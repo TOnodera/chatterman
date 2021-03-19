@@ -1,0 +1,101 @@
+@startuml
+
+
+class Credentials{
+    +email: string
+    +password: string
+}
+
+class User{
+    -id: string
+    -credentials: Credentials
+    -userName
+    -accessAbleRooms: array<string>
+    +registe(user: User)
+    +isAbleToAccess(room_id: string)
+    +isEditable(message: Message)
+}
+
+note right of User::id
+    uuid
+endnote
+
+class LoginManager{
+    +login(credentials: Credentials): boolean
+    +logout(credentials: Credentials): boolean
+    +authentiate(credentials: Credentials): boolean
+    +loginUsers(): number
+}
+
+Interface IUserRepository{
+    +registe(user: User): boolean
+    +getUserByEmail(email: string): User
+    +getUserByPassword(plainPassword: string): User
+    +getUserByUserName(userName: string): User
+    +getUsersCount(): number
+}
+
+class UserController{
+    +registe(user: User): void
+    +login(credentials: Credentials): void
+    +logout(credentials: Credentials): void
+    +authentiate(credentials: Credentials): void
+}
+
+IUserRepository -- User
+IUserRepository -- LoginManager
+User <-- UserController
+LoginManager <-- UserController
+
+
+Interface IMessageRepository{
+    +add(message: Message): void
+    +delete(message_id: string): void
+    +get(message_id: string): User
+    +save(message: Message): void
+    +all(room_id): Message[]
+}
+
+class Message{
+    #message_id: string
+    #message: string
+    #user: User
+    #file: File
+    #room_id: string
+    +constructor(repository: IMessageRepository)
+    +delete(message_id: string): void
+    +edit(message: Message): void
+    +add(message: Message): void
+    +get(message_id: string): Message
+}
+
+note right of Message::message_id
+    uuid
+endnote
+
+class Messages{
+    -count: number
+    +all() : Message[]
+    +getCount(): number
+}
+
+class MessageContoroller{
+    +add(message: Message): void
+    +delete(message: Message): void
+    +edit(message: Message): void
+    +all(): Messages
+    +typing(): void
+}
+
+() Listener
+
+IMessageRepository -- Message
+Message --* Messages
+Message <-- MessageContoroller
+Messages <-- MessageContoroller
+User <-- Message
+MessageContoroller <-- Listener
+UserController <-- Listener
+Credentials <-- LoginManager
+
+@enduml

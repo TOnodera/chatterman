@@ -1,0 +1,8 @@
+@startuml
+client -> MessageContoroller
+MessageContoroller -> Message.get
+Message.get -> Message.get:message.user.isAbleToAccess(message.room_id)
+note right:isAbleToAccessで送信可能なroomか検証。未許可ならDomainException
+Message.get -> IMessageRepository
+IMessageRepository -> IMessageRepository:get(message_id)
+@enduml

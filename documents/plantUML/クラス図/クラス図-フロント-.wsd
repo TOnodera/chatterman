@@ -1,0 +1,17 @@
+@startuml
+
+
+class RegisteUser{
+    -credentials : Credentials
+    -userName: string
+    registe()
+}
+
+class Credentials{
+    -email
+    -password
+}
+
+
+
+@enduml

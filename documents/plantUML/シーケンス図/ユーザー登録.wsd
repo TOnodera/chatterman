@@ -1,0 +1,13 @@
+@startuml
+client -> UserContoroller
+UserContoroller -> User: registe(user)
+User -> IUserRepository: registe(user)
+IUserRepository -> IUserRepository: registe(user)
+IUserRepository -> User
+User -> UserContoroller
+UserContoroller-> client: 201コードまたは例外コード
+note right of IUserRepository
+ドメインエラーはDomainExceptionそれ以外のエラーはException
+成功した場合はクライアントに201を返す
+endnote
+@enduml
