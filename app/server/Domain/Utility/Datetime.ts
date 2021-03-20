@@ -1,0 +1,4 @@
+
+interface Datetime{
+    datetime: string
+}
