@@ -16,7 +16,7 @@ package User{
         -users: User[]
         +constructor(user: User)
         +registe(): void
-        +isAbleToAccess(room_id: string): boolean
+        +isAccessable(room_id: string): boolean
         +isEditable(message: Message): boolean
         +trimCredentials(): void
     }
@@ -42,6 +42,7 @@ package User{
         +getUserByPassword(plainPassword: string): User
         +getUserByName(name: string): User
         +getUserByCredentials(credentials: Credentials): User
+        +hasMessage(message: Message): boolean
     }
 
     class UserRepository

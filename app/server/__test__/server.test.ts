@@ -1,3 +1,5 @@
+import IUserRepository from 'server/Domain/User/IUserRepository';
+import UserRepository from 'server/Domain/User/UserRepository';
 import { ReadConfig } from '../Domain/ReadConfig';
 
 describe('サーバーサイドのテスト',()=>{
@@ -9,6 +11,8 @@ describe('サーバーサイドのテスト',()=>{
     });    
 
     describe('Userクラス',()=>{
+        let repositoryMock : IUserRepository = new UserRepository();
+        repositoryMock.registe = jest.fn(()=>true);
         describe('registe()',()=>{
             it.skip('registe(user)で新規登録出来る',()=>{
                 
