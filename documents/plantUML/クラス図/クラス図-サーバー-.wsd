@@ -1,102 +1,128 @@
 @startuml
 
+package User{
+    class Credentials{
+        +email: string
+        +password: string
+    }
 
-class Credentials{
-    +email: string
-    +password: string
+    class User{
+        -id?: string
+        -credentials: Credentials
+        -name: string
+        -created_at: Datetime
+        -accessAbleRooms: array<string>
+        -repository: IUserRepository
+        +constructor(user: User)
+        +registe(): void
+        +isAbleToAccess(room_id: string): boolean
+        +isEditable(message: Message): boolean
+        +trimCredentials(): void
+    }
+
+    note right of User::id
+        uuid
+    endnote
+
+    Interface ILoginManager{
+        +repository: IUserRepository
+        +login(credentials: Credentials): boolean
+        +logout(credentials: Credentials): boolean
+        +authentiate(credentials: Credentials): boolean
+        +loginUsers(): number
+    }
+
+    class LoginManager
+
+    Interface IUserRepository{
+        +registe(user: User): boolean
+        +getUserByEmail(email: string): User
+        +getUserByPassword(plainPassword: string): User
+        +getUserByname(name: string): User
+        +getUsersCount(): number
+    }
+
+    class UserController{
+        +registe(user: User): void
+        +login(credentials: Credentials): void
+        +logout(credentials: Credentials): void
+        +authentiate(credentials: Credentials): void
+    }
+
+    class UserRepositoryFactory{
+        +create()
+    }
+
 }
 
-class User{
-    -id: string
-    -credentials: Credentials
-    -name
-    -accessAbleRooms: array<string>
-    +registe(user: User)
-    +isAbleToAccess(room_id: string)
-    +isEditable(message: Message)
-    +trimCredentials(): void
-}
-
-note right of User::id
-    uuid
-endnote
-
-class LoginManager{
-    +login(credentials: Credentials): boolean
-    +logout(credentials: Credentials): boolean
-    +authentiate(credentials: Credentials): boolean
-    +loginUsers(): number
-}
-
-Interface IUserRepository{
-    +registe(user: User): boolean
-    +getUserByEmail(email: string): User
-    +getUserByPassword(plainPassword: string): User
-    +getUserByname(name: string): User
-    +getUsersCount(): number
-}
-
-class UserController{
-    +registe(user: User): void
-    +login(credentials: Credentials): void
-    +logout(credentials: Credentials): void
-    +authentiate(credentials: Credentials): void
-}
-
-IUserRepository -- User
-IUserRepository -- LoginManager
+IUserRepository .. UserRepositoryFactory
 User <-- UserController
+ILoginManager <|.. LoginManager
 LoginManager <-- UserController
+UserRepositoryFactory <-- User
+UserRepositoryFactory <-- LoginManager
+ReadConfig <-- UserRepositoryFactory
 
+package Message{
 
-Interface IMessageRepository{
-    +add(message: Message): void
-    +delete(message_id: string): void
-    +get(message_id: string): User
-    +save(message: Message): void
-    +all(room_id): Message[]
+    Interface IMessageRepository{
+        +add(message: Message): void
+        +delete(message_id: string): void
+        +get(message_id: string): User
+        +save(message: Message): void
+        +all(room_id): Message[]
+    }
+
+    class Message{
+        #repository: IMessageRepository
+        #message_id?: string
+        #message: string
+        #user: User
+        #file?: File
+        #room_id: string
+        #counter: number
+        +constructor(message: Message,repository: IMessageRepository)
+        +delete(message_id: string): void
+        +edit(message: Message): void
+        +add(message: Message): void
+    }
+
+    class Messages{
+        #repository: IMessageRepository
+        +all() : Message[]
+        +more(): Message[]
+        +search(): Message[]
+    }
+    note right of Message::message_id
+        uuid
+    endnote
+
+    class MessageContoroller{
+        +add(message: Message): void
+        +delete(message: Message): void
+        +edit(message: Message): void
+        +all(): Messages
+        +typing(): void
+    }
+
+    class MessageRepositryFactory{
+        +create()
+    }
 }
 
-class Message{
-    #message_id: string
-    #message: string
-    #user: User
-    #file: File
-    #room_id: string
-    +constructor(repository: IMessageRepository)
-    +delete(message_id: string): void
-    +edit(message: Message): void
-    +add(message: Message): void
-    +get(message_id: string): Message
+
+class ReadConfig{
+    +config()
 }
 
-note right of Message::message_id
-    uuid
-endnote
-
-class Messages{
-    -count: number
-    +all() : Message[]
-    +getCount(): number
-}
-
-class MessageContoroller{
-    +add(message: Message): void
-    +delete(message: Message): void
-    +edit(message: Message): void
-    +all(): Messages
-    +typing(): void
-}
-
-() Listener
-
-IMessageRepository -- Message
-Message --* Messages
+IMessageRepository .. Message
 Message <-- MessageContoroller
+Message --* Messages
 Messages <-- MessageContoroller
 User <-- Message
-MessageContoroller <-- Listener
-UserController <-- Listener
 Credentials <-- LoginManager
+MessageRepositryFactory <-- Message
+MessageRepositryFactory <-- Messages
+ReadConfig <-- MessageRepositryFactory
 
 @enduml
