@@ -9,11 +9,12 @@ class Credentials{
 class User{
     -id: string
     -credentials: Credentials
-    -userName
+    -name
     -accessAbleRooms: array<string>
     +registe(user: User)
     +isAbleToAccess(room_id: string)
     +isEditable(message: Message)
+    +trimCredentials(): void
 }
 
 note right of User::id
@@ -31,7 +32,7 @@ Interface IUserRepository{
     +registe(user: User): boolean
     +getUserByEmail(email: string): User
     +getUserByPassword(plainPassword: string): User
-    +getUserByUserName(userName: string): User
+    +getUserByname(name: string): User
     +getUsersCount(): number
 }
 

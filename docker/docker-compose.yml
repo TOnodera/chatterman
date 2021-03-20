@@ -14,7 +14,7 @@ services:
     command: bash -c "usermod -o -u 1000 mysql; groupmod -o -g 1000 mysql; chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql/; /entrypoint.sh mysqld --user=mysql --console"
     tty: true
   node:
-    image: node:12
+    build: ./node
     tty: true
     ports:
       - "3000:3000"
