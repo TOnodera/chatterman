@@ -1,0 +1,14 @@
+@startuml
+package ErrorHandling{
+    class Exception
+    class DomainException
+    class Handler
+}
+
+Exception <.. Handler
+Exception <|-- DomainException
+
+note bottom of Handler
+ユーザーへのドメインエラー通知、エラーロギングを行う
+endnote
+@enduml
