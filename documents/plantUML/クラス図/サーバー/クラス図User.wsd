@@ -26,7 +26,6 @@ package User{
         +login(credentials: Credentials): boolean
         +logout(credentials: Credentials): boolean
         +authentiate(credentials: Credentials): boolean
-        +loginUsers(): number
     }
 
     class LoginManager{
@@ -41,7 +40,8 @@ package User{
         +registe(user: User): boolean
         +getUserByEmail(email: string): User
         +getUserByPassword(plainPassword: string): User
-        +getUserByname(name: string): User
+        +getUserByName(name: string): User
+        +getUserByCredentials(credentials: Credentials): User
     }
 
     class UserRepository
@@ -67,6 +67,6 @@ IUserRepository <.. LoginManager
 ReadConfig <.. UserRepositoryFactory
 IUserRepository <|.. UserRepository
 UserRepository <.. UserRepositoryFactory : <<create>>
-Credentials <.. LoginManager
+Credentials <.. UserRepository
 
 @enduml

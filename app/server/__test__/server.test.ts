@@ -6,8 +6,7 @@ describe('サーバーサイドのテスト',()=>{
         it('設定を読み取れる',()=>{
             expect(ReadConfig.dabtabaseConfig().test.host).toBe('test');
         });
-    });
-    
+    });    
 
     describe('Userクラス',()=>{
         describe('registe()',()=>{
