@@ -1,5 +1,5 @@
 class Exception{
-    message: string;
+    message: string | Object;
     status: number;
     constructor(message: string,status: number){
         this.message = message;
