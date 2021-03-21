@@ -24,6 +24,11 @@ CREATE TABLE IF NOT EXISTS accessable_rooms (
     PRIMARY KEY (user_id,room_id)
 );
 
+INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');
+
+/**
+TEST DATABASE 
+*/
 
 DROP DATABASE IF EXISTS chater_test;
 CREATE DATABASE chater_test;
@@ -50,3 +55,5 @@ CREATE TABLE IF NOT EXISTS accessable_rooms (
     deleted_at DATETIME,
     PRIMARY KEY (user_id,room_id)
 );
+
+INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');

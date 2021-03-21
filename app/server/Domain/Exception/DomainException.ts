@@ -1,3 +1,4 @@
+import Exception from './Exception';
 class DomainException extends Exception{
     constructor(message: string,status: number){
         super(message,status);
@@ -6,3 +7,4 @@ class DomainException extends Exception{
         return this;
     }
 }
+export default DomainException;

@@ -1,7 +1,11 @@
 import IUserRepository from './IUserRepository';
+import UserRepository from './UserRepository';
 class UserRepositoryFactory{
     static create(): IUserRepository{
-        throw new Exception('Not implements...',500);
+        switch(true){
+            default:
+                return new UserRepository();
+        }
     }
 }
 export default UserRepositoryFactory;

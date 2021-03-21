@@ -14,7 +14,7 @@ package User{
         -accessAbleRooms: array<string>
         -repository: IUserRepository
         -users: User[]
-        +constructor(user: User)
+        +constructor(name: string,credentials: Credentials,id?: string)
         +registe(): void
         +isAccessable(room_id: string): boolean
         +isEditable(message: Message): boolean

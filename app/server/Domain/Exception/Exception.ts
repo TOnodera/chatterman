@@ -9,3 +9,4 @@ class Exception{
         return this;
     }
 }
+export default Exception;

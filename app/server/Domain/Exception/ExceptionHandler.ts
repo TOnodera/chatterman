@@ -1,3 +1,6 @@
+import Exception from './Exception';
+import AuthenticationException from './AuthenticationException';
+import DomainException from './DomainException';
 class ExceptionHandler{
     static handle(exception: Exception){
         switch(true){
@@ -17,3 +20,4 @@ class ExceptionHandler{
         }
     }
 }
+export default ExceptionHandler;

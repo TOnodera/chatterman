@@ -1,3 +1,4 @@
+import Exception from './Exception';
 class AuthenticationException extends Exception{
     constructor(message: string,status: number){
         super(message,status);
@@ -6,3 +7,4 @@ class AuthenticationException extends Exception{
         return this;
     }
 }
+export default AuthenticationException;
