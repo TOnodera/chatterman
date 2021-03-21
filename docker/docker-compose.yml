@@ -1,9 +1,8 @@
 version: '3'
 services:
   mysql:
-    image: mysql:5.7
+    build: ./mysql
     environment:
-      MYSQL_DATABASE: database
       MYSQL_ROOT_PASSWORD: password
       TZ: "Asia/Tokyo"
     ports:
@@ -11,7 +10,7 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql  # mysqlのデータを永続化
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf  # 設定ファイルをバインド
-    command: bash -c "usermod -o -u 1000 mysql; groupmod -o -g 1000 mysql; chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql/; /entrypoint.sh mysqld --user=mysql --console"
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d #テーブル作成クエリ実行
     tty: true
   node:
     build: ./node

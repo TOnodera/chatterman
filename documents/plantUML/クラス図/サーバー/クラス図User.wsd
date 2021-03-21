@@ -62,7 +62,7 @@ package User{
 
 User <.. UserController
 ILoginManager <|.. LoginManager
-LoginManager .. UserController
+ILoginManager <.. UserController
 IUserRepository <.. User
 IUserRepository <.. LoginManager
 ReadConfig <.. UserRepositoryFactory
