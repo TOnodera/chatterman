@@ -69,5 +69,21 @@ describe('UserRepository', () => {
  
     });
 
+    describe('credentials()', () => {
+
+        it('email,passwordでユーザーの存在を判定できる', async () => {
+            await user.registe();
+            const expectTrue = await repository.credentials({email: email,password: password});
+            expect(expectTrue).toBe(true);
+        });
+
+        it('存在しない場合はfalse', async () => {
+            await user.registe();
+            const expectFalse = await repository.credentials({email: email+'not exist',password: password});
+            expect(expectFalse).toBe(false);
+        });
+ 
+    });
+
 
 })
