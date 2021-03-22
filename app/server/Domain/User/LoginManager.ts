@@ -1,6 +1,8 @@
 import ILoginManager from "./ILoginManager";
 import IUserRepository from "./IUserRepository";
 import UserRepositoryFactory from "./UserRepositoryFactory";
+import loginUserStore from '../../Store/LoginUsersStore'
+import User from "./User";
 
 class LoginManager implements ILoginManager{
     repository: IUserRepository;
@@ -8,10 +10,18 @@ class LoginManager implements ILoginManager{
         this.repository = UserRepositoryFactory.create();
     }
     async login(credentials: Credentials): Promise<boolean> {
-        return this.repository.credentials(credentials);
+        if(this.repository.credentials(credentials)){
+            const user: User = await this.repository.getUserByCredentials(credentials);
+            loginUserStore.enqueue(user);
+            return true;            
+        }
+        return false;
     }
-    logout(credentials: Credentials): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async logout(credentials: Credentials): Promise<boolean> {
+        if(await this.repository.credentials(credentials)){
+            return true;
+        }
+        return false;
     }
     authenticate(credentials: Credentials): Promise<boolean> {
         throw new Error("Method not implemented.");
