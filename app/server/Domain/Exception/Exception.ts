@@ -1,12 +1,8 @@
-class Exception{
-    message: string | Object;
+class Exception extends Error{
     status: number;
-    constructor(message: string,status: number){
-        this.message = message;
+    constructor(message?: string | undefined,status: number = 500){
+        super(message);
         this.status = status;
-    }
-    get(): Exception{
-        return this;
     }
 }
 export default Exception;

@@ -1,9 +1,8 @@
 import User from '../Domain/User/User';
 import { mySqlConnector } from '../Domain/Utility/Connection';
-import Exception from '../Domain/Exception/Exception';
-import ExceptionHandler from '../Domain/Exception/ExceptionHandler';
 import IUserRepository from '../Domain/User/IUserRepository';
 import UserRepositoryFactory from '../Domain/User/UserRepositoryFactory';
+import AuthenticationException from '../Domain/Exception/AuthenticationException';
 
 describe('UserRepository', () => {
 
@@ -13,17 +12,6 @@ describe('UserRepository', () => {
     let password: string;
     let repository: IUserRepository;
     let origin: any;
-
-    /*
-    const mockHandler = jest.fn();
-    jest.mock('../Domain/Exception/ExceptionHandler', () => {
-        return jest.fn().staticClass.mockImplementation(() => {
-            return {
-                handle: mockHandler
-            }
-        });
-    });
-    */
 
     beforeEach(async () => {
         await mySqlConnector.query('TRUNCATE TABLE users');
@@ -44,32 +32,24 @@ describe('UserRepository', () => {
 
         it('新規登録出来る', async () => {
             await user.registe();
-            const getUser = await repository.getUserByEmail(email);
-            expect(getUser && getUser.credentials.email).toBe(email);
-        });
-
-        it('例外はExceptionHandler.handleに渡す', async () => {
-            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
-            const spy = jest.spyOn(ExceptionHandler,'handle');
-            await user.registe();
-            expect(spy.mock.calls.length).toBe(1);
+            const expectTrue = await repository.thisEmailIsAlreadyUsed(email);
+            expect(expectTrue).toBe(true);
         });
 
     });
 
-    describe('getUserByName()', () => {
+    describe('thisEmailIsAlreadyUsed()', () => {
 
-        it('ユーザー名でUserインスタンスを取得出来る', async () => {
+        it('既に登録されているメールアドレスを判別できる', async () => {
             await user.registe();
-            const getUser = await repository.getUserByName(name);
-            expect(getUser && getUser.name).toBe(name);
+            const expectTrue = await repository.thisEmailIsAlreadyUsed(email);
+            expect(expectTrue).toBe(true);
         });
 
-        it('例外はExceptionHandler.handleに渡す', async () => {
-            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
-            const spy = jest.spyOn(ExceptionHandler,'handle');
-            await repository.getUserByName(name);
-            expect(spy.mock.calls.length).toBe(1);
+        it('録されていないメールアドレスの場合はfalse', async () => {
+            await user.registe();
+            const expectFalse = await repository.thisEmailIsAlreadyUsed(email+'email');
+            expect(expectFalse).toBe(false);
         });
  
     });
@@ -82,11 +62,9 @@ describe('UserRepository', () => {
             expect(getUser && getUser.credentials.email).toBe(email);
         });
 
-        it('例外はExceptionHandler.handleに渡す', async () => {
-            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
-            const spy = jest.spyOn(ExceptionHandler,'handle');
-            await repository.getUserByCredentials({email: email , password: password});
-            expect(spy.mock.calls.length).toBe(1);
+        it('存在しない場合は例外を投げる', async () => {
+            await user.registe();
+            expect(async ()=> {await repository.getUserByCredentials({email: email+'email',password: password}) }).rejects.toThrow(new AuthenticationException('認証情報に一致するユーザーが見つかりませんでした。'));
         });
  
     });

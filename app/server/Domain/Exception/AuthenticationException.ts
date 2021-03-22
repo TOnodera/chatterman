@@ -1,6 +1,6 @@
 import Exception from './Exception';
 class AuthenticationException extends Exception{
-    constructor(message: string,status: number){
+    constructor(message?: string | undefined,status: number = 401){
         super(message,status);
     }
     get(): Exception{

@@ -21,8 +21,8 @@ describe('User', () => {
         describe('registe()', () => {
             it('registe(user)で新規登録出来る', async () => {
                 await user.registe();
-                const getUser = await repository.getUserByEmail(email);
-                expect(getUser && getUser.credentials.email).toBe(email);
+                const expectTrue = await repository.thisEmailIsAlreadyUsed(email);
+                expect(expectTrue).toBe(true);
             });
         });
 
