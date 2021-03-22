@@ -1,16 +1,19 @@
 import IUserRepository from './IUserRepository';
 import User from './User';
-import { connector } from '../Utility/Connection';
 import ExceptionHandeler from '../Exception/ExceptionHandler';
-import Exception from '../Exception/Exception';
+import Bcrypt from '../Utility/Bcrypt';
+
 class UserRepository implements IUserRepository {
-    getUserByPassword(plainPassword: string): Promise<void | User> {
-        throw new Error('Method not implemented.');
+
+    private connector: any;
+
+    constructor(connector: any) {
+        this.connector = connector;
     }
 
     async registe(user: User): Promise<boolean | void> {
         try {
-            const [result]: any[] = await connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials.email, user.credentials.password]);
+            const [result]: any[] = await this.connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials.email, user.credentials.password]);
             return result.affectedRows == 1;
         } catch (e) {
             ExceptionHandeler.handle(e);
@@ -20,7 +23,7 @@ class UserRepository implements IUserRepository {
     async getUserByEmail(email: string): Promise<void | User> {
         try {
 
-            const [rows]: any[] = await connector.query('SELECT * FROM users WHERE email = ? ', [email]);
+            const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [email]);
             if (rows.length > 0) {
                 const credentials: Credentials = { email: rows[0].email, password: rows[0].password };
                 return new User(
@@ -38,13 +41,11 @@ class UserRepository implements IUserRepository {
     async getUserByName(name: string): Promise<void | User> {
         try {
 
-            const [rows]: any[] = await connector.query('SELECT * FROM users WHERE name = ? ', [name]);
+            const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE name = ? ', [name]);
             if (rows.length > 0) {
-                console.log('getUserByName()',rows[0]);
-                const credentials: Credentials = { email: rows[0].email, password: rows[0].password };
                 return new User(
                     rows[0].name,
-                    credentials,
+                    { email: rows[0].email, password: rows[0].password },
                     rows[0].created_at,
                     rows[0].id
                 );
@@ -54,8 +55,24 @@ class UserRepository implements IUserRepository {
             ExceptionHandeler.handle(e);
         }
     }
-    getUserByCredentials(credentials: Credentials): Promise<void | User> {
-        throw new Error('Method not implemented.');
+    async getUserByCredentials(credentials: Credentials): Promise<void | User> {
+        try {
+
+            const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+            if (rows.length > 0) {
+                if (Bcrypt.compare(credentials.password, rows[0].password)) {
+                    return new User(
+                        rows[0].name,
+                        { email: rows[0].email, password: rows[0].password },
+                        rows[0].created_at,
+                        rows[0].id
+                    );
+                }
+            }
+
+        } catch (e) {
+            ExceptionHandeler.handle(e);
+        }
     }
     hasMessage(message: Message): Promise<boolean | void> {
         throw new Error('Method not implemented.');

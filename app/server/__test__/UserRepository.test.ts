@@ -1,16 +1,19 @@
 import User from '../Domain/User/User';
-import UserRepository from '../Domain/User/UserRepository';
-import { connector } from '../Domain/Utility/Connection';
+import { mySqlConnector } from '../Domain/Utility/Connection';
 import Exception from '../Domain/Exception/Exception';
 import ExceptionHandler from '../Domain/Exception/ExceptionHandler';
+import IUserRepository from '../Domain/User/IUserRepository';
+import UserRepositoryFactory from '../Domain/User/UserRepositoryFactory';
 
 describe('UserRepository', () => {
 
     let user: User;
     let name: string;
     let email: string;
-    let repository: UserRepository;
+    let password: string;
+    let repository: IUserRepository;
     let origin: any;
+
     /*
     const mockHandler = jest.fn();
     jest.mock('../Domain/Exception/ExceptionHandler', () => {
@@ -23,16 +26,17 @@ describe('UserRepository', () => {
     */
 
     beforeEach(async () => {
-        await connector.query('TRUNCATE TABLE users');
+        await mySqlConnector.query('TRUNCATE TABLE users');
         email = 'test@test.com';
         name = 'tester';
-        user = new User(name, { email: email, password: 'password' });
-        repository = new UserRepository();
-        origin = connector.query;;
+        password = 'password';
+        user = new User(name, { email: email, password: password });
+        repository = UserRepositoryFactory.create();
+        origin = mySqlConnector.query;;
     });
 
     afterEach(()=>{
-        connector.query = origin;
+        mySqlConnector.query = origin;
         jest.clearAllMocks();
     });
 
@@ -45,7 +49,7 @@ describe('UserRepository', () => {
         });
 
         it('例外はExceptionHandler.handleに渡す', async () => {
-            connector.query = jest.fn(() => { throw new Exception('エラー', 500) });
+            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
             const spy = jest.spyOn(ExceptionHandler,'handle');
             await user.registe();
             expect(spy.mock.calls.length).toBe(1);
@@ -62,13 +66,29 @@ describe('UserRepository', () => {
         });
 
         it('例外はExceptionHandler.handleに渡す', async () => {
-            connector.query = jest.fn(() => { throw new Exception('エラー', 500) });
+            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
             const spy = jest.spyOn(ExceptionHandler,'handle');
-            await user.registe();
+            await repository.getUserByName(name);
             expect(spy.mock.calls.length).toBe(1);
         });
+ 
+    });
 
-        
+    describe('getUserByCredentials()', () => {
+
+        it('email,passwordでユーザーインスタンスを取得出来る', async () => {
+            await user.registe();
+            const getUser = await repository.getUserByCredentials({email: email,password: password});
+            expect(getUser && getUser.credentials.email).toBe(email);
+        });
+
+        it('例外はExceptionHandler.handleに渡す', async () => {
+            mySqlConnector.query = jest.fn(() => { throw new Exception('エラー', 500) });
+            const spy = jest.spyOn(ExceptionHandler,'handle');
+            await repository.getUserByCredentials({email: email , password: password});
+            expect(spy.mock.calls.length).toBe(1);
+        });
+ 
     });
 
 

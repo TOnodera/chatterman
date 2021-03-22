@@ -1,6 +1,7 @@
 import User from '../Domain/User/User';
-import { connector } from '../Domain/Utility/Connection';
-import UserRepository from '../Domain/User/UserRepository';
+import { mySqlConnector } from '../Domain/Utility/Connection';
+import UserRepositoryFactory from '../Domain/User/UserRepositoryFactory';
+import IUserRepository from '../Domain/User/IUserRepository';
 
 describe('User', () => {
 
@@ -8,13 +9,13 @@ describe('User', () => {
 
         let user: User;
         let email: string;
-        let repository: UserRepository;
+        let repository: IUserRepository;
 
         beforeEach(async () => {
-            await connector.query('TRUNCATE TABLE users');
+            await mySqlConnector.query('TRUNCATE TABLE users');
             email = 'test@test.com';
             user = new User('test', { email: email, password: 'password' });
-            repository = new UserRepository();
+            repository = UserRepositoryFactory.create();
         });
 
         describe('registe()', () => {

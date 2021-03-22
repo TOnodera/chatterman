@@ -1,11 +1,9 @@
 import IUserRepository from './IUserRepository';
 import UserRepository from './UserRepository';
+import { mySqlConnector } from '../Utility/Connection';
 class UserRepositoryFactory{
     static create(): IUserRepository{
-        switch(true){
-            default:
-                return new UserRepository();
-        }
+        return new UserRepository(mySqlConnector);
     }
 }
 export default UserRepositoryFactory;
