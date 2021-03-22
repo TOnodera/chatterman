@@ -3,6 +3,7 @@ import Datetime from '../Utility/Datetime';
 import IUserRepository from './IUserRepository';
 import UserRepositoryFactory from './UserRepositoryFactory';
 import ExceptionHandler from '../Exception/ExceptionHandler';
+import Bcrypt from '../Utility/Bcrypt';
 class User{
 
     id?: string;
@@ -23,6 +24,7 @@ class User{
     async registe(): Promise<boolean | void>{
         this.id = uuid.v4();
         try{
+            this.credentials.password = await Bcrypt.hash(this.credentials.password);
             return await this.repository.registe(this);
         }catch(exception){
             ExceptionHandler.handle(exception);
