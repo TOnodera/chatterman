@@ -40,6 +40,14 @@ class UserRepository implements IUserRepository {
         }
         throw new AuthenticationException("認証情報に一致するユーザーが見つかりませんでした。");
     }
+
+    async credentials(credentials: Credentials): Promise<boolean>{
+        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+        if (rows.length > 0){
+            return Bcrypt.compare(credentials.password, rows[0].password);
+        }
+        return false;
+    }
     
     hasMessage(message: Message): Promise<boolean> {
         throw new Error('Method not implemented.');

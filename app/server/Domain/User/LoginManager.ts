@@ -1,3 +1,7 @@
+import ILoginManager from "./ILoginManager";
+import IUserRepository from "./IUserRepository";
+import UserRepositoryFactory from "./UserRepositoryFactory";
+
 class LoginManager implements ILoginManager{
     iUserRepository: IUserRepository;
     constructor(){
