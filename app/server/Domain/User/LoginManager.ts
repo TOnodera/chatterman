@@ -3,18 +3,18 @@ import IUserRepository from "./IUserRepository";
 import UserRepositoryFactory from "./UserRepositoryFactory";
 
 class LoginManager implements ILoginManager{
-    iUserRepository: IUserRepository;
+    repository: IUserRepository;
     constructor(){
-        this.iUserRepository = UserRepositoryFactory.create();
+        this.repository = UserRepositoryFactory.create();
     }
-    login(credentials: Credentials): boolean {
+    async login(credentials: Credentials): Promise<boolean> {
+        return this.repository.credentials(credentials);
+    }
+    logout(credentials: Credentials): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
-    logout(credentials: Credentials): boolean {
+    authenticate(credentials: Credentials): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
-    authenticate(credentials: Credentials): boolean {
-        throw new Error("Method not implemented.");
-    }
-    
 }
+export default LoginManager;

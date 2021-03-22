@@ -1,8 +1,7 @@
 import IUserRepository from "./IUserRepository";
 interface ILoginManager{
-    iUserRepository: IUserRepository;
-    login(credentials: Credentials): boolean;
-    logout(credentials: Credentials): boolean;
-    authenticate(credentials: Credentials): boolean;
+    login(credentials: Credentials): Promise<boolean>;
+    logout(credentials: Credentials): Promise<boolean>;
+    authenticate(credentials: Credentials): Promise<boolean>;
 }
 export default ILoginManager;
