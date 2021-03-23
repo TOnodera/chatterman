@@ -3,6 +3,7 @@ import IUserRepository from "./IUserRepository";
 import UserRepositoryFactory from "./UserRepositoryFactory";
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from "./User";
+import Exception from "../Exception/Exception";
 
 class LoginManager implements ILoginManager{
 
@@ -13,7 +14,7 @@ class LoginManager implements ILoginManager{
     }
 
     async login(credentials: Credentials): Promise<boolean> {
-        if(this.repository.credentials(credentials)){
+        if(await this.repository.credentials(credentials)){
             const user: User = await this.repository.getUserByCredentials(credentials);
             loginUserStore.enqueue(user);
             return true;            
@@ -23,13 +24,18 @@ class LoginManager implements ILoginManager{
 
     async logout(credentials: Credentials): Promise<boolean> {
         if(await this.repository.credentials(credentials)){
-            return true;
+            const user: User = await this.repository.getUserByCredentials(credentials);
+            if(user.id){
+                loginUserStore.delete(user.id);
+                return true;
+            }
+            throw new Exception('原因不明のエラーが発生しました。');
         }
         return false;
     }
 
-    authenticate(credentials: Credentials): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async authenticate(credentials: Credentials): Promise<boolean> {
+        return await this.repository.credentials(credentials);
     }
     
 }

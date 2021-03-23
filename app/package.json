@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server:start": "$(npm bin)/ts-node --files -r ./server",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
@@ -31,5 +31,6 @@
     "@types/jest": "^26.0.21",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.4"
-  }
+  },
+  "type": "commonjs"
 }

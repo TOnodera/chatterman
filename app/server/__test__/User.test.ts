@@ -2,6 +2,7 @@ import User from '../Domain/User/User';
 import { mySqlConnector } from '../Domain/Utility/Connection';
 import UserRepositoryFactory from '../Domain/User/UserRepositoryFactory';
 import IUserRepository from '../Domain/User/IUserRepository';
+require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
 
 describe('User', () => {
 
@@ -12,10 +13,13 @@ describe('User', () => {
         let repository: IUserRepository;
 
         beforeEach(async () => {
-            await mySqlConnector.query('TRUNCATE TABLE users');
             email = 'test@test.com';
             user = new User('test', { email: email, password: 'password' });
             repository = UserRepositoryFactory.create();
+        });
+
+        afterEach(async ()=>{
+            await mySqlConnector.query('TRUNCATE TABLE users');
         });
 
         describe('registe()', () => {
