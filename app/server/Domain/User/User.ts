@@ -4,6 +4,7 @@ import IUserRepository from './IUserRepository';
 import UserRepositoryFactory from './UserRepositoryFactory';
 import ExceptionHandler from '../Exception/ExceptionHandler';
 import Bcrypt from '../Utility/Bcrypt';
+import DomainException from '../Exception/DomainException';
 class User{
 
     id?: string;
@@ -24,6 +25,12 @@ class User{
     async registe(): Promise<boolean | void>{
         this.id = uuid.v4();
         try{
+            if( await this.repository.thisEmailIsAlreadyUsed(this.credentials.email) ){
+                throw new DomainException('このメールアドレスは使用されています。');
+            }
+            if( await this.repository.thisNameIsAlreadyUsed(this.name)){
+                throw new DomainException('このユーザー名は使用されています。');
+            }
             this.credentials.password = await Bcrypt.hash(this.credentials.password);
             return await this.repository.registe(this);
         }catch(exception){
