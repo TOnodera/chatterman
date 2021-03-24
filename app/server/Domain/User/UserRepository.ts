@@ -1,8 +1,7 @@
 import IUserRepository from './IUserRepository';
 import User from './User';
-import ExceptionHandeler from '../Exception/ExceptionHandler';
 import Bcrypt from '../Utility/Bcrypt';
-import Exception from '../Exception/Exception';
+import Message from '../Message/Message';
 import AuthenticationException from '../Exception/AuthenticationException';
 
 class UserRepository implements IUserRepository {
@@ -51,6 +50,15 @@ class UserRepository implements IUserRepository {
     
     hasMessage(message: Message): Promise<boolean> {
         throw new Error('Method not implemented.');
+    }
+
+    async get(user_id: string): Promise<{user?: User,exists: boolean}>{
+        const [rows]: any[] = await this.connector.query('SELECT * FROM id = ? ',[user_id]);
+        if(rows.length > 0){
+            const user: User = new User(rows[0].name,{email: rows[0].email,password: rows[0].password},rows[0].created_at,rows[0].id);
+            return {user: user,exists: true};
+        }
+        return {exists: false};
     }
 
 }

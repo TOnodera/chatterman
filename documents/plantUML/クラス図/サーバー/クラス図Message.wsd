@@ -16,7 +16,7 @@ package Message{
         #user: User
         #file?: File
         #room_id: string
-        #counter: number
+        
         +constructor(message: Message,repository: IMessageRepository)
         +delete(message_id: string): void
         +edit(message: Message): void

@@ -24,6 +24,15 @@ CREATE TABLE IF NOT EXISTS accessable_rooms (
     PRIMARY KEY (user_id,room_id)
 );
 
+CREATE TABLE IF NOT EXISTS messages (
+    message_id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR (255) NOT NULL,
+    room_id VARCHAR (255) NOT NULL,
+    message TEXT,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
+);
+
 INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');
 
 /**
@@ -55,5 +64,15 @@ CREATE TABLE IF NOT EXISTS accessable_rooms (
     deleted_at DATETIME NOT NULL,
     PRIMARY KEY (user_id,room_id)
 );
+
+CREATE TABLE IF NOT EXISTS messages (
+    message_id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR (255) NOT NULL,
+    room_id VARCHAR (255) NOT NULL,
+    message TEXT,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
+);
+
 
 INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');

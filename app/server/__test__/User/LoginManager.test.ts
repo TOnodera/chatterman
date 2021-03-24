@@ -1,8 +1,8 @@
-import { mySqlConnector } from "../Domain/Utility/Connection";
-import LoginManager from "../Domain/User/LoginManager";
-import User from "../Domain/User/User";
-import loginUserStore from '../Store/LoginUsersStore';
-import LoginUsersStore from "../Store/LoginUsersStore";
+import { mySqlConnector } from "../../Domain/Utility/Connection";
+import LoginManager from "../../Domain/User/LoginManager";
+import User from "../../Domain/User/User";
+import loginUserStore from '../../Store/LoginUsersStore';
+import LoginUsersStore from "../../Store/LoginUsersStore";
 
 describe('LoginManager', () => {
 
