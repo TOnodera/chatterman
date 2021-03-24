@@ -48,12 +48,14 @@ class UserRepository implements IUserRepository {
         return false;
     }
     
-    hasMessage(message: Message): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async hasMessage(message: Message): Promise<boolean> {
+        const [rows] : any[] = await this.connector.query("SELECT * FROM messages WHERE user_id = ? AND message_id = ?",[message.user?.id,message.message_id]);
+        return rows.length > 0;
     }
 
     async get(user_id: string): Promise<{user?: User,exists: boolean}>{
-        const [rows]: any[] = await this.connector.query('SELECT * FROM id = ? ',[user_id]);
+        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE id = ? ',[user_id]);
+        console.log(user_id,rows);
         if(rows.length > 0){
             const user: User = new User(rows[0].name,{email: rows[0].email,password: rows[0].password},rows[0].created_at,rows[0].id);
             return {user: user,exists: true};

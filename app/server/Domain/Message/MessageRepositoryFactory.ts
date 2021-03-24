@@ -5,3 +5,4 @@ class MessageRepositoryFactory{
         return new MessageRepository(mySqlConnector);
     }
 }
+export default MessageRepositoryFactory;

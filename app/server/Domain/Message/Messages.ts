@@ -1,19 +1,16 @@
 import IMessageRepository from './IMessageRepository';
 import Message from './Message';
-import MessageRepository from './MessageRepository';
+import MessageRepositoryFactory from './MessageRepositoryFactory';
 
 class Messages{
     private repository : IMessageRepository;
     constructor(){
-        this.repository = new MessageRepository();
+        this.repository = MessageRepositoryFactory.create();
     }
-    all(): Message[]{
-        
-    }
-    more(): Message[]{
-
-    }
-    search(): Message[]{
-
+    async all(room_id: string): Promise<{messages?:Message[],exists: boolean}> {
+        const {messages,exists} = await this.repository.all(room_id);
+        return exists
+        ? {messages: messages,exists: true}
+        : {exists: false};
     }
 }

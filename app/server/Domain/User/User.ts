@@ -5,6 +5,8 @@ import UserRepositoryFactory from './UserRepositoryFactory';
 import ExceptionHandler from '../Exception/ExceptionHandler';
 import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
+import Message from '../Message/Message';
+
 class User{
 
     id?: string;
@@ -23,7 +25,6 @@ class User{
     }
 
     async registe(): Promise<boolean | void>{
-        this.id = uuid.v4();
         try{
             if( await this.repository.thisEmailIsAlreadyUsed(this.credentials.email) ){
                 throw new DomainException('このメールアドレスは使用されています。');
@@ -31,6 +32,7 @@ class User{
             if( await this.repository.thisNameIsAlreadyUsed(this.name)){
                 throw new DomainException('このユーザー名は使用されています。');
             }
+            this.id = uuid.v4();
             this.credentials.password = await Bcrypt.hash(this.credentials.password);
             return await this.repository.registe(this);
         }catch(exception){
@@ -42,7 +44,7 @@ class User{
         return this.accessableRooms.includes(room_id);
     }
 
-    async isEditable(message: Message): Promise<boolean | void>{
+    async isEditable(message: Message): Promise<boolean>{
         try{
             return await this.repository.hasMessage(message);
         }catch(exception){
