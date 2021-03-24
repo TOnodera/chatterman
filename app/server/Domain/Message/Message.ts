@@ -48,9 +48,8 @@ class Message{
             throw new Exception('ロードに失敗しました。');
         }
         if(!this.message_id){
-            throw new Exception('message_idがない状態でsave()は呼び出せません。');
+            throw new Exception('message_idがない状態でedit()は呼び出せません。');
         }
-        console.log(this.user,this.room_id);
         if(!this.user || !this.room_id){
             throw new Exception('edit()の呼び出し方法が間違っています。');
         }
@@ -58,8 +57,7 @@ class Message{
             throw new AuthenticationException('このメッセージを編集できません。');
         }
         this.message = newMessage;
-        return await this.repository.save(this);   
-        
+        return await this.repository.save(this);
     }
 
     async delete(): Promise<boolean>{
