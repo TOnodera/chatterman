@@ -1,17 +1,33 @@
+import Exception from "../Exception/Exception";
 import User from "../User/User";
+import LoginManager from '../User/LoginManager';
 
 class UserController{
-    registe(user: User): void{
-
+    private loginManager: LoginManager;
+    constructor(){
+        this.loginManager = new LoginManager();
     }
-    login(credentials: Credentials): void{
+    async registe(name: string,credentials: Credentials){
+        const user: User = new User(name,credentials);
+        if(await user.registe()){
 
+        }
+        throw new Exception();
     }
-    logout(credentials: Credentials): void{
+    async login(name: string,credentials: Credentials){
+        if(await this.loginManager.login(credentials)){
 
+        }
     }
-    authenticate(credentials: Credentials): void{
-        
+    async logout(credentials: Credentials){
+        if(await this.loginManager.logout(credentials)){
+            
+        }
+    }
+    async authenticate(credentials: Credentials){
+        if(await this.loginManager.authenticate(credentials)){
+            
+        }
     }
 }
-export default UserController;
+export default new UserController();

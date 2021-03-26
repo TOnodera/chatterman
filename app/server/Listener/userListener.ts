@@ -1,5 +1,6 @@
 
 import { Socket } from "socket.io";
+import UserController from '../Domain/Controller/UserController';
 
 module.exports = (io : any) => {
   io.on('connection', (socket: Socket) => {
@@ -7,6 +8,7 @@ module.exports = (io : any) => {
     const userRegister = async (fromClient: any) => {
 
         console.log("userRegister...");
+        //UserController.registe(fromClient.name,{email: fromClient.email,password: fromClient.password});
 
     };
 

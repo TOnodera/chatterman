@@ -18,18 +18,21 @@ class User {
     repository: IUserRepository;
 
     constructor(user_id: string);
+    constructor(name: string, credentials: Credentials, created_at?: Datetime, id?: string);
     constructor(name_or_user_id: string, credentials?: Credentials, created_at?: Datetime, id?: string) {
         this.repository = UserRepositoryFactory.create();
         this.accessableRooms = ['everybody'];
+        if(name_or_user_id && !credentials){
+            this.id = name_or_user_id;
+            return;
+        }        
         if (name_or_user_id && credentials) {
             this.id = id;
             this.credentials = credentials;
             this.name = name_or_user_id;
+            this.created_at = created_at;
+            return;
         }
-        if(name_or_user_id && !credentials){
-            this.id = name_or_user_id;
-        }
-        
     }
 
     async load(): Promise<boolean>{
