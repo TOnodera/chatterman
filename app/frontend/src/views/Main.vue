@@ -1,26 +1,32 @@
 <template>
-    <div class="app-wrapper">
-        <div class="app-header">
-            <Header @menu-clicked="menuClicked" />
-        </div>
-        <div class="app-contents">
-            <router-view />
-        </div>
-        <div class="app-footer">
-            <Footer />
+    <div class="dashboard-wrapper columns">
+        <Sidebar
+            class="sidebar column"
+            :class="{
+                'is-hidden-touch is-2': !isMenuClicked,
+                'is-4': isMenuClicked,
+            }"
+        />
+        <div
+            class="dashboard-content column"
+            :class="{ 'is-8': isMenuClicked, 'is-10': !isMenuClicked }"
+        >
+            <div class="columns is-centered">
+                <div class="column mt-5">
+                    <router-view />
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Sidebar from "@/components/Sidebar";
 
 export default {
-    name: "App",
+    name: "Main",
     components: {
-        Header,
-        Footer,
+        Sidebar
     },
     methods: {
         menuClicked(menuClicked) {
