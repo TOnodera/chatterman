@@ -61,6 +61,7 @@
 
 <script>
 import io from 'socket.io-client';
+import userStore from '../store/user.ts';
 export default {
     name: "User",
     data(){
@@ -87,16 +88,20 @@ export default {
                 this.$swal('パスワードが未入力です。');
                 return;
             }
-            const socket = io('localhost:3000');
-            const user = {
+            const registInfo = {
                 name: this.name,
                 credentials: {
                     email: this.email,
                     password: this.password
                 }
             };
-            socket.emit('user:register',user);
+            userStore.registe(registInfo);
         }
+    },
+    mounted() {
+        userStore.addRegisterExceptionHandler((msg)=>{
+            this.$swal(msg);
+        });
     },
 };
 </script>

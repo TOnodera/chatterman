@@ -4,20 +4,20 @@ import DomainException from './DomainException';
 import { Socket } from 'socket.io';
 class ExceptionHandler{
     static handle(exception: Exception,socket: Socket){
-        switch(true){
-            case exception instanceof DomainException:
+        switch(exception.status){
+            case 422:
                 //ドメイン例外の処理
-                socket.send(exception.message);
-                console.log('domain exception...')
+                socket.emit('occurred:domain-exception',exception.message);
+                console.log(exception.message);
                 break;
-            case exception instanceof AuthenticationException:
+            case 401:
                 //認証例外の処理
                 socket.send(exception.message);
                 break;
             default:
                 //想定外のエラー
                 //記録と通知を行う
-                console.log("例外",exception instanceof DomainException);
+                console.log(exception);
                 break;
         }
     }
