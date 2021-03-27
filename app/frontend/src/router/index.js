@@ -1,25 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router';
 import Main from '@/views/Main';
 import Talk from '@/views/Talk';
 import User from '@/views/User';
 import Room from '@/views/Room';
 import Login from '@/views/Login';
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Main',
     component: Main,
-    children:[
-      {
+    children: [{
         path: 'talk',
         name: 'Talk',
         component: Talk
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: User
       },
       {
         path: 'room',
@@ -32,6 +28,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: User
   }
 ];
 

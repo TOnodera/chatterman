@@ -1,6 +1,6 @@
-import { mySqlConnector } from "../Domain/Utility/Connection";
-import User from "../Domain/User/User";
-import LoginUsersStore from "../Store/LoginUsersStore";
+import { mySqlConnector } from "../../Domain/Utility/Connection";
+import User from "../../Domain/User/User";
+import LoginUsersStore from "../../Store/LoginUsersStore";
 
 describe('LoginStore',()=>{
     const credentials: Credentials = {

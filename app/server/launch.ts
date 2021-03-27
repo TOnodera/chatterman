@@ -1,3 +1,5 @@
+import ExceptionHandler from "./Domain/Exception/ExceptionHandler";
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -21,6 +23,7 @@ app.use(express.json());
 //app.use(express.static(path.join(__dirname, '../../dist')));
 chatListener(io);
 userListener(io);
+app.use(ExceptionHandler.handle);
 
 const launch =(port:number) => {
     server.listen(port, () => {

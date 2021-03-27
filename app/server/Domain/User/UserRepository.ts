@@ -13,7 +13,7 @@ class UserRepository implements IUserRepository {
     }
 
     async registe(user: User): Promise<boolean> {
-        const [result]: any[] = await this.connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials.email, user.credentials.password]);
+        const [result]: any[] = await this.connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password]);
         return result.affectedRows == 1;
     }
 

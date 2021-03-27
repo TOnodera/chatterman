@@ -54,22 +54,21 @@ class User {
     }
 
     async registe(): Promise<boolean | void> {
+
         if(!this.credentials || !this.name){
             throw new Exception('このインスタンスを生成したコンストラクタではこのメソッドは呼び出せません。');
         }
-        try {
-            if (await this.repository.thisEmailIsAlreadyUsed(this.credentials.email)) {
-                throw new DomainException('このメールアドレスは使用されています。');
-            }
-            if (await this.repository.thisNameIsAlreadyUsed(this.name)) {
-                throw new DomainException('このユーザー名は使用されています。');
-            }
-            this.id = uuid.v4();
-            this.credentials.password = await Bcrypt.hash(this.credentials.password);
-            return await this.repository.registe(this);
-        } catch (exception) {
-            ExceptionHandler.handle(exception);
+        if (await this.repository.thisEmailIsAlreadyUsed(this.credentials.email)) {
+            throw new DomainException('このメールアドレスは使用されています。');
         }
+        if (await this.repository.thisNameIsAlreadyUsed(this.name)) {
+            throw new DomainException('このユーザー名は使用されています。');
+        }
+        this.id = uuid.v4();
+        this.credentials.password = await Bcrypt.hash(this.credentials.password);
+
+        return await this.repository.registe(this);
+        
     }
 
     isAccessable(room_id: string): boolean {
@@ -77,12 +76,7 @@ class User {
     }
 
     async isEditable(message: Message): Promise<boolean> {
-        try {
-            return await this.repository.hasMessage(message);
-        } catch (exception) {
-            ExceptionHandler.handle(exception);
-        }
-        return false;
+        return await this.repository.hasMessage(message);
     }
 }
 

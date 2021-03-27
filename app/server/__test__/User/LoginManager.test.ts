@@ -1,8 +1,6 @@
 import { mySqlConnector } from "../../Domain/Utility/Connection";
 import LoginManager from "../../Domain/User/LoginManager";
 import User from "../../Domain/User/User";
-import loginUserStore from '../../Store/LoginUsersStore';
-import LoginUsersStore from "../../Store/LoginUsersStore";
 
 describe('LoginManager', () => {
 
@@ -17,7 +15,7 @@ describe('LoginManager', () => {
 
         it('ログイン出来る',async ()=>{
             await user.registe();
-            const result = await loginManager.login(user.credentials);
+            const result = await loginManager.login(user.credentials!);
             expect(result).toBe(true);
             mySqlConnector.query('TRUNCATE TABLE users');
         });

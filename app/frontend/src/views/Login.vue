@@ -46,6 +46,14 @@
                                         ログイン
                                     </button>
                                 </div>
+                                <div class="buttons is-pulled-right mr-2">
+                                    <button
+                                        class="button is-info"
+                                        @click="toRegisterPage"
+                                    >
+                                        登録
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -62,7 +70,6 @@ import Const from '@/util/Const';
 */
 export default {
     name: "Login",
-    /*
     data() {
         return {
             email: null,
@@ -70,6 +77,7 @@ export default {
         };
     },
     methods: {
+        /*
         async attempt() {
             try{
                 const result = await userStore.loginAttempt(this.email,this.password);
@@ -81,9 +89,11 @@ export default {
                 this.$swal(e.message);
             }
 
-        },
+        },*/
+        toRegisterPage(){
+            this.$router.push({name: 'User'});
+        }
     },
-    */
 };
 </script>
 

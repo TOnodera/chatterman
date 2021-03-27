@@ -14,6 +14,20 @@
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",
         "port": 9229
+      },
+      {
+        "name": "App launch",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "${workspaceRoot}/node_modules/.bin/ts-node",
+          "--files",
+          "-r",
+          "${workspaceRoot}/server"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "port": 9229
       }
     ]
   }

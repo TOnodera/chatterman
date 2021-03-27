@@ -1,18 +1,17 @@
 import Exception from "../Exception/Exception";
 import User from "../User/User";
 import LoginManager from '../User/LoginManager';
+import { Socket } from "socket.io";
+import ExceptionHandler from "../Exception/ExceptionHandler";
 
 class UserController{
     private loginManager: LoginManager;
     constructor(){
         this.loginManager = new LoginManager();
     }
-    async registe(name: string,credentials: Credentials){
-        const user: User = new User(name,credentials);
-        if(await user.registe()){
-
-        }
-        throw new Exception();
+    async registe(fromClient: UserRegisteInfo,socket: Socket){
+        const user: User = new User(fromClient.name,fromClient.credentials);
+        await user.registe().catch((e: Exception)=>ExceptionHandler.handle(e,socket));
     }
     async login(name: string,credentials: Credentials){
         if(await this.loginManager.login(credentials)){

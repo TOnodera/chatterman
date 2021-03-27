@@ -1,8 +1,8 @@
-import User from '../Domain/User/User';
-import { mySqlConnector } from '../Domain/Utility/Connection';
-import IUserRepository from '../Domain/User/IUserRepository';
-import UserRepositoryFactory from '../Domain/User/UserRepositoryFactory';
-import AuthenticationException from '../Domain/Exception/AuthenticationException';
+import User from '../../Domain/User/User';
+import { mySqlConnector } from '../../Domain/Utility/Connection';
+import IUserRepository from '../../Domain/User/IUserRepository';
+import UserRepositoryFactory from '../../Domain/User/UserRepositoryFactory';
+import AuthenticationException from '../../Domain/Exception/AuthenticationException';
 require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
 
 describe('UserRepository', () => {
@@ -57,7 +57,7 @@ describe('UserRepository', () => {
 
         it('email,passwordでユーザーインスタンスを取得出来る', async () => {
             const getUser = await repository.getUserByCredentials({email: email,password: password});
-            expect(getUser && getUser.credentials.email).toBe(email);
+            expect(getUser && getUser.credentials!.email).toBe(email);
         });
 
         it('存在しない場合は例外を投げる', async () => {
