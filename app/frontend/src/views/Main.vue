@@ -28,16 +28,11 @@ export default {
     components: {
         Sidebar
     },
-    methods: {
-        menuClicked(menuClicked) {
-            this.isMenuClicked = menuClicked;
-        },
-    },
-    data() {
-        return {
-            isMenuClicked: false,
-        };
-    },
+    props: {
+        isMenuClicked: {
+            type: Boolean,reuqired: true
+        }
+    }
 };
 </script>
 

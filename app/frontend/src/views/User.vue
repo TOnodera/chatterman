@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div class="mb-1">
-            <h2 class="is-size-5">ユーザー登録</h2>
-        </div>
-        <div class="columns">
+        <div class="columns mt-5 is-centered">
             <div class="column is-half">
                 <div class="field">
                     <label class="label">ユーザー名</label>
@@ -34,7 +31,7 @@
                     <!--<p class="help is-danger">This email is invalid</p>-->
                 </div>
 
-                <div class="field is-grouped">
+                <div class="field is-grouped is-pulled-right">
                     <div class="control">
                         <button class="button is-link">登録</button>
                     </div>

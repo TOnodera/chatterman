@@ -4,7 +4,7 @@
             <Header @menu-clicked="menuClicked" />
         </div>
         <div class="app-contents">
-            <router-view />
+            <router-view :isMenuClicked="isClicked" />
         </div>
         <div class="app-footer">
             <Footer />
@@ -22,15 +22,15 @@ export default {
         Header,
         Footer,
     },
-    methods: {
-        menuClicked(menuClicked) {
-            this.isMenuClicked = menuClicked;
-        },
+    data(){
+      return {
+        isClicked: false
+      }
     },
-    data() {
-        return {
-            isMenuClicked: false,
-        };
+    methods: {
+      menuClicked(isClicked){
+        this.isClicked = isClicked;
+      }
     },
 };
 </script>
