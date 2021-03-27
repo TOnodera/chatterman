@@ -59,10 +59,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import io from 'socket.io-client';
-import userStore from '../store/user.ts';
-export default {
+import swal from '../util/swal';
+import userStore from '../store/user';
+import { defineComponent } from 'vue';
+export default defineComponent({
     name: "User",
     data(){
         return {
@@ -77,15 +79,15 @@ export default {
         },
         register(){
             if(!this.name){
-                this.$swal('ユーザー名が未入力です。');
+                swal.fire('ユーザー名が未入力です。');
                 return;
             }
             if(!this.email){
-                this.$swal('メールアドレスが未入力です。');
+                swal.fire('メールアドレスが未入力です。');
                 return;
             }
             if(!this.password){
-                this.$swal('パスワードが未入力です。');
+                swal.fire('パスワードが未入力です。');
                 return;
             }
             const registInfo = {
@@ -99,9 +101,7 @@ export default {
         }
     },
     mounted() {
-        userStore.addRegisterExceptionHandler((msg)=>{
-            this.$swal(msg);
-        });
+        userStore.addRegisterExceptionHandler((msg: string)=>swal.fire(msg));
     },
-};
+});
 </script>

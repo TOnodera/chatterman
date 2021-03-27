@@ -63,12 +63,14 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+
 /*
 import userStore from '@/store/User';
 import Const from '@/util/Const';
 */
-export default {
+export default defineComponent({
     name: "Login",
     data() {
         return {
@@ -77,8 +79,8 @@ export default {
         };
     },
     methods: {
-        /*
         async attempt() {
+            /*
             try{
                 const result = await userStore.loginAttempt(this.email,this.password);
                 if(result){
@@ -88,13 +90,13 @@ export default {
             }catch(e){
                 this.$swal(e.message);
             }
-
-        },*/
+            */
+        },
         toRegisterPage(){
             this.$router.push({name: 'User'});
         }
     },
-};
+});
 </script>
 
 <style lang="scss">

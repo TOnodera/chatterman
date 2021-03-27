@@ -9,10 +9,12 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue"
+
+export default defineComponent({
     name: "ChatLeft",
-};
+});
 </script>
 
 <style lang="scss">

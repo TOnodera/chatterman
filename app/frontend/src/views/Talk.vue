@@ -19,16 +19,17 @@
     </div>
 </template>
 
-<script>
-import ChatLeft from "../components/ChatLeft";
-import ChatRight from "../components/ChatRight";
-export default {
+<script lang="ts">
+import ChatLeft from "../components/ChatLeft.vue";
+import ChatRight from "../components/ChatRight.vue";
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "Talk",
     components: {
         ChatLeft,
         ChatRight,
     },
-};
+});
 </script>
 
 <style lang="scss">

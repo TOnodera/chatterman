@@ -3,7 +3,7 @@ export default {
     me: {} as Me,
     users: [] as User[],
     handlers: {
-        registerExceptionHandler: (e: string): void => {}
+        registerExceptionHandler: (e: string)=>{}
     },
     isLogin(){
         return this.me.isLogin;
@@ -22,11 +22,11 @@ export default {
     registe(newUser: UserRegisteInfo){
         socketStore.socket.emit('user:registe',newUser);
     },
-    addRegisterExceptionHandler(func: (e: string)=>{}): void{
+    addRegisterExceptionHandler(func: (e: string)=>{}){
         this.handlers.registerExceptionHandler = func;
     },
     registerExceptionListener(){
-        socketStore.socket.on('occurred:domain-exception',(msg)=>{
+        socketStore.socket.on('occurred:domain-exception',(msg: string)=>{
             this.handlers.registerExceptionHandler(msg);
         });
     }

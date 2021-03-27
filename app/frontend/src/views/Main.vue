@@ -20,10 +20,11 @@
     </div>
 </template>
 
-<script>
-import Sidebar from "@/components/Sidebar";
+<script lang="ts">
+import Sidebar from "@/components/Sidebar.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
     name: "Main",
     components: {
         Sidebar
@@ -33,7 +34,7 @@ export default {
             type: Boolean,reuqired: true
         }
     }
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -49,5 +50,5 @@ export default {
         box-shadow: -1px 0px 2px 2px rgba(0, 0, 0, 0.5);
         position: relative;
     }
-}
+};
 </style>

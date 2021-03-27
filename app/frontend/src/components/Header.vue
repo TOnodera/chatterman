@@ -36,8 +36,10 @@
     </nav>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
     name: "Header",
     data() {
         return {
@@ -54,6 +56,6 @@ export default {
             this.$router.push({path: '/admin/login'});
         }
     },
-};
+});
 </script>
 
