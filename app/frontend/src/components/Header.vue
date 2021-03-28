@@ -22,7 +22,7 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                
+
             </div>
 
             <div class="navbar-end">
@@ -37,25 +37,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "Header",
-    data() {
-        return {
-            isToggleMenu: false,
-        };
+  name: 'Header',
+  data () {
+    return {
+      isToggleMenu: false
+    };
+  },
+  methods: {
+    toggleMenu () {
+      this.isToggleMenu = !this.isToggleMenu;
+      this.$emit('menu-clicked', this.isToggleMenu);
     },
-    methods: {
-        toggleMenu() {
-            this.isToggleMenu = !this.isToggleMenu;
-            this.$emit('menu-clicked',this.isToggleMenu);
-        },
-        logout(){
-            delete(localStorage.login);
-            this.$router.push({path: '/admin/login'});
-        }
-    },
+    logout () {
+      delete (localStorage.login);
+      this.$router.push({ path: '/admin/login' });
+    }
+  }
 });
 </script>
-

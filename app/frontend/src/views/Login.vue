@@ -64,23 +64,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
 /*
 import userStore from '@/store/User';
 import Const from '@/util/Const';
 */
 export default defineComponent({
-    name: "Login",
-    data() {
-        return {
-            email: null,
-            password: null,
-        };
-    },
-    methods: {
-        async attempt() {
-            /*
+  name: 'Login',
+  data () {
+    return {
+      email: null,
+      password: null
+    };
+  },
+  methods: {
+    async attempt () {
+      /*
             try{
                 const result = await userStore.loginAttempt(this.email,this.password);
                 if(result){
@@ -91,11 +91,11 @@ export default defineComponent({
                 this.$swal(e.message);
             }
             */
-        },
-        toRegisterPage(){
-            this.$router.push({name: 'User'});
-        }
     },
+    toRegisterPage () {
+      this.$router.push({ name: 'User' });
+    }
+  }
 });
 </script>
 

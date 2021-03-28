@@ -13,25 +13,25 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default {
-    name: "App",
-    components: {
-        Header,
-        Footer,
-    },
-    data(){
-      return {
-        isClicked: false
-      }
-    },
-    methods: {
-      menuClicked(isClicked){
-        this.isClicked = isClicked;
-      }
-    },
+  name: 'App',
+  components: {
+    Header,
+    Footer
+  },
+  data () {
+    return {
+      isClicked: false
+    };
+  },
+  methods: {
+    menuClicked (isClicked) {
+      this.isClicked = isClicked;
+    }
+  }
 };
 </script>
 

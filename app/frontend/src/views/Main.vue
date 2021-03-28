@@ -21,19 +21,19 @@
 </template>
 
 <script lang="ts">
-import Sidebar from "@/components/Sidebar.vue";
-import { defineComponent } from "vue";
+import Sidebar from '@/components/Sidebar.vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "Main",
-    components: {
-        Sidebar
-    },
-    props: {
-        isMenuClicked: {
-            type: Boolean,reuqired: true
-        }
+  name: 'Main',
+  components: {
+    Sidebar
+  },
+  props: {
+    isMenuClicked: {
+      type: Boolean, reuqired: true
     }
+  }
 });
 </script>
 

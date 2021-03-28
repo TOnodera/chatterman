@@ -20,15 +20,15 @@
 </template>
 
 <script lang="ts">
-import ChatLeft from "../components/ChatLeft.vue";
-import ChatRight from "../components/ChatRight.vue";
-import { defineComponent } from "vue";
+import ChatLeft from '../components/ChatLeft.vue';
+import ChatRight from '../components/ChatRight.vue';
+import { defineComponent } from 'vue';
 export default defineComponent({
-    name: "Talk",
-    components: {
-        ChatLeft,
-        ChatRight,
-    },
+  name: 'Talk',
+  components: {
+    ChatLeft,
+    ChatRight
+  }
 });
 </script>
 

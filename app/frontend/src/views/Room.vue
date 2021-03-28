@@ -12,7 +12,6 @@
                     </div>
                 </div>
 
-
                 <div class="field is-grouped">
                     <div class="control">
                         <button class="button is-link">登録</button>
@@ -27,9 +26,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "User",
+  name: 'User'
 });
 </script>

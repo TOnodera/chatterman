@@ -9,15 +9,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: 'Footer',
-    data(){
-        return {
-            year: 2021
-        }
-    }
+  name: 'Footer',
+  data () {
+    return {
+      year: 2021
+    };
+  }
 });
 </script>
-

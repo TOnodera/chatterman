@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Main from '@/views/Main.vue';
 import Talk from '@/views/Talk.vue';
 import User from '@/views/User.vue';
@@ -11,15 +11,15 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Main',
     component: Main,
     children: [{
-        path: 'talk',
-        name: 'Talk',
-        component: Talk
-      },
-      {
-        path: 'room',
-        name: 'Room',
-        component: Room
-      },
+      path: 'talk',
+      name: 'Talk',
+      component: Talk
+    },
+    {
+      path: 'room',
+      name: 'Room',
+      component: Room
+    }
     ]
   },
   {
@@ -32,11 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'User',
     component: User
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-export default router
+export default router;

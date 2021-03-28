@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "ChatLeft",
+  name: 'ChatLeft'
 });
 </script>
 
@@ -25,7 +25,7 @@ export default defineComponent({
     .info{
         display: flex;
         justify-content: center; /*左右中央揃え*/
-        align-items: center;    
+        align-items: center;
     }
 }
 .balloon1-left {

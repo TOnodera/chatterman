@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 import './assets/scss/_bulma.scss';
 import './assets/scss/_common.scss';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -11,4 +11,4 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // アイコンを読み込み
 library.add(fas, far, fab);
-createApp(App).use(router).component('fontawesome',FontAwesomeIcon).mount('#app');
+createApp(App).use(router).component('fontawesome', FontAwesomeIcon).mount('#app');
