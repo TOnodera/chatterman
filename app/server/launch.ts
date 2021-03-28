@@ -10,13 +10,13 @@ const userListener = require('./Listener/userListener');
 const port = process.env.PORT || 3000;
 const io = require('socket.io')(server,{
   cors:{
-    origin: ['http://localhost:8080','http://localhost:8081'],
+    origin: ['http://localhost:8080','http://localhost:8081','http://localhost:8082'],
     methods: ['GET','POST'],
     credentials: true
   }
 });
 app.use(cors({
-  origin: ['http://localhost:8080','http://localhost:8081'],
+  origin: ['http://localhost:8080','http://localhost:8081','http://localhost:8082'],
   credentials: true
 }));
 app.use(express.json());

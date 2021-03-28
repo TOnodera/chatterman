@@ -12,10 +12,11 @@ class UserController{
     async registe(fromClient: UserRegisteInfo,socket: Socket){
         const user: User = new User(fromClient.name,fromClient.credentials);
         await user.registe().catch((e: Exception)=>ExceptionHandler.handle(e,socket));
+        socket.emit('user:registered');
     }
     async login(name: string,credentials: Credentials){
         if(await this.loginManager.login(credentials)){
-
+            
         }
     }
     async logout(credentials: Credentials){

@@ -61,8 +61,9 @@
 
 <script lang="ts">
 import swal from '../util/swal';
-import userStore from '../store/user';
+import user from '../store/user';
 import { defineComponent } from 'vue';
+
 export default defineComponent({
   name: 'User',
   data () {
@@ -81,11 +82,18 @@ export default defineComponent({
       this.$router.push({ name: 'Login' });
     },
     register () {
-      userStore.registe(this.newUser);
+      user.registe(this.newUser);
     }
   },
   mounted () {
-    userStore.addRegisterExceptionHandler((msg: string) => swal.fire(msg));
+    user.addRegisterExceptionHandler((msg: string) => {
+        swal.fire(msg);
+    });
+    user.addRegisterSuccessHandler((msg: string)=>{ 
+        swal.fire(msg);
+        console.log("called...");
+        this.$router.push({name: 'Login'});
+    });
   }
 });
 </script>
