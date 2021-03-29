@@ -19,7 +19,8 @@ services:
       - "3000:3000"
       - "8081:8080"
     volumes:
-      - ../app:/app
+      - ../app:/server
+      - ../frontend:/frontend
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
