@@ -17,6 +17,7 @@ class UserController{
     async login(credentials: Credentials,socket: Socket){
         if(await this.loginManager.login(credentials).catch((e: Exception)=>{ExceptionHandler.handle(e,socket)})){
             socket.emit('user:logged-in');
+            socket.request.session.credentials = credentials;
             return;
         }
         socket.emit('user:login-failure');
@@ -26,7 +27,7 @@ class UserController{
             
         }
     }
-    async authenticate(credentials: Credentials){
+    async authenticate(credentials: Credentials,socket: Socket){
         if(await this.loginManager.authenticate(credentials)){
             
         }

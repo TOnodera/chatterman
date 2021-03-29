@@ -1,4 +1,5 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
+import { Socket } from 'socket.io';
 const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
@@ -7,7 +8,6 @@ const session = require('express-session')({
 	resave: false,
 	saveUninitialized: true
 });
-const sharedSession = require('express-socket.io-session');
 const chatListener = require('./Listener/chatListener');
 const userListener = require('./Listener/userListener');
 const io = require('socket.io')(server,{
@@ -23,11 +23,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(session);
-io.use(sharedSession(
-  session,{
-    autoSave: false
-  }
-));
+io.use((socket: Socket,next: NextFunction)=>{
+  session(socket.request,{},next);
+});
 //app.use(express.static(path.join(__dirname, '../../dist')));
 chatListener(io);
 userListener(io);
