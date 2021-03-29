@@ -15,7 +15,7 @@
                                             class="input"
                                             type="email"
                                             placeholder="Email"
-                                            v-model="email"
+                                            v-model="credentials.email"
                                         />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-envelope"></i>
@@ -31,7 +31,7 @@
                                             class="input"
                                             type="password"
                                             placeholder="Password"
-                                            v-model="password"
+                                            v-model="credentials.password"
                                         />
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-lock"></i>
@@ -65,36 +65,32 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import user from '../Domain/User';
+import swal from '../util/swal';
 
-/*
-import userStore from '@/store/User';
-import Const from '@/util/Const';
-*/
 export default defineComponent({
   name: 'Login',
   data () {
     return {
-      email: null,
-      password: null
+      credentials: {
+          email: '',
+          password: ''
+      } as Credentials
     };
   },
   methods: {
     async attempt () {
-      /*
-            try{
-                const result = await userStore.loginAttempt(this.email,this.password);
-                if(result){
-                    localStorage.login = Const.LOGIN_VALUE;
-                    this.$router.push({name: 'DashBoard'});
-                }
-            }catch(e){
-                this.$swal(e.message);
-            }
-            */
+        user.attemptLogin(this.credentials);
     },
     toRegisterPage () {
       this.$router.push({ name: 'User' });
     }
+  },
+  mounted(){
+      user.addLoginSuccessHandler(()=>{
+          swal.fire('ログインしました。');
+          this.$router.push({name: 'Talk'});
+      });
   }
 });
 </script>

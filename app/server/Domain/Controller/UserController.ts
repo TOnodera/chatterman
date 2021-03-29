@@ -14,10 +14,12 @@ class UserController{
         await user.registe().catch((e: Exception)=>ExceptionHandler.handle(e,socket));
         socket.emit('user:registered');
     }
-    async login(name: string,credentials: Credentials){
-        if(await this.loginManager.login(credentials)){
-            
+    async login(credentials: Credentials,socket: Socket){
+        if(await this.loginManager.login(credentials).catch((e: Exception)=>{ExceptionHandler.handle(e,socket)})){
+            socket.emit('user:logged-in');
+            return;
         }
+        socket.emit('user:login-failure');
     }
     async logout(credentials: Credentials){
         if(await this.loginManager.logout(credentials)){

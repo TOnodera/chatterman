@@ -1,4 +1,4 @@
-import socketStore from './socketStore';
+import socketStore from './ClientStore';
 import swal from '../util/swal';
 
 class UserDomain {
@@ -7,7 +7,8 @@ class UserDomain {
   users: User[];
   handlers: {
     registerExceptionHandler: Function,
-    registerSuccessHandler: Function
+    registerSuccessHandler: Function,
+    loginSuccessHandler: Function
   };
 
   constructor() {
@@ -15,15 +16,21 @@ class UserDomain {
     this.users = [];
     this.handlers = {
       registerExceptionHandler: () => { },
-      registerSuccessHandler: () => { }
+      registerSuccessHandler: () => { },
+      loginSuccessHandler: ()=> {}
     };
     //リスナ登録
     this.registerExceptionListener();
     this.registerSuccessListener();
+    this.loginSuccessListener();
   }
 
   isLogin() {
     return this.me.isLogin;
+  }
+
+  attemptLogin(credentials: Credentials){
+    socketStore.socket.emit('user:attempt-login',credentials);
   }
 
   addUser(user: User) {
@@ -65,6 +72,10 @@ class UserDomain {
     this.handlers.registerSuccessHandler = func;
   }
 
+  addLoginSuccessHandler(func: Function){
+    this.handlers.loginSuccessHandler = func;
+  }
+
   registerExceptionListener() {
     socketStore.socket.on('occurred:domain-exception', (msg: string) => {
       this.handlers.registerExceptionHandler(msg);
@@ -74,6 +85,12 @@ class UserDomain {
   registerSuccessListener(){
     socketStore.socket.on('user:registered',(msg: string) => {
       this.handlers.registerSuccessHandler(msg);
+    });
+  }
+
+  loginSuccessListener(){
+    socketStore.socket.on('user:logged-in',()=>{
+      this.handlers.loginSuccessHandler();
     });
   }
 

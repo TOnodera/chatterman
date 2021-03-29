@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import swal from '../util/swal';
-import user from '../store/user';
+import user from '../Domain/User';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -91,7 +91,6 @@ export default defineComponent({
     });
     user.addRegisterSuccessHandler((msg: string)=>{ 
         swal.fire(msg);
-        console.log("called...");
         this.$router.push({name: 'Login'});
     });
   }
