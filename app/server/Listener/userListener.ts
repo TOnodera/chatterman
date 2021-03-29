@@ -15,6 +15,11 @@ module.exports = (io: any) => {
       await UserController.login(credendtials,socket);
     };
 
+    //ログアウト
+    const userLogout = async (credentials: Credentials) => {
+      await UserController.logout(credentials,socket);
+    }
+
     //ハンドラ登録
     socket.on('user:register', userRegister);
     socket.on('user:attempt-login', userLogin);

@@ -13,13 +13,13 @@ class LoginManager implements ILoginManager{
         this.repository = UserRepositoryFactory.create();
     }
 
-    async login(credentials: Credentials): Promise<boolean> {
+    async login(credentials: Credentials): Promise<{user?: User,success: boolean}> {
         if(await this.repository.credentials(credentials)){
             const user: User = await this.repository.getUserByCredentials(credentials);
             loginUserStore.enqueue(user);
-            return true;            
+            return {user: user,success: true};            
         }
-        return false;
+        return {success: false};
     }
 
     async logout(credentials: Credentials): Promise<boolean> {

@@ -41,8 +41,7 @@
                                 <div class="buttons is-pulled-right">
                                     <button
                                         class="button is-primary"
-                                        @click="attempt"
-                                    >
+                                        @click="attempt">
                                         ログイン
                                     </button>
                                 </div>
@@ -88,8 +87,12 @@ export default defineComponent({
   },
   mounted(){
       user.addLoginSuccessHandler(()=>{
+          console.log(user.me.isLogin);
           swal.fire('ログインしました。');
           this.$router.push({name: 'Talk'});
+      });
+      user.addLoginFailureHandler(()=>{
+          swal.fire('ログイン情報が間違っています。');
       });
   }
 });

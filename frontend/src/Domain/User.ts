@@ -1,4 +1,4 @@
-import socketStore from './ClientStore';
+import socketStore from './Socket';
 import swal from '../util/swal';
 
 class UserDomain {
@@ -8,21 +8,32 @@ class UserDomain {
   handlers: {
     registerExceptionHandler: Function,
     registerSuccessHandler: Function,
-    loginSuccessHandler: Function
+    loginSuccessHandler: Function,
+    loginFailureHandler: Function
   };
 
   constructor() {
-    this.me = {} as Me;
+    this.me = {
+      id: '',
+      name: '',
+      credentials: {
+        email: '',
+        password: ''
+      },
+      isLogin: false
+    };
     this.users = [];
     this.handlers = {
-      registerExceptionHandler: () => { },
-      registerSuccessHandler: () => { },
-      loginSuccessHandler: ()=> {}
+      registerExceptionHandler: Function,
+      registerSuccessHandler: Function,
+      loginSuccessHandler: Function,
+      loginFailureHandler: Function
     };
-    //リスナ登録
+    //リスナ起動
     this.registerExceptionListener();
     this.registerSuccessListener();
     this.loginSuccessListener();
+    this.loginFailureListener();
   }
 
   isLogin() {
@@ -31,6 +42,10 @@ class UserDomain {
 
   attemptLogin(credentials: Credentials){
     socketStore.socket.emit('user:attempt-login',credentials);
+  }
+
+  logout(credentials: Credentials){
+
   }
 
   addUser(user: User) {
@@ -76,6 +91,10 @@ class UserDomain {
     this.handlers.loginSuccessHandler = func;
   }
 
+  addLoginFailureHandler(func: Function){
+    this.handlers.loginFailureHandler = func;
+  }
+
   registerExceptionListener() {
     socketStore.socket.on('occurred:domain-exception', (msg: string) => {
       this.handlers.registerExceptionHandler(msg);
@@ -89,8 +108,15 @@ class UserDomain {
   }
 
   loginSuccessListener(){
-    socketStore.socket.on('user:logged-in',()=>{
+    socketStore.socket.on('user:logged-in',(me: Me)=>{
+      this.me = me;
       this.handlers.loginSuccessHandler();
+    });
+  }
+
+  loginFailureListener(){
+    socketStore.socket.on('user:login-failure',()=>{
+      this.handlers.loginFailureHandler();
     });
   }
 

@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import user from '../Domain/User';
 
 export default defineComponent({
   name: 'Header',
@@ -51,9 +52,11 @@ export default defineComponent({
       this.isToggleMenu = !this.isToggleMenu;
       this.$emit('menu-clicked', this.isToggleMenu);
     },
-    logout () {
-      delete (localStorage.login);
-      this.$router.push({ path: '/admin/login' });
+    async logout () {
+      if(user.me.isLogin){
+        await user.logout(user.me.credentials);
+      }
+      this.$router.push({name: 'Login'});
     }
   }
 });
