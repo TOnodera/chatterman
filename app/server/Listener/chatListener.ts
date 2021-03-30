@@ -1,8 +1,7 @@
 import { Socket } from "socket.io";
 import messageController from '../Domain/Controller/MessasgeController';
 import User from "../Domain/User/User";
-//仮実装用
-import user from '../Domain/User/User';
+import roomController from '../Domain/Controller/RoomController';
 
 module.exports = (io: any) => {
     io.on('connection', (socket: Socket) => {
@@ -24,29 +23,13 @@ module.exports = (io: any) => {
         };
 
         //テスト実装　動作するのを確認できたら別クラス(RoomManager?とか)で実装する
-        const attemptToEnter = async (info: any) => {
-            const user: User = new User(info.user_id);
-            await user.load();
-            if(await user.isAccessable(info.room_id)){
-                socket.join(info.room_id);
-                socket.emit('user:join-room',info.room_id);
-                console.log('send user:join-room',info.room_id);
-                return;
-            }
-            socket.emit('user:denied-to-enter-room');
-            console.log('send user:denied-to-enter-room');
+        const attemptToEnter = async (info: RoomAndUserId) => {
+            await roomController.attemptToEnter(info,socket);
         };
 
         //上と同じ　テスト実装
-        const leaveCurrentRoom = async (info: any)=>{
-            const user: User = new User(info.user_id);
-            await user.load();
-            if(await user.isAccessable(info.room_id)){
-                socket.leave(info.room_id);
-                socket.emit('user:left-room',info.room_id);
-                console.log('send user:left-room',info.room_id);
-                return;
-            }
+        const leaveCurrentRoom = async (info: RoomAndUserId)=>{
+            await roomController.leaveCurrentRoom(info,socket);
         }
 
         socket.on('user:send-message', userSendMessage);
