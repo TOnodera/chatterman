@@ -19,8 +19,10 @@ class UserController {
             const { user, success } = await this.loginManager.login(credentials);
             if (success) {
                 socket.emit('user:logged-in',{
-                    id: user?.id,
-                    name: user?.name,
+                    user: {
+                        id: user?.id,
+                        name: user?.name
+                    },
                     credentials: user?.credentials,
                     isLogin: true
                 });

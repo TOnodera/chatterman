@@ -55,7 +55,6 @@ class UserRepository implements IUserRepository {
 
     async get(user_id: string): Promise<{user?: User,exists: boolean}>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE id = ? ',[user_id]);
-        console.log(user_id,rows);
         if(rows.length > 0){
             const user: User = new User(rows[0].name,{email: rows[0].email,password: rows[0].password},rows[0].created_at,rows[0].id);
             return {user: user,exists: true};

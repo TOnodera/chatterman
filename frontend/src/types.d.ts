@@ -1,6 +1,5 @@
 interface Me{
-    id: string,
-    name: string,
+    user: User,
     credentials: Credentials,
     isLogin: boolean
 }

@@ -14,8 +14,10 @@ class UserDomain {
 
   constructor() {
     this.me = {
-      id: '',
-      name: '',
+      user: {
+        id: '',
+        name: '',
+      },
       credentials: {
         email: '',
         password: ''

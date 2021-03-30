@@ -89,7 +89,7 @@ export default defineComponent({
       user.addLoginSuccessHandler(()=>{
           console.log(user.me.isLogin);
           swal.fire('ログインしました。');
-          this.$router.push({name: 'Talk'});
+          this.$router.push({name: 'Talk' ,params: {room_id: 'everybody'}});
       });
       user.addLoginFailureHandler(()=>{
           swal.fire('ログイン情報が間違っています。');

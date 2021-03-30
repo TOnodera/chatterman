@@ -5,15 +5,20 @@
                 <div class="menu-label is-size-6 mt-3">
                     <fontawesome icon="coffee" />ルーム
                     <div class="is-pulled-right is-clickable">
-                        <router-view to="/room">
+                        <router-link to="/room">
                             <fontawesome icon="plus-square" />追加
-                        </router-view>
+                        </router-link>
                     </div>
                 </div>
                 <ul class="menu-list">
                     <li>
-                        <router-link to="/talk">
+                        <router-link to="/talk/everybody">
                             <span class>あああ</span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link to="/talk/no-one">
+                            <span class>いいい</span>
                         </router-link>
                     </li>
                 </ul>
@@ -23,12 +28,12 @@
             </div>
             <ul class="menu-list">
                 <li>
-                    <router-link to="/">
+                    <router-link to="/room">
                         <span class="ml-1">あああ</span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/">
+                    <router-link to="/talk/iii">
                         <fontawesome class="login-color" icon="circle"/>
                         <span class="ml-1">いいい</span>
                     </router-link>

@@ -11,9 +11,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Main',
     component: Main,
     children: [{
-      path: 'talk',
+      path: 'talk/:room_id',
       name: 'Talk',
-      component: Talk
+      component: Talk,
     },
     {
       path: 'room',
