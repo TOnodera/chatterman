@@ -24,13 +24,13 @@ export default defineComponent({
   mounted(){
       let count = 1;
       setInterval(()=>{
-          this.dot += '・';
+          this.dot += '.';
           if(count > 4){
               this.dot = '';
               count = 0;
           }
           count++;
-      },100);
+      },300);
   }
 });
 </script>

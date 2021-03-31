@@ -31,7 +31,6 @@ import Typing from "../components/Typing.vue";
 import user from "../Domain/User";
 import message from "../Domain/Message";
 import room from "../Domain/Room";
-import util from "../util/util";
 
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -64,11 +63,12 @@ export default defineComponent({
         }
     },
     mounted() {
+        console.log('mounted: Talk component...');
         //ユーザーがこのroomに入場できるか検証
         room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
         //リスナ設定
-        message.addAcceptMessageHandler((newMessages: string[]) => {
-            this.messages = newMessages.slice(0, newMessages.length + 1);
+        message.addAcceptMessageHandler((newMessages: any[]) => {
+            this.messages = newMessages.filter(message => message.room_id == this.$route.params.room_id);
         });
         //タイピングイベント受信時の処理
         message.addTypingEventHandler((user: User) => {
@@ -93,6 +93,8 @@ export default defineComponent({
                     this.$route.params.room_id as string,
                     user.me.user
                 );
+                //再描画
+                this.messages = this.messages.filter(message => message.room_id == this.$route.params.room_id);
             }
         }
     }

@@ -4,6 +4,7 @@ class Message{
     private store: Map<string,string[]>;
     private acceptMessageHandler: Function;
     private typingEventHandler: Function;
+
     constructor(){
         this.store = new Map<string,string[]>();
         this.acceptMessageHandler = Function;
@@ -26,7 +27,7 @@ class Message{
             messages.push(fromServer);
             this.store.set(fromServer.room_id,messages);
             this.acceptMessageNotify(fromServer.room_id);
-            console.log(this.store);
+            console.log('in accept message listener...',this.store);
         });
     }
 
@@ -48,13 +49,11 @@ class Message{
 
     typingEventListener(){
         socketStore.socket.on('broadcast:user-typing',(user: User)=>{
-            console.log('typingEventListener()',user);
             this.typingEventNotify(user);
         });
     }
 
     typingEventNotify(user: User){
-        console.log('typingEventNotify()',user);
         this.typingEventHandler(user);
     }
 
