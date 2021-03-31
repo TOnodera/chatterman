@@ -1,7 +1,7 @@
 <template>
     <div class="left-balloon-wrapper">
         <div class="balloon1-left">
-            <p>{{message}}</p>
+            <p>{{text}}{{dot}}</p>
         </div>
         <div class="info">
             <p class="is-size-7">{{user_name}}</p>
@@ -13,8 +13,25 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'ChatLeft',
-  props: ['message','user_name']
+  name: 'Typing',
+  props: ['user_name'],
+  data(){
+      return {
+          text: '入力中',
+          dot: ''
+      };
+  },
+  mounted(){
+      let count = 1;
+      setInterval(()=>{
+          this.dot += '・';
+          if(count > 4){
+              this.dot = '';
+              count = 0;
+          }
+          count++;
+      },100);
+  }
 });
 </script>
 
@@ -27,9 +44,6 @@ export default defineComponent({
         display: flex;
         justify-content: center; /*左右中央揃え*/
         align-items: center;
-        p{
-            word-break: break-all;
-        }
     }
 }
 .balloon1-left {

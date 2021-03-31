@@ -2,13 +2,24 @@
     <div class="talk-input">
         <div class="columns is-centered chat-wrapper">
             <div class="column is-four-fifths">
-                <ChatLeft />
-                <ChatRight />
-                <ChatLeft />
-                <ChatRight />
+                <template v-for="message in messages">
+                    <ChatRight
+                        v-if="message.user_id == user_id"
+                        :message="message.message"
+                        :user_name="message.user_name"
+                        :key="message.message_id"
+                    />
+                    <ChatLeft
+                        v-else
+                        :message="message.message"
+                        :user_name="message.user_name"
+                        :key="message.message_id"
+                    />
+                </template>
+                <Typing :class="{'is-hidden': !isTyping}" />
             </div>
         </div>
-        <InputArea @message-send="send" />
+        <InputArea @message-send="send" @typing="typing" />
     </div>
 </template>
 
@@ -16,6 +27,7 @@
 import ChatLeft from "../components/ChatLeft.vue";
 import ChatRight from "../components/ChatRight.vue";
 import InputArea from "../components/InputArea.vue";
+import Typing from "../components/Typing.vue";
 import user from "../Domain/User";
 import message from "../Domain/Message";
 import room from "../Domain/Room";
@@ -26,11 +38,16 @@ export default defineComponent({
     components: {
         ChatLeft,
         ChatRight,
-        InputArea
+        InputArea,
+        Typing
     },
     data() {
         return {
-            room_id: "" as any
+            room_id: "" as any,
+            messages: [] as any[],
+            user_id: user.me.user.id,
+            isTyping: false,
+            typingUser: ""
         };
     },
     methods: {
@@ -40,23 +57,35 @@ export default defineComponent({
                 user.me.user,
                 this.$route.params.room_id as string
             );
+        },
+        typing() {
+            message.typing(user.me.user);
         }
     },
     mounted() {
-        console.log(this.room_id);
         //ユーザーがこのroomに入場できるか検証
-        //OKならjoinイベントを発生させる。
         room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
-        //user.isEnterable()?
-        //退出した場合は退出イベントを発生させる
-        //user.hasLeft()?
+        //リスナ設定
+        message.addAcceptMessageHandler((newMessages: string[]) => {
+            this.messages = newMessages.slice(0, newMessages.length + 1);
+        });
+        //タイピングイベント受信時の処理
+        message.addTypingEventHandler((user: User) => {
+            if (this.isTyping == false) {
+                this.isTyping = true;
+                this.typingUser = user.name;
+                const id = setTimeout(() => {
+                    this.isTyping = false;
+                    clearTimeout(id);
+                }, 3000);
+            }
+        });
     },
     watch: {
         $route(to, from) {
             const regExp = new RegExp(/^\/talk/);
-            console.log(to.path, from.path);
             if (regExp.test(to.path)) {
-                if (regExp.test(from.path)) {
+                if (regExp.test(from.path) && to.path != from.path) {
                     room.leaveCurrent(user.me.user);
                 }
                 room.attemptToEnter(

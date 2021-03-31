@@ -7,7 +7,8 @@ module.exports = (io: any) => {
     io.on('connection', (socket: Socket) => {
 
         const userSendMessage = async (fromClient: any) => {
-            await messageController.add(fromClient.message,fromClient.user.id,socket,fromClient.room_id);
+            console.log("through controller...");
+            await messageController.add(fromClient.message,fromClient.user.id,io,fromClient.room_id);
         };
 
         const userEditMessage = async (fromClient: any) => {
@@ -22,21 +23,24 @@ module.exports = (io: any) => {
 
         };
 
-        //テスト実装　動作するのを確認できたら別クラス(RoomManager?とか)で実装する
         const attemptToEnter = async (info: RoomAndUserId) => {
             await roomController.attemptToEnter(info,socket);
         };
 
-        //上と同じ　テスト実装
         const leaveCurrentRoom = async (info: RoomAndUserId)=>{
             await roomController.leaveCurrentRoom(info,socket);
         }
+
+        const userTyping = ()=>{
+            messageController.typing(socket);
+        };
 
         socket.on('user:send-message', userSendMessage);
         socket.on('user:edit-message', userEditMessage);
         socket.on('user:delete-message', deleteMessage);
         socket.on('user:attempt-to-enter-room', attemptToEnter);
         socket.on('user:leave-room',leaveCurrentRoom);
+        socket.on('user:typing',userTyping);
 
     });
 }

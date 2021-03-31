@@ -2,7 +2,7 @@
     <div class="input-wrapper">
         <div class="input-area columns is-centered m-0">
             <div class="textarea column">
-                <textarea class="textarea is-primary" rows="1" v-model="message"></textarea>
+                <textarea class="textarea is-primary" rows="1" v-model="message" @keyup="typing"></textarea>
                 <button
                     type="button"
                     class="button is-primary is-pulled-right mt-2"
@@ -25,6 +25,9 @@ export default {
         send(){
             this.$emit('message-send',this.message);
             this.message = '';
+        },
+        typing(){
+            this.$emit('typing');
         }
     },
 };

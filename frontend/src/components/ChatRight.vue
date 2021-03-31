@@ -1,10 +1,10 @@
 <template>
     <div class="right-balloon-wrapper">
         <div class="balloon1-right">
-            <p>こんにちは。これは例です。こんにちは。これは例です。</p>
+            <p>{{message}}</p>
         </div>
         <div class="info">
-            <p>yu-za-mei</p>
+            <p class="is-size-7">{{user_name}}</p>
         </div>
     </div>
 </template>
@@ -13,7 +13,8 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'ChatRight'
+  name: 'ChatRight',
+  props: ['message','user_name']
 });
 </script>
 
@@ -25,6 +26,9 @@ export default defineComponent({
         display: flex;
         justify-content: center; /*左右中央揃え*/
         align-items: center;
+        p{
+            word-break: break-all;
+        }
     }
 }
 .balloon1-right {
