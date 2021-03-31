@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'ChatLeft',
-  props: ['message','user_name']
+    name: "ChatLeft",
+    props: ["message", "user_name"]
 });
 </script>
 
@@ -23,13 +23,14 @@ export default defineComponent({
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
-    .info{
+    p {
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+    .info {
         display: flex;
         justify-content: center; /*左右中央揃え*/
         align-items: center;
-        p{
-            word-break: break-all;
-        }
     }
 }
 .balloon1-left {

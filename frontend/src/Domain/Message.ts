@@ -26,6 +26,7 @@ class Message{
             messages.push(fromServer);
             this.store.set(fromServer.room_id,messages);
             this.acceptMessageNotify(fromServer.room_id);
+            console.log(this.store);
         });
     }
 
@@ -47,11 +48,13 @@ class Message{
 
     typingEventListener(){
         socketStore.socket.on('broadcast:user-typing',(user: User)=>{
+            console.log('typingEventListener()',user);
             this.typingEventNotify(user);
         });
     }
 
     typingEventNotify(user: User){
+        console.log('typingEventNotify()',user);
         this.typingEventHandler(user);
     }
 

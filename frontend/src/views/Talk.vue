@@ -31,6 +31,7 @@ import Typing from "../components/Typing.vue";
 import user from "../Domain/User";
 import message from "../Domain/Message";
 import room from "../Domain/Room";
+import util from "../util/util";
 
 import { defineComponent } from "vue";
 export default defineComponent({

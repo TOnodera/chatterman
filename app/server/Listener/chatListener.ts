@@ -1,6 +1,5 @@
 import { Socket } from "socket.io";
 import messageController from '../Domain/Controller/MessasgeController';
-import User from "../Domain/User/User";
 import roomController from '../Domain/Controller/RoomController';
 
 module.exports = (io: any) => {
@@ -8,7 +7,8 @@ module.exports = (io: any) => {
 
         const userSendMessage = async (fromClient: any) => {
             console.log("through controller...");
-            await messageController.add(fromClient.message,fromClient.user.id,io,fromClient.room_id);
+            await messageController.add(fromClient.message,fromClient.user.id,socket,fromClient.room_id);
+            console.log("in chat listener...",socket.rooms);
         };
 
         const userEditMessage = async (fromClient: any) => {

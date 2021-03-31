@@ -17,7 +17,7 @@
                         </router-link>
                     </li>
                     <li>
-                        <router-link to="/talk/no-one">
+                        <router-link to="/talk/test">
                             <span class>いいい</span>
                         </router-link>
                     </li>

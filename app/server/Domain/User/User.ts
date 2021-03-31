@@ -21,7 +21,7 @@ class User {
     constructor(name: string, credentials: Credentials, created_at?: Datetime, id?: string);
     constructor(name_or_user_id: string, credentials?: Credentials, created_at?: Datetime, id?: string) {
         this.repository = UserRepositoryFactory.create();
-        this.accessableRooms = ['everybody'];
+        this.accessableRooms = ['everybody','test'];
         if(name_or_user_id && !credentials){
             this.id = name_or_user_id;
             return;

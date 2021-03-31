@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'ChatRight',
-  props: ['message','user_name']
+    name: "ChatRight",
+    props: ["message", "user_name"]
 });
 </script>
 
@@ -22,13 +22,14 @@ export default defineComponent({
 .right-balloon-wrapper {
     display: flex;
     justify-content: flex-end;
+    p {
+        word-break: break-word;
+        white-space: pre-line;
+    }
     .info {
         display: flex;
         justify-content: center; /*左右中央揃え*/
         align-items: center;
-        p{
-            word-break: break-all;
-        }
     }
 }
 .balloon1-right {

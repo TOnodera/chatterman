@@ -11,13 +11,17 @@ class MessageController{
         if(await user.load()){
             const message: Message = new Message(strMessage,user,room_id);
             await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
-            /*
-            const res = socket.to(room_id).emit('broadcast:user-send-message',{
+            console.log("in message controller...",socket.rooms);
+            
+            //Room系のクラスで実装しなおした　要リファクタリング
+            socket.broadcast.to(room_id).emit('broadcast:user-send-message',{
                 room_id: room_id,
                 user_id: user_id,
+                user_name: message.user!.name,
+                message_id: message.message_id,
                 message: strMessage
             });
-            */
+            //自分に送る
             socket.emit('broadcast:user-send-message',{
                 room_id: room_id,
                 user_id: user_id,
@@ -25,7 +29,8 @@ class MessageController{
                 message_id: message.message_id,
                 message: strMessage
             });
-            console.log('emitted...');
+            //END Room系のクラスで実装しなおした　要リファクタリング
+
             return;
         }
         throw new Exception('メッセージの登録に失敗しました。');

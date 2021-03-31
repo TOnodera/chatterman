@@ -7,6 +7,7 @@ class RoomManager{
             socket.join(info.room_id);
             socket.emit('user:join-room',info.room_id);
             console.log('send user:join-room',info.room_id);
+            console.log('in room manager:joined...',socket.rooms);
             return;
         }
         socket.emit('user:denied-to-enter-room');
@@ -18,6 +19,7 @@ class RoomManager{
             socket.leave(info.room_id);
             socket.emit('user:left-room',info.room_id);
             console.log('send user:left-room',info.room_id);
+            console.log('in room manager:left...',socket.rooms);
         }
     }
 }
