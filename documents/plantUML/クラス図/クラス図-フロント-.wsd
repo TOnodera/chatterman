@@ -10,11 +10,9 @@ package Mesage{
     class Subject{
         +notifyObserver()
         +addAcceptMessageHandler(func: Function)
-        +addChangeRoomHandler(func: Function)
         +addTypingEventHandler(func: Function)
         +acceptMessageNotify(room_id: string)
         +typingEventNotify(user: User)
-        +changeRoomNotify(room_id: string)
     }
 
     class Observer{
@@ -34,6 +32,21 @@ package Mesage{
     note right of AcceptMessageObserver::handler
     handlerをupdate()で呼び出す
     end note
+
+    class TypingEventSubject{
+        +notify(room_id: string);
+    }
+
+    class TypingEventObserver{
+        +{static} handler: Function
+        +{static} update()
+    }
+    note right of AcceptMessageObserver::handler
+    handlerをupdate()で呼び出す
+    end note
+
+    AcceptMessageObserver <.. AcceptMessageSubject
+    TypingEventObserver <.. TypingEventSubject
 
 }
 

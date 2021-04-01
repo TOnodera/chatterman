@@ -1,19 +1,13 @@
 import socketStore from '../Socket';
-import AcceptMessageObserver from './AcceptMessageObserver';
 import AcceptMessageSubject from './AcceptMessageSubject';
-import acceptMessageSubject from './AcceptMessageSubject';
+import TypingEventSubject from './TypingEventSubject';
+
 class Message{
 
     private store: Map<string,any[]>;
-    private acceptMessageHandler: Function;
-    private typingEventHandler: Function;
-    private changeRoomHandler: Function;
 
     constructor(){
         this.store = new Map<string,string[]>();
-        this.acceptMessageHandler = Function;
-        this.typingEventHandler = Function;
-        this.changeRoomHandler = Function;
         this.acceptMessageListener();
         this.typingEventListener();
     }
@@ -40,23 +34,8 @@ class Message{
 
     acceptMessageListener(){
         socketStore.socket.on('broadcast:user-send-message',(fromServer: any)=>{
-            /*
-            const messages: any[] = this.store.has(fromServer.room_id) ? this.store.get(fromServer.room_id) as string[] : [];
-            messages.push(fromServer);
-            this.store.set(fromServer.room_id,messages);
-            this.acceptMessageNotify(fromServer.room_id);
-            console.log('in acceptMessageLstener: this.store ->',this.store);
-            */
            AcceptMessageSubject.notify(fromServer);
         });
-    }
-
-    addAcceptMessageHandler(func: Function){
-        this.acceptMessageHandler = func;
-    }
-
-    acceptMessageNotify(room_id: string){
-        this.acceptMessageHandler(this.store.get(room_id));
     }
 
     getChatMessages(room_id: string): any[]{
@@ -67,20 +46,11 @@ class Message{
         socketStore.socket.emit('user:typing',user);
     }
 
-    addTypingEventHandler(func: Function){
-        this.typingEventHandler = func;
-    }
-
     typingEventListener(){
         socketStore.socket.on('broadcast:user-typing',(user: User)=>{
-            this.typingEventNotify(user);
+            TypingEventSubject.notify(user);
         });
     }
-
-    typingEventNotify(user: User){
-        this.typingEventHandler(user);
-    }
-
 }
 
 export default new Message();

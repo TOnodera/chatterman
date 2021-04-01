@@ -32,6 +32,7 @@ import user from "../Domain/User";
 import message from "../Domain/Message/Message";
 import room from "../Domain/Room";
 import AcceptMessageObserver from "../Domain/Message/AcceptMessageObserver";
+import TypingEventObserver from '../Domain/Message/TypingEventObserver';
 
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -61,16 +62,6 @@ export default defineComponent({
         },
         includeTalkroomPath(path: string) {
             return new RegExp(/^\/talk/).test(path);
-        },
-        typingHandler(user: User) {
-            if (this.isTyping == false) {
-                this.isTyping = true;
-                this.typingUser = user.name;
-                const id = setTimeout(() => {
-                    this.isTyping = false;
-                    clearTimeout(id);
-                }, this.typingTimer);
-            }
         }
     },
     mounted() {
@@ -84,7 +75,16 @@ export default defineComponent({
             );
         };
         //タイピングイベント受信時の処理
-        message.addTypingEventHandler(this.typingHandler);
+        TypingEventObserver.handle = (user: User) => {
+            if (this.isTyping == false) {
+                this.isTyping = true;
+                this.typingUser = user.name;
+                const id = setTimeout(() => {
+                    this.isTyping = false;
+                    clearTimeout(id);
+                }, this.typingTimer);
+            }
+        };
     },
     watch: {
         $route(to, from) {
