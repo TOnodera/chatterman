@@ -6,7 +6,6 @@ class UserDomain {
   me: Me;
   users: User[];
   handlers: {
-    registerExceptionHandler: Function,
     registerSuccessHandler: Function,
     loginSuccessHandler: Function,
     loginFailureHandler: Function
@@ -26,13 +25,11 @@ class UserDomain {
     };
     this.users = [];
     this.handlers = {
-      registerExceptionHandler: Function,
       registerSuccessHandler: Function,
       loginSuccessHandler: Function,
       loginFailureHandler: Function
     };
     //リスナ起動
-    this.registerExceptionListener();
     this.registerSuccessListener();
     this.loginSuccessListener();
     this.loginFailureListener();
@@ -81,10 +78,6 @@ class UserDomain {
     return true;
   }
 
-  addRegisterExceptionHandler(func: Function) {
-    this.handlers.registerExceptionHandler = func;
-  }
-
   addRegisterSuccessHandler(func: Function) {
     this.handlers.registerSuccessHandler = func;
   }
@@ -95,12 +88,6 @@ class UserDomain {
 
   addLoginFailureHandler(func: Function){
     this.handlers.loginFailureHandler = func;
-  }
-
-  registerExceptionListener() {
-    socketStore.socket.on('occurred:domain-exception', (msg: string) => {
-      this.handlers.registerExceptionHandler(msg);
-    });
   }
 
   registerSuccessListener(){

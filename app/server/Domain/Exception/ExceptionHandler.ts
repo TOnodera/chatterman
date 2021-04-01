@@ -10,7 +10,7 @@ class ExceptionHandler{
                 break;
             case 401:
                 //認証例外の処理
-                socket.send(exception);
+                socket.send('occurred:authentication-exception',exception.message);
                 break;
             default:
                 //想定外のエラー

@@ -28,7 +28,7 @@ import ChatLeft from "../components/ChatLeft.vue";
 import ChatRight from "../components/ChatRight.vue";
 import InputArea from "../components/InputArea.vue";
 import Typing from "../components/Typing.vue";
-import user from "../Domain/User";
+import user from "../Domain/User/User";
 import message from "../Domain/Message/Message";
 import room from "../Domain/Room";
 import AcceptMessageObserver from "../Domain/Message/AcceptMessageObserver";

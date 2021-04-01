@@ -26,7 +26,7 @@
 import { defineComponent } from 'vue';
 import swal from '../util/swal';
 import room from '../Domain/Room';
-import user from '../Domain/User';
+import user from '../Domain/User/User';
 
 export default defineComponent({
   name: 'User',

@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import user from '../Domain/User';
+import user from '../Domain/User/User';
 
 export default defineComponent({
   name: 'Header',

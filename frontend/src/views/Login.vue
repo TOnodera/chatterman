@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import user from '../Domain/User';
+import user from '../Domain/User/User';
 import swal from '../util/swal';
 
 export default defineComponent({
