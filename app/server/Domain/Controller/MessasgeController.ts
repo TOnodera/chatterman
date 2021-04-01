@@ -48,10 +48,8 @@ class MessageController{
         }
         return {exists: false};
     }
-    typing(socket: Socket): void{
-        socket.on('user:typing',(user: {id:string,name:string})=>{
-            socket.broadcast.emit('broadcast:user-typing',user);
-        });
+    typing(user: {id:string,name:string},socket: Socket): void{
+        socket.broadcast.emit('broadcast:user-typing',user);
     }
 }
 export default new MessageController();

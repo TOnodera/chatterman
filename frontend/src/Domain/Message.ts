@@ -4,11 +4,13 @@ class Message{
     private store: Map<string,string[]>;
     private acceptMessageHandler: Function;
     private typingEventHandler: Function;
+    private changeRoomHandler: Function;
 
     constructor(){
         this.store = new Map<string,string[]>();
         this.acceptMessageHandler = Function;
         this.typingEventHandler = Function;
+        this.changeRoomHandler = Function;
         this.acceptMessageListener();
         this.typingEventListener();
     }
@@ -37,6 +39,17 @@ class Message{
 
     acceptMessageNotify(room_id: string){
         this.acceptMessageHandler(this.store.get(room_id));
+    }
+
+    //TODO リスナーとハンドラいっぱいになってきたのでクラス設計見直す
+    //別のルームに移動した際に移動先ルームのメッセージを取得する
+    changeRoomListener(room_id: string){
+        const messages = this.store.has(room_id) ? this.store.get(room_id) : [] as any[];
+        this.changeRoomHandler(messages);
+    }
+
+    addChangeRoomHandler(func: Function){
+        this.changeRoomHandler = func;
     }
 
     typing(user: User){

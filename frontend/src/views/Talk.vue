@@ -16,7 +16,7 @@
                         :key="message.message_id"
                     />
                 </template>
-                <Typing :class="{'is-hidden': !isTyping}" />
+                <Typing :class="{'is-hidden': !isTyping}" :user_name="typingUser" />
             </div>
         </div>
         <InputArea @message-send="send" @typing="typing" />
@@ -43,32 +43,35 @@ export default defineComponent({
     },
     data() {
         return {
-            room_id: "" as any,
             messages: [] as any[],
-            user_id: user.me.user.id,
             isTyping: false,
-            typingUser: ""
+            typingUser: "",
+            current_room: "",
+            user_id: user.me.user.id
         };
     },
     methods: {
         send(msg: string) {
-            message.send(
-                msg,
-                user.me.user,
-                this.$route.params.room_id as string
-            );
+            message.send(msg, user.me.user, this.current_room as string);
         },
         typing() {
             message.typing(user.me.user);
         }
     },
     mounted() {
-        console.log('mounted: Talk component...');
+        this.current_room = this.$route.params.room_id as string;
         //ユーザーがこのroomに入場できるか検証
-        room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
+        room.attemptToEnter(this.current_room as string, user.me.user);
         //リスナ設定
         message.addAcceptMessageHandler((newMessages: any[]) => {
-            this.messages = newMessages.filter(message => message.room_id == this.$route.params.room_id);
+            this.messages = newMessages.filter(
+                message => message.room_id == this.current_room
+            );
+        });
+        //別のルームに移動した際に移動先のメッセージを取得
+        message.addChangeRoomHandler((newMessages: any[]) => {
+            this.messages = newMessages;
+            console.log('in talk component: room change handler was called...');
         });
         //タイピングイベント受信時の処理
         message.addTypingEventHandler((user: User) => {
@@ -86,15 +89,17 @@ export default defineComponent({
         $route(to, from) {
             const regExp = new RegExp(/^\/talk/);
             if (regExp.test(to.path)) {
+                this.current_room = this.$route.params.room_id as string;
                 if (regExp.test(from.path) && to.path != from.path) {
                     room.leaveCurrent(user.me.user);
                 }
-                room.attemptToEnter(
-                    this.$route.params.room_id as string,
-                    user.me.user
-                );
+                room.attemptToEnter(this.current_room, user.me.user);
+                //移動先ルームのメッセージを取得する為のリスナ
+                message.changeRoomListener(this.current_room);
                 //再描画
-                this.messages = this.messages.filter(message => message.room_id == this.$route.params.room_id);
+                this.messages = this.messages.filter(
+                    message => message.room_id == this.current_room
+                );
             }
         }
     }

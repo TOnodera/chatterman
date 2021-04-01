@@ -31,8 +31,8 @@ module.exports = (io: any) => {
             await roomController.leaveCurrentRoom(info,socket);
         }
 
-        const userTyping = ()=>{
-            messageController.typing(socket);
+        const userTyping = (user: {id:string,name:string})=>{
+            messageController.typing(user,socket);
         };
 
         socket.on('user:send-message', userSendMessage);
