@@ -73,6 +73,7 @@ export default defineComponent({
         }
     },
     mounted() {
+        console.log("mounted...");
         this.current_room = this.$route.params.room_id as string;
         //ユーザーがこのroomに入場できるか検証
         room.attemptToEnter(this.current_room as string, user.me.user);
@@ -88,6 +89,9 @@ export default defineComponent({
         });
         //タイピングイベント受信時の処理
         message.addTypingEventHandler(this.typingHandler);
+    },
+    destroyed(){
+        console.log("destroyed...");
     },
     watch: {
         $route(to, from) {

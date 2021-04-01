@@ -14,7 +14,7 @@ class MessageController{
             console.log("in message controller...",socket.rooms);
             
             //Room系のクラスで実装しなおした　要リファクタリング
-            socket.broadcast.to(room_id).emit('broadcast:user-send-message',{
+            const res_broadcast = socket.broadcast.to(room_id).emit('broadcast:user-send-message',{
                 room_id: room_id,
                 user_id: user_id,
                 user_name: message.user!.name,
@@ -22,13 +22,15 @@ class MessageController{
                 message: strMessage
             });
             //自分に送る
-            socket.emit('broadcast:user-send-message',{
+            const res_myself = socket.emit('broadcast:user-send-message',{
                 room_id: room_id,
                 user_id: user_id,
                 user_name: message.user!.name,
                 message_id: message.message_id,
                 message: strMessage
             });
+            console.log('broadcast:',res_broadcast);
+            console.log('myself:',res_myself);
             //END Room系のクラスで実装しなおした　要リファクタリング
 
             return;
