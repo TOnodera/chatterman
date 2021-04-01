@@ -1,7 +1,10 @@
-import socketStore from './Socket';
+import socketStore from '../Socket';
+import AcceptMessageObserver from './AcceptMessageObserver';
+import AcceptMessageSubject from './AcceptMessageSubject';
+import acceptMessageSubject from './AcceptMessageSubject';
 class Message{
 
-    private store: Map<string,string[]>;
+    private store: Map<string,any[]>;
     private acceptMessageHandler: Function;
     private typingEventHandler: Function;
     private changeRoomHandler: Function;
@@ -15,6 +18,18 @@ class Message{
         this.typingEventListener();
     }
 
+    set(key: string,value: string[]){
+        this.store.set(key,value);
+    }
+
+    delete(key: string): boolean{
+        return this.store.delete(key);
+    }
+
+    get(key: string): string[]{
+        return this.store.has(key) ? this.store.get(key) as string[] : [];
+    }
+
     send(message: string,me: User,room_id: string = 'everybody'){
         socketStore.socket.emit('user:send-message',{
             message: message,
@@ -25,11 +40,14 @@ class Message{
 
     acceptMessageListener(){
         socketStore.socket.on('broadcast:user-send-message',(fromServer: any)=>{
+            /*
             const messages: any[] = this.store.has(fromServer.room_id) ? this.store.get(fromServer.room_id) as string[] : [];
             messages.push(fromServer);
             this.store.set(fromServer.room_id,messages);
             this.acceptMessageNotify(fromServer.room_id);
             console.log('in acceptMessageLstener: this.store ->',this.store);
+            */
+           AcceptMessageSubject.notify(fromServer);
         });
     }
 
@@ -41,16 +59,8 @@ class Message{
         this.acceptMessageHandler(this.store.get(room_id));
     }
 
-    //TODO リスナーとハンドラいっぱいになってきたのでクラス設計見直す
-    //別のルームに移動した際に移動先ルームのメッセージを取得する
-    changeRoomListener(room_id: string){
-        const messages = this.store.has(room_id) ? this.store.get(room_id) : [] as any[];
-        this.changeRoomHandler(messages);
-        console.log("in chageRoomListener: this.store -> ",this.store);
-    }
-
-    addChangeRoomHandler(func: Function){
-        this.changeRoomHandler = func;
+    getChatMessages(room_id: string): any[]{
+        return this.get(room_id);
     }
 
     typing(user: User){

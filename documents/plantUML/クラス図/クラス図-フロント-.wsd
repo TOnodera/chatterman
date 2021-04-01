@@ -1,15 +1,68 @@
 @startuml
 
+package Mesage{
 
-class RegisteUser{
-    -credentials : Credentials
-    -userName: string
-    registe()
+    class Message{
+        -store: Map<string,string[]>
+        +send(message: string,me: User,room_id:string = 'everybody')
+    }
+
+    class Subject{
+        +notifyObserver()
+        +addAcceptMessageHandler(func: Function)
+        +addChangeRoomHandler(func: Function)
+        +addTypingEventHandler(func: Function)
+        +acceptMessageNotify(room_id: string)
+        +typingEventNotify(user: User)
+        +changeRoomNotify(room_id: string)
+    }
+
+    class Observer{
+        +acceptMessageListener()
+        +changeRoomListener(room_id: string)
+        +typingEventListener()
+    }
+
+    class AcceptMessageSubject{
+        +notify(room_id: string);
+    }
+
+    class AcceptMessageObserver{
+        +{static} handler: Function
+        +{static} update()
+    }
+    note right of AcceptMessageObserver::handler
+    handlerをupdate()で呼び出す
+    end note
+
+}
+
+
+
+class Me{
+    user: User,
+    credentials: Credentials,
+    isLogin: boolean
+}
+
+class User{
+    id: string,
+    name: string
 }
 
 class Credentials{
-    -email
-    -password
+    email: string,
+    password: string
+}
+
+class UserRegisteInfo {
+    name: string,
+    credentials: Credentials
+}
+
+class Exception{
+    message?: string,
+    status?: number
 }
 
 

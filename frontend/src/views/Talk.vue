@@ -29,8 +29,9 @@ import ChatRight from "../components/ChatRight.vue";
 import InputArea from "../components/InputArea.vue";
 import Typing from "../components/Typing.vue";
 import user from "../Domain/User";
-import message from "../Domain/Message";
+import message from "../Domain/Message/Message";
 import room from "../Domain/Room";
+import AcceptMessageObserver from "../Domain/Message/AcceptMessageObserver";
 
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -59,9 +60,9 @@ export default defineComponent({
             message.typing(user.me.user);
         },
         includeTalkroomPath(path: string) {
-            return (new RegExp(/^\/talk/)).test(path);
+            return new RegExp(/^\/talk/).test(path);
         },
-        typingHandler(user: User){
+        typingHandler(user: User) {
             if (this.isTyping == false) {
                 this.isTyping = true;
                 this.typingUser = user.name;
@@ -73,45 +74,29 @@ export default defineComponent({
         }
     },
     mounted() {
-        console.log("mounted...");
         this.current_room = this.$route.params.room_id as string;
         //ユーザーがこのroomに入場できるか検証
         room.attemptToEnter(this.current_room as string, user.me.user);
-        //リスナ設定
-        message.addAcceptMessageHandler((newMessages: any[]) => {
-            this.messages = newMessages.filter(
-                message => message.room_id == this.current_room
+        //メッセージ受信時の処理
+        AcceptMessageObserver.handler = (messages: any[]) => {
+            this.messages = messages.filter(
+                message => (message.room_id = this.current_room)
             );
-        });
-        //別のルームに移動した際に移動先のメッセージを取得
-        message.addChangeRoomHandler((newMessages: any[]) => {
-            this.messages = newMessages;
-        });
+        };
         //タイピングイベント受信時の処理
         message.addTypingEventHandler(this.typingHandler);
-    },
-    destroyed(){
-        console.log("destroyed...");
     },
     watch: {
         $route(to, from) {
             if (this.includeTalkroomPath(to.path)) {
-
+                //新しいroom_idを設定
                 this.current_room = this.$route.params.room_id as string;
-
+                //退出処理（いらないかもしれない、あとでけすかも）
                 if (this.includeTalkroomPath(from.path)) {
                     room.leaveCurrent(user.me.user);
                 }
-
-                //ルーム移動
-                room.attemptToEnter(this.current_room, user.me.user);
-                //移動先ルームのメッセージを取得する為のリスナ
-                message.changeRoomListener(this.current_room);
-                //再描画
-                this.messages = this.messages.filter(
-                    message => message.room_id == this.current_room
-                );
-
+                //移動先のチャットメッセージを取得
+                this.messages = message.getChatMessages(this.current_room);
             }
         }
     }
