@@ -47,7 +47,8 @@ export default defineComponent({
             isTyping: false,
             typingUser: "",
             current_room: "",
-            user_id: user.me.user.id
+            user_id: user.me.user.id,
+            typingTimer: 3000 //タイピングアイコンの表示時間
         };
     },
     methods: {
@@ -56,6 +57,19 @@ export default defineComponent({
         },
         typing() {
             message.typing(user.me.user);
+        },
+        includeTalkroomPath(path: string) {
+            return (new RegExp(/^\/talk/)).test(path);
+        },
+        typingHandler(user: User){
+            if (this.isTyping == false) {
+                this.isTyping = true;
+                this.typingUser = user.name;
+                const id = setTimeout(() => {
+                    this.isTyping = false;
+                    clearTimeout(id);
+                }, this.typingTimer);
+            }
         }
     },
     mounted() {
@@ -71,28 +85,21 @@ export default defineComponent({
         //別のルームに移動した際に移動先のメッセージを取得
         message.addChangeRoomHandler((newMessages: any[]) => {
             this.messages = newMessages;
-            console.log('in talk component: room change handler was called...');
         });
         //タイピングイベント受信時の処理
-        message.addTypingEventHandler((user: User) => {
-            if (this.isTyping == false) {
-                this.isTyping = true;
-                this.typingUser = user.name;
-                const id = setTimeout(() => {
-                    this.isTyping = false;
-                    clearTimeout(id);
-                }, 3000);
-            }
-        });
+        message.addTypingEventHandler(this.typingHandler);
     },
     watch: {
         $route(to, from) {
-            const regExp = new RegExp(/^\/talk/);
-            if (regExp.test(to.path)) {
+            if (this.includeTalkroomPath(to.path)) {
+
                 this.current_room = this.$route.params.room_id as string;
-                if (regExp.test(from.path) && to.path != from.path) {
+
+                if (this.includeTalkroomPath(from.path)) {
                     room.leaveCurrent(user.me.user);
                 }
+
+                //ルーム移動
                 room.attemptToEnter(this.current_room, user.me.user);
                 //移動先ルームのメッセージを取得する為のリスナ
                 message.changeRoomListener(this.current_room);
@@ -100,6 +107,7 @@ export default defineComponent({
                 this.messages = this.messages.filter(
                     message => message.room_id == this.current_room
                 );
+
             }
         }
     }

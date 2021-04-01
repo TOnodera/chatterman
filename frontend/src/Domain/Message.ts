@@ -29,7 +29,7 @@ class Message{
             messages.push(fromServer);
             this.store.set(fromServer.room_id,messages);
             this.acceptMessageNotify(fromServer.room_id);
-            console.log('in accept message listener...',this.store);
+            console.log('in acceptMessageLstener: this.store ->',this.store);
         });
     }
 
@@ -46,6 +46,7 @@ class Message{
     changeRoomListener(room_id: string){
         const messages = this.store.has(room_id) ? this.store.get(room_id) : [] as any[];
         this.changeRoomHandler(messages);
+        console.log("in chageRoomListener: this.store -> ",this.store);
     }
 
     addChangeRoomHandler(func: Function){
@@ -70,8 +71,6 @@ class Message{
         this.typingEventHandler(user);
     }
 
-    
-    
 }
 
 export default new Message();
