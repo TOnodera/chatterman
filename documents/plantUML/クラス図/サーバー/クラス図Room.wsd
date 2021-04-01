@@ -1,0 +1,7 @@
+@startuml
+    class RoomManager{
+        +attemptToenter()
+        +leaveCurrentRoom()
+        +isAccessable(user: User)
+    }
+@enduml

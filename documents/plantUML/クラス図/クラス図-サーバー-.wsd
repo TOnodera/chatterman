@@ -2,6 +2,7 @@
 !include サーバー/クラス図Handler.wsd
 !include サーバー/クラス図Message.wsd
 !include サーバー/クラス図User.wsd
+!include サーバー/クラス図Room.wsd
 
 class ReadConfig{
     +config()

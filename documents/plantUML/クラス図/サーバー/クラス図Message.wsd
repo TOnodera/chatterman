@@ -30,7 +30,7 @@ package Message{
         +search(): Message[]
     }
 
-    class MessageContoroller{
+    class MessageController{
         +add(message: Message): void
         +delete(message: Message): void
         +edit(message: Message): void
@@ -45,12 +45,13 @@ package Message{
 }
 
 MessageRepository <.. MessageRepositoryFactory: <<create>>
-Message <.. MessageContoroller
-Messages <.. MessageContoroller
+Message <-- MessageController
+Messages <-- MessageController
 User <-- Message
 IMessageRepository <.. Message
 IMessageRepository <.. Messages
 ReadConfig <-- MessageRepositoryFactory
-IMessageRepository <|-- MessageRepository
+IMessageRepository <|.. MessageRepository
+RoomManager <-- MessageController
 
 @enduml
