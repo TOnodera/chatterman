@@ -13,7 +13,9 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS rooms (
     id VARCHAR (255) PRIMARY KEY,
     name TEXT NOT NULL,
-    created_at DATETIME NOT NULL
+    creater_id VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
 );
 
 CREATE TABLE IF NOT EXISTS accessable_rooms (
@@ -33,7 +35,7 @@ CREATE TABLE IF NOT EXISTS messages (
     deleted_at DATETIME
 );
 
-INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('everybody', 'ミーティングルーム','superuser', '2021-03-25 01:24:21');
 
 /**
 TEST DATABASE 
@@ -54,7 +56,9 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS rooms (
     id VARCHAR (255) PRIMARY KEY,
     name TEXT NOT NULL,
-    created_at DATETIME NOT NULL
+    creater_id VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
 );
 
 CREATE TABLE IF NOT EXISTS accessable_rooms (
@@ -75,4 +79,4 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 
-INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('test-room', 'everybody', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('everybody', 'ミーティングルーム','superuser', '2021-03-25 01:24:21');

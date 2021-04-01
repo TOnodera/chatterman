@@ -5,20 +5,9 @@ package Mesage{
     class Message{
         -store: Map<string,string[]>
         +send(message: string,me: User,room_id:string = 'everybody')
-    }
-
-    class Subject{
-        +notifyObserver()
-        +addAcceptMessageHandler(func: Function)
-        +addTypingEventHandler(func: Function)
-        +acceptMessageNotify(room_id: string)
-        +typingEventNotify(user: User)
-    }
-
-    class Observer{
-        +acceptMessageListener()
-        +changeRoomListener(room_id: string)
-        +typingEventListener()
+        +add()
+        +delete()
+        +get()
     }
 
     class AcceptMessageSubject{
@@ -47,6 +36,8 @@ package Mesage{
 
     AcceptMessageObserver <.. AcceptMessageSubject
     TypingEventObserver <.. TypingEventSubject
+    TypingEventObserver <-- Message
+    AcceptMessageObserver <-- Message
 
 }
 

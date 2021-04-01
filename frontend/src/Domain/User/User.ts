@@ -1,5 +1,5 @@
-import socketStore from './Socket';
-import swal from '../util/swal';
+import socketStore from '../Socket';
+import swal from '../../util/swal';
 
 class UserDomain {
 

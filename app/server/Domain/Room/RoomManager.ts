@@ -1,5 +1,7 @@
 import { Socket } from 'socket.io';
+import ExceptionHandler from '../Exception/ExceptionHandler';
 import User from '../User/User';
+import Room from './Room';
 class RoomManager{
     async attemptToEnter(info: RoomAndUserId,socket: Socket){
         const user: User = new User(info.user_id);
@@ -16,7 +18,15 @@ class RoomManager{
         }
     }
     async joinRoom(user: User){
-        
+
+    }
+    async createRoom(name: string,user_id: string,socket: Socket){
+        const room: Room = new Room();
+        if(await room.create(name,user_id).catch(e=>ExceptionHandler.handle(e,socket))){
+            socket.emit('room-created');
+        }else{
+            socket.emit('room-created-failure');
+        }
     }
     
 }

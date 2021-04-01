@@ -1,9 +1,8 @@
 import Exception from './Exception';
 import { Socket } from 'socket.io';
-import { execArgv } from 'process';
+
 class ExceptionHandler{
     static handle(exception: Exception,socket: Socket){
-        console.log(exception);
         switch(exception.status){
             case 422:
                 //ドメイン例外の処理
