@@ -5,15 +5,20 @@ import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 
 class UserController {
+
     private loginManager: LoginManager;
+
     constructor() {
         this.loginManager = new LoginManager();
     }
+
     async registe(fromClient: UserRegisteInfo, socket: Socket) {
         const user: User = new User(fromClient.name, fromClient.credentials);
-        await user.registe().catch((e: Exception) => ExceptionHandler.handle(e, socket));
-        socket.emit('user:registered');
+        if(await user.registe().catch((e: Exception) => ExceptionHandler.handle(e, socket))){
+            socket.emit('user:registered','登録しました。ログインして下さい。');
+        }
     }
+
     async login(credentials: Credentials, socket: Socket) {
         try {
             const { user, success } = await this.loginManager.login(credentials);
@@ -31,9 +36,11 @@ class UserController {
             }
         } catch (e) {
             ExceptionHandler.handle(e, socket);
+            return;
         }
         socket.emit('user:login-failure');
     }
+
     async logout(credentials: Credentials, socket: Socket) {
         console.log("logout...1");
         if (await this.loginManager.logout(credentials)) {
@@ -45,10 +52,12 @@ class UserController {
         console.log("logout...3");
         socket.emit('user:logout-failure');
     }
+
     async authenticate(credentials: Credentials, socket: Socket) {
         if (await this.loginManager.authenticate(credentials)) {
 
         }
     }
+
 }
 export default new UserController();

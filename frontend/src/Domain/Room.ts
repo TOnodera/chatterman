@@ -42,8 +42,8 @@ class Room {
 
     createRoom(name: string,user_id: string){
         socketStore.socket.emit('user:create-room',name,user_id);
-        console.log('user:create-room emitted...');
     }
+
 }
 
 export default new Room();

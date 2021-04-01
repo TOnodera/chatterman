@@ -1,3 +1,5 @@
+import { deprecationHandler } from "moment";
+import ExceptionHandler from "server/Domain/Exception/ExceptionHandler";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
 import roomManager from '../Domain/Room/RoomManager';
@@ -8,7 +10,6 @@ module.exports = (io: any) => {
     //ユーザー登録
     const userRegister = async (fromClient: UserRegisteInfo) => {
       await UserController.registe(fromClient, socket);
-      socket.emit('user:registered','登録が完了しました。ログインして下さい。');
     };
 
     //ログイン

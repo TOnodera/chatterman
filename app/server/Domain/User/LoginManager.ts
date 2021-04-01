@@ -3,7 +3,6 @@ import IUserRepository from "./IUserRepository";
 import UserRepositoryFactory from "./UserRepositoryFactory";
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from "./User";
-import Exception from "../Exception/Exception";
 
 class LoginManager implements ILoginManager{
 
@@ -29,9 +28,8 @@ class LoginManager implements ILoginManager{
                 loginUserStore.delete(user.id);
                 return true;
             }
-            throw new Exception('原因不明のエラーが発生しました。');
         }
-        return false;
+        return false;        
     }
 
     async authenticate(credentials: Credentials): Promise<boolean> {

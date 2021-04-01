@@ -53,7 +53,7 @@ class User {
         return await this.load() ? {user: this,exists: true} : {exists: false};
     }
 
-    async registe(): Promise<boolean | void> {
+    async registe(): Promise<boolean> {
 
         if(!this.credentials || !this.name){
             throw new Exception('このインスタンスを生成したコンストラクタではこのメソッドは呼び出せません。');
