@@ -2,7 +2,6 @@ import uuid from 'node-uuid';
 import Datetime from '../Utility/Datetime';
 import IUserRepository from './IUserRepository';
 import UserRepositoryFactory from './UserRepositoryFactory';
-import ExceptionHandler from '../Exception/ExceptionHandler';
 import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
 import Message from '../Message/Message';
@@ -69,6 +68,13 @@ class User {
 
         return await this.repository.registe(this);
         
+    }
+
+    getId(): string{
+        if(this.id){
+            return this.id;
+        }
+        throw new Exception('このインスタンスはIDを持っていません。');
     }
 
     isAccessable(room_id: string): boolean {

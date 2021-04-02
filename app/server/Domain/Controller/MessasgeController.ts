@@ -9,29 +9,22 @@ class MessageController{
     async add(strMessage:string,user_id: string,socket: Socket,room_id: string){
         const user: User = new User(user_id);
         if(await user.load()){
+            
             const message: Message = new Message(strMessage,user,room_id);
             await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
             console.log("in message controller...",socket.rooms);
-            
             //Room系のクラスで実装しなおした　要リファクタリング
-            const res_broadcast = socket.broadcast.to(room_id).emit('broadcast:user-send-message',{
+            const toClient: SendMessageToClient = {
                 room_id: room_id,
                 user_id: user_id,
-                user_name: message.user!.name,
-                message_id: message.message_id,
+                user_name: message.user?.name as string,
+                message_id: message.message_id as string,
                 message: strMessage
-            });
+            };
+            //ブロードキャスト
+            socket.broadcast.to(room_id).emit('broadcast:user-send-message',toClient);
             //自分に送る
-            const res_myself = socket.emit('broadcast:user-send-message',{
-                room_id: room_id,
-                user_id: user_id,
-                user_name: message.user!.name,
-                message_id: message.message_id,
-                message: strMessage
-            });
-            console.log('broadcast:',res_broadcast);
-            console.log('myself:',res_myself);
-            //END Room系のクラスで実装しなおした　要リファクタリング
+            socket.emit('broadcast:user-send-message',toClient);
 
             return;
         }

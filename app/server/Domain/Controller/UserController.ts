@@ -1,8 +1,8 @@
-import Exception from "../Exception/Exception";
 import User from "../User/User";
 import LoginManager from '../User/LoginManager';
 import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
+import roomManager from "../Room/RoomManager";
 
 class UserController {
 
@@ -14,8 +14,16 @@ class UserController {
 
     async registe(fromClient: UserRegisteInfo, socket: Socket) {
         const user: User = new User(fromClient.name, fromClient.credentials);
-        if(await user.registe().catch((e: Exception) => ExceptionHandler.handle(e, socket))){
-            socket.emit('user:registered','登録しました。ログインして下さい。');
+        try {
+            if (await user.registe()) {
+                const user_id = user.getId();
+                //デフォルトのユーザールーム（ダイレクトメッセージ用）を作成
+                if (await roomManager.createUserDefaultRoom(user_id)) {
+                    socket.emit('user:registered', '登録しました。ログインして下さい。');
+                }
+            }
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
         }
     }
 
@@ -23,16 +31,23 @@ class UserController {
         try {
             const { user, success } = await this.loginManager.login(credentials);
             if (success) {
-                socket.emit('user:logged-in',{
+
+                let toClient: NotifyLoggedIn = {
                     user: {
-                        id: user?.id,
-                        name: user?.name
+                        id: user?.id as string,
+                        name: user?.name as string
                     },
-                    credentials: user?.credentials,
+                    credentials: user?.credentials as Credentials,
                     isLogin: true
-                });
-                socket.request.session.credentials = credentials;
-                return;
+                };
+
+                //デフォルトのユーザールーム作成
+                if (await roomManager.createUserDefaultRoom(toClient.user.id)) {
+                    socket.request.session.credentials = credentials;
+                    //イベント発行
+                    socket.emit('user:logged-in', toClient);
+                    return;
+                }
             }
         } catch (e) {
             ExceptionHandler.handle(e, socket);

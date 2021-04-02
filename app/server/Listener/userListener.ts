@@ -1,8 +1,6 @@
-import { deprecationHandler } from "moment";
-import ExceptionHandler from "server/Domain/Exception/ExceptionHandler";
+import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import roomManager from '../Domain/Room/RoomManager';
 
 module.exports = (io: any) => {
   io.on('connection', (socket: Socket) => {
@@ -24,13 +22,13 @@ module.exports = (io: any) => {
 
     //ルーム作成
     const createRoom = async (name: string,user_id: string) => {
-      console.log('create-room called...');
-      await roomManager.createRoom(name,user_id,socket);
+      await RoomController.createRoom(name,user_id,socket);
     };
 
     //ハンドラ登録
     socket.on('user:register', userRegister);
     socket.on('user:attempt-login', userLogin);
+    socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
     
   });

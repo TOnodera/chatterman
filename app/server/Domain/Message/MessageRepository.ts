@@ -18,7 +18,7 @@ class MessageRepository implements IMessageRepository {
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                //ボトルネックになるのでリファクタリングする
+                //TODO ボトルネックになるのでリファクタリングする
                 const {user,exists}: {user?:User,exists: boolean} = await this.userRepository.get(row.user_id);
                 if(exists){
                     const  message: Message = new Message(row.message_id);

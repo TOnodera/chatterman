@@ -44,7 +44,7 @@ class UserDomain {
   }
 
   logout(credentials: Credentials){
-
+    socketStore.socket.emit('user:logout',credentials);
   }
 
   addUser(user: User) {
