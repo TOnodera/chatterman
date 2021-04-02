@@ -23,6 +23,7 @@
 <script lang="ts">
 import Sidebar from '@/components/Sidebar.vue';
 import { defineComponent } from 'vue';
+import { launchAtLoggedIn as listen } from '../Domain/Listener';
 
 export default defineComponent({
   name: 'Main',
@@ -33,7 +34,11 @@ export default defineComponent({
     isMenuClicked: {
       type: Boolean, reuqired: true
     }
-  }
+  },
+  mounted() {
+      //ログイン後に必要になるサーバーからイベントリスナ設定
+      listen();
+  },
 });
 </script>
 

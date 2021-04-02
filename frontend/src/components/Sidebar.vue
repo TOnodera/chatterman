@@ -11,14 +11,9 @@
                     </div>
                 </div>
                 <ul class="menu-list">
-                    <li>
-                        <router-link to="/talk/everybody">
-                            <span class>あああ</span>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/talk/test">
-                            <span class>いいい</span>
+                    <li v-for="room in rooms" :key="room.room_id">
+                        <router-link :to="/talk/ + room.room_id">
+                            <span class>{{room.name}}</span>
                         </router-link>
                     </li>
                 </ul>
@@ -42,19 +37,26 @@
 import { defineComponent } from "vue";
 import user from "../Domain/User/User";
 import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
+import room from '../Domain/Room';
 
 export default defineComponent({
     name: "Sidebar",
     data() {
         return {
-            users: [] as any[]
+            users: [] as any[],
+            rooms: [] as any[]
         };
     },
     mounted() {
         acceptUsersObserver.handler = (users: any[]) => {
             this.users = users;
         };
+        room.acceptRoomsListener((rooms: any[])=>{
+            console.log(rooms);
+            this.rooms = rooms;
+        });
         user.getUsers();
+        room.getAllRooms(user.me.user.id);
     }
 });
 </script>

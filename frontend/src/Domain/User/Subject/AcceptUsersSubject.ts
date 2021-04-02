@@ -1,7 +1,7 @@
 import AcceptUsersObserver from '../Observer/AcceptUsersObserver';
 class AcceptUsersSubject{
     notify(users: any[]){
-        AcceptUsersObserver.handler(users);
+        AcceptUsersObserver.update(users);
     }
 }
 export default new AcceptUsersSubject();

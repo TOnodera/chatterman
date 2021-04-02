@@ -24,16 +24,18 @@ class RoomManager{
         return false;
     }
 
-    async createRoom(name: string,user_id: string): Promise<boolean>{
+    async createRoom(name: string,user_id: string): Promise<Room>{
         const room: Room = new Room();
         return await room.create(name,user_id);
     }
 
     async createUserDefaultRoom(user_id: string): Promise<boolean>{
+
         let result: boolean;
         try{
             this.repository.begin();
-            result = await this.createRoom(user_id,user_id) && await this.addAccessableRooms(user_id,user_id);
+            const room = await this.createRoom(user_id,user_id);
+            result = await this.addAccessableRooms(user_id,room.id!);
             this.repository.commit();
         }catch{
             this.repository.rollback();
@@ -44,6 +46,10 @@ class RoomManager{
 
     async addAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
         return await this.repository.addAccessableRooms(user_id,room_id);
+    }
+
+    async getAllRooms(user_id: string): Promise<RoomInfo[]>{
+        return await this.repository.getAllRooms(user_id);
     }
     
 }

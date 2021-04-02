@@ -30,12 +30,17 @@ module.exports = (io: any) => {
       await UserController.getUsers(socket);
     }
 
+    //入室権限があるルーム情報のデータを送信
+    const requireRooms = async (user_id: string) => {
+      await RoomController.getAllRooms(user_id,socket);
+    };
+
     //ハンドラ登録
     socket.on('user:register', userRegister);
     socket.on('user:attempt-login', userLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
     socket.on('user:require-users',requireUsers);
-    
+    socket.on('user:require-rooms',requireRooms);
   });
 }

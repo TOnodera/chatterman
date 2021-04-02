@@ -35,3 +35,8 @@ interface Client{
     id: string,
     name: string
 }
+
+interface RoomInfo{
+    id: string,
+    name: string
+}

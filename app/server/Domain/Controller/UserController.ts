@@ -71,7 +71,6 @@ class UserController {
     }
 
     async getUsers(socket: Socket) {
-        console.log("event accept...");
         socket.emit('user:send-users-data', await userService.getUsers());
     }
 

@@ -19,6 +19,21 @@ class Room {
         });
     }
 
+    leaveCurrent(user: User){
+        socketStore.socket.emit('user:leave-room',{
+            room_id: this.current,
+            user_id: user.id
+        });
+    }
+
+    createRoom(name: string,user_id: string){
+        socketStore.socket.emit('user:create-room',name,user_id);
+    }
+
+    getAllRooms(user_id: string){
+        socketStore.socket.emit('user:require-rooms',user_id);
+    }
+
     //roomへのアクセス許可が出た場合のリスナ
     arrowedToEnterRoomListener() {
         socketStore.socket.on('user:join-room', (room_id: string) => {
@@ -33,16 +48,11 @@ class Room {
         });
     }
 
-    leaveCurrent(user: User){
-        socketStore.socket.emit('user:leave-room',{
-            room_id: this.current,
-            user_id: user.id
+    acceptRoomsListener(handler: Function){
+        socketStore.socket.on('user:send-rooms-data',(rooms: any[])=>{
+            handler(rooms);
         });
-    }
-
-    createRoom(name: string,user_id: string){
-        socketStore.socket.emit('user:create-room',name,user_id);
-    }
+    }    
 
 }
 
