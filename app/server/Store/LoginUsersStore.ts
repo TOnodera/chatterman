@@ -5,13 +5,13 @@ export default {
     users: [] as unknown as User[],
     maxUserNum: 100,
     enqueue(user: User){
-        console.log('enque: user->',user.id);
         if(!user.id){
             throw new  Exception('idの無いユーザーをストアに追加しようとしました。');
         }
         if(this.users.length < this.maxUserNum){
             if(!this.inUsers(user.id)){
                 this.users.push(user);
+                console.log('enque: user->',user.id);
             }
             return true;
         }else{
@@ -32,7 +32,7 @@ export default {
         return false;
     },
     inUsers(id: string){
-        const user =this.users.filter((user: any)=>{
+        const user = this.users.filter((user: any)=>{
             return user.id == id;
         });
         return user.length > 0;

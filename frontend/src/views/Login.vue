@@ -66,6 +66,7 @@
 import { defineComponent } from 'vue';
 import user from '../Domain/User/User';
 import swal from '../util/swal';
+import LoginObserver from '../Domain/User/Observer/LoginObserver';
 
 export default defineComponent({
   name: 'Login',
@@ -86,14 +87,10 @@ export default defineComponent({
     }
   },
   mounted(){
-      user.addLoginSuccessHandler(()=>{
-          console.log(user.me.isLogin);
+      LoginObserver.handler = ()=>{
           swal.fire('ログインしました。');
           this.$router.push({name: 'Talk' ,params: {room_id: 'everybody'}});
-      });
-      user.addLoginFailureHandler(()=>{
-          swal.fire('ログイン情報が間違っています。');
-      });
+      };
   }
 });
 </script>

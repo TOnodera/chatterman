@@ -4,6 +4,7 @@ import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
+import DomainException from "../Exception/DomainException";
 
 class UserController {
 
@@ -45,14 +46,13 @@ class UserController {
                 socket.request.session.credentials = credentials;
                 //イベント発行
                 socket.emit('user:logged-in', toClient);
-                return;
+    
+            }else{
+                throw new DomainException('ログイン情報が間違っています。');
             }
-            console.log(user,success);
         } catch (e) {
             ExceptionHandler.handle(e, socket);
-            return;
         }
-        socket.emit('user:login-failure');
     }
 
     async logout(credentials: Credentials, socket: Socket) {

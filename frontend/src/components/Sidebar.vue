@@ -29,7 +29,7 @@
             <ul class="menu-list">
                 <li v-for="user in users" :key="user.id">
                     <router-link :to="/talk/ + user.id">
-                        <fontawesome class="login-color" icon="circle"/>
+                        <fontawesome class="login-color" icon="circle" />
                         <span class="ml-1">{{user.name}}</span>
                     </router-link>
                 </li>
@@ -39,22 +39,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import user from '../Domain/User/User';
+import { defineComponent } from "vue";
+import user from "../Domain/User/User";
+import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
 
 export default defineComponent({
-  name: 'Sidebar',
-  data(){
-      return {
-          users: [] as any[]
-      };
-  },
-  mounted(){
-      user.addAcceptUsersHandler((users: any[])=>{
-          this.users = users;
-      });
-      user.getUsersEvent();
-  }
+    name: "Sidebar",
+    data() {
+        return {
+            users: [] as any[]
+        };
+    },
+    mounted() {
+        acceptUsersObserver.handler = (users: any[]) => {
+            this.users = users;
+        };
+        user.getUsers();
+    }
 });
 </script>
 
@@ -72,7 +73,7 @@ export default defineComponent({
         }
     }
 }
-.login-color{
+.login-color {
     color: #01d1b2;
 }
 </style>

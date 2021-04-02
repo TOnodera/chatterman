@@ -1,132 +1,94 @@
 import socketStore from '../Socket';
 import swal from '../../util/swal';
+import loginSubject from './Subject/LoginSubject';
+import registerSubject from './Subject/RegisterSubject';
+import acceptUsersSubject from './Subject/AcceptUsersSubject';
 
 class UserDomain {
 
-  me: Me;
-  users: User[];
-  handlers: {
-    registerSuccessHandler: Function,
-    loginSuccessHandler: Function,
-    loginFailureHandler: Function,
-    acceptUsersHandler: Function
-  };
+	me: Me;
+	users: User[];
 
-  constructor() {
-    this.me = {
-      user: {
-        id: '',
-        name: '',
-      },
-      credentials: {
-        email: '',
-        password: ''
-      },
-      isLogin: false
-    };
-    this.users = [];
-    this.handlers = {
-      registerSuccessHandler: Function,
-      loginSuccessHandler: Function,
-      loginFailureHandler: Function,
-      acceptUsersHandler: Function
-    };
-    //リスナ起動
-    this.registerSuccessListener();
-    this.loginSuccessListener();
-    this.loginFailureListener();
-    this.acceptUsersListener();
-  }
+	constructor() {
+		this.me = {
+			user: {
+				id: '',
+				name: '',
+			},
+			credentials: {
+				email: '',
+				password: ''
+			},
+			isLogin: false
+		};
+		this.users = [];
+	}
 
-  isLogin() {
-    return this.me.isLogin;
-  }
+	isLogin() {
+		return this.me.isLogin;
+	}
 
-  attemptLogin(credentials: Credentials){
-    socketStore.socket.emit('user:attempt-login',credentials);
-  }
+	addUser(user: User) {
+		this.users.push(user);
+	}
 
-  logout(credentials: Credentials){
-    socketStore.socket.emit('user:logout',credentials);
-  }
+	deleteUser(id: string) {
+		this.users = this.users.filter(user => {
+			return user.id != id;
+		});
+	}
 
-  addUser(user: User) {
-    this.users.push(user);
-  }
+	userCount(): number {
+		return this.users.length;
+	}
 
-  deleteUser(id: string) {
-    this.users = this.users.filter(user => {
-      return user.id != id;
-    });
-  }
+	registe(newUser: UserRegisteInfo): boolean {
+		if (!newUser.name) {
+			swal.fire('ユーザー名が未入力です。');
+			return false;
+		}
+		if (!newUser.credentials.email) {
+			swal.fire('メールアドレスが未入力です。');
+			return false;
+		}
+		if (!newUser.credentials.password) {
+			swal.fire('パスワードが未入力です。');
+			return false;
+		}
+		socketStore.socket.emit('user:register', newUser);
+		return true;
+	}
 
-  userCount(): number {
-    return this.users.length;
-  }
+	attemptLogin(credentials: Credentials) {
+		socketStore.socket.emit('user:attempt-login', credentials);
+	}
 
-  registe(newUser: UserRegisteInfo): boolean {
-    if (!newUser.name) {
-      swal.fire('ユーザー名が未入力です。');
-      return false;
-    }
-    if (!newUser.credentials.email) {
-      swal.fire('メールアドレスが未入力です。');
-      return false;
-    }
-    if (!newUser.credentials.password) {
-      swal.fire('パスワードが未入力です。');
-      return false;
-    }
-    socketStore.socket.emit('user:register', newUser);
-    return true;
-  }
+	logout(credentials: Credentials) {
+		socketStore.socket.emit('user:logout', credentials);
+	}
 
-  addRegisterSuccessHandler(func: Function) {
-    this.handlers.registerSuccessHandler = func;
-  }
+	getUsers() {
+		socketStore.socket.emit('user:require-users');
+	}
 
-  addLoginSuccessHandler(func: Function){
-    this.handlers.loginSuccessHandler = func;
-  }
+	registerSuccessListener() {
+		socketStore.socket.on('user:registered', (msg: string) => {
+			registerSubject.notify(msg);
+		});
+	}
 
-  addLoginFailureHandler(func: Function){
-    this.handlers.loginFailureHandler = func;
-  }
+	loginSuccessListener() {
+		socketStore.socket.on('user:logged-in', (me: Me) => {
+			this.me = me;
+			loginSubject.notify();
+		});
+	}
 
-  registerSuccessListener(){
-    socketStore.socket.on('user:registered',(msg: string) => {
-      this.handlers.registerSuccessHandler(msg);
-    });
-  }
-
-  loginSuccessListener(){
-    socketStore.socket.on('user:logged-in',(me: Me)=>{
-      this.me = me;
-      this.handlers.loginSuccessHandler();
-    });
-  }
-
-  loginFailureListener(){
-    socketStore.socket.on('user:login-failure',()=>{
-      this.handlers.loginFailureHandler();
-    });
-  }
-
-  acceptUsersListener(){
-    socketStore.socket.on('user:send-users-data',(users: {id:string,name:string}[])=>{
-      this.handlers.acceptUsersHandler(users);
-    });
-  }
-
-  addAcceptUsersHandler(func: Function){
-    this.handlers.acceptUsersHandler = func;
-  }
-
-  getUsersEvent(){
-    socketStore.socket.emit('user:require-users');
-  }
-
-  
+	acceptUsersListener() {
+		socketStore.socket.on('user:send-users-data', (users: { id: string, name: string }[]) => {
+			acceptUsersSubject.notify(users);
+		});
+	}
 }
 
 export default new UserDomain();

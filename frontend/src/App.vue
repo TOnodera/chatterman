@@ -15,7 +15,7 @@
 <script>
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import serverException from '@/Domain/Exception/ServerException';
+import { launchAtAppUped } from './Domain/Listener';
 
 export default {
   name: 'App',
@@ -34,9 +34,8 @@ export default {
     }
   },
   mounted() {
-    //サーバーから送信される例外のリスナー
-    serverException.launchListener(); 
-  }
+    launchAtAppUped();
+  },
 };
 </script>
 
