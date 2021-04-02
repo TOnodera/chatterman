@@ -8,7 +8,8 @@ class UserDomain {
   handlers: {
     registerSuccessHandler: Function,
     loginSuccessHandler: Function,
-    loginFailureHandler: Function
+    loginFailureHandler: Function,
+    acceptUsersHandler: Function
   };
 
   constructor() {
@@ -27,12 +28,14 @@ class UserDomain {
     this.handlers = {
       registerSuccessHandler: Function,
       loginSuccessHandler: Function,
-      loginFailureHandler: Function
+      loginFailureHandler: Function,
+      acceptUsersHandler: Function
     };
     //リスナ起動
     this.registerSuccessListener();
     this.loginSuccessListener();
     this.loginFailureListener();
+    this.acceptUsersListener();
   }
 
   isLogin() {
@@ -109,6 +112,21 @@ class UserDomain {
     });
   }
 
+  acceptUsersListener(){
+    socketStore.socket.on('user:send-users-data',(users: {id:string,name:string}[])=>{
+      this.handlers.acceptUsersHandler(users);
+    });
+  }
+
+  addAcceptUsersHandler(func: Function){
+    this.handlers.acceptUsersHandler = func;
+  }
+
+  getUsersEvent(){
+    socketStore.socket.emit('user:require-users');
+  }
+
+  
 }
 
 export default new UserDomain();

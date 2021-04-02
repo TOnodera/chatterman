@@ -25,11 +25,17 @@ module.exports = (io: any) => {
       await RoomController.createRoom(name,user_id,socket);
     };
 
+    //ユーザーデータ送信
+    const requireUsers = async () => {
+      await UserController.getUsers(socket);
+    }
+
     //ハンドラ登録
     socket.on('user:register', userRegister);
     socket.on('user:attempt-login', userLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
+    socket.on('user:require-users',requireUsers);
     
   });
 }

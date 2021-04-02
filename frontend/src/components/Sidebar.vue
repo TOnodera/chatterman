@@ -27,15 +27,10 @@
                 <fontawesome icon="user" />メンバー
             </div>
             <ul class="menu-list">
-                <li>
-                    <router-link to="/room">
-                        <span class="ml-1">あああ</span>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/talk/iii">
+                <li v-for="user in users" :key="user.id">
+                    <router-link :to="/talk/ + user.id">
                         <fontawesome class="login-color" icon="circle"/>
-                        <span class="ml-1">いいい</span>
+                        <span class="ml-1">{{user.name}}</span>
                     </router-link>
                 </li>
             </ul>
@@ -45,9 +40,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import user from '../Domain/User/User';
 
 export default defineComponent({
-  name: 'Sidebar'
+  name: 'Sidebar',
+  data(){
+      return {
+          users: [] as any[]
+      };
+  },
+  mounted(){
+      user.addAcceptUsersHandler((users: any[])=>{
+          this.users = users;
+      });
+      user.getUsersEvent();
+  }
 });
 </script>
 

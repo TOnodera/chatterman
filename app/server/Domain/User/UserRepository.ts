@@ -62,5 +62,10 @@ class UserRepository implements IUserRepository {
         return {exists: false};
     }
 
+    async getUsers(): Promise<Client[]>{
+        const [rows]: any[] = await this.connector.query('SELECT id,name FROM users WHERE deleted_at is NULL ORDER BY name');
+        return rows.length > 0 ? rows : []
+    }
+
 }
 export default UserRepository;

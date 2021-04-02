@@ -3,6 +3,7 @@ import LoginManager from '../User/LoginManager';
 import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 import roomManager from "../Room/RoomManager";
+import userService from '../User/Service';
 
 class UserController {
 
@@ -41,14 +42,12 @@ class UserController {
                     isLogin: true
                 };
 
-                //デフォルトのユーザールーム作成
-                if (await roomManager.createUserDefaultRoom(toClient.user.id)) {
-                    socket.request.session.credentials = credentials;
-                    //イベント発行
-                    socket.emit('user:logged-in', toClient);
-                    return;
-                }
+                socket.request.session.credentials = credentials;
+                //イベント発行
+                socket.emit('user:logged-in', toClient);
+                return;
             }
+            console.log(user,success);
         } catch (e) {
             ExceptionHandler.handle(e, socket);
             return;
@@ -57,21 +56,23 @@ class UserController {
     }
 
     async logout(credentials: Credentials, socket: Socket) {
-        console.log("logout...1");
         if (await this.loginManager.logout(credentials)) {
-            console.log("logout...2");
             socket.emit('user:done-logout');
             socket.request.session.credentials = { email: '', password: '' };
             return;
         }
-        console.log("logout...3");
         socket.emit('user:logout-failure');
     }
 
     async authenticate(credentials: Credentials, socket: Socket) {
         if (await this.loginManager.authenticate(credentials)) {
-
+            
         }
+    }
+
+    async getUsers(socket: Socket) {
+        console.log("event accept...");
+        socket.emit('user:send-users-data', await userService.getUsers());
     }
 
 }

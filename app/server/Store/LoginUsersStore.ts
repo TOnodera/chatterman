@@ -5,6 +5,7 @@ export default {
     users: [] as unknown as User[],
     maxUserNum: 100,
     enqueue(user: User){
+        console.log('enque: user->',user.id);
         if(!user.id){
             throw new  Exception('idの無いユーザーをストアに追加しようとしました。');
         }
@@ -21,6 +22,7 @@ export default {
         return this.users.shift();
     },
     delete(id: string){
+        console.log('delete: user->',id);
         if(this.inUsers(id)){
             this.users = this.users.filter((user)=>{
                 return user.id != id;
