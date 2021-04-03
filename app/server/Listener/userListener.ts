@@ -16,8 +16,8 @@ module.exports = (io: any) => {
     };
 
     //ログアウト
-    const userLogout = async (credentials: Credentials) => {
-      await UserController.logout(credentials,socket);
+    const userLogout = async (id: string,credentials: Credentials) => {
+      await UserController.logout(id,credentials,socket);
     };
 
     //ルーム作成

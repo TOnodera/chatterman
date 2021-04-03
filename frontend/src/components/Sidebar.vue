@@ -21,10 +21,10 @@
             <div class="menu-label is-size-6 mt-3">
                 <fontawesome icon="user" />メンバー
             </div>
-            <ul class="menu-list">
+            <ul class="menu-list" v-if="users.length > 0">
                 <li v-for="user in users" :key="user.id">
                     <router-link :to="/talk/ + user.id">
-                        <fontawesome class="login-color" icon="circle" />
+                        <fontawesome :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}" icon="circle" />
                         <span class="ml-1">{{user.name}}</span>
                     </router-link>
                 </li>
@@ -38,12 +38,14 @@ import { defineComponent } from "vue";
 import user from "../Domain/User/User";
 import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
 import room from '../Domain/Room';
+import logoutObserver from '../Domain/User/Observer/LogoutObserver';
+import anotherUserLoginObserver from '../Domain/User/Observer/AnotherUserLoginObserver';
 
 export default defineComponent({
     name: "Sidebar",
     data() {
         return {
-            users: [] as any[],
+            users: [] as User[],
             rooms: [] as any[]
         };
     },
@@ -52,9 +54,24 @@ export default defineComponent({
             this.users = users;
         };
         room.acceptRoomsListener((rooms: any[])=>{
-            console.log(rooms);
             this.rooms = rooms;
         });
+        logoutObserver.handler = (id: string) => {
+            this.users = this.users.map((user: User)=>{
+                if(user.id == id){
+                    user.isLogin = false;
+                }
+                return user;
+            });
+        };
+        anotherUserLoginObserver.handler = (logoutUser: User)=>{
+            this.users = this.users.map((user: User)=>{
+                if(user.id == logoutUser.id){
+                    user.isLogin = true;
+                }
+                return user;
+            });
+        };
         user.getUsers();
         room.getAllRooms(user.me.user.id);
     }
@@ -77,5 +94,8 @@ export default defineComponent({
 }
 .login-color {
     color: #01d1b2;
+}
+.logout-color {
+    color: #7a7a7a;
 }
 </style>

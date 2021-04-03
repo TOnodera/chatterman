@@ -8,6 +8,8 @@ import user from '@/Domain/User/User';
 
 const launchAtLoggedIn = ()=>{
     user.acceptUsersListener();
+    user.logoutListener();
+    user.anotherUserLoginListener();
 };
 
 const launchAtAppUped = ()=>{

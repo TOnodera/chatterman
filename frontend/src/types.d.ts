@@ -6,7 +6,8 @@ interface Me{
 
 interface User{
     id: string,
-    name: string
+    name: string,
+    isLogin?: boolean
 }
 
 interface Credentials{

@@ -25,15 +25,10 @@ interface SendMessageToClient{
     message: string
 }
 
-interface NotifyLoggedIn{
-    user: Client,
-    credentials: Credentials,
-    isLogin: boolean
-}
-
 interface Client{
     id: string,
-    name: string
+    name: string,
+    isLogin?: boolean
 }
 
 interface RoomInfo{

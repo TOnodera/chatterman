@@ -53,9 +53,7 @@ export default defineComponent({
       this.$emit('menu-clicked', this.isToggleMenu);
     },
     async logout () {
-      if(user.me.isLogin){
-        await user.logout(user.me.credentials);
-      }
+      await user.logout(user.me.user.id,user.me.credentials);
       this.$router.push({name: 'Login'});
     }
   }

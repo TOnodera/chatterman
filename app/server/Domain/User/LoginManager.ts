@@ -22,9 +22,12 @@ class LoginManager implements ILoginManager{
     }
 
     async logout(credentials: Credentials): Promise<boolean> {
+        console.log(credentials);
         if(await this.repository.credentials(credentials)){
+            console.log(1);
             const user: User = await this.repository.getUserByCredentials(credentials);
             if(user.id){
+                console.log(2);
                 loginUserStore.delete(user.id);
                 return true;
             }

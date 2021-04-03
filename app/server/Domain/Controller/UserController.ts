@@ -34,18 +34,15 @@ class UserController {
             const { user, success } = await this.loginManager.login(credentials);
             if (success) {
 
-                let toClient: NotifyLoggedIn = {
-                    user: {
-                        id: user?.id as string,
-                        name: user?.name as string
-                    },
-                    credentials: user?.credentials as Credentials,
-                    isLogin: true
+                let toClient: Client = {
+                    id: user?.id as string,
+                    name: user?.name as string
                 };
 
                 socket.request.session.credentials = credentials;
                 //イベント発行
                 socket.emit('user:logged-in', toClient);
+                socket.broadcast.emit('broadcast:user-login',toClient);
     
             }else{
                 throw new DomainException('ログイン情報が間違っています。');
@@ -55,13 +52,15 @@ class UserController {
         }
     }
 
-    async logout(credentials: Credentials, socket: Socket) {
+    async logout(id: string,credentials: Credentials, socket: Socket) {
+        console.log("logput: ",id);
         if (await this.loginManager.logout(credentials)) {
-            socket.emit('user:done-logout');
+            socket.broadcast.emit('broadcast:user-logout',id);
+            console.log("send logout event-> ",id);
             socket.request.session.credentials = { email: '', password: '' };
             return;
         }
-        socket.emit('user:logout-failure');
+        socket.emit('user:logout-failure',id);
     }
 
     async authenticate(credentials: Credentials, socket: Socket) {

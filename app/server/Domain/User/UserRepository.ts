@@ -29,7 +29,7 @@ class UserRepository implements IUserRepository {
 
     async getUserByCredentials(credentials: Credentials): Promise<User> {
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
-        if (rows.length > 0 && Bcrypt.compare(credentials.password, rows[0].password)) {
+        if (rows.length > 0 && await Bcrypt.compare(credentials.password, rows[0].password)) {
             return new User(
                 rows[0].name,
                 { email: rows[0].email, password: rows[0].password },
@@ -42,8 +42,10 @@ class UserRepository implements IUserRepository {
 
     async credentials(credentials: Credentials): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+        console.log("in credentials :",1);
         if (rows.length > 0){
-            return Bcrypt.compare(credentials.password, rows[0].password);
+            console.log("in credentials :",await Bcrypt.compare(credentials.password, rows[0].password));
+            return await Bcrypt.compare(credentials.password, rows[0].password);
         }
         return false;
     }
@@ -62,7 +64,7 @@ class UserRepository implements IUserRepository {
         return {exists: false};
     }
 
-    async getUsers(): Promise<Client[]>{
+    async getUsers(): Promise<any[]>{
         const [rows]: any[] = await this.connector.query('SELECT id,name FROM users WHERE deleted_at is NULL ORDER BY name');
         return rows.length > 0 ? rows : []
     }

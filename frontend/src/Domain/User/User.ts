@@ -3,6 +3,8 @@ import swal from '../../util/swal';
 import loginSubject from './Subject/LoginSubject';
 import registerSubject from './Subject/RegisterSubject';
 import acceptUsersSubject from './Subject/AcceptUsersSubject';
+import logoutSubject from './Subject/LogoutSubject';
+import anotherUserLoginSubject from './Subject/AnoterUserLoginSubject';
 
 class UserDomain {
 
@@ -60,11 +62,13 @@ class UserDomain {
 	}
 
 	attemptLogin(credentials: Credentials) {
+		this.me.credentials = credentials;
 		socketStore.socket.emit('user:attempt-login', credentials);
 	}
 
-	logout(credentials: Credentials) {
-		socketStore.socket.emit('user:logout', credentials);
+	logout(id: string,credentials: Credentials) {
+		socketStore.socket.emit('user:logout', id, credentials);
+		this.me.isLogin = false;
 	}
 
 	getUsers() {
@@ -78,8 +82,8 @@ class UserDomain {
 	}
 
 	loginSuccessListener() {
-		socketStore.socket.on('user:logged-in', (me: Me) => {
-			this.me = me;
+		socketStore.socket.on('user:logged-in', (user: User) => {
+			this.me.user = user;
 			loginSubject.notify();
 		});
 	}
@@ -87,6 +91,18 @@ class UserDomain {
 	acceptUsersListener() {
 		socketStore.socket.on('user:send-users-data', (users: { id: string, name: string }[]) => {
 			acceptUsersSubject.notify(users);
+		});
+	}
+
+	logoutListener(){
+		socketStore.socket.on('broadcast:user-logout',(id: string)=>{
+			logoutSubject.notify(id);
+		});
+	}
+
+	anotherUserLoginListener(){
+		socketStore.socket.on('broadcast:user-login',(id:string)=>{
+			anotherUserLoginSubject.notify(id);
 		});
 	}
 }
