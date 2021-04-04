@@ -6,6 +6,7 @@ import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
 import Message from '../Message/Message';
 import Exception from '../Exception/Exception';
+import room from '../Room/RoomRepository';
 
 class User {
 
@@ -77,8 +78,8 @@ class User {
         throw new Exception('このインスタンスはIDを持っていません。');
     }
 
-    isAccessable(room_id: string): boolean {
-        return this.accessableRooms.includes(room_id);
+    async isAccessable(user_id: string,room_id: string): Promise<boolean> {
+        return await room.isAccessAbleRooms(user_id,room_id);
     }
 
     async isEditable(message: Message): Promise<boolean> {

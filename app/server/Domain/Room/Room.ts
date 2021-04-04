@@ -19,6 +19,8 @@ class Room {
 
         const room: any = await this.repository.getRoom(id);
 
+        console.log(room);
+
         const response = new Room(room.id);
         response.name = room.name;
         response.creater_id = room.creater_id;
@@ -37,12 +39,18 @@ class Room {
             throw new DomainException('同じ名前のルームが登録されているので名前を変えて下さい。');
         }
 
+        try{
+
         this.id = uuid.v4();
         this.name = name;
         this.creater_id = creater_id;
         await this.repository.createRoom(this);
+        console.log(await this.getRoom(this.id));
+        }catch(e){
+            console.log(e);
+        }
 
-        return await this.getRoom(this.id);
+        return await this.getRoom(this.id as string);
         
     }
 

@@ -1,11 +1,14 @@
 export default {
     mysql: {
         host: "mysql",
-        dababase: 'database',
-        user: "user",
+        database: 'chater',
+        user: "root",
         password: "password"
     },
-    test: {
-        host: "test"
+    mysql_test: {
+        host: "mysql",
+        database: 'chater_test',
+        user: "root",
+        password: "password"
     }
 }

@@ -1,5 +1,6 @@
 import socketStore from './Socket';
 import swal from '../util/swal';
+import router from '@/router';
 class Room {
 
     private current: string;
@@ -45,6 +46,7 @@ class Room {
     deniedToEnterRoomListener() {
         socketStore.socket.on('user:denied-to-enter-room', () => {
             swal.fire('入室権限がありません。');
+            router.push({name: 'Login'});
         });
     }
 

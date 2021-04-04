@@ -85,9 +85,6 @@ export default defineComponent({
         room.attemptToEnter(this.current_room as string, user.me.user);
         //メッセージ受信時の処理
         AcceptMessageObserver.handler = (messages: any[]) => {
-            console.log(messages.filter(
-                message => message.room_id == this.current_room
-            ));
             this.messages = messages.filter(
                 message => message.room_id == this.current_room
             );
@@ -110,6 +107,10 @@ export default defineComponent({
     watch: {
         $route(to, from) {
             if (this.includeTalkroomPath(to.path)) {
+                console.log("room changed...");
+                //前のルームのメッセージを削除
+                message.clearMessages(this.current_room);
+                this.messages = [];
                 //新しいroom_idを設定
                 this.current_room = this.$route.params.room_id as string;
                 //退出処理（いらないかもしれない、あとでけすかも）

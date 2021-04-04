@@ -18,6 +18,7 @@ class UserController {
     async registe(fromClient: UserRegisteInfo, socket: Socket) {
         const user: User = new User(fromClient.name, fromClient.credentials);
         try {
+            user.repository.begin();
             if (await user.registe()) {
                 const user_id = user.getId();
                 //デフォルトのユーザールーム（ダイレクトメッセージ用）を作成
@@ -25,7 +26,9 @@ class UserController {
                     socket.emit('user:registered', '登録しました。ログインして下さい。');
                 }
             }
+            user.repository.commit();
         } catch (e) {
+            user.repository.rollback();
             ExceptionHandler.handle(e, socket);
         }
     }

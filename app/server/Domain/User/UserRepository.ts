@@ -69,5 +69,16 @@ class UserRepository implements IUserRepository {
         return rows.length > 0 ? rows : []
     }
 
+    async begin(){
+        await this.connector.query('BEGIN');
+    }
+
+    async commit(){
+        await this.connector.query('COMMIT');
+    }
+    
+    async rollback(){
+        await this.connector.query('ROLLBACK');
+    }
 }
 export default UserRepository;

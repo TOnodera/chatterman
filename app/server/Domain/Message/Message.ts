@@ -36,7 +36,7 @@ class Message{
         if(!this.user || !this.room_id){
             throw new Exception('add()の呼び出し方法が間違っています。');
         }
-        if(this.user.isAccessable(this.room_id) == false){
+        if(await this.user.isAccessable(this.user.id as string,this.room_id) == false){
             throw new AuthenticationException('このトークルームには投稿できません。')
         }
         this.message_id = uuid.v4();

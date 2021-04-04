@@ -49,7 +49,9 @@ class Message {
         }
     }
 
-    
+    clearMessages(room_id: string){
+        this.store.delete(room_id);
+    }
 
     acceptMessageListener() {
         socketStore.socket.on('broadcast:user-send-message', (fromServer: any) => {
@@ -64,13 +66,9 @@ class Message {
         });
     }
 
-    acceptMessageHandling(fromServer: any[]){
-        if(fromServer.length > 0){
-            for (let message of fromServer) {
-                AcceptMessageSubject.notify(message);
-            }
-        }else{
-            AcceptMessageSubject.notify([]);
+    acceptMessageHandling(fromServer: any[]) {
+        for (let message of fromServer) {
+            AcceptMessageSubject.notify(message);
         }
     }
 

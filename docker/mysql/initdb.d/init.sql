@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS messages (
     deleted_at DATETIME
 );
 
-INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('everybody', 'ミーティングルーム','superuser', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','god', '2021-03-25 01:24:21');
 
 /**
 TEST DATABASE 
@@ -79,4 +79,4 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 
-INSERT INTO `rooms` (`id`, `name`, `created_at`) VALUES ('everybody', 'ミーティングルーム','superuser', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`,`creater_id` , `created_at`) VALUES ('everybody', 'ミーティングルーム','god', '2021-03-25 01:24:21');

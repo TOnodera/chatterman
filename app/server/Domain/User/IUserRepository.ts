@@ -1,5 +1,6 @@
 import User from './User';
 import Message from '../Message/Message';
+import { Client } from 'server/@types/types';
 interface IUserRepository{
     registe(user: User): Promise<boolean>;
     thisEmailIsAlreadyUsed(email: string): Promise<boolean>;
@@ -9,5 +10,8 @@ interface IUserRepository{
     hasMessage(message: Message): Promise<boolean>;
     get(id: string): Promise<{user?: User,exists: boolean}>;
     getUsers(): Promise<Client[]>;
+    begin(): void;
+    commit(): void;
+    rollback(): void;
 }
 export default IUserRepository;

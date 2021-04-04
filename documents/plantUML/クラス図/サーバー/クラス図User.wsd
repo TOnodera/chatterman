@@ -63,7 +63,7 @@ IUserRepository <.. LoginManager
 ReadConfig <.. UserRepositoryFactory
 IUserRepository <|.. UserRepository
 UserRepository <.. UserRepositoryFactory : <<create>>
-RoomManager <-- UserController
 LoginManager <-- UserController
+RoomManager <-- User
 
 @enduml
