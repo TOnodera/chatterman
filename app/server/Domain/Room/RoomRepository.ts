@@ -1,6 +1,7 @@
 import { RoomInfo } from 'server/@types/types';
 import {mySqlConnector} from '../Utility/Connection';
 import Room from './Room';
+import RoomRegister from './RoomRegister';
 class RoomRepository{
 
     private connector: any;
@@ -14,13 +15,13 @@ class RoomRepository{
         return rows.length > 0 ? rows : [];
     }
 
-    async getRoom(id: string): Promise<any[]>{
+    async getRoom(id: string): Promise<any>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM rooms WHERE id = ? ',[id]);
         return rows[0];
     }
 
-    async createRoom(room: Room): Promise<boolean>{
-        const [rows]: any[] = await this.connector.query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, created_at = NOW()',[room.id,room.name,room.creater_id]);
+    async createRoom(room: RoomRegister): Promise<boolean>{
+        const [rows]: any[] = await this.connector.query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()',[room.id,room.name,room.creater_id,room.room_type]);
         return rows.affectedRows == 1;
     }
 

@@ -38,3 +38,7 @@ interface RoomInfo{
     id: string,
     name: string
 }
+
+interface RoomType{
+    Type: 'talkroom' | 'directmessage'
+}

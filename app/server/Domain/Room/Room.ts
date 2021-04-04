@@ -1,61 +1,20 @@
-import uuid from 'node-uuid';
-import DomainException from '../Exception/DomainException';
-import Exception from '../Exception/Exception';
-import repository from './RoomRepository';
+import { RoomType } from 'server/@types/types';
+import Datetime from '../Utility/Datetime';
 class Room {
 
-    id?: string;
-    name?: string;
-    creater_id?: string;
-    room_type?: string;
-    created_at?: string;
-    private repository;
+    id: string;
+    name: string;
+    creater_id: string;
+    room_type: RoomType;
+    created_at: Datetime;
 
-    constructor(id?: string) {
-        this.repository = repository;
+    constructor(id: string,name: string,creater_id: string,room_type: RoomType,created_at: Datetime) {
         this.id = id;
-    }
-
-    async getRoom(id: string): Promise<Room> {
-
-        const room: any = await this.repository.getRoom(id);
-
-        console.log(room);
-
-        const response = new Room(room.id);
-        response.name = room.name;
-        response.room_type = room.room_type;
-        response.creater_id = room.creater_id;
-        response.created_at = room.created_at;
-
-        return room;
-    }
-
-    async create(name: string, creater_id: string): Promise<Room> {
-
-        if (!name || !creater_id) {
-            throw new Exception('name,creater_idがない状態で呼び出せません。');
-        }
-
-        if (await this.repository.existsSameName(name)) {
-            throw new DomainException('同じ名前のルームが登録されているので名前を変えて下さい。');
-        }
-
-        try{
-
-        this.id = uuid.v4();
         this.name = name;
         this.creater_id = creater_id;
-        await this.repository.createRoom(this);
-        console.log(await this.getRoom(this.id));
-        }catch(e){
-            console.log(e);
-        }
-
-        return await this.getRoom(this.id as string);
-        
+        this.room_type = room_type;
+        this.created_at = created_at;
     }
-
 }
 
 export default Room;

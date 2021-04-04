@@ -1,4 +1,4 @@
-import { RoomAndUserId, RoomInfo } from 'server/@types/types';
+import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
 import { Socket } from 'socket.io';
 import ExceptionHandler from '../Exception/ExceptionHandler';
 import roomManager from '../Room/RoomManager';
@@ -18,8 +18,8 @@ class RoomController {
         }
     }
 
-    async createRoom(name: string, creater_id: string, socket: Socket) {
-        if (await roomManager.createRoom(name, creater_id).catch(e => ExceptionHandler.handle(e, socket))) {
+    async createRoom(name: string, creater_id: string,room_type: RoomType, socket: Socket) {
+        if (await roomManager.createRoom(name, creater_id, room_type).catch(e => ExceptionHandler.handle(e, socket))) {
             socket.emit('room-created');
         } else {
             socket.emit('room-created-failure');

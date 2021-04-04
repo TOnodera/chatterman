@@ -4,7 +4,7 @@ import ExceptionHandler from "../Exception/ExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
 import DomainException from "../Exception/DomainException";
-import { Client, UserRegisteInfo } from "server/@types/types";
+import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import Exception from "../Exception/Exception";
 import {transaction} from '../Utility/Connection';
@@ -21,7 +21,8 @@ class UserController {
         const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
         transaction(async ()=> {
             const user_id = await user.registe();
-            if (user_id && await roomManager.createUserDefaultRoom(user_id)) { //デフォルトのユーザールームも合わせて作成
+            const roomType: RoomType = {Type: 'directmessage'};
+            if (user_id && await roomManager.createUserDefaultRoom(user_id,user_id,roomType)) { //デフォルトのユーザールームも合わせて作成
                 socket.emit('user:registered', '登録しました。ログインして下さい。');
             }else{
                 socket.emit('user:registered-failure', '登録に失敗しました。');

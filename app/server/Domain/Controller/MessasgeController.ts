@@ -5,33 +5,29 @@ import messages from '../Message/Messages';
 import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 import { SendMessageToClient } from "server/@types/types";
+import UserFactory from "../User/UserFactory";
 
 class MessageController{
     async add(strMessage:string,user_id: string,socket: Socket,room_id: string){
-        const user: User = new User(user_id);
-        if(await user.load()){
-            
-            const message: Message = new Message(strMessage,user,room_id);
-            await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
-            console.log("in message controller...",socket.rooms);
-            
-            const toClient: SendMessageToClient = {
-                room_id: room_id,
-                user_id: user_id,
-                user_name: message.user?.name as string,
-                message_id: message.message_id as string,
-                message: strMessage,
-                created_at: message.created_at?.get() as string
-            };
-            console.log(toClient);
-            //ブロードキャスト
-            socket.broadcast.to(room_id).emit('broadcast:user-send-message',toClient);
-            //自分に送る
-            socket.emit('broadcast:user-send-message',toClient);
 
-            return;
-        }
-        throw new Exception('メッセージの登録に失敗しました。');
+        const user: User = await UserFactory.create(user_id);
+        const message: Message = new Message(strMessage,user,room_id);
+        await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
+  
+        const toClient: SendMessageToClient = {
+            room_id: room_id,
+            user_id: user_id,
+            user_name: message.user?.name as string,
+            message_id: message.message_id as string,
+            message: strMessage,
+            created_at: message.created_at?.get() as string
+        };
+        console.log(toClient);
+        //ブロードキャスト
+        socket.broadcast.to(room_id).emit('broadcast:user-send-message',toClient);
+        //自分に送る
+        socket.emit('broadcast:user-send-message',toClient);
+        
     }
     delete(): void{
 

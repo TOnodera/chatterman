@@ -1,7 +1,9 @@
-import { RoomAndUserId, RoomInfo } from 'server/@types/types';
+import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
 import User from '../User/User';
 import UserFactory from '../User/UserFactory';
 import Room from './Room';
+import RoomFactory from './RoomFactoryy';
+import RoomRegister from './RoomRegister';
 import repository from './RoomRepository';
 class RoomManager {
 
@@ -26,14 +28,15 @@ class RoomManager {
         return false;
     }
 
-    async createRoom(name: string, user_id: string): Promise<Room> {
-        const room: Room = new Room();
-        return await room.create(name, user_id);
+    async createRoom(name: string,creater_id: string, room_type: RoomType): Promise<Room> {
+        const register = new RoomRegister(name,creater_id,room_type);
+        const id: string = await register.create();
+        return await RoomFactory.create(id);
     }
 
-    async createUserDefaultRoom(user_id: string): Promise<boolean> {
-        const room = await this.createRoom(user_id, user_id);
-        const result = await this.addAccessableRooms(user_id, room.id!) && await this.addAccessableRooms(user_id, 'everybody');
+    async createUserDefaultRoom(name: string,user_id: string, room_typs: RoomType): Promise<boolean> {
+        const room: Room = await this.createRoom(user_id, user_id,room_typs);
+        const result = await this.addAccessableRooms(user_id, room.id) && await this.addAccessableRooms(user_id, 'everybody');
         return result;
     }
 
