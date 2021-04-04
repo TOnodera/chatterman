@@ -1,5 +1,6 @@
 import { RoomAndUserId, RoomInfo } from 'server/@types/types';
 import User from '../User/User';
+import UserFactory from '../User/UserFactory';
 import Room from './Room';
 import repository from './RoomRepository';
 class RoomManager {
@@ -10,16 +11,16 @@ class RoomManager {
     }
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
-        const user: User = new User(info.user_id);
-        if (await user.load() && await user.isAccessable(info.user_id, info.room_id)) {
+        const user: User = await UserFactory.create(info.user_id);
+        if (await user.isAccessable(info.user_id, info.room_id)) {
             return true;
         }
         return false;
     }
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
-        const user: User = new User(info.user_id);
-        if (await user.load() && await user.isAccessable(info.user_id, info.room_id)) {
+        const user: User = await UserFactory.create(info.user_id);
+        if (await user.isAccessable(info.user_id, info.room_id)) {
             return true;
         }
         return false;
@@ -33,7 +34,6 @@ class RoomManager {
     async createUserDefaultRoom(user_id: string): Promise<boolean> {
         const room = await this.createRoom(user_id, user_id);
         const result = await this.addAccessableRooms(user_id, room.id!) && await this.addAccessableRooms(user_id, 'everybody');
-        console.log("createUserDefaultroom:",result)
         return result;
     }
 

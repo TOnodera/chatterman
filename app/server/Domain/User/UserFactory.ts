@@ -1,0 +1,11 @@
+import ExceptionHandler from "../Exception/ExceptionHandler";
+import User from "./User";
+import repositoryFactory from './UserRepositoryFactory';
+class UserFactory{
+    static async create(id: string): Promise<User>{
+        const repository = repositoryFactory.create();
+        const row : any = await repository.get(id);
+        return new User(row.id,row.name,row.credentials,row.created_at);        
+    }
+}
+export default UserFactory;

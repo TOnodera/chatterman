@@ -3,6 +3,9 @@ import User from './User';
 import Bcrypt from '../Utility/Bcrypt';
 import Message from '../Message/Message';
 import AuthenticationException from '../Exception/AuthenticationException';
+import UserRegister from './UserRegister';
+import Exception from '../Exception/Exception';
+import UserFactory from './UserFactory';
 
 class UserRepository implements IUserRepository {
 
@@ -12,7 +15,7 @@ class UserRepository implements IUserRepository {
         this.connector = connector;
     }
 
-    async registe(user: User): Promise<boolean> {
+    async registe(user: UserRegister): Promise<boolean> {
         const [result]: any[] = await this.connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password]);
         return result.affectedRows == 1;
     }
@@ -30,21 +33,14 @@ class UserRepository implements IUserRepository {
     async getUserByCredentials(credentials: Credentials): Promise<User> {
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
         if (rows.length > 0 && await Bcrypt.compare(credentials.password, rows[0].password)) {
-            return new User(
-                rows[0].name,
-                { email: rows[0].email, password: rows[0].password },
-                rows[0].created_at,
-                rows[0].id
-            );
+            return await UserFactory.create(rows[0].id);
         }
         throw new AuthenticationException("認証情報に一致するユーザーが見つかりませんでした。");
     }
 
     async credentials(credentials: Credentials): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
-        console.log("in credentials :",1);
         if (rows.length > 0){
-            console.log("in credentials :",await Bcrypt.compare(credentials.password, rows[0].password));
             return await Bcrypt.compare(credentials.password, rows[0].password);
         }
         return false;
@@ -55,13 +51,21 @@ class UserRepository implements IUserRepository {
         return rows.length > 0;
     }
 
-    async get(user_id: string): Promise<{user?: User,exists: boolean}>{
+    async get(user_id: string): Promise<any>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE id = ? ',[user_id]);
-        if(rows.length > 0){
-            const user: User = new User(rows[0].name,{email: rows[0].email,password: rows[0].password},rows[0].created_at,rows[0].id);
-            return {user: user,exists: true};
+        if(rows.lenght > 0){
+            const credentials: Credentials = {
+                email: rows[0].email as string,
+                password: rows[0].password as string
+            };
+            return {
+                id: rows[0].id,
+                name: rows[0].name,
+                credentials: credentials,
+                created_at: rows[0].created_at
+            };
         }
-        return {exists: false};
+        throw new Exception("ユーザーが見つかりませんでした。");
     }
 
     async getUsers(): Promise<any[]>{

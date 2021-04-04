@@ -1,4 +1,3 @@
-import User from "../User/User";
 import LoginManager from '../User/LoginManager';
 import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
@@ -6,6 +5,9 @@ import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
 import DomainException from "../Exception/DomainException";
 import { Client, UserRegisteInfo } from "server/@types/types";
+import UserRegister from "../User/UserRegister";
+import Exception from "../Exception/Exception";
+import {transaction} from '../Utility/Connection';
 
 class UserController {
 
@@ -16,21 +18,15 @@ class UserController {
     }
 
     async registe(fromClient: UserRegisteInfo, socket: Socket) {
-        const user: User = new User(fromClient.name, fromClient.credentials);
-        try {
-            user.repository.begin();
-            if (await user.registe()) {
-                const user_id = user.getId();
-                //デフォルトのユーザールーム（ダイレクトメッセージ用）を作成
-                if (await roomManager.createUserDefaultRoom(user_id)) {
-                    socket.emit('user:registered', '登録しました。ログインして下さい。');
-                }
+        const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+        transaction(async ()=> {
+            const user_id = await user.registe();
+            if (user_id && await roomManager.createUserDefaultRoom(user_id)) { //デフォルトのユーザールームも合わせて作成
+                socket.emit('user:registered', '登録しました。ログインして下さい。');
+            }else{
+                socket.emit('user:registered-failure', '登録に失敗しました。');
             }
-            user.repository.commit();
-        } catch (e) {
-            user.repository.rollback();
-            ExceptionHandler.handle(e, socket);
-        }
+        });
     }
 
     async login(credentials: Credentials, socket: Socket) {

@@ -3,6 +3,8 @@ import Message from './Message';
 import UserRepositoryFactory from '../User/UserRepositoryFactory';
 import Exception from '../Exception/Exception';
 import Datetime from '../Utility/Datetime';
+import UserFactory from '../User/UserFactory';
+import User from '../User/User';
 
 class MessageRepository implements IMessageRepository {
 
@@ -88,12 +90,11 @@ class MessageRepository implements IMessageRepository {
         const [result]: any[] = await this.connector.query('SELECT * FROM messages WHERE message_id = ? LIMIT 1', [message_id]);
         if (result.length > 0) {
             //ユーザーが見つからない場合はメッセージ返さない
-            const { user, exists } = await this.userRepository.get(result[0].user_id);
-            if (exists) {
-                const message =  new Message(result[0].message, user!, result[0].room_id);
-                message.created_at = new Datetime(result[0].created_at);
-                return { message: message, exists: true };
-            }
+            const user: User = await UserFactory.create(result[0].user_id);
+            const message =  new Message(result[0].message, user, result[0].room_id);
+            message.created_at = new Datetime(result[0].created_at);
+            return { message: message, exists: true };
+            
         }
         return { exists: false };
     }
