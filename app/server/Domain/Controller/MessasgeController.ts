@@ -1,9 +1,10 @@
 import Exception from "../Exception/Exception";
 import Message from "../Message/Message";
 import User from "../User/User";
-import Messages from '../Message/Messages';
+import messages from '../Message/Messages';
 import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
+import { SendMessageToClient } from "server/@types/types";
 
 class MessageController{
     async add(strMessage:string,user_id: string,socket: Socket,room_id: string){
@@ -13,14 +14,16 @@ class MessageController{
             const message: Message = new Message(strMessage,user,room_id);
             await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
             console.log("in message controller...",socket.rooms);
-            //Room系のクラスで実装しなおした　要リファクタリング
+            
             const toClient: SendMessageToClient = {
                 room_id: room_id,
                 user_id: user_id,
                 user_name: message.user?.name as string,
                 message_id: message.message_id as string,
-                message: strMessage
+                message: strMessage,
+                created_at: message.created_at?.get() as string
             };
+            console.log(toClient);
             //ブロードキャスト
             socket.broadcast.to(room_id).emit('broadcast:user-send-message',toClient);
             //自分に送る
@@ -36,15 +39,24 @@ class MessageController{
     edit(): void{
 
     }
-    async all(room_id: string): Promise<{messages?: Message[],exists: boolean}>{
-        const {messages,exists} = await Messages.all(room_id);
-        if(exists){
-            return {messages: messages,exists: true};
-        }
-        return {exists: false};
-    }
+
     typing(user: {id:string,name:string},socket: Socket): void{
         socket.broadcast.emit('broadcast:user-typing',user);
     }
+
+    async moreMessages(room_id: string,message_id: string,socket: Socket){
+        const response: SendMessageToClient[] = await messages.more(room_id,message_id);
+        for(let data of response){
+            console.log(data.created_at);
+        }
+        socket.emit('user:send-messages-data',response);
+    }
+
+    async getLatest(room_id: string, sokcet: Socket){
+        console.log(room_id);
+        const response: SendMessageToClient[] = await messages.latest(room_id);
+        sokcet.emit('user:send-latest-messages',response);
+    }
+
 }
 export default new MessageController();

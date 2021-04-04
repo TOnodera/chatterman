@@ -4,7 +4,7 @@
             <p>{{message}}</p>
         </div>
         <div class="info">
-            <p class="is-size-7">{{user_name}}</p>
+            <p class="is-size-7">{{user_name}}<br><span>{{created_at}}</span></p>
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "ChatLeft",
-    props: ["message", "user_name"]
+    props: ["message", "user_name", "created_at"]
 });
 </script>
 

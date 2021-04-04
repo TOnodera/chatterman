@@ -5,6 +5,7 @@ import ExceptionHandler from "../Exception/ExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
 import DomainException from "../Exception/DomainException";
+import { Client, UserRegisteInfo } from "server/@types/types";
 
 class UserController {
 

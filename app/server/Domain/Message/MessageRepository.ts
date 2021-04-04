@@ -1,35 +1,74 @@
 import IMessageRepository from './IMessageRepository';
 import Message from './Message';
 import UserRepositoryFactory from '../User/UserRepositoryFactory';
-import User from '../User/User';
 import Exception from '../Exception/Exception';
+import Datetime from '../Utility/Datetime';
 
 class MessageRepository implements IMessageRepository {
 
     private connector;
     private userRepository;
+    private nums: number;
+    
     constructor(connector: any) {
         this.connector = connector;
         this.userRepository = UserRepositoryFactory.create();
+        this.nums = 20;
     }
 
-    async all(room_id: string): Promise<{ messages?: Message[], exists: boolean }> {
-        const [rows]: any[] = this.connector.query('SELECT * FROM messages WHERE room_id = ? AND deleted_at IS NULL', [room_id]);
+    async latest(room_id: string): Promise<Message[]> {
+        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE room_id = ? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT ?', [room_id,this.nums]);
+        console.log('in message repository',room_id);
+        
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                //TODO ボトルネックになるのでリファクタリングする
-                const {user,exists}: {user?:User,exists: boolean} = await this.userRepository.get(row.user_id);
-                if(exists){
-                    const  message: Message = new Message(row.message_id);
-                    if(await message.load()){
-                        messages.push(message);                    
-                    }
+                const  message: Message = new Message(row.message_id);
+                if(await message.load()){
+                    messages.push(message);                    
                 }
             }
-            return {messages: messages,exists: true};
+            return messages.reverse();
         }
-        return {exists: false};
+        return [];
+    }
+
+    async getCreatedAt(message_id: string): Promise<Datetime>{
+        const {message,exists} = await this.get(message_id);
+        if(exists){
+            return message?.created_at as Datetime;
+        }
+        throw new Exception('想定外のエラー: messageにcreated_atがありません。');
+    }
+
+    async roomIncludeMessage(room_id: string,message_id: string): Promise<boolean>{
+        const {message,exists} = await this.get(message_id);
+        if(exists){
+            if(message?.room_id == room_id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async more(room_id: string,message_id: string): Promise<Message[]>{
+        if(await this.roomIncludeMessage(room_id,message_id) == false){
+            throw new Exception(`指定されたルームに${message_id}のメッセージは存在しません。`);
+        }
+        const created_at = await this.getCreatedAt(message_id);
+        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE room_id = ? AND deleted_at IS NULL AND created_at < ? ORDER BY created_at DESC LIMIT ? ', [room_id,created_at.get(),this.nums]);
+        if (rows.length > 0) {
+            const messages: Message[] = [];
+            for (let row of rows) {
+                const  message: Message = new Message(row.message_id);
+                if(await message.load()){
+                    messages.push(message);                    
+                }
+            }
+            return messages.reverse();
+        }else{
+            return [];
+        }
     }
 
     async add(message: Message): Promise<boolean> {
@@ -51,7 +90,9 @@ class MessageRepository implements IMessageRepository {
             //ユーザーが見つからない場合はメッセージ返さない
             const { user, exists } = await this.userRepository.get(result[0].user_id);
             if (exists) {
-                return { message: new Message(result[0].message, user!, result[0].room_id), exists: true };
+                const message =  new Message(result[0].message, user!, result[0].room_id);
+                message.created_at = new Datetime(result[0].created_at);
+                return { message: message, exists: true };
             }
         }
         return { exists: false };

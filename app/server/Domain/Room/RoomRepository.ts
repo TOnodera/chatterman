@@ -1,3 +1,4 @@
+import { RoomInfo } from 'server/@types/types';
 import {mySqlConnector} from '../Utility/Connection';
 import Room from './Room';
 class RoomRepository{

@@ -11,6 +11,11 @@
                     </div>
                 </div>
                 <ul class="menu-list">
+                    <li>
+                        <router-link to="/talk/everybody">
+                            <span class>ミーティングルーム</span>
+                        </router-link>
+                    </li>
                     <li v-for="room in rooms" :key="room.room_id">
                         <router-link :to="/talk/ + room.room_id">
                             <span class>{{room.name}}</span>

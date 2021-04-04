@@ -8,12 +8,14 @@
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
+                        :created_at="message.created_at"
                     />
                     <ChatLeft
                         v-else
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
+                        :created_at="message.created_at"
                     />
                 </template>
                 <Typing :class="{'is-hidden': !isTyping}" :user_name="typingUser" />
@@ -32,8 +34,7 @@ import user from "../Domain/User/User";
 import message from "../Domain/Message/Message";
 import room from "../Domain/Room";
 import AcceptMessageObserver from "../Domain/Message/AcceptMessageObserver";
-import TypingEventObserver from '../Domain/Message/TypingEventObserver';
-
+import TypingEventObserver from "../Domain/Message/TypingEventObserver";
 import { defineComponent } from "vue";
 export default defineComponent({
     name: "Talk",
@@ -62,6 +63,20 @@ export default defineComponent({
         },
         includeTalkroomPath(path: string) {
             return new RegExp(/^\/talk/).test(path);
+        },
+        toBottom() {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                left: 0
+            });
+        },
+        observeScrollTopEvent() {
+            window.onscroll = () => {
+                const scrollTop = document.documentElement.scrollTop;
+                if (scrollTop == 0) {
+                    message.requireMoreMessages(this.current_room);
+                }
+            };
         }
     },
     mounted() {
@@ -70,8 +85,11 @@ export default defineComponent({
         room.attemptToEnter(this.current_room as string, user.me.user);
         //メッセージ受信時の処理
         AcceptMessageObserver.handler = (messages: any[]) => {
+            console.log(messages.filter(
+                message => message.room_id == this.current_room
+            ));
             this.messages = messages.filter(
-                message => (message.room_id = this.current_room)
+                message => message.room_id == this.current_room
             );
         };
         //タイピングイベント受信時の処理
@@ -85,6 +103,9 @@ export default defineComponent({
                 }, this.typingTimer);
             }
         };
+        message.requireFirstMessages(this.current_room);
+        this.observeScrollTopEvent();
+        this.toBottom();
     },
     watch: {
         $route(to, from) {
@@ -95,8 +116,7 @@ export default defineComponent({
                 if (this.includeTalkroomPath(from.path)) {
                     room.leaveCurrent(user.me.user);
                 }
-                //移動先のチャットメッセージを取得
-                this.messages = message.getChatMessages(this.current_room);
+                message.requireFirstMessages(this.current_room);
             }
         }
     }

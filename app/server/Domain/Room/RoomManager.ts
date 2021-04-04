@@ -1,3 +1,4 @@
+import { RoomAndUserId, RoomInfo } from 'server/@types/types';
 import User from '../User/User';
 import Room from './Room';
 import repository from './RoomRepository';

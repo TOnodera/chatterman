@@ -1,10 +1,12 @@
 <template>
-    <div class="right-balloon-wrapper">
-        <div class="balloon1-right">
-            <p>{{message}}</p>
-        </div>
-        <div class="info">
-            <p class="is-size-7">{{user_name}}</p>
+    <div>
+        <div class="right-balloon-wrapper">
+            <div class="balloon1-right">
+                <p>{{message}}</p>
+            </div>
+            <div class="info">
+                <p class="is-size-7">{{user_name}}<br><span>{{created_at}}</span></p>
+            </div>
         </div>
     </div>
 </template>
@@ -14,7 +16,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "ChatRight",
-    props: ["message", "user_name"]
+    props: ["message", "user_name","created_at"]
 });
 </script>
 
@@ -28,7 +30,7 @@ export default defineComponent({
     }
     .info {
         display: flex;
-        justify-content: center; /*左右中央揃え*/
+        justify-content: center; //左右中央揃え
         align-items: center;
     }
 }

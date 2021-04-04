@@ -3,6 +3,8 @@
  * クライアントから来る情報のdto
  **/
 
+import Datetime from "server/Domain/Utility/Datetime";
+
 interface UserRegisteInfo {
     name: string,
     credentials: Credentials
@@ -22,7 +24,8 @@ interface SendMessageToClient{
     user_id: string,
     user_name: string,
     message_id: string,
-    message: string
+    message: string,
+    created_at: string
 }
 
 interface Client{

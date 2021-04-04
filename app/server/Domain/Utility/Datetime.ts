@@ -4,8 +4,8 @@ class Datetime{
     constructor(datetime?: string){
         this.datetime = datetime ? moment(datetime) : moment();
     }
-    get() : Moment{
-        return this.datetime;
+    get() : string{
+        return this.datetime.format("Y-M-D h:m:s");
     }
 }
 export default Datetime;

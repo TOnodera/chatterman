@@ -1,5 +1,6 @@
 import UserRepositoryFactory from './UserRepositoryFactory';
 import loginUsersStore from '../../Store/LoginUsersStore';
+import { Client } from 'server/@types/types';
 class Service{
     private repository: any;
     constructor(){

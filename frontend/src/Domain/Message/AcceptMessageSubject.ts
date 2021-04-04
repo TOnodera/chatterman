@@ -6,7 +6,9 @@ class AcceptMessageSubject {
         const messages: any[] = messageDomain.get(fromServer.room_id);
         messages.push(fromServer);
         messageDomain.set(fromServer.room_id, messages);
-        AcceptMessageObserver.update(messageDomain.get(fromServer.room_id));
+        //日付順にソートして渡す
+        const sortedMessages = messageDomain.get(fromServer.room_id).sort((a,b) => (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime());
+        AcceptMessageObserver.update(sortedMessages);
     }
 }
 

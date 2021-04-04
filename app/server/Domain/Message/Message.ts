@@ -40,7 +40,11 @@ class Message{
             throw new AuthenticationException('このトークルームには投稿できません。')
         }
         this.message_id = uuid.v4();
-        return await this.repository.add(this);
+        if(await this.repository.add(this)){
+            await this.load();
+            return true;
+        }
+        return false;
     }
 
     async edit(newMessage:string): Promise<boolean>{
