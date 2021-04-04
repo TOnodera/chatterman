@@ -7,6 +7,7 @@ class Room {
     id?: string;
     name?: string;
     creater_id?: string;
+    room_type?: string;
     created_at?: string;
     private repository;
 
@@ -23,6 +24,7 @@ class Room {
 
         const response = new Room(room.id);
         response.name = room.name;
+        response.room_type = room.room_type;
         response.creater_id = room.creater_id;
         response.created_at = room.created_at;
 

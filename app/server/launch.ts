@@ -1,5 +1,6 @@
 import express, { NextFunction } from 'express';
 import { Socket } from 'socket.io';
+
 const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);

@@ -2,19 +2,26 @@
 
 package User{
 
-    class User{
-        -id?: string
-        -credentials: Credentials
-        -name: string
-        -created_at: Datetime
-        -accessAbleRooms: array<string>
-        -repository: IUserRepository
-        -users: User[]
-        +constructor(name: string,credentials: Credentials,id?: string)
-        +registe(): void
-        +isAccessable(room_id: string): boolean
-        +isEditable(message: Message): boolean
-        +trimCredentials(): void
+    package user-core{
+        
+        class User{
+            -id?: string
+            -credentials: Credentials
+            -name: string
+            -created_at: Datetime
+            -accessAbleRooms: array<string>
+            -repository: IUserRepository
+            -users: User[]
+            +constructor(name: string,credentials: Credentials,id?: string)
+            +registe(): void
+            +isAccessable(room_id: string): boolean
+            +isEditable(message: Message): boolean
+            +trimCredentials(): void
+        }
+
+        class UserRegister{
+            
+        }
     }
 
     Interface ILoginManager{
@@ -29,7 +36,7 @@ package User{
         +getLoginUsersCount(room_id: string): number
     }
     note right of LoginManager::users
-        ユーザー情報をインメモリで保管するキュー
+    ユーザー情報をインメモリで保管するキュー
     endnote
 
     Interface IUserRepository{
