@@ -1,16 +1,16 @@
 import { createPool } from 'mysql2/promise';
 import config from '../../config';
-import Exception from '../Exception/Exception';
 
 const mySqlConnector = createPool(config.database.mysql);
-const transaction = (func: Function) => {
+const transaction = async (func: Function) => {
+    const connection = mySqlConnector.getConnection();
     try{
-        mySqlConnector.query('START TRANSACTION');
-        func();
-        mySqlConnector.query('COMMIT');
+        (await connection).beginTransaction();
+        await func();
+        (await connection).commit();
     }catch(e){
-        mySqlConnector.query('ROLLBACK');
-        throw new Exception('データベース処理に失敗しました。');
+        (await connection).rollback();
+        throw e;
     }
 }
-export {mySqlConnector,transaction};
+export { mySqlConnector, transaction };

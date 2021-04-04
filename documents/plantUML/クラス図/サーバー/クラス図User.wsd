@@ -5,22 +5,25 @@ package User{
     package user-core{
         
         class User{
-            -id?: string
+            -id: string
             -credentials: Credentials
             -name: string
             -created_at: Datetime
             -accessAbleRooms: array<string>
             -repository: IUserRepository
             -users: User[]
-            +constructor(name: string,credentials: Credentials,id?: string)
-            +registe(): void
+            +constructor(id: string)
             +isAccessable(room_id: string): boolean
             +isEditable(message: Message): boolean
             +trimCredentials(): void
         }
 
         class UserRegister{
-            
+            -credentials: Credentials
+            -name: string
+            -repository: IUserRepository
+            +constructor(name: string,credentials: Credentials)
+            +registe(): void
         }
     }
 

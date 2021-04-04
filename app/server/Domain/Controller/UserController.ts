@@ -6,8 +6,8 @@ import userService from '../User/Service';
 import DomainException from "../Exception/DomainException";
 import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
-import Exception from "../Exception/Exception";
-import {transaction} from '../Utility/Connection';
+import { transaction } from '../Utility/Connection';
+import User from '../User/User';
 
 class UserController {
 
@@ -18,60 +18,66 @@ class UserController {
     }
 
     async registe(fromClient: UserRegisteInfo, socket: Socket) {
-        const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
-        transaction(async ()=> {
-            const user_id = await user.registe();
-            const roomType: RoomType = {Type: 'directmessage'};
-            if (user_id && await roomManager.createUserDefaultRoom(user_id,user_id,roomType)) { //デフォルトのユーザールームも合わせて作成
-                socket.emit('user:registered', '登録しました。ログインして下さい。');
-            }else{
-                socket.emit('user:registered-failure', '登録に失敗しました。');
-            }
-        });
-    }
-
-    async login(credentials: Credentials, socket: Socket) {
         try {
-            const { user, success } = await this.loginManager.login(credentials);
-            if (success) {
-
-                let toClient: Client = {
-                    id: user?.id as string,
-                    name: user?.name as string
-                };
-
-                socket.request.session.credentials = credentials;
-                //イベント発行
-                socket.emit('user:logged-in', toClient);
-                socket.broadcast.emit('broadcast:user-login',toClient);
-    
-            }else{
-                throw new DomainException('ログイン情報が間違っています。');
-            }
+            const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+            await transaction(async () => {
+                const user_id = await user.registe();
+                const roomType: RoomType = { Type: 'directmessage' };
+                if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
+                    socket.emit('user:registered', '登録しました。ログインして下さい。');
+                } else {
+                    socket.emit('user:registered-failure', '登録に失敗しました。');
+                }
+            });
         } catch (e) {
             ExceptionHandler.handle(e, socket);
         }
     }
 
-    async logout(id: string,credentials: Credentials, socket: Socket) {
-        console.log("logput: ",id);
-        if (await this.loginManager.logout(credentials)) {
-            socket.broadcast.emit('broadcast:user-logout',id);
-            console.log("send logout event-> ",id);
-            socket.request.session.credentials = { email: '', password: '' };
-            return;
+    async login(credentials: Credentials, socket: Socket) {
+        try {
+            
+            const user: User = await this.loginManager.login(credentials);
+            let toClient: Client = {
+                id: user.id,
+                name: user.name
+            };
+
+            socket.request.session.credentials = credentials;
+            //イベント発行
+            socket.emit('user:logged-in', toClient);
+            socket.broadcast.emit('broadcast:user-login', toClient);
+
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
         }
-        socket.emit('user:logout-failure',id);
+    }
+
+    async logout(id: string, credentials: Credentials, socket: Socket) {
+        try {
+            if (await this.loginManager.logout(credentials)) {
+                socket.broadcast.emit('broadcast:user-logout', id);
+                socket.request.session.credentials = { email: '', password: '' };
+                return;
+            }
+            socket.emit('user:logout-failure', id);
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
+        }
     }
 
     async authenticate(credentials: Credentials, socket: Socket) {
         if (await this.loginManager.authenticate(credentials)) {
-            
+
         }
     }
 
     async getUsers(socket: Socket) {
-        socket.emit('user:send-users-data', await userService.getUsers());
+        try {
+            socket.emit('user:send-users-data', await userService.getUsers());
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
+        }
     }
 
 }

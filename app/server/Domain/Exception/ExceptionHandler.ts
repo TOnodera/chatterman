@@ -1,5 +1,6 @@
 import Exception from './Exception';
 import { Socket } from 'socket.io';
+import logger from '../Utility/logger';
 
 class ExceptionHandler{
     static handle(exception: Exception,socket: Socket){
@@ -11,7 +12,7 @@ class ExceptionHandler{
                 break;
             case 401:
                 //認証例外の処理
-                socket.send('occurred:authentication-exception',exception.message);
+                socket.emit('occurred:authentication-exception',exception.message);
                 break;
             default:
                 //想定外のエラー

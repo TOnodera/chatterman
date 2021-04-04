@@ -1,4 +1,3 @@
-import ExceptionHandler from "../Exception/ExceptionHandler";
 import User from "./User";
 import repositoryFactory from './UserRepositoryFactory';
 class UserFactory{

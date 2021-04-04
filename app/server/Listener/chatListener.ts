@@ -7,8 +7,7 @@ module.exports = (io: any) => {
     io.on('connection', (socket: Socket) => {
 
         const userSendMessage = async (fromClient: any) => {
-            console.log("userSendMessage()");
-            await messageController.add(fromClient.message,fromClient.user.id,socket,fromClient.room_id);
+            await messageController.add(fromClient.message,fromClient.user.id,fromClient.room_id,socket);
         };
 
         const userEditMessage = async (fromClient: any) => {

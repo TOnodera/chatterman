@@ -63,7 +63,7 @@
 import swal from '../util/swal';
 import user from '../Domain/User/User';
 import { defineComponent } from 'vue';
-import UserObserver from '../Domain/User/Observer/UserObserver';
+import RegisterObserver from '../Domain/User/Observer/RegisterObserver';
 
 export default defineComponent({
   name: 'User',
@@ -87,7 +87,7 @@ export default defineComponent({
     }
   },
   mounted () {
-    UserObserver.handler = (msg: string)=>{ 
+    RegisterObserver.handler = (msg: string)=>{ 
         swal.fire(msg);
         this.$router.push({name: 'Login'});
     };

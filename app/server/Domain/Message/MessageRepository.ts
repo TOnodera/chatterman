@@ -1,20 +1,20 @@
 import IMessageRepository from './IMessageRepository';
 import Message from './Message';
-import UserRepositoryFactory from '../User/UserRepositoryFactory';
 import Exception from '../Exception/Exception';
 import Datetime from '../Utility/Datetime';
 import UserFactory from '../User/UserFactory';
 import User from '../User/User';
+import MessageRegister from './MessageRegister';
+import MessageFactory from './MessageFactory';
+import logger from '../Utility/logger';
 
 class MessageRepository implements IMessageRepository {
 
     private connector;
-    private userRepository;
     private nums: number;
     
     constructor(connector: any) {
         this.connector = connector;
-        this.userRepository = UserRepositoryFactory.create();
         this.nums = 20;
     }
 
@@ -25,32 +25,23 @@ class MessageRepository implements IMessageRepository {
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                const  message: Message = new Message(row.message_id);
-                if(await message.load()){
-                    messages.push(message);                    
-                }
+                const  message: Message = await MessageFactory.create(row.message_id);
+                messages.push(message);                    
             }
             return messages.reverse();
         }
+
         return [];
     }
 
     async getCreatedAt(message_id: string): Promise<Datetime>{
-        const {message,exists} = await this.get(message_id);
-        if(exists){
-            return message?.created_at as Datetime;
-        }
-        throw new Exception('想定外のエラー: messageにcreated_atがありません。');
+        const message: Message = await MessageFactory.create(message_id);
+        return message.created_at;
     }
 
     async roomIncludeMessage(room_id: string,message_id: string): Promise<boolean>{
-        const {message,exists} = await this.get(message_id);
-        if(exists){
-            if(message?.room_id == room_id){
-                return true;
-            }
-        }
-        return false;
+        const message: Message = await MessageFactory.create(message_id);
+        return message.room_id == room_id;
     }
 
     async more(room_id: string,message_id: string): Promise<Message[]>{
@@ -62,10 +53,8 @@ class MessageRepository implements IMessageRepository {
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                const  message: Message = new Message(row.message_id);
-                if(await message.load()){
-                    messages.push(message);                    
-                }
+                const  message: Message = await MessageFactory.create(row.message_id);
+                messages.push(message);                    
             }
             return messages.reverse();
         }else{
@@ -73,12 +62,9 @@ class MessageRepository implements IMessageRepository {
         }
     }
 
-    async add(message: Message): Promise<boolean> {
-        if(message.message_id && message.user && message.room_id){
-            const [result]: any[] = await this.connector.query('INSERT INTO messages SET message_id = ?, user_id = ? ,room_id = ?, message = ? ,created_at = NOW()', [message.message_id, message.user.id, message.room_id, message.message]);
-            return result.affectedRows == 1;
-        }
-        throw new Exception('message_id,user,room_idのいずれかが設定されない状態で呼び出されました。');
+    async add(message: MessageRegister): Promise<boolean> {
+        const [result]: any[] = await this.connector.query('INSERT INTO messages SET message_id = ?, user_id = ? ,room_id = ?, message = ? ,created_at = NOW()', [message.message_id, message.user.id, message.room_id, message.message]);
+        return result.affectedRows == 1;
     }
 
     async delete(message_id: string): Promise<boolean> {
@@ -86,17 +72,20 @@ class MessageRepository implements IMessageRepository {
         return result.affectedRows == 1;
     }
 
-    async get(message_id: string): Promise<{ message?: Message, exists: boolean }> {
-        const [result]: any[] = await this.connector.query('SELECT * FROM messages WHERE message_id = ? LIMIT 1', [message_id]);
-        if (result.length > 0) {
-            //ユーザーが見つからない場合はメッセージ返さない
-            const user: User = await UserFactory.create(result[0].user_id);
-            const message =  new Message(result[0].message, user, result[0].room_id);
-            message.created_at = new Datetime(result[0].created_at);
-            return { message: message, exists: true };
-            
+    async get(message_id: string): Promise<Message> {
+        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE message_id = ? LIMIT 1', [message_id]);
+        if (rows.length > 0) {
+            const result: any = rows[0];
+            const user: User = await UserFactory.create(result.user_id);
+            return new Message(
+                result.message_id,
+                result.message,
+                user,
+                result.room_id,
+                new Datetime(result.created_at)
+            );
         }
-        return { exists: false };
+        throw new Exception('メッセージが見つかりませんでした。');        
     }
 
     async save(message: Message): Promise<boolean> {

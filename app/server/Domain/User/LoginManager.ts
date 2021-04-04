@@ -3,6 +3,7 @@ import IUserRepository from "./IUserRepository";
 import UserRepositoryFactory from "./UserRepositoryFactory";
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from "./User";
+import AuthenticationException from "../Exception/AuthenticationException";
 
 class LoginManager implements ILoginManager{
 
@@ -12,13 +13,13 @@ class LoginManager implements ILoginManager{
         this.repository = UserRepositoryFactory.create();
     }
 
-    async login(credentials: Credentials): Promise<{user?: User,success: boolean}> {
+    async login(credentials: Credentials): Promise<User> {
         if(await this.repository.credentials(credentials)){
             const user: User = await this.repository.getUserByCredentials(credentials);
             loginUserStore.enqueue(user);
-            return {user: user,success: true};            
+            return user;   
         }
-        return {success: false};
+        throw new AuthenticationException('登録して下さい。');
     }
 
     async logout(credentials: Credentials): Promise<boolean> {

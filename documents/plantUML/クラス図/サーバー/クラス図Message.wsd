@@ -9,18 +9,28 @@ package Message{
         +all(room_id): Message[]
     }
 
-    class Message{
-        #repository: IMessageRepository
-        #message_id?: string
-        #message: string
-        #user: User
-        #file?: File
-        #room_id: string
-        
-        +constructor(message: Message,repository: IMessageRepository)
-        +delete(message_id: string): void
-        +edit(message: Message): void
-        +add(message: Message): void
+    package message-core{
+        class MessageRegister{
+            repository: IMessageRepository
+            message: string
+            user: User
+            room_id: string
+
+            +constructor(message:string,user: User,room_id: string)
+            +add(message: Message): void
+        }
+
+        class Message{
+            repository: IMessageRepository
+            message_id: string
+            message: string
+            user: User
+            room_id: string
+
+            +constructor(message: Message,repository: IMessageRepository)
+            +delete(message_id: string): void
+            +edit(message: Message): void
+        }
     }
 
     class Messages{

@@ -4,8 +4,8 @@ import Bcrypt from '../Utility/Bcrypt';
 import Message from '../Message/Message';
 import AuthenticationException from '../Exception/AuthenticationException';
 import UserRegister from './UserRegister';
-import Exception from '../Exception/Exception';
 import UserFactory from './UserFactory';
+import DomainException from '../Exception/DomainException';
 
 class UserRepository implements IUserRepository {
 
@@ -53,7 +53,7 @@ class UserRepository implements IUserRepository {
 
     async get(user_id: string): Promise<any>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE id = ? ',[user_id]);
-        if(rows.lenght > 0){
+        if(rows.length > 0){
             const credentials: Credentials = {
                 email: rows[0].email as string,
                 password: rows[0].password as string
@@ -65,11 +65,11 @@ class UserRepository implements IUserRepository {
                 created_at: rows[0].created_at
             };
         }
-        throw new Exception("ユーザーが見つかりませんでした。");
+        throw new DomainException("ユーザーが見つかりませんでした。");
     }
 
     async getUsers(): Promise<any[]>{
-        const [rows]: any[] = await this.connector.query('SELECT id,name FROM users WHERE deleted_at is NULL ORDER BY name');
+        const [rows]: any[] = await this.connector.query('SELECT users.id,users.name,rooms.id as room_id FROM users JOIN rooms ON rooms.creater_id = users.id AND rooms.room_type = "directmessage" WHERE users.deleted_at is NULL ORDER BY users.name');
         return rows.length > 0 ? rows : []
     }
 

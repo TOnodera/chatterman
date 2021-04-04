@@ -56,7 +56,7 @@ export default defineComponent({
     },
     methods: {
         send(msg: string) {
-            message.send(msg, user.me.user, this.current_room as string);
+            message.send(msg, user.me.user, this.current_room);
         },
         typing() {
             message.typing(user.me.user);

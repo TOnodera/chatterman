@@ -14,7 +14,7 @@ class RoomManager {
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        if (await user.isAccessable(info.user_id, info.room_id)) {
+        if (await user.isAccessable(info.room_id)) {
             return true;
         }
         return false;
@@ -22,7 +22,7 @@ class RoomManager {
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        if (await user.isAccessable(info.user_id, info.room_id)) {
+        if (await user.isAccessable(info.room_id)) {
             return true;
         }
         return false;
@@ -34,7 +34,7 @@ class RoomManager {
         return await RoomFactory.create(id);
     }
 
-    async createUserDefaultRoom(name: string,user_id: string, room_typs: RoomType): Promise<boolean> {
+    async createUserDefaultRoom(user_id: string, room_typs: RoomType): Promise<boolean> {
         const room: Room = await this.createRoom(user_id, user_id,room_typs);
         const result = await this.addAccessableRooms(user_id, room.id) && await this.addAccessableRooms(user_id, 'everybody');
         return result;

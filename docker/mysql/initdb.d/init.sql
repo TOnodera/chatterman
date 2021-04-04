@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS messages (
     deleted_at DATETIME
 );
 
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
 INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'god', '2021-03-25 01:24:21');
 
 /**
@@ -80,5 +81,5 @@ CREATE TABLE IF NOT EXISTS messages (
     deleted_at DATETIME
 );
 
-
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
 INSERT INTO `rooms` (`id`, `name`, `room_type`,`creater_id` , `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom','god', '2021-03-25 01:24:21');

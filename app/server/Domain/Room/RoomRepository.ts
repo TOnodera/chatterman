@@ -1,5 +1,6 @@
-import { RoomInfo } from 'server/@types/types';
+import { RoomInfo, RoomType } from 'server/@types/types';
 import {mySqlConnector} from '../Utility/Connection';
+import logger from '../Utility/logger';
 import Room from './Room';
 import RoomRegister from './RoomRegister';
 class RoomRepository{
@@ -10,8 +11,8 @@ class RoomRepository{
         this.connector = mySqlConnector;
     }
 
-    async getAllRooms(user_id: string): Promise<RoomInfo[]>{
-        const [rows]: any[] = await this.connector.query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND accessable_rooms.deleted_at IS NULL',[user_id]);
+    async getAllRooms(user_id: string,room_type: RoomType = {Type: 'talkroom'}): Promise<RoomInfo[]>{
+        const [rows]: any[] = await this.connector.query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,room_type.Type]);
         return rows.length > 0 ? rows : [];
     }
 
@@ -21,7 +22,7 @@ class RoomRepository{
     }
 
     async createRoom(room: RoomRegister): Promise<boolean>{
-        const [rows]: any[] = await this.connector.query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()',[room.id,room.name,room.creater_id,room.room_type]);
+        const [rows]: any[] = await this.connector.query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()',[room.id,room.name,room.creater_id,room.room_type.Type]);
         return rows.affectedRows == 1;
     }
 
@@ -39,18 +40,6 @@ class RoomRepository{
     async isAccessAbleRooms(user_id: string,room_id: string): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM accessable_rooms WHERE user_id = ? AND room_id = ?',[user_id,room_id]);
         return rows.length > 0;
-    }
-
-    async begin(){
-        await this.connector.query('BEGIN');
-    }
-
-    async commit(){
-        await this.connector.query('COMMIT');
-    }
-    
-    async rollback(){
-        await this.connector.query('ROLLBACK');
     }
 
 }

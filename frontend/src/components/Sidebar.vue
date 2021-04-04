@@ -23,7 +23,7 @@
             </div>
             <ul class="menu-list" v-if="users.length > 0">
                 <li v-for="user in users" :key="user.id">
-                    <router-link :to="/talk/ + user.id">
+                    <router-link :to="/talk/ + user.room_id">
                         <fontawesome :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}" icon="circle" />
                         <span class="ml-1">{{user.name}}</span>
                     </router-link>

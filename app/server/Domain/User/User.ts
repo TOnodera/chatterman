@@ -24,8 +24,8 @@ class User {
         return this.id;
     }
 
-    async isAccessable(user_id: string,room_id: string): Promise<boolean> {
-        return await room.isAccessAbleRooms(user_id,room_id);
+    async isAccessable(room_id: string): Promise<boolean> {
+        return await room.isAccessAbleRooms(this.id,room_id);
     }
 
     async isEditable(message: Message): Promise<boolean> {

@@ -1,7 +1,7 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import { UserRegisteInfo } from "server/@types/types";
+import { RoomType, UserRegisteInfo } from "server/@types/types";
 
 module.exports = (io: any) => {
   io.on('connection', (socket: Socket) => {
@@ -23,7 +23,8 @@ module.exports = (io: any) => {
 
     //ルーム作成
     const createRoom = async (name: string,user_id: string) => {
-      await RoomController.createRoom(name,user_id,socket);
+      const roomType: RoomType = {Type: 'talkroom'};
+      await RoomController.createRoom(name,user_id,roomType,socket);
     };
 
     //ユーザーデータ送信

@@ -3,6 +3,7 @@
  * クライアントから来る情報のdto
  **/
 
+import User from "server/Domain/User/User";
 import Datetime from "server/Domain/Utility/Datetime";
 
 interface UserRegisteInfo {
@@ -31,6 +32,7 @@ interface SendMessageToClient{
 interface Client{
     id: string,
     name: string,
+    room_id?: string,
     isLogin?: boolean
 }
 
@@ -42,3 +44,15 @@ interface RoomInfo{
 interface RoomType{
     Type: 'talkroom' | 'directmessage'
 }
+
+/**
+ * その他
+ */
+
+interface MessageDto{
+    message_id: string,
+    message: string,
+    user: User,
+    room_id: string,
+    created_at: Datetime
+};

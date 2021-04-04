@@ -1,57 +1,74 @@
-import Exception from "../Exception/Exception";
-import Message from "../Message/Message";
 import User from "../User/User";
 import messages from '../Message/Messages';
 import { Socket } from "socket.io";
-import ExceptionHandler from "../Exception/ExceptionHandler";
 import { SendMessageToClient } from "server/@types/types";
 import UserFactory from "../User/UserFactory";
+import MessageRegister from "../Message/MessageRegister";
+import MessageFactory from "../Message/MessageFactory";
+import ExceptionHandler from "../Exception/ExceptionHandler";
+import { transaction } from '../Utility/Connection';
 
-class MessageController{
-    async add(strMessage:string,user_id: string,socket: Socket,room_id: string){
+class MessageController {
 
-        const user: User = await UserFactory.create(user_id);
-        const message: Message = new Message(strMessage,user,room_id);
-        await message.add().catch(e=>{ExceptionHandler.handle(e,socket)});
-  
-        const toClient: SendMessageToClient = {
-            room_id: room_id,
-            user_id: user_id,
-            user_name: message.user?.name as string,
-            message_id: message.message_id as string,
-            message: strMessage,
-            created_at: message.created_at?.get() as string
-        };
-        console.log(toClient);
-        //ブロードキャスト
-        socket.broadcast.to(room_id).emit('broadcast:user-send-message',toClient);
-        //自分に送る
-        socket.emit('broadcast:user-send-message',toClient);
-        
-    }
-    delete(): void{
+    async add(strMessage: string, user_id: string, room_id: string,socket: Socket) {
 
-    }
-    edit(): void{
+        try {
 
-    }
+            await transaction(async () => {
 
-    typing(user: {id:string,name:string},socket: Socket): void{
-        socket.broadcast.emit('broadcast:user-typing',user);
-    }
+                const user: User = await UserFactory.create(user_id);
+                const message: MessageRegister = new MessageRegister(strMessage, user, room_id);
+                const message_id: string = await message.add();
+                const registered = await MessageFactory.create(message_id);
 
-    async moreMessages(room_id: string,message_id: string,socket: Socket){
-        const response: SendMessageToClient[] = await messages.more(room_id,message_id);
-        for(let data of response){
-            console.log(data.created_at);
+                const toClient: SendMessageToClient = {
+                    room_id: room_id,
+                    user_id: user_id,
+                    user_name: registered.user.name,
+                    message_id: registered.message_id,
+                    message: strMessage,
+                    created_at: registered.created_at.get()
+                };
+
+                //ブロードキャスト
+                socket.broadcast.to(room_id).emit('broadcast:user-send-message', toClient);
+                //自分に送る
+                socket.emit('broadcast:user-send-message', toClient);
+
+            });
+
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
         }
-        socket.emit('user:send-messages-data',response);
+
+    }
+    delete(): void {
+
+    }
+    edit(): void {
+
     }
 
-    async getLatest(room_id: string, sokcet: Socket){
-        console.log(room_id);
-        const response: SendMessageToClient[] = await messages.latest(room_id);
-        sokcet.emit('user:send-latest-messages',response);
+    typing(user: { id: string, name: string }, socket: Socket): void {
+        socket.broadcast.emit('broadcast:user-typing', user);
+    }
+
+    async moreMessages(room_id: string, message_id: string, socket: Socket) {
+        try {
+            const response: SendMessageToClient[] = await messages.more(room_id, message_id);
+            socket.emit('user:send-messages-data', response);
+        } catch (e) {
+            ExceptionHandler.handle(e, socket);
+        }
+    }
+
+    async getLatest(room_id: string, sokcet: Socket) {
+        try {
+            const response: SendMessageToClient[] = await messages.latest(room_id);
+            sokcet.emit('user:send-latest-messages', response);
+        } catch (e) {
+            ExceptionHandler.handle(e, sokcet);
+        }
     }
 
 }

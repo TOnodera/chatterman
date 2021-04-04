@@ -1,7 +1,29 @@
 @startuml
+package Room{
+    class Room{
+        id: string
+        name: string
+        creater_id: string
+        room_type: string
+        created_at: string
+        +getRoom(id)
+    }
+
+    class CreateRoom{
+        name?: string
+        creater_id?: string
+        room_type?: string
+        +create(name,creater_id,room_type)
+    }
+
+    class RoomFactory{
+        create(id): Room
+    }
+
     class RoomManager{
         +attemptToenter()
         +leaveCurrentRoom()
         +isAccessable(user: User)
     }
+}
 @enduml

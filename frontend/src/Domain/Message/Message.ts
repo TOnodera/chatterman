@@ -24,7 +24,7 @@ class Message {
         return this.store.has(key) ? this.store.get(key) as any[] : [];
     }
 
-    send(message: string, me: User, room_id: string = 'everybody') {
+    send(message: string, me: User, room_id: string) {
         socketStore.socket.emit('user:send-message', {
             message: message,
             user: me,
@@ -55,6 +55,7 @@ class Message {
 
     acceptMessageListener() {
         socketStore.socket.on('broadcast:user-send-message', (fromServer: any) => {
+            console.log('broadcast message accepted...');
             AcceptMessageSubject.notify(fromServer);
         });
         //送信要求への応答として送られたメッセージの処理
