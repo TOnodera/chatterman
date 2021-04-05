@@ -12,8 +12,8 @@ module.exports = (io: any) => {
     };
 
     //ログイン
-    const userLogin = async (credendtials: Credentials) => {
-      await UserController.login(credendtials,socket);
+    const afterLogin = async (credendtials: Credentials) => {
+      await UserController.afterCredentials(credendtials,socket);
     };
 
     //ログアウト
@@ -39,7 +39,7 @@ module.exports = (io: any) => {
 
     //ハンドラ登録
     socket.on('user:register', userRegister);
-    socket.on('user:attempt-login', userLogin);
+    socket.on('user:after-login', afterLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
     socket.on('user:require-users',requireUsers);

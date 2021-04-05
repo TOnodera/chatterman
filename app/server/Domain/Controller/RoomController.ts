@@ -1,6 +1,6 @@
 import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
 import { Socket } from 'socket.io';
-import ExceptionHandler from '../Exception/ExceptionHandler';
+import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
 class RoomController {
@@ -13,7 +13,7 @@ class RoomController {
                 socket.emit('user:denied-to-enter-room');
             }
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -23,7 +23,7 @@ class RoomController {
                 socket.emit('user:left-room', info.room_id);
             }
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -35,7 +35,7 @@ class RoomController {
                 socket.emit('room-created-failure');
             }
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -44,7 +44,7 @@ class RoomController {
             const rooms: RoomInfo[] = await roomManager.getAllRooms(user_id);
             socket.emit('user:send-rooms-data', rooms);
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 

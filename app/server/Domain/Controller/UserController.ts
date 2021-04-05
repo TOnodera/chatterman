@@ -1,6 +1,6 @@
 import LoginManager from '../User/LoginManager';
 import { Socket } from "socket.io";
-import ExceptionHandler from "../Exception/ExceptionHandler";
+import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
 import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
@@ -29,14 +29,19 @@ class UserController {
                 }
             });
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
-    async login(credentials: Credentials, socket: Socket) {
+    async login(credentials: Credentials): Promise<boolean> {
+        await this.loginManager.login(credentials);
+        return true;
+    }
+
+    async afterCredentials(credentials: Credentials, socket: Socket) {
         try {
 
-            const user: User = await this.loginManager.login(credentials);
+            const user: User = await userService.getUserByCredentials(credentials);
             let toClient: Client = {
                 id: user.id,
                 name: user.name
@@ -51,7 +56,7 @@ class UserController {
             socket.broadcast.emit('broadcast:user-login', toClient);
 
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -64,7 +69,7 @@ class UserController {
             }
             socket.emit('user:logout-failure', id);
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -78,7 +83,7 @@ class UserController {
         try {
             socket.emit('user:send-users-data', await userService.getUsers());
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 

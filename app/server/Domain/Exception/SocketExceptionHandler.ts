@@ -2,9 +2,9 @@ import Exception from './Exception';
 import { Socket } from 'socket.io';
 import logger from '../Utility/logger';
 
-class ExceptionHandler{
+class SocketExceptionHandler{
     static handle(exception: Exception,socket: Socket){
-        console.log(exception.message);
+        logger.error(exception.message,exception.status);
         switch(exception.status){
             case 422:
                 //ドメイン例外の処理
@@ -21,4 +21,4 @@ class ExceptionHandler{
         }
     }
 }
-export default ExceptionHandler;
+export default SocketExceptionHandler;

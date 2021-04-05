@@ -5,6 +5,8 @@ import registerSubject from './Subject/RegisterSubject';
 import acceptUsersSubject from './Subject/AcceptUsersSubject';
 import logoutSubject from './Subject/LogoutSubject';
 import anotherUserLoginSubject from './Subject/AnoterUserLoginSubject';
+import http from '@/util/axios';
+import error from '@/util/HttpError';
 
 class UserDomain {
 
@@ -61,9 +63,20 @@ class UserDomain {
 		return true;
 	}
 
-	attemptLogin(credentials: Credentials) {
+	async attemptLogin(credentials: Credentials) {
+
 		this.me.credentials = credentials;
-		socketStore.socket.emit('user:attempt-login', credentials);
+		const response = await http.post('/api/login',credentials);
+		const data: any = response.data;
+
+		if(error.hasHttpError(data)){
+			error.showError(data);
+			return;
+		}
+
+		//ログイン完了イベント発行
+		socketStore.socket.emit('user:after-login',credentials);
+		
 	}
 
 	logout(id: string,credentials: Credentials) {

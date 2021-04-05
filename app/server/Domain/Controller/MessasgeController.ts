@@ -5,9 +5,8 @@ import { SendMessageToClient } from "server/@types/types";
 import UserFactory from "../User/UserFactory";
 import MessageRegister from "../Message/MessageRegister";
 import MessageFactory from "../Message/MessageFactory";
-import ExceptionHandler from "../Exception/ExceptionHandler";
 import { transaction } from '../Utility/Connection';
-import logger from "../Utility/logger";
+import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 
 class MessageController {
 
@@ -41,7 +40,7 @@ class MessageController {
             });
 
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
 
     }
@@ -61,7 +60,7 @@ class MessageController {
             const response: SendMessageToClient[] = await messages.more(room_id, message_id);
             socket.emit('user:send-messages-data', response);
         } catch (e) {
-            ExceptionHandler.handle(e, socket);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 
@@ -70,7 +69,7 @@ class MessageController {
             const response: SendMessageToClient[] = await messages.latest(room_id);
             sokcet.emit('user:send-latest-messages', response);
         } catch (e) {
-            ExceptionHandler.handle(e, sokcet);
+            SocketExceptionHandler.handle(e, sokcet);
         }
     }
 
