@@ -24,21 +24,12 @@
             <div class="navbar-start">
 
             </div>
-
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light" @click="logout">ログアウト</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </nav>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import user from '../Domain/User/User';
 
 export default defineComponent({
   name: 'Header',
@@ -51,11 +42,16 @@ export default defineComponent({
     toggleMenu () {
       this.isToggleMenu = !this.isToggleMenu;
       this.$emit('menu-clicked', this.isToggleMenu);
-    },
-    async logout () {
-      await user.logout(user.me.user.id,user.me.credentials);
-      this.$router.push({name: 'Login'});
     }
   }
 });
 </script>
+
+<style lang="scss">
+.navbar{
+  margin-top: 5px;
+  box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
+  position: fixed !important;
+  width: 100%;
+}  
+</style>

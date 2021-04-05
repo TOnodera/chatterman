@@ -7,6 +7,7 @@ import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';
+import logger from '../Utility/logger';
 
 class UserController {
 
@@ -16,21 +17,19 @@ class UserController {
         this.loginManager = new LoginManager();
     }
 
-    async registe(fromClient: UserRegisteInfo, socket: Socket) {
-        try {
-            const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
-            await transaction(async () => {
-                const user_id = await user.registe();
-                const roomType: RoomType = { Type: 'directmessage' };
-                if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
-                    socket.emit('user:registered', '登録しました。ログインして下さい。');
-                } else {
-                    socket.emit('user:registered-failure', '登録に失敗しました。');
-                }
-            });
-        } catch (e) {
-            SocketExceptionHandler.handle(e, socket);
-        }
+    async registe(fromClient: UserRegisteInfo): Promise<boolean> {
+        logger.debug(fromClient);
+        const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+        let result: boolean = false;
+        await transaction(async () => {
+            const user_id = await user.registe();
+            const roomType: RoomType = { Type: 'directmessage' };
+            if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
+                result = true;
+            }
+            //socket.emit('user:registered-failure', '登録に失敗しました。');            
+        });
+        return result;
     }
 
     async login(credentials: Credentials): Promise<boolean> {

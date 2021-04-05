@@ -24,11 +24,21 @@
             <ul class="menu-list" v-if="users.length > 0">
                 <li v-for="user in users" :key="user.id">
                     <router-link :to="/talk/ + user.room_id">
-                        <fontawesome :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}" icon="circle" />
+                        <fontawesome
+                            :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}"
+                            icon="circle"
+                        />
                         <span class="ml-1">{{user.name}}</span>
                     </router-link>
                 </li>
             </ul>
+            <div class="is-pulled-left mt-5">
+                <div class>
+                    <div class="buttons">
+                        <a class="button is-size-7" @click="logout">ログアウト</a>
+                    </div>
+                </div>
+            </div>
         </aside>
     </div>
 </template>
@@ -37,9 +47,9 @@
 import { defineComponent } from "vue";
 import user from "../Domain/User/User";
 import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
-import room from '../Domain/Room';
-import logoutObserver from '../Domain/User/Observer/LogoutObserver';
-import anotherUserLoginObserver from '../Domain/User/Observer/AnotherUserLoginObserver';
+import room from "../Domain/Room";
+import logoutObserver from "../Domain/User/Observer/LogoutObserver";
+import anotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
 
 export default defineComponent({
     name: "Sidebar",
@@ -49,24 +59,30 @@ export default defineComponent({
             rooms: [] as any[]
         };
     },
+    methods: {
+        async logout() {
+            await user.logout(user.me.user.id, user.me.credentials);
+            this.$router.push({ name: "Login" });
+        }
+    },
     mounted() {
         acceptUsersObserver.handler = (users: any[]) => {
             this.users = users;
         };
-        room.acceptRoomsListener((rooms: any[])=>{
+        room.acceptRoomsListener((rooms: any[]) => {
             this.rooms = rooms;
         });
         logoutObserver.handler = (id: string) => {
-            this.users = this.users.map((user: User)=>{
-                if(user.id == id){
+            this.users = this.users.map((user: User) => {
+                if (user.id == id) {
                     user.isLogin = false;
                 }
                 return user;
             });
         };
-        anotherUserLoginObserver.handler = (logoutUser: User)=>{
-            this.users = this.users.map((user: User)=>{
-                if(user.id == logoutUser.id){
+        anotherUserLoginObserver.handler = (logoutUser: User) => {
+            this.users = this.users.map((user: User) => {
+                if (user.id == logoutUser.id) {
                     user.isLogin = true;
                 }
                 return user;
@@ -79,6 +95,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.menu {
+    position: fixed;
+    top: 50px;
+}
 .sidebar-wrapper {
     min-height: 100vh;
     background-color: #fff;

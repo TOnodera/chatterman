@@ -6,12 +6,7 @@ import { RoomType, UserRegisteInfo } from "server/@types/types";
 module.exports = (io: any) => {
   io.on('connection', (socket: Socket) => {
 
-    //ユーザー登録
-    const userRegister = async (fromClient: UserRegisteInfo) => {
-      await UserController.registe(fromClient, socket);
-    };
-
-    //ログイン
+    //ログイン直後
     const afterLogin = async (credendtials: Credentials) => {
       await UserController.afterCredentials(credendtials,socket);
     };
@@ -38,7 +33,6 @@ module.exports = (io: any) => {
     };
 
     //ハンドラ登録
-    socket.on('user:register', userRegister);
     socket.on('user:after-login', afterLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);

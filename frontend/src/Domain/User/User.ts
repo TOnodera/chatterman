@@ -46,7 +46,7 @@ class UserDomain {
 		return this.users.length;
 	}
 
-	registe(newUser: UserRegisteInfo): boolean {
+	async registe(newUser: UserRegisteInfo): Promise<boolean> {
 		if (!newUser.name) {
 			swal.fire('ユーザー名が未入力です。');
 			return false;
@@ -59,7 +59,12 @@ class UserDomain {
 			swal.fire('パスワードが未入力です。');
 			return false;
 		}
-		socketStore.socket.emit('user:register', newUser);
+
+		const response = await http.post('/api/users',newUser);
+		if(error.hasHttpError(response.data)){
+			error.showError(response.data);
+			return false;
+		}
 		return true;
 	}
 

@@ -42,7 +42,6 @@ export default {
 <style lang="scss" scoped>
 .app-wrapper {
     .app-header {
-        box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
         position: relative;
     }
     .app-contents {
