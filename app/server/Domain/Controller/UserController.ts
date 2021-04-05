@@ -3,11 +3,11 @@ import { Socket } from "socket.io";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
-import DomainException from "../Exception/DomainException";
 import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';
+import logger from '../Utility/logger';
 
 class UserController {
 
@@ -36,13 +36,16 @@ class UserController {
 
     async login(credentials: Credentials, socket: Socket) {
         try {
-            
+
             const user: User = await this.loginManager.login(credentials);
             let toClient: Client = {
                 id: user.id,
                 name: user.name
             };
 
+            //入室可能なルームにソケットをジョイン
+            await roomManager.joinUser(user,socket);
+            //認証用セッション情報設定
             socket.request.session.credentials = credentials;
             //イベント発行
             socket.emit('user:logged-in', toClient);

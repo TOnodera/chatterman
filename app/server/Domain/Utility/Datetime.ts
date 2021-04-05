@@ -5,7 +5,7 @@ class Datetime{
         this.datetime = datetime ? moment(datetime) : moment();
     }
     get() : string{
-        return this.datetime.format("Y-M-D h:m:s");
+        return this.datetime.format("Y-M-D HH:mm:ss");
     }
 }
 export default Datetime;

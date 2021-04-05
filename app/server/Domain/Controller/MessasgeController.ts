@@ -7,10 +7,11 @@ import MessageRegister from "../Message/MessageRegister";
 import MessageFactory from "../Message/MessageFactory";
 import ExceptionHandler from "../Exception/ExceptionHandler";
 import { transaction } from '../Utility/Connection';
+import logger from "../Utility/logger";
 
 class MessageController {
 
-    async add(strMessage: string, user_id: string, room_id: string,socket: Socket) {
+    async add(strMessage: string, user_id: string, room_id: string, socket: Socket) {
 
         try {
 
@@ -30,10 +31,12 @@ class MessageController {
                     created_at: registered.created_at.get()
                 };
 
+            
                 //ブロードキャスト
-                socket.broadcast.to(room_id).emit('broadcast:user-send-message', toClient);
+                socket.to(room_id).emit('broadcast:user-send-message', toClient);
                 //自分に送る
                 socket.emit('broadcast:user-send-message', toClient);
+            
 
             });
 

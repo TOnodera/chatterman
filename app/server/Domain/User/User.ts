@@ -3,6 +3,7 @@ import IUserRepository from './IUserRepository';
 import UserRepositoryFactory from './UserRepositoryFactory';
 import Message from '../Message/Message';
 import room from '../Room/RoomRepository';
+import logger from '../Utility/logger';
 
 class User {
 
@@ -26,6 +27,11 @@ class User {
 
     async isAccessable(room_id: string): Promise<boolean> {
         return await room.isAccessAbleRooms(this.id,room_id);
+    }
+
+    async accessAbleRooms(): Promise<string[]>{
+        const rooms: string[] = await room.getAccessAbleRooms(this.id);
+        return rooms;
     }
 
     async isEditable(message: Message): Promise<boolean> {

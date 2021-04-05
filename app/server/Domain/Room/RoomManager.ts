@@ -1,6 +1,8 @@
 import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
+import { Socket } from 'socket.io';
 import User from '../User/User';
 import UserFactory from '../User/UserFactory';
+import logger from '../Utility/logger';
 import Room from './Room';
 import RoomFactory from './RoomFactoryy';
 import RoomRegister from './RoomRegister';
@@ -46,6 +48,17 @@ class RoomManager {
 
     async getAllRooms(user_id: string): Promise<RoomInfo[]> {
         return await this.repository.getAllRooms(user_id);
+    }
+
+    join(room_id: string,socket: Socket){
+        socket.join(room_id);
+    }
+
+    async joinUser(user: User,socket: Socket){
+        for(let room_id of await user.accessAbleRooms()){
+            logger.warn(room_id);
+            this.join(room_id,socket);
+        }
     }
 
 }
