@@ -7,7 +7,6 @@ import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';
-import logger from '../Utility/logger';
 
 class UserController {
 

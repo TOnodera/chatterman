@@ -55,7 +55,6 @@ class Message {
 
     acceptMessageListener() {
         socketStore.socket.on('broadcast:user-send-message', (fromServer: any) => {
-            console.log('broadcast message accepted...');
             AcceptMessageSubject.notify(fromServer);
         });
         //送信要求への応答として送られたメッセージの処理

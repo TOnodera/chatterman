@@ -1,5 +1,6 @@
 import express, { NextFunction } from 'express';
 import { Socket } from 'socket.io';
+import route from './Route';
 
 const cors = require('cors');
 const app = express();
@@ -35,5 +36,8 @@ const launch =(port:number) => {
         console.log('Server listening at port %d', port);
     });
 }
+
+//expressルート定義
+route(app);
 
 export default launch;
