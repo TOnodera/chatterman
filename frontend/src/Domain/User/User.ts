@@ -93,12 +93,6 @@ class UserDomain {
 		socketStore.socket.emit('user:require-users');
 	}
 
-	registerSuccessListener() {
-		socketStore.socket.on('user:registered', (msg: string) => {
-			registerSubject.notify(msg);
-		});
-	}
-
 	loginSuccessListener() {
 		socketStore.socket.on('user:logged-in', (user: User) => {
 			this.me.user = user;

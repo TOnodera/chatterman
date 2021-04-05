@@ -80,9 +80,9 @@ export default defineComponent({
                 return user;
             });
         };
-        anotherUserLoginObserver.handler = (logoutUser: User) => {
+        anotherUserLoginObserver.handler = (loginUser: User) => {
             this.users = this.users.map((user: User) => {
-                if (user.id == logoutUser.id) {
+                if (user.id == loginUser.id) {
                     user.isLogin = true;
                 }
                 return user;

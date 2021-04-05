@@ -2,6 +2,7 @@ import UserRepositoryFactory from './UserRepositoryFactory';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import { Client } from 'server/@types/types';
 import User from './User';
+import { Socket } from 'socket.io';
 class Service{
 
     private repository: any;
@@ -10,6 +11,7 @@ class Service{
     }
 
     async getUsers(): Promise<Client[]>{
+
         const users: Client[] = await this.repository.getUsers();
         for(let user of users){
             if(loginUsersStore.inUsers(user.id)){

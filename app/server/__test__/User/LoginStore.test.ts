@@ -15,10 +15,6 @@ describe('LoginStore',()=>{
         mySqlConnector.query('TRUNCATE TABLE users');
     });
 
-   it('enqueueできる',()=>{
-       LoginUsersStore.enqueue(user);
-       expect(LoginUsersStore.inUsers(user.id!)).toBe(true);
-   });
 
    it('deleteできる',()=>{
        expect(LoginUsersStore.delete(user.id!)).toBe(true);
@@ -26,12 +22,6 @@ describe('LoginStore',()=>{
 
    it('削除済みならfalse',()=>{
        expect(LoginUsersStore.delete(user.id!)).toBe(false);
-   });
-
-   it('dequeue()が動く',()=>{
-       LoginUsersStore.enqueue(user);
-       expect(LoginUsersStore.dequeue()).toBe(user);
-       expect(LoginUsersStore.inUsers(user.id!)).toBe(false);
    });
 
 });

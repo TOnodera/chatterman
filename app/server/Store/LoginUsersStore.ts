@@ -1,40 +1,60 @@
 import Exception from "../Domain/Exception/Exception";
 import DomainException from "../Domain/Exception/DomainException";
 import User from "../Domain/User/User";
+import logger from "../Domain/Utility/logger";
 export default {
-    users: [] as unknown as User[],
+    //users: [] as unknown as User[],
+    users: new Map as Map<string,User>,
     maxUserNum: 100,
-    enqueue(user: User){
+    set(socket_id:string,user: User){
         if(!user.id){
             throw new  Exception('idの無いユーザーをストアに追加しようとしました。');
         }
-        if(this.users.length < this.maxUserNum){
-            if(!this.inUsers(user.id)){
-                this.users.push(user);
-                console.log('enque: user->',user.id);
+        logger.info(this.users.size);
+        if(this.users.size < this.maxUserNum){
+            if(!this.users.has(socket_id)){
+                this.users.set(socket_id,user);
             }
             return true;
         }else{
             throw new DomainException('ログインユーザー数が上限を超えました。しばらくしてから再ログインしてください。');
         }
     },
-    dequeue(){
-        return this.users.shift();
-    },
-    delete(id: string){
-        console.log('delete: user->',id);
-        if(this.inUsers(id)){
-            this.users = this.users.filter((user)=>{
-                return user.id != id;
-            });
-            return true;
+    delete(socket_id: string){
+        if(this.users.has(socket_id)){
+            return this.users.delete(socket_id);
         }
         return false;
     },
-    inUsers(id: string){
-        const user = this.users.filter((user: any)=>{
-            return user.id == id;
+    inUsers(user_id: string){
+        let exists: boolean = false;
+        this.users.forEach(user=>{
+            if(user.id == user_id){
+                exists = true;
+            }
         });
-        return user.length > 0;
+        return exists;
+    },
+    getUserInUsersMap(socket_id:string): {user?:User,exist:boolean}{
+        if(this.users.has(socket_id)){
+            return {user:this.users.get(socket_id),exist: true};
+        }
+        return {exist: false};
+    },
+    getSocketNumPerUser(user_id: string): number{
+        let count = 0;
+        this.users.forEach((user)=>{
+            if(user.id == user_id){
+                count++;
+            }
+        });
+        return count;
+    },
+    getSocketNumUsingThisUser(socket_id: string): number{
+        const {user,exist} = this.getUserInUsersMap(socket_id);
+        if(exist){
+            return this.getSocketNumPerUser(user!.id);
+        }
+        return 0;
     }
 }

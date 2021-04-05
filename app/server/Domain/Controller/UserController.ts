@@ -8,13 +8,14 @@ import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';
 import logger from '../Utility/logger';
+import loginUserStore from '../../Store/LoginUsersStore';
 
 class UserController {
 
-    private loginManager: LoginManager;
+    private loginManager: any;
 
     constructor() {
-        this.loginManager = new LoginManager();
+        this.loginManager = LoginManager;
     }
 
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {
@@ -46,6 +47,7 @@ class UserController {
                 name: user.name
             };
 
+            loginUserStore.set(socket.id,user);
             //入室可能なルームにソケットをジョイン
             await roomManager.joinUser(user,socket);
             //認証用セッション情報設定
@@ -61,8 +63,7 @@ class UserController {
 
     async logout(id: string, credentials: Credentials, socket: Socket) {
         try {
-            if (await this.loginManager.logout(credentials)) {
-                socket.broadcast.emit('broadcast:user-logout', id);
+            if (await this.loginManager.logout(credentials,socket)) {
                 socket.request.session.credentials = { email: '', password: '' };
                 return;
             }

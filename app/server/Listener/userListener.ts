@@ -1,10 +1,9 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import { RoomType, UserRegisteInfo } from "server/@types/types";
+import { RoomType } from "server/@types/types";
 
-module.exports = (io: any) => {
-  io.on('connection', (socket: Socket) => {
+module.exports =  (socket: Socket) => {
 
     //ログイン直後
     const afterLogin = async (credendtials: Credentials) => {
@@ -38,5 +37,4 @@ module.exports = (io: any) => {
     socket.on('user:create-room',createRoom);
     socket.on('user:require-users',requireUsers);
     socket.on('user:require-rooms',requireRooms);
-  });
 }

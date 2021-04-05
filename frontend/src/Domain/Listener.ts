@@ -15,7 +15,6 @@ const launchAtLoggedIn = ()=>{
 const launchAtAppUped = ()=>{
     serverException.launchListener();
     user.loginSuccessListener();
-    user.registerSuccessListener();
 };
 
 export {

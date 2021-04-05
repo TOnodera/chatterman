@@ -10,8 +10,7 @@ const session = require('express-session')({
 	resave: false,
 	saveUninitialized: true
 });
-const chatListener = require('./Listener/chatListener');
-const userListener = require('./Listener/userListener');
+const socketListener = require('./Listener');
 const io = require('socket.io')(server,{
   cors:{
     origin: ['http://localhost:8080','http://localhost:8081','http://localhost:8082'],
@@ -29,15 +28,15 @@ io.use((socket: Socket,next: NextFunction)=>{
   session(socket.request,{},next);
 });
 //app.use(express.static(path.join(__dirname, '../../dist')));
-chatListener(io);
-userListener(io);
+socketListener(io);
+//expressルート定義
+route(app);
 const launch =(port:number) => {
     server.listen(port, () => {
         console.log('Server listening at port %d', port);
     });
 }
 
-//expressルート定義
-route(app);
+
 
 export default launch;
