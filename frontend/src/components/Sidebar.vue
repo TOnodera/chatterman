@@ -1,6 +1,11 @@
 <template>
     <div class="sidebar-wrapper ml-3">
         <aside class="menu">
+            <div class="ml-5 mt-4 is-hidden-desktop touch-info">
+                <div class="is-centered">
+                    <FlashIcon/>
+                </div>
+            </div>
             <div class="mb-5">
                 <div class="menu-label is-size-6 mt-3">
                     <fontawesome icon="coffee" />ルーム
@@ -23,7 +28,7 @@
             </div>
             <ul class="menu-list" v-if="users.length > 0">
                 <li v-for="user in users" :key="user.id">
-                    <router-link :to="/talk/ + user.room_id">
+                    <router-link :to="/talk/ + user.room_id + '-' + me.id">
                         <fontawesome
                             :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}"
                             icon="circle"
@@ -50,22 +55,27 @@ import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
 import room from "../Domain/Room";
 import logoutObserver from "../Domain/User/Observer/LogoutObserver";
 import anotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
+import FlashIcon from './FlashIcon.vue';
 
 export default defineComponent({
     name: "Sidebar",
     data() {
         return {
+            me: user.me.user,
             users: [] as User[],
             rooms: [] as any[]
         };
     },
+    components: {
+        FlashIcon
+    },
     methods: {
         async logout() {
-            await user.logout(user.me.user.id, user.me.credentials);
+            await user.logout(this.me.id, user.me.credentials);
             this.$router.push({ name: "Login" });
         }
     },
-    mounted() {
+    async mounted() {
         acceptUsersObserver.handler = (users: any[]) => {
             this.users = users;
         };
@@ -88,8 +98,8 @@ export default defineComponent({
                 return user;
             });
         };
-        user.getUsers();
-        room.getAllRooms(user.me.user.id);
+        await user.getUsers();
+        await room.getAllRooms(user.me.user.id);
     }
 });
 </script>
@@ -117,5 +127,10 @@ export default defineComponent({
 }
 .logout-color {
     color: #7a7a7a;
+}
+.touch-info {
+    width: 200px;
+    margin-top: 50px;
+    text-align: center;
 }
 </style>

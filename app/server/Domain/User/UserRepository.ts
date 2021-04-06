@@ -47,7 +47,7 @@ class UserRepository implements IUserRepository {
     }
     
     async hasMessage(message: Message): Promise<boolean> {
-        const [rows] : any[] = await this.connector.query("SELECT * FROM messages WHERE user_id = ? AND message_id = ?",[message.user?.id,message.message_id]);
+        const [rows] : any[] = await this.connector.query("SELECT * FROM messages WHERE user_id = ? AND id = ?",[message.user?.id,message.message_id]);
         return rows.length > 0;
     }
 
@@ -73,16 +73,5 @@ class UserRepository implements IUserRepository {
         return rows.length > 0 ? rows : []
     }
 
-    async begin(){
-        await this.connector.query('BEGIN');
-    }
-
-    async commit(){
-        await this.connector.query('COMMIT');
-    }
-    
-    async rollback(){
-        await this.connector.query('ROLLBACK');
-    }
 }
 export default UserRepository;

@@ -117,6 +117,7 @@ export default defineComponent({
                 if (this.includeTalkroomPath(from.path)) {
                     room.leaveCurrent(user.me.user);
                 }
+                room.attemptToEnter(this.current_room,user.me.user);
                 message.requireFirstMessages(this.current_room);
             }
         }

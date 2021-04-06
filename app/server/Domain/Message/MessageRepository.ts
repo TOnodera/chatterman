@@ -63,17 +63,17 @@ class MessageRepository implements IMessageRepository {
     }
 
     async add(message: MessageRegister): Promise<boolean> {
-        const [result]: any[] = await this.connector.query('INSERT INTO messages SET message_id = ?, user_id = ? ,room_id = ?, message = ? ,created_at = NOW()', [message.message_id, message.user.id, message.room_id, message.message]);
+        const [result]: any[] = await this.connector.query('INSERT INTO messages SET id = ?, user_id = ? ,room_id = ?, message = ? ,created_at = NOW()', [message.message_id, message.user.id, message.room_id, message.message]);
         return result.affectedRows == 1;
     }
 
     async delete(message_id: string): Promise<boolean> {
-        const [result]: any[] = await this.connector.query('UPDATE messages SET deleted_at = NOW() WHERE message_id = ?', [message_id]);
+        const [result]: any[] = await this.connector.query('UPDATE messages SET deleted_at = NOW() WHERE id = ?', [message_id]);
         return result.affectedRows == 1;
     }
 
     async get(message_id: string): Promise<Message> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE message_id = ? LIMIT 1', [message_id]);
+        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE id = ? LIMIT 1', [message_id]);
         if (rows.length > 0) {
             const result: any = rows[0];
             const user: User = await UserFactory.create(result.user_id);
@@ -89,7 +89,7 @@ class MessageRepository implements IMessageRepository {
     }
 
     async save(message: Message): Promise<boolean> {
-        const [result] = await this.connector.query('UPDATE messages SET message = ? WHERE message_id = ? ', [message.message, message.message_id]);
+        const [result] = await this.connector.query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
         return result.affectedRows == 1;
     }
     

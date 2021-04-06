@@ -46,7 +46,7 @@ class Room {
     deniedToEnterRoomListener() {
         socketStore.socket.on('user:denied-to-enter-room', () => {
             swal.fire('入室権限がありません。');
-            router.push({name: 'Login'});
+            router.back();
         });
     }
 

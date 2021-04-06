@@ -8,8 +8,10 @@ class RoomController {
     async attemptToEnter(info: RoomAndUserId, socket: Socket) {
         try {
             if (await roomManager.attemptToEnter(info)) {
+                logger.info('user:join-room',`user->${info.user_id}`,`room->${info.room_id}`);
                 socket.emit('user:join-room', info.room_id);
             } else {
+                logger.info('user:denied-to-enter-room',`user->${info.user_id}`,`room->${info.room_id}`);
                 socket.emit('user:denied-to-enter-room');
             }
         } catch (e) {

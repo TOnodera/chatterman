@@ -11,8 +11,5 @@ interface IUserRepository{
     hasMessage(message: Message): Promise<boolean>;
     get(id: string): Promise< User>;
     getUsers(): Promise<Client[]>;
-    begin(): void;
-    commit(): void;
-    rollback(): void;
 }
 export default IUserRepository;

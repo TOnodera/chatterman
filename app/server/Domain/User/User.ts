@@ -3,7 +3,6 @@ import IUserRepository from './IUserRepository';
 import UserRepositoryFactory from './UserRepositoryFactory';
 import Message from '../Message/Message';
 import room from '../Room/RoomRepository';
-import logger from '../Utility/logger';
 
 class User {
 

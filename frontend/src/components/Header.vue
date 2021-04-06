@@ -22,36 +22,43 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-
+                <div class="ml-5 mt-4">
+                    <div class="is-pulled-right">
+                        <FlashIcon/>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import { defineComponent } from "vue";
+import FlashIcon from './FlashIcon.vue';
 export default defineComponent({
-  name: 'Header',
-  data () {
-    return {
-      isToggleMenu: false
-    };
-  },
-  methods: {
-    toggleMenu () {
-      this.isToggleMenu = !this.isToggleMenu;
-      this.$emit('menu-clicked', this.isToggleMenu);
+    name: "Header",
+    components: {
+      FlashIcon
+    },
+    data() {
+        return {
+            isToggleMenu: false
+        };
+    },
+    methods: {
+        toggleMenu() {
+            this.isToggleMenu = !this.isToggleMenu;
+            this.$emit("menu-clicked", this.isToggleMenu);
+        }
     }
-  }
 });
 </script>
 
 <style lang="scss">
-.navbar{
-  margin-top: 5px;
-  box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
-  position: fixed !important;
-  width: 100%;
-}  
+.navbar {
+    margin-top: 5px;
+    box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
+    position: fixed !important;
+    width: 100%;
+}
 </style>
