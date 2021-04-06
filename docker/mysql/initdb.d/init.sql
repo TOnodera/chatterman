@@ -28,10 +28,19 @@ CREATE TABLE IF NOT EXISTS accessable_rooms (
 );
 
 CREATE TABLE IF NOT EXISTS messages (
-    message_id VARCHAR(255) PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR (255) NOT NULL,
     room_id VARCHAR (255) NOT NULL,
     message TEXT,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS requests (
+    id VARCHAR(255) PRIMARY KEY,
+    accept_user VARCHAR (255) NOT NULL,
+    request_id VARCHAR (255) NOT NULL,
+    phase TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
     deleted_at DATETIME
 );
@@ -77,6 +86,15 @@ CREATE TABLE IF NOT EXISTS messages (
     user_id VARCHAR (255) NOT NULL,
     room_id VARCHAR (255) NOT NULL,
     message TEXT,
+    created_at DATETIME NOT NULL,
+    deleted_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS requests (
+    id VARCHAR(255) PRIMARY KEY,
+    accept_user VARCHAR (255) NOT NULL,
+    request_id VARCHAR (255) NOT NULL,
+    phase TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
     deleted_at DATETIME
 );
