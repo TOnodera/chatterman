@@ -36,7 +36,7 @@ class Room {
 
     //roomへのアクセス許可が出た場合のリスナ
     arrowedToEnterRoomListener() {
-        socketStore.socket.on('user:join-room', (room_id: string) => {
+        socketStore.registeOnce('user:join-room', (room_id: string) => {
             this.current = room_id;
             arrowedToEnterRoomSubject.notify(room_id);            
         });
@@ -44,13 +44,13 @@ class Room {
 
     //roomへのアクセスが拒否された場合のリスナ
     deniedToEnterRoomListener() {
-        socketStore.socket.on('user:denied-to-enter-room', (msg: string) => {
+        socketStore.registeOnce('user:denied-to-enter-room', (msg: string) => {
             deniedToEnterRoomSubject.notify(msg);
         });
     }
 
     acceptRoomsListener(){
-        socketStore.socket.on('user:send-rooms-data',(rooms: any[])=>{
+        socketStore.registeOnce('user:send-rooms-data',(rooms: any[])=>{
             acceptRoomsSubject.notify(rooms);
         });
     }    

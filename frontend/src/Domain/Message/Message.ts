@@ -22,6 +22,10 @@ class Message {
         return this.store.has(key) ? this.store.get(key) as any[] : [];
     }
 
+    deleteAll(){
+        this.store.clear();
+    }
+
     send(message: string, me: User, room_id: string) {
         socketStore.socket.emit('user:send-message', {
             message: message,
@@ -64,20 +68,22 @@ class Message {
     }
 
     typingEventListener() {
-        socketStore.socket.on('broadcast:user-typing', (user: User,room_id: string) => {
-            TypingEventSubject.notify(user,room_id);
+        socketStore.registeOnce('broadcast:user-typing', (info: {user_name: string,room_id: string}) => {
+            TypingEventSubject.notify(info);
         });
     }
 
     acceptMessageListener() {
-        socketStore.socket.on('broadcast:user-send-message', (fromServer: any) => {
+        socketStore.registeOnce('broadcast:user-send-message', (fromServer: any) => {
             AcceptMessageSubject.notify(fromServer);
         });
         //送信要求への応答として送られたメッセージの処理
-        socketStore.socket.on('user:send-messages-data', (fromServer: any[]) => {
+        socketStore.registeOnce('user:send-messages-data', (fromServer: any[]) => {
+            console.log('user:send-messages-data');
             this.acceptMessageHandling(fromServer);
         });
-        socketStore.socket.on('user:send-latest-messages', (fromServer: any[]) => {
+        socketStore.registeOnce('user:send-latest-messages', (fromServer: any[]) => {
+            console.log('user:send-latest-messages');
             this.acceptMessageHandling(fromServer);
         });
     }

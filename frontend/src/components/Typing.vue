@@ -1,5 +1,5 @@
 <template>
-    <div class="left-balloon-wrapper">
+    <div class="left-balloon-wrapper" :class="{'is-hidden': !isTyping}">
         <div class="balloon1-left">
             <p>{{text}}{{dot}}</p>
         </div>
@@ -10,28 +10,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
+import room from "../Domain/Room/Room";
 
 export default defineComponent({
-  name: 'Typing',
-  props: ['user_name'],
-  data(){
-      return {
-          text: '入力中',
-          dot: ''
-      };
-  },
-  mounted(){
-      let count = 1;
-      setInterval(()=>{
-          this.dot += '.';
-          if(count > 4){
-              this.dot = '';
-              count = 0;
-          }
-          count++;
-      },300);
-  }
+    name: "Typing",
+    props: ["user_name", "room_id"],
+    data() {
+        return {
+            text: "入力中",
+            dot: "",
+            isTyping: false,
+            typingUser: "",
+            typingTimer: 3000 //タイピングアイコンの表示時間
+        };
+    },
+    mounted() {
+        let count = 1;
+        setInterval(() => {
+            this.dot += ".";
+            if (count > 4) {
+                this.dot = "";
+                count = 0;
+            }
+            count++;
+        }, 300);
+    },
+    updated() {
+        if (this.isTyping == false && room.current == this.room_id) {
+            this.isTyping = true;
+            this.typingUser = this.user_name;
+            const id = setTimeout(() => {
+                this.isTyping = false;
+                clearTimeout(id);
+            }, this.typingTimer);
+        }
+    }
 });
 </script>
 
@@ -40,7 +54,7 @@ export default defineComponent({
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
-    .info{
+    .info {
         display: flex;
         justify-content: center; /*左右中央揃え*/
         align-items: center;

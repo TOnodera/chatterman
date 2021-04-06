@@ -44,3 +44,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+.dashboard-content{
+    margin-top: 50px;
+}    
+</style>

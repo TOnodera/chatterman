@@ -4,7 +4,7 @@
             <div class="column is-four-fifths">
                 <template v-for="message in messages">
                     <ChatRight
-                        v-if="message.user_id == user_id"
+                        v-if="message.user_id == user.me.user.id"
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
@@ -18,7 +18,7 @@
                         :created_at="message.created_at"
                     />
                 </template>
-                <Typing :class="{'is-hidden': !isTyping}" :user_name="typingUser" />
+                <Typing :user_name="typingUserInfo.user_name" :room_id="typingUserInfo.room_id"/>
             </div>
         </div>
         <InputArea @message-send="send" @typing="typing" />
@@ -52,10 +52,11 @@ export default defineComponent({
     data() {
         return {
             messages: [] as any[],
-            isTyping: false,
-            typingUser: "",
-            user_id: user.me.user.id,
-            typingTimer: 3000 //タイピングアイコンの表示時間
+            user: user,
+            typingUserInfo: {
+                user_name: '',
+                room_id: ''
+            }
         };
     },
     methods: {
@@ -81,6 +82,10 @@ export default defineComponent({
                     message.requireMoreMessages(room.current);
                 }
             };
+        },
+        clear(room_id: string){
+            message.clearMessages(room_id);
+            this.messages = [];
         }
     },
     mounted() {
@@ -88,7 +93,7 @@ export default defineComponent({
         room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
         //入場出来る場合の処理
         arrowedToEnterRoomObserver.handler = (room_id: string)=>{
-            console.log(room_id);
+            console.log("入室許可...");
             message.requireFirstMessages(room_id);
         };
         //入場出来ない場合の処理
@@ -103,15 +108,8 @@ export default defineComponent({
             );
         };
         //タイピングイベント受信時の処理
-        typingEventObserver.handle = (user: User,room_id: string) => {
-            if (this.isTyping == false && room.current == room_id) {
-                this.isTyping = true;
-                this.typingUser = user.name;
-                const id = setTimeout(() => {
-                    this.isTyping = false;
-                    clearTimeout(id);
-                }, this.typingTimer);
-            }
+        typingEventObserver.handle = (info: {user_name: string,room_id: string}) => {
+            this.typingUserInfo = info;
         };
         //スクロールが最上部まで到達したか監視
         this.observeScrollTopEvent();
@@ -119,14 +117,18 @@ export default defineComponent({
         this.toBottom();
     },
     watch: {
-        $route(to) {
+        $route(to,from) {
             if (this.includeTalkroomPath(to.path)) {
                 const room_id: string = this.$route.params.room_id as string;
-                message.clearMessages(room_id);
-                this.messages = [];
+                this.clear(room_id);
+                console.log(from);
+                console.log('before room.attemptToEnter...');
                 room.attemptToEnter(room_id,user.me.user);
             }
         }
+    },
+    unmounted(){
+        message.deleteAll();
     }
 });
 </script>

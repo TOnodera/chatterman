@@ -1,10 +1,26 @@
 import io, { Socket } from 'socket.io-client';
 import swal from '../util/swal';
 class ClientSocket {
+
     socket: typeof Socket;
+    private eventArray: string[];
     constructor () {
       this.socket = io('http://localhost:3000');
       this.onError();
+      this.eventArray = [];
+    }
+
+    /**
+     * 
+     * @param event 
+     * @param func 
+     * リスナが未登録の場合のみ登録する
+     */
+    registeOnce(event: string,func: Function){
+      if(this.socket.hasListeners(event) == false){
+        this.socket.on(event,func);
+        this.eventArray.push(event);
+      }
     }
 
     onError () {

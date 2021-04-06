@@ -38,6 +38,9 @@ export default {
     emitAtAppUped();//アプリ起動時に送信するイベント
     launchAtAppUped();//アプリ起動時に起動するリスナ
   },
+  unmounted() {
+    
+  },
 };
 </script>
 

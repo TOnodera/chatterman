@@ -41,6 +41,7 @@ module.exports = (socket: Socket) => {
     }
 
     const latestMessages = (room_id: string) => {
+        logger.info('新規メッセージ送信要求を受信');
         messageController.getLatest(room_id, socket);
     }
 

@@ -20,12 +20,10 @@ class MessageRepository implements IMessageRepository {
 
     async latest(room_id: string): Promise<Message[]> {
         const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE room_id = ? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT ?', [room_id,this.nums]);
-        console.log('in message repository',room_id);
         
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                logger.debug(row.id);
                 const  message: Message = await MessageFactory.create(row.id);
                 messages.push(message);                    
             }

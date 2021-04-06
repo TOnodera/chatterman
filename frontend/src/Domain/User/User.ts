@@ -93,26 +93,26 @@ class UserDomain {
 	}
 
 	loginSuccessListener() {
-		socketStore.socket.on('user:logged-in', (user: User) => {
+		socketStore.registeOnce('user:logged-in', (user: User) => {
 			this.me.user = user;
 			loginSubject.notify();
 		});
 	}
 
 	acceptUsersListener() {
-		socketStore.socket.on('user:send-users-data', (users: { id: string, name: string }[]) => {
+		socketStore.registeOnce('user:send-users-data', (users: { id: string, name: string }[]) => {
 			acceptUsersSubject.notify(users);
 		});
 	}
 
 	logoutListener(){
-		socketStore.socket.on('broadcast:user-logout',(id: string)=>{
+		socketStore.registeOnce('broadcast:user-logout',(id: string)=>{
 			logoutSubject.notify(id);
 		});
 	}
 
 	anotherUserLoginListener(){
-		socketStore.socket.on('broadcast:user-login',(id:string)=>{
+		socketStore.registeOnce('broadcast:user-login',(id:string)=>{
 			anotherUserLoginSubject.notify(id);
 		});
 	}

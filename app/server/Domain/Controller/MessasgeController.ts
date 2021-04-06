@@ -15,6 +15,8 @@ class MessageController {
 
         try {
 
+            logger.info(`1/6 MesageController -> add() メッセージ送信処理開始  message:${strMessage}, user_id: ${user_id},room_id: ${room_id},socket_id: ${socket.id}`);
+            logger.info(`2/6 トランザクション開始: socket_id: ${socket.id}`);
             await transaction(async () => {
 
                 const user: User = await UserFactory.create(user_id);
@@ -32,13 +34,17 @@ class MessageController {
                 };
 
             
-                //ブロードキャスト
+                logger.info(`3/6 ブロードキャスト配信: socket_id: ${socket.id}`);
                 socket.to(room_id).emit('broadcast:user-send-message', toClient);
-                //自分に送る
+
+                logger.info(`4/6 自分自身に配信: socket_id: ${socket.id}`);
                 socket.emit('broadcast:user-send-message', toClient);
             
 
             });
+
+            logger.info(`5/6 トランザクション完了: socket_id: ${socket.id}`);
+            logger.info(`6/6 送信完了: socket_id: ${socket.id}`);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
@@ -53,7 +59,7 @@ class MessageController {
     }
 
     typing(user: { id: string, name: string }, room_id: string, socket: Socket): void {
-        socket.broadcast.emit('broadcast:user-typing', user,room_id);
+        socket.broadcast.emit('broadcast:user-typing',{ user_name: user.name,room_id: room_id });
     }
 
     async moreMessages(room_id: string, message_id: string, socket: Socket) {
