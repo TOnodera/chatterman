@@ -1,0 +1,27 @@
+@startuml
+
+package 申請{
+    class ApplyController{
+        request(accept_user,request_user)
+        hasRequest(user_id)
+        approve()
+        deny()
+    }
+    class ApplyRequest{
+        request(accept_user,request_user)
+        hasRequest(user_id)
+        approve()
+        deny()
+    }
+    class RequestRepository{
+        DB処理()
+    }
+    ApplyRequest <-- ApplyController
+    RequestRepository <-- ApplyRequest
+}
+note bottom of 申請
+ダイレクトメッセージの許可申請を管理する
+end note
+
+
+@enduml

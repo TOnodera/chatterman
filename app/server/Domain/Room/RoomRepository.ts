@@ -16,7 +16,7 @@ class RoomRepository{
         return rows.length > 0 ? rows : [];
     }
 
-    async getAccessAbleRooms(user_id: string): Promise<string[]>{
+    async getAccessableRooms(user_id: string): Promise<string[]>{
         const [rows]: any[] = await this.connector.query('SELECT room_id FROM accessable_rooms WHERE user_id = ? AND accessable_rooms.deleted_at IS NULL',[user_id]);
         if(rows.length > 0){
             let result: string[] = [];

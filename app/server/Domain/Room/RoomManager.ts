@@ -61,5 +61,13 @@ class RoomManager {
         }
     }
 
+    async isAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
+        return await this.repository.isAccessable(user_id,room_id);
+    }
+
+    async getAccessableRooms(user_id: string): Promise<string[]>{
+        return await this.repository.getAccessableRooms(user_id);
+    }
+
 }
 export default new RoomManager();

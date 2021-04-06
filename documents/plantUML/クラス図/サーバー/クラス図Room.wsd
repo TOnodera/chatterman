@@ -1,20 +1,25 @@
 @startuml
 package Room{
+
     class Room{
         id: string
         name: string
         creater_id: string
         room_type: string
         created_at: string
-        +getRoom(id)
     }
 
-    class CreateRoom{
-        name?: string
-        creater_id?: string
-        room_type?: string
-        +create(name,creater_id,room_type)
+    class RoomRegister{
+        id: string
+        name: string
+        creater_id: string
+        room_type: RoomType
+        -repository: RoomRepository
+        +create(): string
     }
+    note right of RoomRegister::create()
+    生成したRoomのidを返す
+    end note
 
     class RoomFactory{
         create(id): Room
@@ -23,7 +28,25 @@ package Room{
     class RoomManager{
         +attemptToenter()
         +leaveCurrentRoom()
+        +createRoom()
+        +createUserDefaultRoom()
+        +addAccessableRooms()
+        +getAllRooms()
+        +join()
+        +joinUser()
+        +isAccessableRooms()
+        +getAccessableRooms()
         +isAccessable(user: User)
     }
+
+    class RoomRepository{
+        DB処理メソッド()
+    }
+
+    RoomRegister <-- RoomFactory
+    Room <.. RoomFactory : <<create>>
+    RoomManager <-- RoomContorller
+    RoomRegister <-- RoomManager
+    RoomRepository <-- RoomManager
 }
 @enduml
