@@ -49,7 +49,7 @@ class RoomRepository{
         return rows.affectedRows == 1;
     }
 
-    async isAccessAbleRooms(user_id: string,room_id: string): Promise<boolean>{
+    async isAccessable(user_id: string,room_id: string): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM accessable_rooms WHERE user_id = ? AND room_id = ?',[user_id,room_id]);
         return rows.length > 0;
     }

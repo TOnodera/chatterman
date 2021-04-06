@@ -98,8 +98,6 @@ export default defineComponent({
                 return user;
             });
         };
-        await user.getUsers();
-        await room.getAllRooms(user.me.user.id);
     }
 });
 </script>

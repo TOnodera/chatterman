@@ -1,5 +1,6 @@
 import serverException from '@/Domain/Exception/ServerException';
 import user from '@/Domain/User/User';
+import room from './Room';
 
 /**
  * サーバーから受信するイベントのリスナー
@@ -10,6 +11,8 @@ const launchAtLoggedIn = ()=>{
     user.acceptUsersListener();
     user.logoutListener();
     user.anotherUserLoginListener();
+    room.arrowedToEnterRoomListener();
+    room.deniedToEnterRoomListener();
 };
 
 const launchAtAppUped = ()=>{

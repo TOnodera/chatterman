@@ -7,9 +7,6 @@ class Room {
     private default: string = 'everybody';
     constructor(){
         this.current = this.default;
-        //リスナ起動
-        this.arrowedToEnterRoomListener();
-        this.deniedToEnterRoomListener();
     }
 
     //roomへの入室を試みた際に入室資格があるかチェック
