@@ -3,6 +3,7 @@ class AcceptRoomsObserver{
     static update(rooms: any[]){
         if(this.handler){
             this.handler(rooms);
+            return;
         }
         throw new Error("イベントハンドラがない状態で呼び出されました。");
     }

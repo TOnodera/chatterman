@@ -51,11 +51,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import user from "../Domain/User/User";
-import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
-import room from "../Domain/Room/Room";
-import logoutObserver from "../Domain/User/Observer/LogoutObserver";
-import anotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
+import AcceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
+import LogoutObserver from "../Domain/User/Observer/LogoutObserver";
+import AnotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
 import FlashIcon from './FlashIcon.vue';
+import AcceptRoomsObserver from '../Domain/Room/Observer/AcceptRoomsObserver';
+import room from '../Domain/Room/Room';
 
 export default defineComponent({
     name: "Sidebar",
@@ -76,13 +77,13 @@ export default defineComponent({
         }
     },
     async mounted() {
-        acceptUsersObserver.handler = (users: any[]) => {
+        AcceptUsersObserver.handler = (users: any[]) => {
             this.users = users;
         };
-        room.acceptRoomsListener((rooms: any[]) => {
+        AcceptRoomsObserver.handler = (rooms: any[]) => {
             this.rooms = rooms;
-        });
-        logoutObserver.handler = (id: string) => {
+        };
+        LogoutObserver.handler = (id: string) => {
             this.users = this.users.map((user: User) => {
                 if (user.id == id) {
                     user.isLogin = false;
@@ -90,7 +91,7 @@ export default defineComponent({
                 return user;
             });
         };
-        anotherUserLoginObserver.handler = (loginUser: User) => {
+        AnotherUserLoginObserver.handler = (loginUser: User) => {
             this.users = this.users.map((user: User) => {
                 if (user.id == loginUser.id) {
                     user.isLogin = true;
@@ -98,6 +99,10 @@ export default defineComponent({
                 return user;
             });
         };
+        //ユーザーデータ送信要求
+        user.getUsers();
+        //ルームデータ送信要求
+        room.getAllRooms(user.me.user.id);
     }
 });
 </script>

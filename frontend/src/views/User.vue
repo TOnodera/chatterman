@@ -63,7 +63,6 @@
 import swal from '../util/swal';
 import user from '../Domain/User/User';
 import { defineComponent } from 'vue';
-import RegisterObserver from '../Domain/User/Observer/RegisterObserver';
 
 export default defineComponent({
   name: 'User',
@@ -82,15 +81,14 @@ export default defineComponent({
     toLoginPage () {
       this.$router.push({ name: 'Login' });
     },
-    register () {
-      user.registe(this.newUser);
+    async register () {
+      if(await user.registe(this.newUser)){
+          swal.fire('登録しました。ログインして下さい。');
+          this.$router.push({name: 'Login'});
+      }else{
+          swal.fire('登録に失敗しました。');
+      }
     }
-  },
-  mounted () {
-    RegisterObserver.handler = (msg: string)=>{ 
-        swal.fire(msg);
-        this.$router.push({name: 'Login'});
-    };
   }
 });
 </script>

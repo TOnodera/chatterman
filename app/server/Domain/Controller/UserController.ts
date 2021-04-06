@@ -19,21 +19,24 @@ class UserController {
     }
 
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {
-        logger.debug(fromClient);
+        logger.info(`1/4 UserController.registe() -> 登録処理開始 name: ${fromClient.name}`);
         const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+        logger.info(`2/4 UserController.registe() -> ユーザー作成 name: ${fromClient.name}`);
         let result: boolean = false;
         await transaction(async () => {
             const user_id = await user.registe();
             const roomType: RoomType = { Type: 'directmessage' };
             if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
                 result = true;
-            }
-            //socket.emit('user:registered-failure', '登録に失敗しました。');            
+                logger.info(`3/4 UserController.registe() -> 共通ルームへのアクセスと自分用DMルームへのアクセス設定完了 name: ${fromClient.name}`);
+            }          
         });
+        logger.info(`4/4 UserController.registe() -> 登録処理完了 name: ${fromClient.name}`);
         return result;
     }
 
     async login(credentials: Credentials): Promise<boolean> {
+        logger.info("ログイン処理UserContorollerからLoginManagerに処理委譲");
         await this.loginManager.login(credentials);
         return true;
     }
@@ -81,7 +84,9 @@ class UserController {
 
     async getUsers(socket: Socket) {
         try {
+            logger.info('表示用ユーザー情報要求メッセージを受信');
             socket.emit('user:send-users-data', await userService.getUsers());
+            logger.info('表示用ユーザー情報を送信');
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }

@@ -6,6 +6,7 @@ import User from "./User";
 import AuthenticationException from "../Exception/AuthenticationException";
 import { Socket } from "socket.io";
 import Exception from "../Exception/Exception";
+import logger from "../Utility/logger";
 
 class LoginManager implements ILoginManager{
 
@@ -17,14 +18,18 @@ class LoginManager implements ILoginManager{
 
     async login(credentials: Credentials): Promise<User> {
         if(await this.repository.credentials(credentials)){
+            logger.info(`LoginManager.login() -> 1/2 ログイン処理開始:${credentials.email}`);
             const user: User = await this.repository.getUserByCredentials(credentials);
+            logger.info(`LoginManager.login() -> 2/2 ログイン処理完了:${credentials.email}`);
             return user;
         }
         throw new AuthenticationException('登録して下さい。');
     }
 
     async afterLogin(user: User,socket: Socket){
+        logger.info('1/2 LoginManager.afterLogin() -> ログイン後のソケット登録処理開始');
         loginUserStore.set(socket.id,user);
+        logger.info('2/2 LoginManager.afterLogin() -> ログイン後のソケット登録処理完了');
     }
 
     async logout(credentials: Credentials,socket: Socket): Promise<boolean> {

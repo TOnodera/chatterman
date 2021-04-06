@@ -1,7 +1,6 @@
 import socketStore from '../Socket';
 import swal from '../../util/swal';
 import loginSubject from './Subject/LoginSubject';
-import registerSubject from './Subject/RegisterSubject';
 import acceptUsersSubject from './Subject/AcceptUsersSubject';
 import logoutSubject from './Subject/LogoutSubject';
 import anotherUserLoginSubject from './Subject/AnoterUserLoginSubject';
@@ -116,6 +115,12 @@ class UserDomain {
 		socketStore.socket.on('broadcast:user-login',(id:string)=>{
 			anotherUserLoginSubject.notify(id);
 		});
+	}
+
+	launchListener(){
+		this.acceptUsersListener();
+		this.logoutListener();
+		this.anotherUserLoginListener();
 	}
 }
 

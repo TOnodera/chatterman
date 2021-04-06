@@ -1,8 +1,8 @@
 class TypingEventObserver{
     static handle: Function;
-    static update(user: User){
+    static update(user: User,room_id: string){
         if(this.handle){
-            this.handle(user);
+            this.handle(user,room_id);
             return;
         }
         throw new Error("イベントハンドラが設定されていない状態で呼び出されました。");

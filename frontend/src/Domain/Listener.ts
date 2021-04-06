@@ -1,6 +1,7 @@
 import serverException from '@/Domain/Exception/ServerException';
-import user from '@/Domain/User/User';
+import user from './User/User';
 import room from './Room/Room';
+import message from './Message/Message';
 
 /**
  * サーバーから受信するイベントのリスナー
@@ -8,11 +9,9 @@ import room from './Room/Room';
  */
 
 const launchAtLoggedIn = ()=>{
-    user.acceptUsersListener();
-    user.logoutListener();
-    user.anotherUserLoginListener();
-    room.arrowedToEnterRoomListener();
-    room.deniedToEnterRoomListener();
+    user.launchListener();
+    room.launchListener();
+    message.launchListener();
 };
 
 const launchAtAppUped = ()=>{

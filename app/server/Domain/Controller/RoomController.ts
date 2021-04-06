@@ -12,7 +12,7 @@ class RoomController {
                 socket.emit('user:join-room', info.room_id);
             } else {
                 logger.info('user:denied-to-enter-room',`user->${info.user_id}`,`room->${info.room_id}`);
-                socket.emit('user:denied-to-enter-room');
+                socket.emit('user:denied-to-enter-room',"入場できません。");
             }
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
@@ -43,8 +43,11 @@ class RoomController {
 
     async getAllRooms(user_id: string, socket: Socket) {
         try {
+            logger.info('ルームデータ要求メッセージ受信');
+            logger.info(`1/2 RoomController.getAllRooms() -> user_id: ${user_id},socket_id: ${socket.id}`);
             const rooms: RoomInfo[] = await roomManager.getAllRooms(user_id);
             socket.emit('user:send-rooms-data', rooms);
+            logger.info(`2/2 RoomController.getAllRooms() -> データ送信...送信数 ${rooms.length}`);
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }

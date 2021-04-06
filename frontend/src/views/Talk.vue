@@ -33,9 +33,14 @@ import Typing from "../components/Typing.vue";
 import user from "../Domain/User/User";
 import message from "../Domain/Message/Message";
 import room from "../Domain/Room/Room";
-import AcceptMessageObserver from "../Domain/Message/Observer/AcceptMessageObserver";
-import TypingEventObserver from "../Domain/Message/Observer/TypingEventObserver";
+import acceptMessageObserver from "../Domain/Message/Observer/AcceptMessageObserver";
+import typingEventObserver from "../Domain/Message/Observer/TypingEventObserver";
+import arrowedToEnterRoomObserver from "../Domain/Room/Observer/ArrowedToEnterRoomObserver";
+import deniedToEnterRoomObserver from "../Domain/Room/Observer/DeniedToEnterRoomObserver";
+import swal from '../util/swal';
+
 import { defineComponent } from "vue";
+
 export default defineComponent({
     name: "Talk",
     components: {
@@ -49,17 +54,16 @@ export default defineComponent({
             messages: [] as any[],
             isTyping: false,
             typingUser: "",
-            current_room: "",
             user_id: user.me.user.id,
             typingTimer: 3000 //タイピングアイコンの表示時間
         };
     },
     methods: {
         send(msg: string) {
-            message.send(msg, user.me.user, this.current_room);
+            message.send(msg, user.me.user, room.current);
         },
         typing() {
-            message.typing(user.me.user);
+            message.typing(user.me.user,room.current);
         },
         includeTalkroomPath(path: string) {
             return new RegExp(/^\/talk/).test(path);
@@ -74,24 +78,32 @@ export default defineComponent({
             window.onscroll = () => {
                 const scrollTop = document.documentElement.scrollTop;
                 if (scrollTop == 0) {
-                    message.requireMoreMessages(this.current_room);
+                    message.requireMoreMessages(room.current);
                 }
             };
         }
     },
     mounted() {
-        this.current_room = this.$route.params.room_id as string;
         //ユーザーがこのroomに入場できるか検証
-        room.attemptToEnter(this.current_room as string, user.me.user);
+        room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
+        //入場出来る場合の処理
+        arrowedToEnterRoomObserver.handler = (room_id: string)=>{
+            message.requireFirstMessages(room_id);
+        };
+        //入場出来ない場合の処理
+        deniedToEnterRoomObserver.handler = (msg: string)=>{
+            swal.fire(msg);
+            this.$router.back();
+        };
         //メッセージ受信時の処理
-        AcceptMessageObserver.handler = (messages: any[]) => {
+        acceptMessageObserver.handler = (messages: any[]) => {
             this.messages = messages.filter(
-                message => message.room_id == this.current_room
+                message => message.room_id == room.current
             );
         };
         //タイピングイベント受信時の処理
-        TypingEventObserver.handle = (user: User) => {
-            if (this.isTyping == false) {
+        typingEventObserver.handle = (user: User,room_id: string) => {
+            if (this.isTyping == false && room.current == room_id) {
                 this.isTyping = true;
                 this.typingUser = user.name;
                 const id = setTimeout(() => {
@@ -100,25 +112,23 @@ export default defineComponent({
                 }, this.typingTimer);
             }
         };
-        message.requireFirstMessages(this.current_room);
+        //スクロールが最上部まで到達したか監視
         this.observeScrollTopEvent();
+        //入場したら最下部に移動
         this.toBottom();
     },
     watch: {
         $route(to, from) {
             if (this.includeTalkroomPath(to.path)) {
-                console.log("room changed...");
                 //前のルームのメッセージを削除
-                message.clearMessages(this.current_room);
-                this.messages = [];
-                //新しいroom_idを設定
-                this.current_room = this.$route.params.room_id as string;
+                message.clearMessages(room.current);
                 //退出処理（いらないかもしれない、あとでけすかも）
                 if (this.includeTalkroomPath(from.path)) {
                     room.leaveCurrent(user.me.user);
                 }
-                room.attemptToEnter(this.current_room,user.me.user);
-                message.requireFirstMessages(this.current_room);
+                const room_id: string = this.$route.params.room_id as string;
+                room.attemptToEnter(room_id,user.me.user);
+                message.requireFirstMessages(room_id);
             }
         }
     }

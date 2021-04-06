@@ -51,8 +51,8 @@ class MessageController {
 
     }
 
-    typing(user: { id: string, name: string }, socket: Socket): void {
-        socket.broadcast.emit('broadcast:user-typing', user);
+    typing(user: { id: string, name: string }, room_id: string, socket: Socket): void {
+        socket.broadcast.emit('broadcast:user-typing', user,room_id);
     }
 
     async moreMessages(room_id: string, message_id: string, socket: Socket) {

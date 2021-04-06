@@ -5,7 +5,7 @@ import deniedToEnterRoomSubject from './Subject/DeniedToEnterRoomSubject';
 
 class Room {
 
-    private current: string;
+    current: string;
     private default: string = 'everybody';
     constructor(){
         this.current = this.default;
@@ -37,14 +37,16 @@ class Room {
     //roomへのアクセス許可が出た場合のリスナ
     arrowedToEnterRoomListener() {
         socketStore.socket.on('user:join-room', (room_id: string) => {
+            console.log(`許可されました: ${room_id}`);
+            this.current = room_id;
             arrowedToEnterRoomSubject.notify(room_id);            
         });
     }
 
     //roomへのアクセスが拒否された場合のリスナ
     deniedToEnterRoomListener() {
-        socketStore.socket.on('user:denied-to-enter-room', () => {
-            deniedToEnterRoomSubject.notify();
+        socketStore.socket.on('user:denied-to-enter-room', (msg: string) => {
+            deniedToEnterRoomSubject.notify(msg);
         });
     }
 
@@ -53,6 +55,12 @@ class Room {
             acceptRoomsSubject.notify(rooms);
         });
     }    
+
+    launchListener(){
+        this.acceptRoomsListener();
+        this.deniedToEnterRoomListener();
+        this.acceptRoomsListener();
+    }
 
 }
 

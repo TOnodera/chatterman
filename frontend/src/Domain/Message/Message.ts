@@ -8,8 +8,6 @@ class Message {
 
     constructor() {
         this.store = new Map<string, any[]>();
-        this.acceptMessageListener();
-        this.typingEventListener();
     }
 
     set(key: string, value: any[]) {
@@ -53,6 +51,26 @@ class Message {
         this.store.delete(room_id);
     }
 
+    acceptMessageHandling(fromServer: any[]) {
+        for (let message of fromServer) {
+            AcceptMessageSubject.notify(message);
+        }
+    }
+
+    getChatMessages(room_id: string): any[] {
+        return this.get(room_id);
+    }
+
+    typing(user: User,room_id: string) {
+        socketStore.socket.emit('user:typing', user,room_id);
+    }
+
+    typingEventListener() {
+        socketStore.socket.on('broadcast:user-typing', (user: User,room_id: string) => {
+            TypingEventSubject.notify(user,room_id);
+        });
+    }
+
     acceptMessageListener() {
         socketStore.socket.on('broadcast:user-send-message', (fromServer: any) => {
             AcceptMessageSubject.notify(fromServer);
@@ -66,25 +84,11 @@ class Message {
         });
     }
 
-    acceptMessageHandling(fromServer: any[]) {
-        for (let message of fromServer) {
-            AcceptMessageSubject.notify(message);
-        }
+    launchListener(){
+        this.typingEventListener();
+        this.acceptMessageListener();
     }
 
-    getChatMessages(room_id: string): any[] {
-        return this.get(room_id);
-    }
-
-    typing(user: User) {
-        socketStore.socket.emit('user:typing', user);
-    }
-
-    typingEventListener() {
-        socketStore.socket.on('broadcast:user-typing', (user: User) => {
-            TypingEventSubject.notify(user);
-        });
-    }
 }
 
 export default new Message();

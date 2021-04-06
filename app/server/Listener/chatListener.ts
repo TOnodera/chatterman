@@ -31,8 +31,8 @@ module.exports = (socket: Socket) => {
         await roomController.leaveCurrentRoom(info, socket);
     }
 
-    const userTyping = (user: { id: string, name: string }) => {
-        messageController.typing(user, socket);
+    const userTyping = (user: { id: string, name: string },room_id: string) => {
+        messageController.typing(user, room_id, socket);
     };
 
     const moreMessages = (room_id: string, message_id: string) => {
