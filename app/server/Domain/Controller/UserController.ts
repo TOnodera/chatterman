@@ -82,10 +82,10 @@ class UserController {
         }
     }
 
-    async getUsers(socket: Socket) {
+    async getMembers(user_id: string,socket: Socket) {
         try {
             logger.info('表示用ユーザー情報要求メッセージを受信');
-            socket.emit('user:send-users-data', await userService.getUsers());
+            socket.emit('user:send-users-data', await userService.getMembers(user_id));
             logger.info('表示用ユーザー情報を送信');
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);

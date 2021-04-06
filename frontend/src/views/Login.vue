@@ -89,7 +89,7 @@ export default defineComponent({
   mounted(){
       LoginObserver.handler = ()=>{
           swal.fire('ログインしました。');
-          this.$router.push({name: 'Talk' ,params: {room_id: 'everybody'}});
+          this.$router.push({name: 'TalkRoom' ,params: {room_id: 'everybody'}});
       };
   }
 });

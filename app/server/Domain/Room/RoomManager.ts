@@ -46,8 +46,8 @@ class RoomManager {
         return await this.repository.addAccessableRooms(user_id, room_id);
     }
 
-    async getAllRooms(user_id: string): Promise<RoomInfo[]> {
-        return await this.repository.getAllRooms(user_id);
+    async getTalkRooms(user_id: string): Promise<RoomInfo[]> {
+        return await this.repository.getTalkRooms(user_id);
     }
 
     join(room_id: string,socket: Socket){

@@ -25,7 +25,8 @@ class MessageRepository implements IMessageRepository {
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                const  message: Message = await MessageFactory.create(row.message_id);
+                logger.debug(row.id);
+                const  message: Message = await MessageFactory.create(row.id);
                 messages.push(message);                    
             }
             return messages.reverse();
@@ -53,7 +54,7 @@ class MessageRepository implements IMessageRepository {
         if (rows.length > 0) {
             const messages: Message[] = [];
             for (let row of rows) {
-                const  message: Message = await MessageFactory.create(row.message_id);
+                const  message: Message = await MessageFactory.create(row.id);
                 messages.push(message);                    
             }
             return messages.reverse();
@@ -78,14 +79,14 @@ class MessageRepository implements IMessageRepository {
             const result: any = rows[0];
             const user: User = await UserFactory.create(result.user_id);
             return new Message(
-                result.message_id,
+                result.id,
                 result.message,
                 user,
                 result.room_id,
                 new Datetime(result.created_at)
             );
         }
-        throw new Exception('メッセージが見つかりませんでした。');        
+        throw new Exception(`メッセージが見つかりませんでした。 message_id: ${message_id}`);        
     }
 
     async save(message: Message): Promise<boolean> {

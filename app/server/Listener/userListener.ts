@@ -22,19 +22,20 @@ module.exports =  (socket: Socket) => {
     };
 
     //ユーザーデータ送信
-    const requireUsers = async () => {
-      await UserController.getUsers(socket);
+    const requireUsers = async (user_id: string) => {
+      await UserController.getMembers(user_id,socket);
     }
 
     //入室権限があるルーム情報のデータを送信
     const requireRooms = async (user_id: string) => {
-      await RoomController.getAllRooms(user_id,socket);
+      await RoomController.getTalkRooms(user_id,socket);
     };
 
     //ハンドラ登録
     socket.on('user:after-login', afterLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
-    socket.on('user:require-users',requireUsers);
+    socket.on('user:require-members',requireUsers);
     socket.on('user:require-rooms',requireRooms);
+
 }

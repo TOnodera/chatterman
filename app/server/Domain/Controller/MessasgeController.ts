@@ -7,6 +7,7 @@ import MessageRegister from "../Message/MessageRegister";
 import MessageFactory from "../Message/MessageFactory";
 import { transaction } from '../Utility/Connection';
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
+import logger from "../Utility/logger";
 
 class MessageController {
 
@@ -57,19 +58,23 @@ class MessageController {
 
     async moreMessages(room_id: string, message_id: string, socket: Socket) {
         try {
+            logger.info(`1/2 MessageController.moreMessages() -> 追加メッセージ送信要求 room_id: ${room_id}, message_id: ${message_id},socket_id: ${socket.id}`);
             const response: SendMessageToClient[] = await messages.more(room_id, message_id);
             socket.emit('user:send-messages-data', response);
+            logger.info(`2/2 MessageController.moreMessages() -> 送信完了 room_id: ${room_id}, message_id: ${message_id},socket_id: ${socket.id}`);
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }
     }
 
-    async getLatest(room_id: string, sokcet: Socket) {
+    async getLatest(room_id: string, socket: Socket) {
         try {
+            logger.info(`1/2 MessageController.getLatest() -> 新規メッセージ送信要求 room_id: ${room_id}, socket_id: ${socket.id}`);
             const response: SendMessageToClient[] = await messages.latest(room_id);
-            sokcet.emit('user:send-latest-messages', response);
+            socket.emit('user:send-latest-messages', response);
+            logger.info(`2/2 MessageController.getLatest() -> 送信完了 room_id: ${room_id}, socket_id: ${socket.id} count: ${response.length}`);
         } catch (e) {
-            SocketExceptionHandler.handle(e, sokcet);
+            SocketExceptionHandler.handle(e, socket);
         }
     }
 

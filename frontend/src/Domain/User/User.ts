@@ -88,8 +88,8 @@ class UserDomain {
 		this.me.isLogin = false;
 	}
 
-	getUsers() {
-		socketStore.socket.emit('user:require-users');
+	getMembers(user_id: string) {
+		socketStore.socket.emit('user:require-members',user_id);
 	}
 
 	loginSuccessListener() {

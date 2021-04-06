@@ -10,10 +10,10 @@ class Service{
         this.repository = UserRepositoryFactory.create();
     }
 
-    async getUsers(): Promise<Client[]>{
-        logger.info('1/3 User/Service.getUsers() -> ユーザー情報取得開始');
-        const users: Client[] = await this.repository.getUsers();
-        logger.info('2/3 User/Service.getUsers() -> ログイン中のユーザー情報取得開始');
+    async getMembers(user_id: string): Promise<Client[]>{
+        logger.info('1/3 User/Service.getMembers() -> ユーザー情報取得開始');
+        const users: Client[] = await this.repository.getMembers(user_id);
+        logger.info('2/3 User/Service.getMembers() -> ログイン中のユーザー情報取得開始');
         for(let user of users){
             if(loginUsersStore.inUsers(user.id)){
                 user.isLogin = true;
@@ -21,7 +21,7 @@ class Service{
                 user.isLogin = false;
             }
         }
-        logger.info('3/3 User/Service.getUsers() -> return users;');
+        logger.info('3/3 User/Service.getMembers() -> return users;');
         return users;
     }
 

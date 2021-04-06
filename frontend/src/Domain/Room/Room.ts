@@ -30,14 +30,13 @@ class Room {
         socketStore.socket.emit('user:create-room',name,user_id);
     }
 
-    getAllRooms(user_id: string){
+    getRooms(user_id: string){
         socketStore.socket.emit('user:require-rooms',user_id);
     }
 
     //roomへのアクセス許可が出た場合のリスナ
     arrowedToEnterRoomListener() {
         socketStore.socket.on('user:join-room', (room_id: string) => {
-            console.log(`許可されました: ${room_id}`);
             this.current = room_id;
             arrowedToEnterRoomSubject.notify(room_id);            
         });
@@ -59,7 +58,7 @@ class Room {
     launchListener(){
         this.acceptRoomsListener();
         this.deniedToEnterRoomListener();
-        this.acceptRoomsListener();
+        this.arrowedToEnterRoomListener();
     }
 
 }

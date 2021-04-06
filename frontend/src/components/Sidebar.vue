@@ -28,7 +28,7 @@
             </div>
             <ul class="menu-list" v-if="users.length > 0">
                 <li v-for="user in users" :key="user.id">
-                    <router-link :to="/talk/ + user.room_id + '-' + me.id">
+                    <router-link :to="/talk/ + user.room_id">
                         <fontawesome
                             :class="{'login-color': user.isLogin,'logout-color': !user.isLogin}"
                             icon="circle"
@@ -77,12 +77,20 @@ export default defineComponent({
         }
     },
     async mounted() {
+        
+        /**
+         * イベントハンドラ設定
+         */
+
+        //表示用メンバーデータ受信時の処理
         AcceptUsersObserver.handler = (users: any[]) => {
             this.users = users;
         };
+        //表示用ルームデータ受信時の処理
         AcceptRoomsObserver.handler = (rooms: any[]) => {
             this.rooms = rooms;
         };
+        //ログアウトイベント受信時の処理
         LogoutObserver.handler = (id: string) => {
             this.users = this.users.map((user: User) => {
                 if (user.id == id) {
@@ -91,6 +99,7 @@ export default defineComponent({
                 return user;
             });
         };
+        //別のユーザーのログインイベントの処理
         AnotherUserLoginObserver.handler = (loginUser: User) => {
             this.users = this.users.map((user: User) => {
                 if (user.id == loginUser.id) {
@@ -99,10 +108,15 @@ export default defineComponent({
                 return user;
             });
         };
+
+        /**
+         * イベント送信
+         */
+
         //ユーザーデータ送信要求
-        user.getUsers();
+        user.getMembers(user.me.user.id);
         //ルームデータ送信要求
-        room.getAllRooms(user.me.user.id);
+        room.getRooms(user.me.user.id);
     }
 });
 </script>

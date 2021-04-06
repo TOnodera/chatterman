@@ -11,8 +11,13 @@ class RoomRepository{
         this.connector = mySqlConnector;
     }
 
-    async getAllRooms(user_id: string,room_type: RoomType = {Type: 'talkroom'}): Promise<RoomInfo[]>{
-        const [rows]: any[] = await this.connector.query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,room_type.Type]);
+    async getTalkRooms(user_id: string): Promise<RoomInfo[]>{
+        const [rows]: any[] = await this.connector.query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,'talkroom']);
+        return rows.length > 0 ? rows : [];
+    }
+
+    async getDirectMessageRooms(user_id: string): Promise<RoomInfo[]>{
+        const [rows]: any[] = await this.connector.query('SELECT room_id,rooms.name,rooms.creater_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,'directmessage']);
         return rows.length > 0 ? rows : [];
     }
 

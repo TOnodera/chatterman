@@ -33,10 +33,8 @@ class Message {
     //メッセージ送信要求
     requireMoreMessages(room_id: string) {
         if (this.store.has(room_id)) {
-            console.log("in resuqreMessages :1");
             //moreMessages 日付順にソートして先頭（一番古い）データを取り出す
             const oldest = this.get(room_id).sort((a, b) => (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()).slice(0, 1)[0];
-            console.log("oldest_id:", oldest.created_at);
             socketStore.socket.emit('user:more-messages', room_id, oldest.message_id);
         }
     }

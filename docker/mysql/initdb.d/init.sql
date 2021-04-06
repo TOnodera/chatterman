@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS requests (
     id VARCHAR(255) PRIMARY KEY,
     accept_user VARCHAR (255) NOT NULL,
     request_id VARCHAR (255) NOT NULL,
-    phase TINYINT NOT NULL,
+    is_accept TINYINT NOT NULL,
+    accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
     deleted_at DATETIME
 );
@@ -94,7 +95,8 @@ CREATE TABLE IF NOT EXISTS requests (
     id VARCHAR(255) PRIMARY KEY,
     accept_user VARCHAR (255) NOT NULL,
     request_id VARCHAR (255) NOT NULL,
-    phase TINYINT NOT NULL,
+    is_accept TINYINT NOT NULL,
+    accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
     deleted_at DATETIME
 );

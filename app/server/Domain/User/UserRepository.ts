@@ -68,8 +68,8 @@ class UserRepository implements IUserRepository {
         throw new DomainException("ユーザーが見つかりませんでした。");
     }
 
-    async getUsers(): Promise<any[]>{
-        const [rows]: any[] = await this.connector.query('SELECT users.id,users.name,rooms.id as room_id FROM users JOIN rooms ON rooms.creater_id = users.id AND rooms.room_type = "directmessage" WHERE users.deleted_at is NULL ORDER BY users.name');
+    async getMembers(user_id: string): Promise<any[]>{
+        const [rows]: any[] = await this.connector.query('SELECT users.id,users.name,rooms.id as room_id FROM users JOIN rooms ON rooms.creater_id = users.id AND rooms.room_type = "directmessage" LEFT JOIN accessable_rooms ON user_id = ? AND room_id = rooms.id WHERE users.deleted_at is NULL ORDER BY users.name',[user_id]);
         return rows.length > 0 ? rows : []
     }
 

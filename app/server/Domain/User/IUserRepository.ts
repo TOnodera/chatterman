@@ -10,6 +10,6 @@ interface IUserRepository{
     credentials(credentials: Credentials): Promise<boolean>;
     hasMessage(message: Message): Promise<boolean>;
     get(id: string): Promise< User>;
-    getUsers(): Promise<Client[]>;
+    getMembers(user_id: string): Promise<Client[]>;
 }
 export default IUserRepository;

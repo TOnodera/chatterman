@@ -42,7 +42,7 @@ import swal from '../util/swal';
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "Talk",
+    name: "TalkRoom",
     components: {
         ChatLeft,
         ChatRight,
@@ -88,6 +88,7 @@ export default defineComponent({
         room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
         //入場出来る場合の処理
         arrowedToEnterRoomObserver.handler = (room_id: string)=>{
+            console.log(room_id);
             message.requireFirstMessages(room_id);
         };
         //入場出来ない場合の処理
@@ -118,17 +119,12 @@ export default defineComponent({
         this.toBottom();
     },
     watch: {
-        $route(to, from) {
+        $route(to) {
             if (this.includeTalkroomPath(to.path)) {
-                //前のルームのメッセージを削除
-                message.clearMessages(room.current);
-                //退出処理（いらないかもしれない、あとでけすかも）
-                if (this.includeTalkroomPath(from.path)) {
-                    room.leaveCurrent(user.me.user);
-                }
                 const room_id: string = this.$route.params.room_id as string;
+                message.clearMessages(room_id);
+                this.messages = [];
                 room.attemptToEnter(room_id,user.me.user);
-                message.requireFirstMessages(room_id);
             }
         }
     }
