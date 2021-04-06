@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import swal from '../util/swal';
-import room from '../Domain/Room';
+import room from '../Domain/Room/Room';
 import user from '../Domain/User/User';
 
 export default defineComponent({

@@ -1,6 +1,6 @@
 import socketStore from '../Socket';
-import AcceptMessageSubject from './AcceptMessageSubject';
-import TypingEventSubject from './TypingEventSubject';
+import AcceptMessageSubject from './Subject/AcceptMessageSubject';
+import TypingEventSubject from './Subject/TypingEventSubject';
 
 class Message {
 

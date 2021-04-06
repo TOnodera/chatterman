@@ -52,7 +52,7 @@
 import { defineComponent } from "vue";
 import user from "../Domain/User/User";
 import acceptUsersObserver from "../Domain/User/Observer/AcceptUsersObserver";
-import room from "../Domain/Room";
+import room from "../Domain/Room/Room";
 import logoutObserver from "../Domain/User/Observer/LogoutObserver";
 import anotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
 import FlashIcon from './FlashIcon.vue';

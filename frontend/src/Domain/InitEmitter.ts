@@ -1,5 +1,5 @@
 import user from './User/User';
-import room from './Room';
+import room from './Room/Room';
 /**
  * アプリ起動時、ログイン時にフロント側から送信する必要があるイベントをこのファイルにまとめて書く
  */

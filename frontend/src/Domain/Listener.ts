@@ -1,6 +1,6 @@
 import serverException from '@/Domain/Exception/ServerException';
 import user from '@/Domain/User/User';
-import room from './Room';
+import room from './Room/Room';
 
 /**
  * サーバーから受信するイベントのリスナー

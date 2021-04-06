@@ -16,6 +16,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { launchAtAppUped } from './Domain/Listener';
+import { emitAtAppUped } from './Domain/InitEmitter';
 
 export default {
   name: 'App',
@@ -34,7 +35,8 @@ export default {
     }
   },
   mounted() {
-    launchAtAppUped();
+    emitAtAppUped();//アプリ起動時に送信するイベント
+    launchAtAppUped();//アプリ起動時に起動するリスナ
   },
 };
 </script>

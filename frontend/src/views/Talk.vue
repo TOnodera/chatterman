@@ -32,9 +32,9 @@ import InputArea from "../components/InputArea.vue";
 import Typing from "../components/Typing.vue";
 import user from "../Domain/User/User";
 import message from "../Domain/Message/Message";
-import room from "../Domain/Room";
-import AcceptMessageObserver from "../Domain/Message/AcceptMessageObserver";
-import TypingEventObserver from "../Domain/Message/TypingEventObserver";
+import room from "../Domain/Room/Room";
+import AcceptMessageObserver from "../Domain/Message/Observer/AcceptMessageObserver";
+import TypingEventObserver from "../Domain/Message/Observer/TypingEventObserver";
 import { defineComponent } from "vue";
 export default defineComponent({
     name: "Talk",

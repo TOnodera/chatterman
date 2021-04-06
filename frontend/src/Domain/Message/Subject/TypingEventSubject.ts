@@ -1,4 +1,4 @@
-import TypingEventObserver from './TypingEventObserver';
+import TypingEventObserver from '../Observer/TypingEventObserver';
 class TypingEventSubject{
     notify(user: User){
         TypingEventObserver.update(user);

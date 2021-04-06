@@ -1,5 +1,5 @@
-import messageDomain from './Message';
-import AcceptMessageObserver from './AcceptMessageObserver';
+import messageDomain from '../Message';
+import AcceptMessageObserver from '../Observer/AcceptMessageObserver';
 
 class AcceptMessageSubject {
     notify(fromServer: any) {
