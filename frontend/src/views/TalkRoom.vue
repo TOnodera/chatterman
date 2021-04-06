@@ -18,7 +18,7 @@
                         :created_at="message.created_at"
                     />
                 </template>
-                <Typing :user_name="typingUserInfo.user_name" :room_id="typingUserInfo.room_id"/>
+                <Typing/>
             </div>
         </div>
         <InputArea @message-send="send" @typing="typing" />
@@ -34,10 +34,10 @@ import user from "../Domain/User/User";
 import message from "../Domain/Message/Message";
 import room from "../Domain/Room/Room";
 import acceptMessageObserver from "../Domain/Message/Observer/AcceptMessageObserver";
-import typingEventObserver from "../Domain/Message/Observer/TypingEventObserver";
 import arrowedToEnterRoomObserver from "../Domain/Room/Observer/ArrowedToEnterRoomObserver";
 import deniedToEnterRoomObserver from "../Domain/Room/Observer/DeniedToEnterRoomObserver";
 import swal from '../util/swal';
+import {onScroll,toBottom} from '../util/window';
 
 import { defineComponent } from "vue";
 
@@ -52,11 +52,7 @@ export default defineComponent({
     data() {
         return {
             messages: [] as any[],
-            user: user,
-            typingUserInfo: {
-                user_name: '',
-                room_id: ''
-            }
+            user: user
         };
     },
     methods: {
@@ -69,19 +65,8 @@ export default defineComponent({
         includeTalkroomPath(path: string) {
             return new RegExp(/^\/talk/).test(path);
         },
-        toBottom() {
-            window.scrollTo({
-                top: document.documentElement.scrollHeight,
-                left: 0
-            });
-        },
-        observeScrollTopEvent() {
-            window.onscroll = () => {
-                const scrollTop = document.documentElement.scrollTop;
-                if (scrollTop == 0) {
-                    message.requireMoreMessages(room.current);
-                }
-            };
+        observeScrollTopEvent(room_id: string) {
+            window.onscroll = () => onScroll(room_id);
         },
         clear(room_id: string){
             message.clearMessages(room_id);
@@ -89,40 +74,40 @@ export default defineComponent({
         }
     },
     mounted() {
+
         //ユーザーがこのroomに入場できるか検証
-        room.attemptToEnter(this.$route.params.room_id as string, user.me.user);
+        const room_id = this.$route.params.room_id ? this.$route.params.room_id as string : room.current;
+        room.attemptToEnter(room_id, user.me.user);
+
         //入場出来る場合の処理
         arrowedToEnterRoomObserver.handler = (room_id: string)=>{
-            console.log("入室許可...");
             message.requireFirstMessages(room_id);
         };
+
         //入場出来ない場合の処理
         deniedToEnterRoomObserver.handler = (msg: string)=>{
             swal.fire(msg);
-            this.$router.back();
+            this.$router.push({name: 'TalkRoom',params: {room_id: 'everyone'}});
         };
+
         //メッセージ受信時の処理
         acceptMessageObserver.handler = (messages: any[]) => {
             this.messages = messages.filter(
                 message => message.room_id == room.current
             );
         };
-        //タイピングイベント受信時の処理
-        typingEventObserver.handle = (info: {user_name: string,room_id: string}) => {
-            this.typingUserInfo = info;
-        };
-        //スクロールが最上部まで到達したか監視
-        this.observeScrollTopEvent();
+
+        //スクロールが最上部まで到達したか監視 到達したらメッセージ追加要求イベント発動
+        this.observeScrollTopEvent(room_id);
         //入場したら最下部に移動
-        this.toBottom();
+        toBottom();
+
     },
     watch: {
-        $route(to,from) {
+        $route(to) {
             if (this.includeTalkroomPath(to.path)) {
                 const room_id: string = this.$route.params.room_id as string;
                 this.clear(room_id);
-                console.log(from);
-                console.log('before room.attemptToEnter...');
                 room.attemptToEnter(room_id,user.me.user);
             }
         }

@@ -4,7 +4,7 @@
             <p>{{text}}{{dot}}</p>
         </div>
         <div class="info">
-            <p class="is-size-7">{{user_name}}</p>
+            <p class="is-size-7">{{typingUser}}</p>
         </div>
     </div>
 </template>
@@ -12,10 +12,10 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import room from "../Domain/Room/Room";
+import typingEventObserver from "../Domain/Message/Observer/TypingEventObserver";
 
 export default defineComponent({
     name: "Typing",
-    props: ["user_name", "room_id"],
     data() {
         return {
             text: "入力中",
@@ -26,6 +26,8 @@ export default defineComponent({
         };
     },
     mounted() {
+
+        //「入力中...」の表示
         let count = 1;
         setInterval(() => {
             this.dot += ".";
@@ -35,16 +37,18 @@ export default defineComponent({
             }
             count++;
         }, 300);
-    },
-    updated() {
-        if (this.isTyping == false && room.current == this.room_id) {
-            this.isTyping = true;
-            this.typingUser = this.user_name;
-            const id = setTimeout(() => {
-                this.isTyping = false;
-                clearTimeout(id);
-            }, this.typingTimer);
-        }
+
+        //タイピングイベント受信時の処理
+        typingEventObserver.handle = (info: {user_name: string,room_id: string}) => {
+            if (this.isTyping == false && room.current == info.room_id) {
+                this.isTyping = true;
+                this.typingUser = info.user_name;
+                const id = setTimeout(() => {
+                    this.isTyping = false;
+                    clearTimeout(id);
+                }, this.typingTimer);
+            }
+        };
     }
 });
 </script>
