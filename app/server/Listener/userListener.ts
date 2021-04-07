@@ -1,7 +1,9 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import { RoomType } from "server/@types/types";
+import { RoomType, UserBasicInfo, UserRegisteInfo } from "server/@types/types";
+import logger from "../Domain/Utility/logger";
+import applyController from '../Domain/Controller/ApplyController';
 
 module.exports =  (socket: Socket) => {
 
@@ -31,11 +33,17 @@ module.exports =  (socket: Socket) => {
       await RoomController.getTalkRooms(user_id,socket);
     };
 
+    //ダイレクトメッセージの許可申請
+    const applyDirectMessage = async (target_id: string,basicInfo: UserBasicInfo) => {
+      applyController.apply(target_id,basicInfo,socket);
+    };
+
     //ハンドラ登録
     socket.on('user:after-login', afterLogin);
     socket.on('user:logout',userLogout);
     socket.on('user:create-room',createRoom);
     socket.on('user:require-members',requireUsers);
     socket.on('user:require-rooms',requireRooms);
+    socket.on('user:apply-directmessage',applyDirectMessage);
 
 }

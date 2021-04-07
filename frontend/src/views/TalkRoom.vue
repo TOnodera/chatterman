@@ -36,8 +36,8 @@ import room from "../Domain/Room/Room";
 import acceptMessageObserver from "../Domain/Message/Observer/AcceptMessageObserver";
 import arrowedToEnterRoomObserver from "../Domain/Room/Observer/ArrowedToEnterRoomObserver";
 import deniedToEnterRoomObserver from "../Domain/Room/Observer/DeniedToEnterRoomObserver";
-import swal from '../util/swal';
 import {onScroll,toBottom} from '../util/window';
+import apply from '../Domain/Apply/Apply';
 
 import { defineComponent } from "vue";
 
@@ -85,9 +85,13 @@ export default defineComponent({
         };
 
         //入場出来ない場合の処理
-        deniedToEnterRoomObserver.handler = (msg: string)=>{
-            swal.fire(msg);
-            this.$router.push({name: 'TalkRoom',params: {room_id: 'everyone'}});
+        deniedToEnterRoomObserver.handler = (user_id: string)=>{
+            const basicInfo: UserBasicInfo = {
+                id: user_id,
+                info: user.me
+            };
+            apply.showApplyForm(user_id,basicInfo);
+            this.$router.push({name: 'TalkRoom',params: {room_id: 'everybody'}});
         };
 
         //メッセージ受信時の処理

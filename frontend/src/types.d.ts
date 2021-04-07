@@ -24,3 +24,8 @@ interface Exception{
     message?: string,
     status?: number
 }
+
+interface UserBasicInfo{
+    id: string,
+    info: Me
+}

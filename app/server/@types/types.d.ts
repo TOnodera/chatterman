@@ -16,6 +16,11 @@ interface RoomAndUserId{
     user_id: string
 }
 
+interface UserBasicInfo{
+    id: string,
+    user: UserRegisteInfo
+}
+
 /**
  * クライアントに送る情報のdto
  */

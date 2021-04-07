@@ -23,7 +23,7 @@ module.exports = (socket: Socket) => {
     };
 
     const attemptToEnter = async (info: RoomAndUserId) => {
-        logger.info(`attempot to enter... user:${info.user_id} -> room:${info.room_id}`);
+        logger.info(`次のユーザーが入室しようとしました。 user:${info.user_id} -> room:${info.room_id}`);
         await roomController.attemptToEnter(info, socket);
     };
 

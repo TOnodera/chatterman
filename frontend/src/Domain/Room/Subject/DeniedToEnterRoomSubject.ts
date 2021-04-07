@@ -1,8 +1,8 @@
 import DeniedToEnterRoomObserver from "../Observer/DeniedToEnterRoomObserver";
 
 class DeniedToEnterRoomSubject{
-    notify(msg: string){
-        DeniedToEnterRoomObserver.update(msg);
+    notify(denied: string){
+        DeniedToEnterRoomObserver.update(denied);
     }
 }
 

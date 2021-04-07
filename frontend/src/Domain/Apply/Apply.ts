@@ -1,0 +1,58 @@
+import swal from '../../util/swal';
+import socketStore from '../Socket';
+
+class Apply {
+    apply(target_user: string,basicInfo: UserBasicInfo){
+        if(!target_user || !basicInfo.info.credentials.email || !basicInfo.info.credentials.password){
+            swal.fire({
+                title:'不正なリクエストが行われました。',
+                icon: 'error'
+            });
+            return;
+        }
+        socketStore.socket.emit('user:apply-directmessage',target_user,basicInfo);
+    }
+    hasRequest() {
+
+    }
+    alreadyRequests(){
+
+    }
+    async showApplyForm(target_user: string,basicInfo: UserBasicInfo) {
+
+        /*
+        //リクエストが無いか確認
+        if(this.hasRequest()){
+            //ある場合は承認画面を表示
+            showApproveFrom();
+            return;
+        }
+        
+        //申請済みか確認
+        if(this.alreadyRequests()){
+            swal.fire('申請済みです。承認されるまでお待ち下さい。');
+        }
+        */
+
+        //未申請の場合は申請
+        if(await this.applyForm()){
+            this.apply(target_user,basicInfo);
+        }
+    }
+
+    async applyForm(): Promise<boolean>{
+        return await swal.fire({
+            title: 'ダイレクトメッセージを送る場合は許可が必要です。',
+            showDenyButton: true,
+            confirmButtonText: `許可申請する`,
+            denyButtonText: `申請しない`,
+        }).then(result =>{
+             if(result.isConfirmed){
+                 return true;
+             }
+             return false;
+        });
+    }
+
+}
+export default new Apply;
