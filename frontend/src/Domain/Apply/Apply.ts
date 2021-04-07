@@ -52,5 +52,29 @@ class Apply {
         });
     }
 
+    alreadyAcceptedListener(){
+        socketStore.registeOnce('user:already-application-is-accepted',(msg:string)=>{
+            swal.info(msg);
+        });
+    }
+
+    hasAcceptedListener(){
+        socketStore.registeOnce('user:already-requested',(msg: string)=>{
+            swal.info(msg);
+        });
+    }
+
+    requestHasSentListener(){
+        socketStore.registeOnce('user:apply-resuest-has-sent',(msg: string)=>{
+            swal.info(msg);
+        });
+    }
+
+    launchListener(){
+        this.alreadyAcceptedListener();
+        this.hasAcceptedListener();
+        this.requestHasSentListener();
+    }
+
 }
 export default new Apply;

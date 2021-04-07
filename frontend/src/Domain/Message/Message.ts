@@ -1,6 +1,9 @@
 import socketStore from '../Socket';
 import AcceptMessageSubject from './Subject/AcceptMessageSubject';
 import TypingEventSubject from './Subject/TypingEventSubject';
+import swal from '../../util/swal';
+import izitoast from 'izitoast';
+
 
 class Message {
 
@@ -27,11 +30,29 @@ class Message {
     }
 
     send(message: string, me: User, room_id: string) {
+        if(this.validate(message,me,room_id) == false){
+            return;
+        }
         socketStore.socket.emit('user:send-message', {
             message: message,
             user: me,
             room_id: room_id
         });
+    }
+
+    validate(message: string,me: User,room_id: string){
+        if(!me || !room_id){
+            swal.error("不正な送信データです。");
+            return false;
+        }
+        if(!message){
+            izitoast.warning({
+                title: 'メッセージを入力して下さい。',
+                timeout: 1500,
+                position: 'center'
+            });
+            return false;
+        }
     }
 
     //メッセージ送信要求
