@@ -4,6 +4,7 @@ import { SendMessageToClient } from "server/@types/types";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import logger from "../Utility/logger";
 import messageManager from '../Message/MessasgeManager';
+import Config from '../../config';
 
 class MessageController {
 
@@ -24,9 +25,11 @@ class MessageController {
         logger.info(`2/2 MessageController.add -> 送信処理完了:user_id->${user_id},socket_id:${socket.id}`);
 
     }
+
     delete(): void {
 
     }
+
     edit(): void {
 
     }
@@ -70,4 +73,9 @@ class MessageController {
     }
 
 }
-export default new MessageController();
+
+const messageController = new MessageController;
+export {
+    MessageController,
+    messageController
+}

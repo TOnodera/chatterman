@@ -4,7 +4,6 @@ import UserFactory from "../User/UserFactory";
 import MessageRegister from "../Message/MessageRegister";
 import MessageFactory from "../Message/MessageFactory";
 import { transaction } from '../Utility/Connection';
-import Config from '../../config';
 
 class MessageManager {
 
@@ -34,10 +33,5 @@ class MessageManager {
         return result;
 
     }
-
-    async addAsSuperUser(message:string,room_id: string): Promise<SendMessageToClient>{        
-        return await this.add(message,Config.system.superuser,room_id);
-    }   
-
 }
 export default new MessageManager();

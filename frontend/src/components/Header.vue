@@ -22,11 +22,7 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                <div class="ml-5 mt-4">
-                    <div class="is-pulled-right">
-                        <FlashIcon/>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </nav>

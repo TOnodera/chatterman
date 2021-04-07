@@ -9,8 +9,8 @@ class Apply{
         this.repository = factory.create();
     }
 
-    async apply(target_id: string,user_id: string){
-        await this.repository.apply(target_id,user_id);
+    async apply(target_id: string,user_id: string): Promise<string>{
+        return await this.repository.apply(target_id,user_id);
     }
 
     async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{

@@ -1,7 +1,7 @@
 import { RoomAndUserId } from "server/@types/types";
 import logger from "../Domain/Utility/logger";
 import { Socket } from "socket.io";
-import messageController from '../Domain/Controller/MessasgeController';
+import { messageController } from '../Domain/Controller/MessasgeController';
 import roomController from '../Domain/Controller/RoomController';
 
 module.exports = (socket: Socket) => {

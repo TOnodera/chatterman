@@ -1,9 +1,9 @@
 <template>
     <div class="sidebar-wrapper ml-3">
         <aside class="menu">
-            <div class="ml-5 mt-4 is-hidden-desktop touch-info">
-                <div class="is-centered">
-                    <FlashIcon/>
+            <div class="ml-5 mt-4 touch-info">
+                <div class="is-centered" :class="{'is-hidden': isHidden}">
+                    <FlashIcon @click="lookAtInformationRoom"/>
                 </div>
             </div>
             <div class="mb-5">
@@ -56,6 +56,9 @@ import LogoutObserver from "../Domain/User/Observer/LogoutObserver";
 import AnotherUserLoginObserver from "../Domain/User/Observer/AnotherUserLoginObserver";
 import FlashIcon from './FlashIcon.vue';
 import AcceptRoomsObserver from '../Domain/Room/Observer/AcceptRoomsObserver';
+import NoticeObserver from '../Domain/Notice/Observer/NoticeObserver';
+import swal from '../util/swal';
+
 import room from '../Domain/Room/Room';
 
 export default defineComponent({
@@ -64,7 +67,8 @@ export default defineComponent({
         return {
             me: user.me.user,
             users: [] as User[],
-            rooms: [] as any[]
+            rooms: [] as any[],
+            isHidden: true
         };
     },
     components: {
@@ -74,6 +78,9 @@ export default defineComponent({
         async logout() {
             await user.logout(this.me.id, user.me.credentials);
             this.$router.push({ name: "Login" });
+        },
+        lookAtInformationRoom(){
+            swal.info('新しいお知らせを受信しています。確認して下さい。');
         }
     },
     async mounted() {
@@ -107,6 +114,11 @@ export default defineComponent({
                 }
                 return user;
             });
+        };
+        //新規お知らせメッセージ受信時
+        NoticeObserver.handler = ()=>{
+            console.log("called");
+            this.isHidden = false;
         };
 
         /**

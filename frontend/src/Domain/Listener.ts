@@ -3,6 +3,7 @@ import user from './User/User';
 import room from './Room/Room';
 import message from './Message/Message';
 import apply from './Apply/Apply';
+import notice from './Notice/Notice';
 
 /**
  * サーバーから受信するイベントのリスナー
@@ -14,6 +15,7 @@ const launchAtLoggedIn = ()=>{
     room.launchListener();
     message.launchListener();
     apply.launchListener();
+    notice.launchListener();
 };
 
 const launchAtAppUped = ()=>{

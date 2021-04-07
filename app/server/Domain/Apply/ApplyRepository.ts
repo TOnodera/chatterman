@@ -16,9 +16,9 @@ class ApplyRepository{
         this.connector = connector;
     }
 
-    async apply(target_id: string,user_id: string){
+    async apply(target_id: string,user_id: string): Promise<string>{
         const [row]: any[] = await this.connector.query('INSERT INTO requests SET target_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();',[target_id,user_id,this.IS_ACCEPT_UNTREATED,this.IS_NOTIFIED_YET]);
-        return row.affectedRows == 1;
+        return row.insertId;
     }
 
     async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{

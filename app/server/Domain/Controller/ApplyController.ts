@@ -1,11 +1,12 @@
 import loginManager from "../User/LoginManager";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
-import { SendMessageToClient, UserBasicInfo } from "server/@types/types";
+import { UserBasicInfo } from "server/@types/types";
 import apply from '../Apply/Apply';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
-import messageManager from '../Message/MessasgeManager';
+import notifyManager from '../Notify/NotifyManager';
+import applyService from '../Apply/ApplyService';
 
 
 class ApplyController {
@@ -30,22 +31,18 @@ class ApplyController {
                 return;
             }
 
-            await apply.apply(target_id, info.user.id);
+            const apply_id:string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
-            const toClient:SendMessageToClient = await messageManager.addAsSuperUser(`${info.user.name}さんからダイレクトメッセージの許可申請が届きました。`, information_room);
-
-             //ログイン中のユーザーに該当するユーザーがいる場合はソケット取得してメッセージ送信
-             const socket_id: any = loginManager.getSocketFromUserId(target_id);
-             if(socket_id){
-                 socket.to(information_room).emit('user:get-apply-resuest',toClient);
-             }
+            //お知らせメッセージを送信
+            await notifyManager.sendNoticeMessage(applyService.makeMessage(info.user.name,apply_id,info.user.id), information_room,socket);
+            //新規お知らせメッセージの通知
+            socket.to(information_room).emit('user:new-notice');
 
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }
 
         socket.emit('user:apply-resuest-has-sent', '許可申請を送りました。承認されるまでお待ち下さい。');
-
         logger.info(`2/2 ApplyController.apply() -> 処理完了 request_user: ${info.credentials.email}`);
 
     }
