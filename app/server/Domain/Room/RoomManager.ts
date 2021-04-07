@@ -9,6 +9,8 @@ import RoomRegister from './RoomRegister';
 import repository from './RoomRepository';
 class RoomManager {
 
+    private INFORMATION_ROOM_NAME = "お知らせ";
+
     private repository: any;
     constructor() {
         this.repository = repository;
@@ -39,6 +41,13 @@ class RoomManager {
     async createUserDefaultRoom(user_id: string, room_typs: RoomType): Promise<boolean> {
         const room: Room = await this.createRoom(user_id, user_id,room_typs);
         const result = await this.addAccessableRooms(user_id, room.id) && await this.addAccessableRooms(user_id, 'everybody');
+        return result;
+    }
+
+    async createInformationRoom(user_id:string): Promise<boolean>{
+        const roomType: RoomType = {Type: 'talkroom'};
+        const room: Room = await this.createRoom(this.INFORMATION_ROOM_NAME, user_id,roomType);
+        const result = await this.addAccessableRooms(user_id, room.id);
         return result;
     }
 

@@ -1,6 +1,5 @@
 import uuid from 'node-uuid';
 import { RoomType } from 'server/@types/types';
-import DomainException from '../Exception/DomainException';
 import repository from './RoomRepository';
 class RoomRegister {
 
@@ -19,9 +18,6 @@ class RoomRegister {
     }
 
     async create(): Promise<string> {
-        if (await this.repository.existsSameName(this.name)) {
-            throw new DomainException('同じ名前のルームが登録されているので名前を変えて下さい。');
-        }
         await this.repository.createRoom(this);
         return this.id;
     }

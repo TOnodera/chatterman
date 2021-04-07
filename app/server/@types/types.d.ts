@@ -50,7 +50,7 @@ interface RoomInfo{
 }
 
 interface RoomType{
-    Type: 'talkroom' | 'directmessage'
+    Type: 'talkroom' | 'directmessage' 
 }
 
 /**

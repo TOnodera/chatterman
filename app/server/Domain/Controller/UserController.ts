@@ -30,9 +30,9 @@ class UserController {
             logger.info(`2/4 UserController.registe() -> ユーザー作成 name: ${fromClient.name}`);
 
             const roomType: RoomType = { Type: 'directmessage' };
-            if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
+            if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType) && roomManager.createInformationRoom(user_id)) { //デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
                 result = true;
-                logger.info(`3/4 UserController.registe() -> 共通ルームへのアクセスと自分用DMルームへのアクセス設定完了 name: ${fromClient.name}`);
+                logger.info(`3/4 UserController.registe() -> 共通ルーム,自分用DMルーム,お知らせ用ルームの登録とアクセス設定完了 name: ${fromClient.name}`);
             }
                       
         });
