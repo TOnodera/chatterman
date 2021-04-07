@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE TABLE IF NOT EXISTS requests (
     id INT AUTO_INCREMENT,
     accept_user VARCHAR (255) NOT NULL,
-    request_id VARCHAR (255) NOT NULL,
+    request_user VARCHAR (255) NOT NULL,
     is_accept TINYINT NOT NULL,
     accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE TABLE IF NOT EXISTS requests (
     id INT AUTO_INCREMENT,
     accept_user VARCHAR (255) NOT NULL,
-    request_id VARCHAR (255) NOT NULL,
+    request_user VARCHAR (255) NOT NULL,
     is_accept TINYINT NOT NULL,
     accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,

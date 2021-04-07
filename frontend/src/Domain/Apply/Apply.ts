@@ -3,7 +3,7 @@ import socketStore from '../Socket';
 
 class Apply {
     apply(target_user: string,basicInfo: UserBasicInfo){
-        if(!target_user || !basicInfo.info.credentials.email || !basicInfo.info.credentials.password){
+        if(!target_user || !basicInfo.credentials.email || !basicInfo.credentials.password){
             swal.error('不正なリクエストが行われました。');
             return;
         }
@@ -39,7 +39,8 @@ class Apply {
 
     async applyForm(): Promise<boolean>{
         return await swal.fire({
-            title: 'ダイレクトメッセージを送る場合は許可が必要です。',
+            title: 'ユーザーの許可が必要です。',
+            text: 'ダイレクトメッセージを送る場合は許可が必要です。',
             showDenyButton: true,
             confirmButtonText: `許可申請する`,
             denyButtonText: `申請しない`,

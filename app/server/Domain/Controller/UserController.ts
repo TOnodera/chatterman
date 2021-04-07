@@ -19,17 +19,22 @@ class UserController {
     }
 
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {
+
         logger.info(`1/4 UserController.registe() -> 登録処理開始 name: ${fromClient.name}`);
         const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
-        logger.info(`2/4 UserController.registe() -> ユーザー作成 name: ${fromClient.name}`);
+
         let result: boolean = false;
         await transaction(async () => {
+
             const user_id = await user.registe();
+            logger.info(`2/4 UserController.registe() -> ユーザー作成 name: ${fromClient.name}`);
+
             const roomType: RoomType = { Type: 'directmessage' };
             if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType)) { //デフォルトのユーザールームも合わせて作成
                 result = true;
                 logger.info(`3/4 UserController.registe() -> 共通ルームへのアクセスと自分用DMルームへのアクセス設定完了 name: ${fromClient.name}`);
-            }          
+            }
+                      
         });
         logger.info(`4/4 UserController.registe() -> 登録処理完了 name: ${fromClient.name}`);
         return result;

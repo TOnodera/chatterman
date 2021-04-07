@@ -8,7 +8,7 @@ class Apply{
     }
 
     async apply(target_id: string,user_id: string){
-        this.repository.apply(target_id,user_id);
+        await this.repository.apply(target_id,user_id);
     }
 
     async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{

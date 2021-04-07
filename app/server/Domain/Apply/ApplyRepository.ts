@@ -17,16 +17,18 @@ class ApplyRepository{
     }
 
     async apply(target_id: string,user_id: string){
-        const [row]: any[] = await this.connector.query('INSERT INTO request SET accept_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();',[target_id,user_id,this.IS_ACCEPT_UNTREATED,this.IS_NOTIFIED_YET]);
+        const [row]: any[] = await this.connector.query('INSERT INTO requests SET accept_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();',[target_id,user_id,this.IS_ACCEPT_UNTREATED,this.IS_NOTIFIED_YET]);
         return row.affectedRows == 1;
     }
 
     async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{
-        return false;
+        const [rows]: any[] = await this.connector.query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? deleted_at IS NULL ', [target_id,user_id]);        
+        return rows.length > 0;
     }
 
     async hasAccepted(target_id: string,user_id: string): Promise<boolean>{
-        return false;
+        const [rows]: any[] = await this.connector.query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? deleted_at IS NULL ', [user_id,target_id]);        
+        return rows.length > 0;
     }
 
 }

@@ -17,8 +17,11 @@ interface RoomAndUserId{
 }
 
 interface UserBasicInfo{
-    id: string,
-    user: UserRegisteInfo
+    user: {
+        id: string,
+        name: string
+    },
+    credentials: Credentials
 }
 
 /**

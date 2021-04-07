@@ -26,6 +26,6 @@ interface Exception{
 }
 
 interface UserBasicInfo{
-    id: string,
-    info: Me
+    user: User,
+    credentials: Credentials 
 }

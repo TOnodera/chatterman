@@ -50,7 +50,6 @@ class RoomRepository{
 
     async addAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('INSERT INTO accessable_rooms SET user_id = ?,room_id = ?, created_at = NOW()',[user_id,room_id]);
-        console.log(user_id,room_id,rows);
         return rows.affectedRows == 1;
     }
 

@@ -10,14 +10,24 @@
                                     <div class="field">
                                         <label class="label">ユーザー名</label>
                                         <div class="control">
-                                            <input class="input" type="text" placeholder="ユーザー名" v-model="newUser.name"/>
+                                            <input
+                                                class="input"
+                                                type="text"
+                                                placeholder="ユーザー名"
+                                                v-model="newUser.name"
+                                            />
                                         </div>
                                     </div>
 
                                     <div class="field">
                                         <label class="label">メールアドレス</label>
                                         <div class="control has-icons-left has-icons-right">
-                                            <input class="input" type="text" placeholder="Email" v-model="newUser.credentials.email"/>
+                                            <input
+                                                class="input"
+                                                type="text"
+                                                placeholder="Email"
+                                                v-model="newUser.credentials.email"
+                                            />
                                             <span class="icon is-small is-left">
                                                 <fontawesome icon="user" />
                                             </span>
@@ -46,7 +56,10 @@
                                             <button class="button is-link" @click="register">登録</button>
                                         </div>
                                         <div class="control">
-                                            <button class="button is-link is-light" @click="toLoginPage">キャンセル</button>
+                                            <button
+                                                class="button is-link is-light"
+                                                @click="toLoginPage"
+                                            >キャンセル</button>
                                         </div>
                                     </div>
                                 </div>
@@ -60,35 +73,37 @@
 </template>
 
 <script lang="ts">
-import swal from '../util/swal';
-import user from '../Domain/User/User';
-import { defineComponent } from 'vue';
+import swal from "../util/swal";
+import user from "../Domain/User/User";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'User',
-  data () {
-    return {
-      newUser: {
-        name: '',
-        credentials: {
-          email: '',
-          password: ''
-        }
-      } as UserRegisteInfo
-    };
-  },
-  methods: {
-    toLoginPage () {
-      this.$router.push({ name: 'Login' });
+    name: "User",
+    data() {
+        return {
+            newUser: {
+                name: "",
+                credentials: {
+                    email: "",
+                    password: ""
+                }
+            } as UserRegisteInfo
+        };
     },
-    async register () {
-      if(await user.registe(this.newUser)){
-          swal.success('登録しました。ログインして下さい。');
-          this.$router.push({name: 'Login'});
-      }else{
-          swal.error('登録に失敗しました。');
-      }
+    methods: {
+        toLoginPage() {
+            this.$router.push({ name: "Login" });
+        },
+        async register() {
+            try {
+                if (await user.registe(this.newUser)) {
+                    swal.success("登録しました。ログインして下さい。");
+                    this.$router.push({ name: "Login" });
+                } 
+            } catch (e) {
+                swal.warning(e.message);
+            }
+        }
     }
-  }
 });
 </script>

@@ -4,7 +4,7 @@
             <div class="column is-four-fifths">
                 <template v-for="message in messages">
                     <ChatRight
-                        v-if="message.user_id == user.me.user.id"
+                        v-if="message.user_id == this_user.me.user.id"
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
@@ -52,7 +52,7 @@ export default defineComponent({
     data() {
         return {
             messages: [] as any[],
-            user: user
+            this_user: user
         };
     },
     methods: {
@@ -85,12 +85,9 @@ export default defineComponent({
         };
 
         //入場出来ない場合の処理
-        deniedToEnterRoomObserver.handler = (user_id: string)=>{
-            const basicInfo: UserBasicInfo = {
-                id: user_id,
-                info: user.me
-            };
-            apply.showApplyForm(user_id,basicInfo);
+        deniedToEnterRoomObserver.handler = (target_id: string)=>{
+            const basicInfo: UserBasicInfo = { user: user.me.user, credentials: user.me.credentials};
+            apply.showApplyForm(target_id,basicInfo);
             this.$router.push({name: 'TalkRoom',params: {room_id: 'everybody'}});
         };
 
