@@ -23,7 +23,7 @@ class LoginManager implements ILoginManager{
             logger.info(`LoginManager.login() -> 2/2 ログイン処理完了:${credentials.email}`);
             return user;
         }
-        throw new AuthenticationException('登録して下さい。');
+        throw new AuthenticationException('認証情報が間違っています。未登録の場合は登録して下さい。');
     }
 
     async afterLogin(user: User,socket: Socket){

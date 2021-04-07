@@ -37,13 +37,14 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 CREATE TABLE IF NOT EXISTS requests (
-    id VARCHAR(255) PRIMARY KEY,
+    id INT AUTO_INCREMENT,
     accept_user VARCHAR (255) NOT NULL,
     request_id VARCHAR (255) NOT NULL,
     is_accept TINYINT NOT NULL,
     accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
-    deleted_at DATETIME
+    deleted_at DATETIME,
+    INDEX (id)
 );
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
@@ -92,14 +93,16 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 CREATE TABLE IF NOT EXISTS requests (
-    id VARCHAR(255) PRIMARY KEY,
+    id INT AUTO_INCREMENT,
     accept_user VARCHAR (255) NOT NULL,
     request_id VARCHAR (255) NOT NULL,
     is_accept TINYINT NOT NULL,
     accept_notified TINYINT NOT NULL,
     created_at DATETIME NOT NULL,
-    deleted_at DATETIME
+    deleted_at DATETIME,
+    INDEX (id)
 );
+
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
 INSERT INTO `rooms` (`id`, `name`, `room_type`,`creater_id` , `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom','god', '2021-03-25 01:24:21');

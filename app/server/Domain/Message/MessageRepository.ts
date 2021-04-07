@@ -6,7 +6,6 @@ import UserFactory from '../User/UserFactory';
 import User from '../User/User';
 import MessageRegister from './MessageRegister';
 import MessageFactory from './MessageFactory';
-import logger from '../Utility/logger';
 
 class MessageRepository implements IMessageRepository {
 
