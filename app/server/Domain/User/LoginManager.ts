@@ -68,5 +68,12 @@ class LoginManager implements ILoginManager{
     getSocketNumsUsingThisUser(socket_id: string): number{
         return loginUserStore.getSocketNumUsingThisUser(socket_id);
     }
+
+    //user_idからソケットを取得する
+    getSocketFromUserId(user_id: string): string | undefined{
+        const socket_id = loginUserStore.getSocketByUserId(user_id);
+        return socket_id == '' ? undefined : socket_id;
+    }
+
 }
 export default new LoginManager;

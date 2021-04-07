@@ -42,15 +42,21 @@ class RoomController {
     }
 
     async getTalkRooms(user_id: string, socket: Socket) {
+
         try {
-            logger.info('ルームデータ要求メッセージ受信');
+            
             logger.info(`1/2 RoomController.getTalkRooms() -> user_id: ${user_id},socket_id: ${socket.id}`);
+
             const rooms: RoomInfo[] = await roomManager.getTalkRooms(user_id);
             socket.emit('user:send-rooms-data', rooms);
+
             logger.info(`2/2 RoomController.getTalkRooms() -> データ送信...送信数 ${rooms.length}`);
+        
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }
+
+        
     }
 
 }

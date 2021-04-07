@@ -1,13 +1,10 @@
 import User from "../User/User";
-import messages from '../Message/Messages';
-import { Socket } from "socket.io";
 import { SendMessageToClient } from "server/@types/types";
 import UserFactory from "../User/UserFactory";
 import MessageRegister from "../Message/MessageRegister";
 import MessageFactory from "../Message/MessageFactory";
 import { transaction } from '../Utility/Connection';
-import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
-import logger from "../Utility/logger";
+import Config from '../../config';
 
 class MessageManager {
 
@@ -38,39 +35,9 @@ class MessageManager {
 
     }
 
-    delete(): void {
-
-    }
-    edit(): void {
-
-    }
-
-    typing(user: { id: string, name: string }, room_id: string, socket: Socket): void {
-        socket.broadcast.emit('broadcast:user-typing',{ user_name: user.name,room_id: room_id });
-    }
-
-    async moreMessages(room_id: string, message_id: string, socket: Socket) {
-
-        try {
-            const response: SendMessageToClient[] = await messages.more(room_id, message_id);
-        } catch (e) {
-            SocketExceptionHandler.handle(e, socket);
-            return false;
-        }
-        
-        return true;
-
-    }
-
-    async getLatest(room_id: string, socket: Socket) {
-        try {
-            const response: SendMessageToClient[] = await messages.latest(room_id);
-        } catch (e) {
-            SocketExceptionHandler.handle(e, socket);
-            return false;
-        }
-        return true;
-    }
+    async addAsSuperUser(message:string,room_id: string): Promise<SendMessageToClient>{        
+        return await this.add(message,Config.system.superuser,room_id);
+    }   
 
 }
 export default new MessageManager();

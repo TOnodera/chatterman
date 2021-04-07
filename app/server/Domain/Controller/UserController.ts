@@ -20,23 +20,22 @@ class UserController {
 
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {
 
-        logger.info(`1/4 UserController.registe() -> 登録処理開始 name: ${fromClient.name}`);
-        const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+        logger.info(`1/2 UserController.registe() -> 登録処理開始 name: ${fromClient.name}`);
 
-        let result: boolean = false;
-        await transaction(async () => {
+        const user: UserRegister = new UserRegister(fromClient.name, fromClient.credentials);
+        const [result]: boolean[] = await transaction(async () => {
 
             const user_id = await user.registe();
-            logger.info(`2/4 UserController.registe() -> ユーザー作成 name: ${fromClient.name}`);
-
             const roomType: RoomType = { Type: 'directmessage' };
             if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType) && roomManager.createInformationRoom(user_id)) { //デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
-                result = true;
-                logger.info(`3/4 UserController.registe() -> 共通ルーム,自分用DMルーム,お知らせ用ルームの登録とアクセス設定完了 name: ${fromClient.name}`);
+                return true;
             }
-                      
+            return false;
+            
         });
-        logger.info(`4/4 UserController.registe() -> 登録処理完了 name: ${fromClient.name}`);
+
+        logger.info(`2/2 UserController.registe() -> 登録処理完了 name: ${fromClient.name}`);
+
         return result;
     }
 
@@ -89,9 +88,9 @@ class UserController {
 
     async getMembers(user_id: string,socket: Socket) {
         try {
-            logger.info('表示用ユーザー情報要求メッセージを受信');
+            logger.info('1/2 表示用ユーザー情報要求メッセージを受信');
             socket.emit('user:send-users-data', await userService.getMembers(user_id));
-            logger.info('表示用ユーザー情報を送信');
+            logger.info('2/2 表示用ユーザー情報を送信');
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }

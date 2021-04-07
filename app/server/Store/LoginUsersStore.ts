@@ -56,5 +56,14 @@ export default {
             return this.getSocketNumPerUser(user!.id);
         }
         return 0;
+    },
+    getSocketByUserId(user_id: string): string{
+        let socket_id: string = '';
+        this.users.forEach((user,socketId)=>{
+            if(user_id == user.id){
+                socket_id = socketId;
+            }
+        });
+        return socket_id;
     }
 }
