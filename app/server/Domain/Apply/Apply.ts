@@ -1,4 +1,6 @@
 import factory from './ApplyRepositoryFactory';
+import userService from '../User/Service';
+
 class Apply{
 
     private repository: any;
@@ -17,6 +19,10 @@ class Apply{
 
     async hasAccepted(target_id: string,user_id: string): Promise<boolean>{
         return await this.repository.hasAccepted(target_id,user_id);
+    }
+
+    async getUserinformationRoomId(user_id: string): Promise<string>{
+        return await userService.getInfromationRoomId(user_id);
     }
 
 }

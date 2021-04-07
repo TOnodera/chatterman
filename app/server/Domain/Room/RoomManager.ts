@@ -7,10 +7,12 @@ import Room from './Room';
 import RoomFactory from './RoomFactoryy';
 import RoomRegister from './RoomRegister';
 import repository from './RoomRepository';
+import config from '../../config';
+
 class RoomManager {
 
     private INFORMATION_ROOM_NAME = "お知らせ";
-
+    private SUPER_USER = config.system.superuser;
     private repository: any;
     constructor() {
         this.repository = repository;
@@ -47,7 +49,7 @@ class RoomManager {
     async createInformationRoom(user_id:string): Promise<boolean>{
         const roomType: RoomType = {Type: 'talkroom'};
         const room: Room = await this.createRoom(this.INFORMATION_ROOM_NAME, user_id,roomType);
-        const result = await this.addAccessableRooms(user_id, room.id);
+        const result = await this.addAccessableRooms(user_id, room.id) && this.addAccessableRooms(this.SUPER_USER,room.id);
         return result;
     }
 

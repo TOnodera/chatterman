@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS requests (
     UNIQUE (target_user,request_user)
 );
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
-INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'god', '2021-03-25 01:24:21');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '管理システム', 'info@chat-system.com', 'god@father.com', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '2021-03-25 01:24:21');
 
 /**
 TEST DATABASE 
@@ -103,5 +103,5 @@ CREATE TABLE IF NOT EXISTS requests (
     UNIQUE (target_user,request_user)
 );
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('god', '神', 'god@iamkami.kami', 'god@father.com', '2021-03-25 01:24:21');
-INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'god', '2021-03-25 01:24:21');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '管理システム', 'info@chat-system.com', 'god@father.com', '2021-03-25 01:24:21');
+INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '2021-03-25 01:24:21');

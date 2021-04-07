@@ -28,5 +28,9 @@ class Service{
     async getUserByCredentials(credentials: Credentials): Promise<User>{
         return await this.repository.getUserByCredentials(credentials);
     }
+
+    async getInfromationRoomId(user_id: string): Promise<string>{
+        return await this.repository.getInformationRoomId(user_id);
+    }
 }
 export default new Service();
