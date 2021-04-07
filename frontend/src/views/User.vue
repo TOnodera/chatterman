@@ -83,10 +83,10 @@ export default defineComponent({
     },
     async register () {
       if(await user.registe(this.newUser)){
-          swal.fire('登録しました。ログインして下さい。');
+          swal.success('登録しました。ログインして下さい。');
           this.$router.push({name: 'Login'});
       }else{
-          swal.fire('登録に失敗しました。');
+          swal.error('登録に失敗しました。');
       }
     }
   }

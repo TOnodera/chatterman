@@ -88,7 +88,7 @@ export default defineComponent({
   },
   mounted(){
       LoginObserver.handler = ()=>{
-          swal.fire('ログインしました。');
+          swal.success('ログインしました。');
           this.$router.push({name: 'TalkRoom' ,params: {room_id: 'everybody'}});
       };
   }

@@ -20,11 +20,11 @@ class ServerException{
     }
 
     domainExceptionHandler(message: string){
-        swal.fire(message);
+        swal.warning(message);
     }
 
     authenticationExceptionHandler(message: string){
-        swal.fire(message);
+        swal.warning(message);
     }
 }
 

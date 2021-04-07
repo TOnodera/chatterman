@@ -4,10 +4,7 @@ import socketStore from '../Socket';
 class Apply {
     apply(target_user: string,basicInfo: UserBasicInfo){
         if(!target_user || !basicInfo.info.credentials.email || !basicInfo.info.credentials.password){
-            swal.fire({
-                title:'不正なリクエストが行われました。',
-                icon: 'error'
-            });
+            swal.error('不正なリクエストが行われました。');
             return;
         }
         socketStore.socket.emit('user:apply-directmessage',target_user,basicInfo);
@@ -30,7 +27,7 @@ class Apply {
         
         //申請済みか確認
         if(this.alreadyRequests()){
-            swal.fire('申請済みです。承認されるまでお待ち下さい。');
+            swal.info('申請済みです。承認されるまでお待ち下さい。');
         }
         */
 

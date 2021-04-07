@@ -47,15 +47,15 @@ class UserDomain {
 
 	async registe(newUser: UserRegisteInfo): Promise<boolean> {
 		if (!newUser.name) {
-			swal.fire('ユーザー名が未入力です。');
+			swal.warning('ユーザー名が未入力です。');
 			return false;
 		}
 		if (!newUser.credentials.email) {
-			swal.fire('メールアドレスが未入力です。');
+			swal.warning('メールアドレスが未入力です。');
 			return false;
 		}
 		if (!newUser.credentials.password) {
-			swal.fire('パスワードが未入力です。');
+			swal.warning('パスワードが未入力です。');
 			return false;
 		}
 

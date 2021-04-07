@@ -41,7 +41,7 @@ export default defineComponent({
       },
       register(){
           if(!this.name){
-              swal.fire('ルーム名を入力して下さい。');
+              swal.warning('ルーム名を入力して下さい。');
               return;
           }
           room.createRoom(this.name,user.me.user.id);

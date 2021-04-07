@@ -14,7 +14,7 @@ class HttpError{
     }
 
     showError(data:{message: string,status: number}){
-        swal.fire(data.message);
+        swal.warning(data.message);
     }
 
 }
