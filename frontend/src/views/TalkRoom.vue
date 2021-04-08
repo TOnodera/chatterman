@@ -6,6 +6,7 @@
                 <div v-if="isNoticeRoom">
                     <SystemMessages :messages="messages"/>
                 </div>
+
                 <div v-else>
                     <Messages :messages="messages" :user_id="this_user.me.user.id"/>
                 </div>
@@ -112,9 +113,7 @@ export default defineComponent({
                 this.clear(room_id);
                 room.attemptToEnter(room_id, user.me.user);
                 //お知らせルームかチェック
-                if (room_id == user.me.information_room) {
-                    this.isNoticeRoom = true;
-                }
+                this.isNoticeRoom = room_id == user.me.information_room;
             }
         }
     },

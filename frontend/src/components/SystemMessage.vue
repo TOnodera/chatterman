@@ -3,7 +3,7 @@
         <div class="system-message">
             <div>
                 <p class="system-comment has-text-white has-background-info">{{message}}</p>
-                <ApprovalButtons apply_id=100 user_id="test"/> 
+                <ApprovalButtons :apply_id="100" user_id="test"/> 
                 <p class="user-info is-size-7">
                     <span>{{user_name}}</span>
                     <span>{{created_at}}</span>
