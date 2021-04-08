@@ -22,7 +22,8 @@ class UserDomain {
 				email: '',
 				password: ''
 			},
-			isLogin: false
+			isLogin: false,
+			information_room: ''
 		};
 		this.users = [];
 	}
@@ -93,8 +94,10 @@ class UserDomain {
 	}
 
 	loginSuccessListener() {
-		socketStore.registeOnce('user:logged-in', (user: User) => {
+		socketStore.registeOnce('user:logged-in', (user: AfterLoginInfo) => {
 			this.me.user = user;
+			this.me.isLogin = true;
+			this.me.information_room = user.information_room;
 			loginSubject.notify();
 		});
 	}

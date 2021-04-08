@@ -3,7 +3,7 @@ import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
-import { Client, RoomType, UserRegisteInfo } from "server/@types/types";
+import { AfterLoginInfo, Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';
@@ -49,10 +49,9 @@ class UserController {
         try {
 
             const user: User = await userService.getUserByCredentials(credentials);
-            let toClient: Client = {
-                id: user.id,
-                name: user.name
-            };
+            const information_room = await roomManager.getInformationRoomId(user.id);
+            const toMe: AfterLoginInfo = {id: user.id,name: user.name,information_room: information_room};
+            const toClient: Client = {id: user.id,name: user.name};
 
             loginUserStore.set(socket.id,user);
             //入室可能なルームにソケットをジョイン
@@ -60,7 +59,7 @@ class UserController {
             //認証用セッション情報設定
             socket.request.session.credentials = credentials;
             //イベント発行
-            userEventEmitter.sendLoggedInEvent(toClient,socket);
+            userEventEmitter.sendLoggedInEvent(toMe,socket);
             userEventEmitter.broadcastUserLoginEvent(toClient,socket);
 
         } catch (e) {

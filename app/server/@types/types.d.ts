@@ -25,7 +25,7 @@ interface UserBasicInfo{
 }
 
 /**
- * クライアントに送る情報のdto
+ * クライアントに送る情報
  */
 
 interface SendMessageToClient{
@@ -44,6 +44,12 @@ interface Client{
     isLogin?: boolean
 }
 
+interface AfterLoginInfo{
+    id: string,
+    name: string,
+    information_room: string
+}
+
 interface RoomInfo{
     id: string,
     name: string
@@ -52,15 +58,3 @@ interface RoomInfo{
 interface RoomType{
     Type: 'talkroom' | 'directmessage' 
 }
-
-/**
- * その他
- */
-
-interface MessageDto{
-    message_id: string,
-    message: string,
-    user: User,
-    room_id: string,
-    created_at: Datetime
-};
