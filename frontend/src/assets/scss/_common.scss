@@ -1,8 +1,21 @@
 @charset "utf-8";
 
+
 //swal2でダイアログ表示した時に何故かbodyにpadding-right: 15pxが指定されるので消す
 //https://github.com/sweetalert2/sweetalert2/issues/678
 
+@import "../../../node_modules/bulma/sass/utilities/initial-variables.sass";
+
 body{
     padding: 0 !important;
+}
+
+@media screen and (max-width: $tablet){
+    .is-touch-position-fixed{
+        position: fixed;
+    }
+}
+
+.z-index-1{
+    z-index: 1;
 }

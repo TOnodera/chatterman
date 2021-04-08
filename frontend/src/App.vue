@@ -1,8 +1,5 @@
 <template>
     <div class="app-wrapper">
-        <div class="app-header">
-            <Header/>
-        </div>
         <div class="app-contents">
             <router-view/>
         </div>
@@ -13,7 +10,6 @@
 </template>
 
 <script lang="ts">
-import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import { launchAtAppUped } from './Domain/Listener';
 import { emitAtAppUped } from './Domain/InitEmitter';
@@ -22,7 +18,6 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'App',
   components: {
-    Header,
     Footer
   },
   mounted() {
@@ -34,9 +29,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .app-wrapper {
-    .app-header {
-        position: relative;
-    }
     .app-contents {
         min-height: 100vh;
     }

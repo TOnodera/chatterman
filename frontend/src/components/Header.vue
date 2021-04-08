@@ -1,51 +1,54 @@
 <template>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
-            </a>
+    <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img
+                        src="@/assets/logo.png"
+                        alt="ロゴ"
+                        height="32"
+                    />
+                </a>
 
-            <a
-                role="button"
-                class="navbar-burger"
-                aria-label="menu"
-                aria-expanded="false"
-                data-target="navbarBasicExample"
-                @click="toggleMenu"
-                :class="{'is-active': isToggle}"
-            >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                
+                <a
+                    role="button"
+                    class="navbar-burger burger has-text-black"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    data-target="navbar-menu"
+                    @click="toggle"
+                >
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
             </div>
         </div>
     </nav>
+    
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import FlashIcon from './FlashIcon.vue';
+import FlashIcon from "./FlashIcon.vue";
+import Menu from './Menu.vue';
 import viewStore from '../store/view';
 
 export default defineComponent({
     name: "Header",
     components: {
-      FlashIcon
+        FlashIcon,
+        Menu
     },
     data() {
         return {
-            isToggle: false
+            isMenuButtonClicked: false
         };
     },
     methods: {
-        toggleMenu() {
-            viewStore.toggle((isToggle: boolean)=>this.isToggle = isToggle);
+        toggle() {
+            this.isMenuButtonClicked = !this.isMenuButtonClicked;
+            viewStore.set(this.isMenuButtonClicked);
         }
     }
 });
@@ -53,7 +56,6 @@ export default defineComponent({
 
 <style lang="scss">
 .navbar {
-    margin-top: 5px;
     box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
     position: fixed !important;
     width: 100%;

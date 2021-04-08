@@ -1,11 +1,17 @@
-const view = {
-    state: {
-        toggleButtonClicked: false //スマホ、パッド端末時のサイドバー表示ボタンがクリックされたかどうか
-    },
-    toggle(func: Function){
-        this.state.toggleButtonClicked = !this.state.toggleButtonClicked;
-        func(this.state.toggleButtonClicked);
-    }
-};
+class ViewStore{
 
-export default view;
+    static isVisibleSideMenu: boolean;
+    static handler: Function;
+
+    static set(value: boolean){
+        this.isVisibleSideMenu = value;
+        this.handler(this.isVisibleSideMenu);
+    }
+
+    static get(){
+        this.isVisibleSideMenu;
+    }
+
+}
+
+export default ViewStore;
