@@ -5,16 +5,18 @@ import { UserBasicInfo } from "server/@types/types";
 import apply from '../Apply/Apply';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
-import notifyManager from '../Notify/NotifyManager';
 import applyService from '../Apply/ApplyService';
+import NotifyManager from "../Notify/NotifyManager";
 
 
 class ApplyController {
 
     private socket: Socket;
+    private notifyManager: NotifyManager;
 
     constructor(socket: Socket){
         this.socket = socket;
+        this.notifyManager = new NotifyManager(socket);
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
@@ -40,7 +42,7 @@ class ApplyController {
             const apply_id:string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
             //お知らせメッセージを送信
-            await notifyManager.sendNoticeMessage(applyService.makeMessage(info.user.name,apply_id,info.user.id), information_room,this.socket);
+            await this.notifyManager.sendNoticeMessage(applyService.makeMessage(info.user.name,apply_id,info.user.id), information_room);
             //新規お知らせメッセージの通知
             this.socket.to(information_room).emit('user:new-notice');
 
