@@ -10,19 +10,19 @@ class MessageManager {
     private socket: Socket;
     private messageEventEmitter: MessageEventEmitter;
 
-    constructor(socket: Socket){
+    constructor(socket: Socket) {
         this.socket = socket;
         this.messageEventEmitter = new MessageEventEmitter(socket);
     }
 
-    async add(message: string, user_id: string, room_id: string) {
+    async add(message: string, user_id: string, room_id: string, options: any = {}) {
 
         logger.info(`1/2 MessageManager.add -> 送信処理開始:user_id->${user_id},socket_id:${this.socket.id}`);
 
-        const toClient: SendMessageToClient = await MessageService.add(message,user_id,room_id);
+        const toClient: SendMessageToClient = await MessageService.add(message, user_id, room_id);
 
-        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id,toClient);
-        this.messageEventEmitter.sendUserSendMessageEvent(toClient);
+        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient, options);
+        this.messageEventEmitter.sendUserSendMessageEvent(toClient, options);
 
         logger.info(`2/2 MessageManager.add -> 送信処理完了:user_id->${user_id},socket_id:${this.socket.id}`);
 
@@ -37,7 +37,7 @@ class MessageManager {
     }
 
     typing(user: { id: string, name: string }, room_id: string): void {
-        this.messageEventEmitter.broadcastUserTypingEvent(user.name,room_id);
+        this.messageEventEmitter.broadcastUserTypingEvent(user.name, room_id);
     }
 
     async moreMessages(room_id: string, message_id: string) {

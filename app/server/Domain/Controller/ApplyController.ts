@@ -16,7 +16,7 @@ class ApplyController {
     private notifyManager: NotifyManager;
     private applyEventEmitter: ApplyEventEmitter;
 
-    constructor(socket: Socket){
+    constructor(socket: Socket) {
         this.socket = socket;
         this.notifyManager = new NotifyManager(socket);
         this.applyEventEmitter = new ApplyEventEmitter(socket);
@@ -32,21 +32,27 @@ class ApplyController {
 
         try {
 
+            //自分宛てのDM許可申請が無いか確認
             if (await apply.hasAccepted(target_id, info.user.id)) {
                 this.applyEventEmitter.sendAlreadyApplicationIsAcceptedEvent();
                 return;
             }
 
+            //送信済みの許可申請が無いか確認
             if (await apply.hasAlreadyRequested(target_id, info.user.id)) {
                 this.applyEventEmitter.sendAlreadyRequestedEvent();
                 return;
             }
 
-            const apply_id:string = await apply.apply(target_id, info.user.id);
+            const apply_id: string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
-            //相手にお知らせメッセージを送信
-            await this.notifyManager.sendNoticeMessage(applyService.makeMessage(info.user.name,apply_id,info.user.id), information_room);
-            //相手に新規お知らせメッセージの通知イベント送信
+            const metaData = { apply_id: apply, user_id: info.user.id };
+            //送信テキスト生成
+            const messageTxt = applyService.makeMessage(info.user.name, apply_id, info.user.id);
+
+            //相手のお知らせルームにメッセージを送信
+            await this.notifyManager.sendNoticeMessage(messageTxt, information_room, metaData);
+            //相手に新規お知らせの通知イベント発行
             this.applyEventEmitter.sendNewNotice(information_room);
 
         } catch (e) {
