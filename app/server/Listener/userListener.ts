@@ -1,11 +1,13 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import { RoomType, UserBasicInfo, UserRegisteInfo } from "server/@types/types";
-import logger from "../Domain/Utility/logger";
-import applyController from '../Domain/Controller/ApplyController';
+import { RoomType, UserBasicInfo } from "server/@types/types";
+import ApplyController from "../Domain/Controller/ApplyController";
 
 module.exports =  (socket: Socket) => {
+
+    const applyController = new ApplyController(socket);
+    const roomController = new RoomController(socket);
 
     //ログイン直後
     const afterLogin = async (credendtials: Credentials) => {
@@ -20,7 +22,7 @@ module.exports =  (socket: Socket) => {
     //ルーム作成
     const createRoom = async (name: string,user_id: string) => {
       const roomType: RoomType = {Type: 'talkroom'};
-      await RoomController.createRoom(name,user_id,roomType,socket);
+      await roomController.createRoom(name,user_id,roomType);
     };
 
     //ユーザーデータ送信
@@ -30,12 +32,12 @@ module.exports =  (socket: Socket) => {
 
     //入室権限があるルーム情報のデータを送信
     const requireRooms = async (user_id: string) => {
-      await RoomController.getTalkRooms(user_id,socket);
+      await roomController.getTalkRooms(user_id);
     };
 
     //ダイレクトメッセージの許可申請
     const applyDirectMessage = async (target_id: string,basicInfo: UserBasicInfo) => {
-      applyController.apply(target_id,basicInfo,socket);
+      applyController.apply(target_id,basicInfo);
     };
 
     //ハンドラ登録

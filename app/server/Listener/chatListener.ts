@@ -1,13 +1,16 @@
 import { RoomAndUserId } from "server/@types/types";
 import logger from "../Domain/Utility/logger";
 import { Socket } from "socket.io";
-import { messageController } from '../Domain/Controller/MessasgeController';
-import roomController from '../Domain/Controller/RoomController';
+import MessageController from '../Domain/Controller/MessasgeController';
+import RoomController from '../Domain/Controller/RoomController';
 
 module.exports = (socket: Socket) => {
 
+    const messageController = new MessageController(socket);
+    const roomController = new RoomController(socket);
+
     const userSendMessage = async (fromClient: any) => {
-        await messageController.add(fromClient.message, fromClient.user.id, fromClient.room_id, socket);
+        await messageController.add(fromClient.message, fromClient.user.id, fromClient.room_id);
     };
 
     const userEditMessage = async (fromClient: any) => {
@@ -24,25 +27,25 @@ module.exports = (socket: Socket) => {
 
     const attemptToEnter = async (info: RoomAndUserId) => {
         logger.info(`次のユーザーが入室しようとしました。 user:${info.user_id} -> room:${info.room_id}`);
-        await roomController.attemptToEnter(info, socket);
+        await roomController.attemptToEnter(info);
     };
 
     const leaveCurrentRoom = async (info: RoomAndUserId) => {
-        await roomController.leaveCurrentRoom(info, socket);
+        await roomController.leaveCurrentRoom(info);
     }
 
     const userTyping = (user: { id: string, name: string },room_id: string) => {
-        messageController.typing(user, room_id, socket);
+        messageController.typing(user, room_id);
     };
 
     const moreMessages = (room_id: string, message_id: string) => {
         console.log('moreMessages');
-        messageController.moreMessages(room_id, message_id, socket);
+        messageController.moreMessages(room_id, message_id);
     }
 
     const latestMessages = (room_id: string) => {
         logger.info('新規メッセージ送信要求を受信');
-        messageController.getLatest(room_id, socket);
+        messageController.getLatest(room_id);
     }
 
     socket.on('user:send-message', userSendMessage);
