@@ -9,6 +9,7 @@ import { transaction } from '../Utility/Connection';
 import User from '../User/User';
 import logger from '../Utility/logger';
 import loginUserStore from '../../Store/LoginUsersStore';
+import userEventEmitter from '../User/UserEventEmitter';
 
 class UserController {
 
@@ -40,7 +41,6 @@ class UserController {
     }
 
     async login(credentials: Credentials): Promise<boolean> {
-        logger.info("ログイン処理UserContorollerからLoginManagerに処理委譲");
         await this.loginManager.login(credentials);
         return true;
     }
@@ -60,8 +60,8 @@ class UserController {
             //認証用セッション情報設定
             socket.request.session.credentials = credentials;
             //イベント発行
-            socket.emit('user:logged-in', toClient);
-            socket.broadcast.emit('broadcast:user-login', toClient);
+            userEventEmitter.sendLoggedInEvent(toClient,socket);
+            userEventEmitter.broadcastUserLoginEvent(toClient,socket);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
@@ -74,7 +74,7 @@ class UserController {
                 socket.request.session.credentials = { email: '', password: '' };
                 return;
             }
-            socket.emit('user:logout-failure', id);
+            userEventEmitter.sendLogoutFailureEvent(id,socket);
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }
@@ -88,9 +88,8 @@ class UserController {
 
     async getMembers(user_id: string,socket: Socket) {
         try {
-            logger.info('1/2 表示用ユーザー情報要求メッセージを受信');
-            socket.emit('user:send-users-data', await userService.getMembers(user_id));
-            logger.info('2/2 表示用ユーザー情報を送信');
+            const clients: Client[] = await userService.getMembers(user_id);
+            userEventEmitter.sendSendUsersDataEvent(clients,socket);
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);
         }
