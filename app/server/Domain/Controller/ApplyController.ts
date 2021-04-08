@@ -7,16 +7,19 @@ import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import applyService from '../Apply/ApplyService';
 import NotifyManager from "../Notify/NotifyManager";
+import ApplyEventEmitter from "../Apply/ApplyEventEmitter";
 
 
 class ApplyController {
 
     private socket: Socket;
     private notifyManager: NotifyManager;
+    private applyEventEmitter: ApplyEventEmitter;
 
     constructor(socket: Socket){
         this.socket = socket;
         this.notifyManager = new NotifyManager(socket);
+        this.applyEventEmitter = new ApplyEventEmitter(socket);
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
@@ -30,27 +33,27 @@ class ApplyController {
         try {
 
             if (await apply.hasAccepted(target_id, info.user.id)) {
-                this.socket.emit('user:already-application-is-accepted', 'DM送信の申請を受信しています。詳しくはお知らせを確認して下さい。');
+                this.applyEventEmitter.sendAlreadyApplicationIsAcceptedEvent();
                 return;
             }
 
             if (await apply.hasAlreadyRequested(target_id, info.user.id)) {
-                this.socket.emit('user:already-requested', '申請を既に送信しています。許可されるのをお待ち下さい。');
+                this.applyEventEmitter.sendAlreadyRequestedEvent();
                 return;
             }
 
             const apply_id:string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
-            //お知らせメッセージを送信
+            //相手にお知らせメッセージを送信
             await this.notifyManager.sendNoticeMessage(applyService.makeMessage(info.user.name,apply_id,info.user.id), information_room);
-            //新規お知らせメッセージの通知
-            this.socket.to(information_room).emit('user:new-notice');
+            //相手に新規お知らせメッセージの通知イベント送信
+            this.applyEventEmitter.sendNewNotice(information_room);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
 
-        this.socket.emit('user:apply-resuest-has-sent', '許可申請を送りました。承認されるまでお待ち下さい。');
+        this.applyEventEmitter.sendApplyRequestHasSentEvent();
         logger.info(`2/2 ApplyController.apply() -> 処理完了 request_user: ${info.credentials.email}`);
 
     }
