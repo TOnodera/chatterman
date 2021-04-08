@@ -4,13 +4,16 @@ import { SendMessageToClient } from "server/@types/types";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import logger from "../Utility/logger";
 import messageManager from '../Message/MessasgeManager';
+import MessageEventEmitter from '../Message/MessageEventEmitter';
 
 class MessageController {
 
     private socket: Socket;
+    private messageEventEmitter: MessageEventEmitter;
 
     constructor(socket: Socket){
         this.socket = socket;
+        this.messageEventEmitter = new MessageEventEmitter(socket);
     }
 
     async add(strMessage: string, user_id: string, room_id: string) {
@@ -20,8 +23,9 @@ class MessageController {
         try{
 
             const toClient: SendMessageToClient = await messageManager.add(strMessage,user_id,room_id);
-            this.socket.to(room_id).emit('broadcast:user-send-message', toClient);
-            this.socket.emit('broadcast:user-send-message', toClient);
+
+            this.messageEventEmitter.broadcastUserSendMessageEvent(room_id,toClient);
+            this.messageEventEmitter.sendUserSendMessageEvent(toClient);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
@@ -40,7 +44,7 @@ class MessageController {
     }
 
     typing(user: { id: string, name: string }, room_id: string): void {
-        this.socket.broadcast.emit('broadcast:user-typing',{ user_name: user.name,room_id: room_id });
+        this.messageEventEmitter.broadcastUserTypingEvent(user.name,room_id);
     }
 
     async moreMessages(room_id: string, message_id: string) {
@@ -50,7 +54,7 @@ class MessageController {
         try {
 
             const response: SendMessageToClient[] = await messages.more(room_id, message_id);
-            this.socket.emit('user:send-messages-data', response);
+            this.messageEventEmitter.sendSendMessagesDataEvent(response);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
@@ -67,7 +71,7 @@ class MessageController {
         try {
             
             const response: SendMessageToClient[] = await messages.latest(room_id);
-            this.socket.emit('user:send-latest-messages', response);
+            this.messageEventEmitter.sendSendLatestMessagesEvent(response);
 
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
