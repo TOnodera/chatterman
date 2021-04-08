@@ -6,6 +6,7 @@
                 :user_name="message.user_name"
                 :key="message.message_id"
                 :created_at="message.created_at"
+                :options="message.options"
             />
         </div>
     </div>
@@ -22,6 +23,9 @@ export default {
         messages: {
             type: Array
         }
-    }
+    },
+    mounted() {
+        console.log(this.messages);
+    },
 };
 </script>

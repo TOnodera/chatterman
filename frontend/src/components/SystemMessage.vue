@@ -3,7 +3,7 @@
         <div class="system-message">
             <div>
                 <p class="system-comment has-text-white has-background-info">{{message}}</p>
-                <ApprovalButtons :apply_id="100" user_id="test"/> 
+                <ApprovalButtons :apply_id="options.apply_id" :user_id="options.user_id"/> 
                 <p class="user-info is-size-7">
                     <span>{{user_name}}</span>
                     <span>{{created_at}}</span>
@@ -19,7 +19,20 @@ import ApprovalButtons from './ApprovalButtons.vue';
 
 export default defineComponent({
     name: "SystemMessage",
-    props: ["message", "user_name", "created_at"],
+    props: {
+        message: {
+            type: String
+        },
+        user_name: {
+            type: String
+        },
+        created_at: {
+            type: String
+        },
+        options: {
+            type: Object
+        }
+    },
     components: {
         ApprovalButtons
     }
