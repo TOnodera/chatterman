@@ -89,13 +89,5 @@ class UserRepository implements IUserRepository {
         return result;
     }
 
-    async getInformationRoomId(user_id: string): Promise<string>{
-        const [rows]: any[] = await this.connector.query("SELECT room_id FROM accessable_rooms WHERE user_id = ? AND deleted_at IS NULL",[user_id]);
-        if(rows.length > 0){
-            return rows[0].room_id;
-        }
-        throw new Exception("指定されたユーザーのルームIDは存在しません。");
-    }
-
 }
 export default UserRepository;

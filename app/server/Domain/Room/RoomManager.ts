@@ -80,5 +80,9 @@ class RoomManager {
         return await this.repository.getAccessableRooms(user_id);
     }
 
+    async getInformationRoomId(user_id: string): Promise<string>{
+        return await this.repository.getInformationRoomId(user_id);
+    }
+
 }
 export default new RoomManager();

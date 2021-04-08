@@ -3,6 +3,8 @@ import loginUsersStore from '../../Store/LoginUsersStore';
 import { Client } from 'server/@types/types';
 import User from './User';
 import logger from '../Utility/logger';
+import roomManager from '../Room/RoomManager';
+
 class Service{
 
     private repository: any;
@@ -30,7 +32,7 @@ class Service{
     }
 
     async getInfromationRoomId(user_id: string): Promise<string>{
-        return await this.repository.getInformationRoomId(user_id);
+        return await roomManager.getInformationRoomId(user_id);
     }
 }
 export default new Service();
