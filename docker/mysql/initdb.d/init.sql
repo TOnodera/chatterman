@@ -47,6 +47,13 @@ CREATE TABLE IF NOT EXISTS requests (
     UNIQUE (target_user,request_user)
 );
 
+CREATE TABLE IF NOT EXISTS message_polymorphics(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    massage_id VARCHAR(255) NOT NULL,
+    table_name VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL
+);
+
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '管理システム', 'info@chat-system.com', 'god@father.com', '2021-03-25 01:24:21');
 INSERT INTO `rooms` (`id`, `name`, `room_type`, `creater_id`, `created_at`) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '2021-03-25 01:24:21');
 
@@ -101,6 +108,13 @@ CREATE TABLE IF NOT EXISTS requests (
     created_at DATETIME NOT NULL,
     deleted_at DATETIME,
     UNIQUE (target_user,request_user)
+);
+
+CREATE TABLE IF NOT EXISTS message_polymorphics(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    massage_id VARCHAR(255) NOT NULL,
+    table_name VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL
 );
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`) VALUES ('77f6eb46-4907-4e7e-b93b-5135aaedc3b1', '管理システム', 'info@chat-system.com', 'god@father.com', '2021-03-25 01:24:21');
