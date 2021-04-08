@@ -30,7 +30,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .sidebar-wrapper {
     .menu{
-        padding-top: 50px;
+        padding-top: 70px;
     }
     min-height: 100vh;
     background-color: #fff;

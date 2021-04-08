@@ -1,12 +1,11 @@
 <template>
     <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
-        <div class="container">
+        <div class="">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/">
+                <a class="navbar-item ml-2" href="/">
                     <img
                         src="@/assets/logo.png"
                         alt="ロゴ"
-                        height="32"
                     />
                 </a>
 
@@ -56,8 +55,15 @@ export default defineComponent({
 
 <style lang="scss">
 .navbar {
+    height: auto !important;
     box-shadow: 1px 0px 2px 2px rgba(0, 0, 0, 0.5);
     position: fixed !important;
     width: 100%;
+    .navbar-item{
+        padding: 0;
+        img{
+            height: 50px;
+        }
+    }
 }
 </style>
