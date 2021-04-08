@@ -95,7 +95,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-wrapper {
     height: 100vh;
     display: flex;

@@ -36,8 +36,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dashboard-content{
-    padding-top: 40px !important; 
+    margin-top: 40px !important; 
 }    
 </style>

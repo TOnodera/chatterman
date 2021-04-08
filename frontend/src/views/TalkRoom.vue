@@ -2,22 +2,33 @@
     <div class="talk-input">
         <div class="columns is-centered chat-wrapper">
             <div class="column is-four-fifths">
-                <template v-for="message in messages">
-                    <ChatRight
+                <div v-for="message in messages" :key="message.id">
+
+                    <!--
+                    <MyMessage
                         v-if="message.user_id == this_user.me.user.id"
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
                         :created_at="message.created_at"
                     />
-                    <ChatLeft
+                    <AnotherUserMessage
                         v-else
                         :message="message.message"
                         :user_name="message.user_name"
                         :key="message.message_id"
                         :created_at="message.created_at"
                     />
-                </template>
+                    -->
+
+                    <SystemMessage
+                        :message="message.message"
+                        :user_name="message.user_name"
+                        :key="message.message_id"
+                        :created_at="message.created_at"
+                    />
+
+                </div>
                 <Typing/>
             </div>
         </div>
@@ -26,8 +37,9 @@
 </template>
 
 <script lang="ts">
-import ChatLeft from "../components/ChatLeft.vue";
-import ChatRight from "../components/ChatRight.vue";
+import AnotherUserMessage from "../components/AnotherUserMessage.vue";
+import MyMessage from "../components/MyMessage.vue";
+import SystemMessage from "../components/SystemMessage.vue";
 import InputArea from "../components/InputArea.vue";
 import Typing from "../components/Typing.vue";
 import user from "../Domain/User/User";
@@ -44,8 +56,9 @@ import { defineComponent } from "vue";
 export default defineComponent({
     name: "TalkRoom",
     components: {
-        ChatLeft,
-        ChatRight,
+        AnotherUserMessage,
+        MyMessage,
+        SystemMessage,
         InputArea,
         Typing
     },
