@@ -62,7 +62,8 @@ export default defineComponent({
     .navbar-item{
         padding: 0;
         img{
-            height: 50px;
+            height: 50px !important;
+            max-height: none !important;
         }
     }
 }
