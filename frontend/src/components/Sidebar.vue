@@ -1,8 +1,8 @@
 <template>
-    <div class="sidebar-wrapper ml-3">
+    <div class="sidebar-wrapper ml-3" :class="{'is-hidden': isToggle}">
         <aside class="menu">
             <div class="ml-5 mt-4 touch-info">
-                <div class="is-centered" :class="{'is-hidden': isHidden}">
+                <div class="is-centered" :class="{'is-hidden': isHiddenFlashIcon}">
                     <FlashIcon @click="lookAtInformationRoom"/>
                 </div>
             </div>
@@ -58,6 +58,7 @@ import FlashIcon from './FlashIcon.vue';
 import AcceptRoomsObserver from '../Domain/Room/Observer/AcceptRoomsObserver';
 import NoticeObserver from '../Domain/Notice/Observer/NoticeObserver';
 import swal from '../util/swal';
+import viewStore from '../store/view';
 
 import room from '../Domain/Room/Room';
 
@@ -68,7 +69,8 @@ export default defineComponent({
             me: user.me.user,
             users: [] as User[],
             rooms: [] as any[],
-            isHidden: true
+            isHiddenFlashIcon: true,
+            isToggle: false
         };
     },
     components: {
@@ -117,9 +119,10 @@ export default defineComponent({
         };
         //新規お知らせメッセージ受信時
         NoticeObserver.handler = ()=>{
-            console.log("called");
-            this.isHidden = false;
+            this.isHiddenFlashIcon = false;
         };
+        //サイドバー表示非表示切り替え
+        viewStore.toggle((isToggle: boolean)=>this.isToggle = isToggle);
 
         /**
          * イベント送信

@@ -12,7 +12,7 @@
                 aria-expanded="false"
                 data-target="navbarBasicExample"
                 @click="toggleMenu"
-                :class="{'is-active': isToggleMenu}"
+                :class="{'is-active': isToggle}"
             >
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -31,6 +31,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import FlashIcon from './FlashIcon.vue';
+import viewStore from '../store/view';
+
 export default defineComponent({
     name: "Header",
     components: {
@@ -38,13 +40,12 @@ export default defineComponent({
     },
     data() {
         return {
-            isToggleMenu: false
+            isToggle: false
         };
     },
     methods: {
         toggleMenu() {
-            this.isToggleMenu = !this.isToggleMenu;
-            this.$emit("menu-clicked", this.isToggleMenu);
+            viewStore.toggle((isToggle: boolean)=>this.isToggle = isToggle);
         }
     }
 });

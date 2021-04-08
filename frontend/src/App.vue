@@ -1,10 +1,10 @@
 <template>
     <div class="app-wrapper">
         <div class="app-header">
-            <Header @menu-clicked="menuClicked" />
+            <Header/>
         </div>
         <div class="app-contents">
-            <router-view :isMenuClicked="isClicked" />
+            <router-view/>
         </div>
         <div class="app-footer">
             <Footer />
@@ -12,36 +12,24 @@
     </div>
 </template>
 
-<script>
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+<script lang="ts">
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 import { launchAtAppUped } from './Domain/Listener';
 import { emitAtAppUped } from './Domain/InitEmitter';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     Header,
     Footer
   },
-  data () {
-    return {
-      isClicked: false
-    };
-  },
-  methods: {
-    menuClicked (isClicked) {
-      this.isClicked = isClicked;
-    }
-  },
   mounted() {
     emitAtAppUped();//アプリ起動時に送信するイベント
     launchAtAppUped();//アプリ起動時に起動するリスナ
-  },
-  unmounted() {
-    
-  },
-};
+  }
+});
 </script>
 
 <style lang="scss" scoped>
