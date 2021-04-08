@@ -1,11 +1,11 @@
 import User from "../User/User";
 import { SendMessageToClient } from "server/@types/types";
 import UserFactory from "../User/UserFactory";
-import MessageRegister from "../Message/MessageRegister";
-import MessageFactory from "../Message/MessageFactory";
+import MessageRegister from "./MessageRegister";
+import MessageFactory from "./MessageFactory";
 import { transaction } from '../Utility/Connection';
 
-class MessageManager {
+class MessageService {
 
     async add(strMessage: string, user_id: string, room_id: string): Promise<SendMessageToClient> {
 
@@ -34,4 +34,4 @@ class MessageManager {
 
     }
 }
-export default new MessageManager();
+export default new MessageService();

@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io';
-import MessageController from '../Controller/MessasgeController';
 import Config from '../../config';
+import MessageManager from '../Message/MessageManager';
 
-class NotifyManager extends MessageController{
+class NotifyManager extends MessageManager{
 
     constructor(socket: Socket){
         super(socket);
