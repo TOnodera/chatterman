@@ -1,7 +1,7 @@
 import loginManager from "../User/LoginManager";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
-import { ApproveOptions, MessageOptions, UserBasicInfo } from "server/@types/types";
+import { MessageOptions, UserBasicInfo } from "server/@types/types";
 import apply from '../Apply/Apply';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
