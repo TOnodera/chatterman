@@ -9,12 +9,6 @@ class Apply {
         }
         socketStore.socket.emit('user:apply-directmessage',target_user,basicInfo);
     }
-    hasRequest() {
-
-    }
-    alreadyRequests(){
-
-    }
     async showApplyForm(target_user: string,basicInfo: UserBasicInfo) {
         /**
          * 申請処理
