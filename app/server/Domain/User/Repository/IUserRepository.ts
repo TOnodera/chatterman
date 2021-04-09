@@ -1,7 +1,7 @@
-import User from './User';
-import Message from '../Message/Message';
+import User from '../User';
+import Message from '../../Message/Message';
 import { Client } from 'server/@types/types';
-import UserRegister from './UserRegister';
+import UserRegister from '../UserRegister';
 interface IUserRepository{
     registe(user: UserRegister): Promise<boolean>;
     thisEmailIsAlreadyUsed(email: string): Promise<boolean>;

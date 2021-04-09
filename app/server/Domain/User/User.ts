@@ -1,5 +1,5 @@
 import Datetime from '../Utility/Datetime';
-import IUserRepository from './IUserRepository';
+import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import Message from '../Message/Message';
 import roomManager from '../Room/RoomManager';

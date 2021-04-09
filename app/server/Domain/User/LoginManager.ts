@@ -1,5 +1,5 @@
 import ILoginManager from "./ILoginManager";
-import IUserRepository from "./IUserRepository";
+import IUserRepository from "./Repository/IUserRepository";
 import UserRepositoryFactory from "./Factory/UserRepositoryFactory";
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from "./User";

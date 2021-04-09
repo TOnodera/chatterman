@@ -1,4 +1,4 @@
-import IUserRepository from './IUserRepository';
+import IUserRepository from './Repository/IUserRepository';
 import User from './User';
 import Bcrypt from '../Utility/Bcrypt';
 import Message from '../Message/Message';
