@@ -114,6 +114,8 @@ export default defineComponent({
                 room.attemptToEnter(room_id, user.me.user);
                 //お知らせルームかチェック
                 this.isNoticeRoom = room_id == user.me.information_room;
+                console.log(`room_id:${room_id},information_room: ${user.me.information_room}`);
+                console.log(room_id == user.me.information_room);
             }
         }
     },

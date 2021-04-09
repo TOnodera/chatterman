@@ -33,9 +33,21 @@ interface SendMessageToClient{
     user_id: string,
     user_name: string,
     message_id: string,
+    approve_option?: ApproveOptions,
     message: string,
     created_at: string
 }
+
+//メッセージの付加オプション
+interface MessageOptions{
+    polimorphic_table: string,
+    polimorphic_id: string | number
+}
+
+interface ApproveOptions extends MessageOptions{
+    user_id: string
+}
+
 
 interface Client{
     id: string,
@@ -56,5 +68,5 @@ interface RoomInfo{
 }
 
 interface RoomType{
-    Type: 'talkroom' | 'directmessage' 
+    Type: 'talkroom' | 'directmessage' | 'information' 
 }

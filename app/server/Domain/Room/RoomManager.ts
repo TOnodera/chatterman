@@ -47,7 +47,7 @@ class RoomManager {
     }
 
     async createInformationRoom(user_id:string): Promise<boolean>{
-        const roomType: RoomType = {Type: 'talkroom'};
+        const roomType: RoomType = {Type: 'information'};
         const room: Room = await this.createRoom(this.INFORMATION_ROOM_NAME, user_id,roomType);
         const result = await this.addAccessableRooms(user_id, room.id) && this.addAccessableRooms(this.SUPER_USER,room.id);
         return result;
@@ -59,6 +59,10 @@ class RoomManager {
 
     async getTalkRooms(user_id: string): Promise<RoomInfo[]> {
         return await this.repository.getTalkRooms(user_id);
+    }
+
+    async getInformationRoom(user_id: string): Promise<RoomInfo[]> {
+        return await this.repository.getInformationRoom(user_id);
     }
 
     join(room_id: string,socket: Socket){
