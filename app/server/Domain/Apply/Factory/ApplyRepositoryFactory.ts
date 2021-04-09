@@ -1,5 +1,5 @@
-import {mySqlConnector} from '../Utility/Connection';
-import ApplyRepository from './ApplyRepository';
+import {mySqlConnector} from '../../Utility/Connection';
+import ApplyRepository from '../Repository/ApplyRepository';
 
 class ApplyRepositoryFactory{
     static create(){

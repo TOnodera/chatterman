@@ -1,4 +1,4 @@
-import factory from './ApplyRepositoryFactory';
+import factory from './Factory/ApplyRepositoryFactory';
 import userService from '../User/Service';
 
 class Apply{
