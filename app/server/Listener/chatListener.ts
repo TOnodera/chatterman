@@ -39,7 +39,6 @@ module.exports = (socket: Socket) => {
     };
 
     const moreMessages = (room_id: string, message_id: string) => {
-        console.log('moreMessages');
         messageController.moreMessages(room_id, message_id);
     }
 

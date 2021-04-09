@@ -23,9 +23,6 @@ export default {
         messages: {
             type: Array
         }
-    },
-    mounted() {
-        console.log(this.messages);
-    },
+    }
 };
 </script>

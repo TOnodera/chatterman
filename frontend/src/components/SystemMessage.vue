@@ -3,7 +3,7 @@
         <div class="system-message">
             <div>
                 <p class="system-comment has-text-white has-background-info">{{message}}</p>
-                <ApprovalButtons apply_id="test" user_id="test"/> 
+                <ApprovalButtons :unique_id="options.unique_id" v-if="options.unique_id"/> 
                 <p class="user-info is-size-7">
                     <span>{{user_name}}</span>
                     <span>{{created_at}}</span>
@@ -35,6 +35,9 @@ export default defineComponent({
     },
     components: {
         ApprovalButtons
+    },
+    mounted(){
+        console.log("options:",this.options);
     }
 });
 </script>

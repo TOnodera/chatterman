@@ -33,21 +33,10 @@ interface SendMessageToClient{
     user_id: string,
     user_name: string,
     message_id: string,
-    approve_option?: ApproveOptions,
+    options?: Options,
     message: string,
     created_at: string
 }
-
-//メッセージの付加オプション
-interface MessageOptions{
-    polymorphic_table: 'requests',//ポリモーフィック関連でテーブル名を受け付けるので設定されている以外の値が代入されないようにする
-    polymorphic_id: string | number
-}
-
-interface ApproveOptions extends MessageOptions{
-    user_id: string
-}
-
 
 interface Client{
     id: string,
@@ -69,4 +58,19 @@ interface RoomInfo{
 
 interface RoomType{
     Type: 'talkroom' | 'directmessage' | 'information' 
+}
+
+interface Options{
+    unique_id: string
+}
+
+interface ApproveOptions extends Options{
+    user_id: string
+}
+
+//データ登録時に使用
+//メッセージの付加オプション
+interface MessageOptions{
+    polymorphic_table: 'requests',//ポリモーフィック関連でテーブル名を受け付けるので設定されている以外の値が代入されないようにする
+    polymorphic_id: string | number
 }

@@ -1,3 +1,5 @@
+import Exception from "../../Exception/Exception";
+
 class ApplyRepository{
 
     private connector: any;
@@ -29,6 +31,14 @@ class ApplyRepository{
     async hasAccepted(target_id: string,user_id: string): Promise<boolean>{
         const [rows]: any[] = await this.connector.query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? AND deleted_at IS NULL ', [user_id,target_id]);        
         return rows.length > 0;
+    }
+
+    async getUserId(apply_id: string): Promise<string>{
+        const [rows]: any[] = await this.connector.query("SELECT request_user FROM requests WHERE id = ?",[apply_id]);
+        if(rows.length > 0){
+            return rows[0].request_user;
+        }        
+        throw new Exception("DM申請テーブル（requests）で申請IDに紐づくユーザーIDが取得出来ませんでした。想定されない処理です。");
     }
 
 }

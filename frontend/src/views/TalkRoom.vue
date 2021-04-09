@@ -45,7 +45,7 @@ export default defineComponent({
     },
     data() {
         return {
-            messages: [] as any[],
+            messages: [] as FromServerMessage[],
             this_user: user,
             isNoticeRoom: false
         };

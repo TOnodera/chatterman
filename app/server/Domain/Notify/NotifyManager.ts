@@ -1,3 +1,4 @@
+import { MessageOptions } from 'server/@types/types';
 import { Socket } from 'socket.io';
 import Config from '../../config';
 import MessageManager from '../Message/MessageManager';
@@ -8,7 +9,7 @@ class NotifyManager extends MessageManager {
         super(socket);
     }
 
-    async sendNoticeMessage(message: string, room_id: string, options: any = {}) {
+    async sendNoticeMessage(message: string, room_id: string, options?: MessageOptions) {
         await this.add(message, Config.system.superuser, room_id, options);
     }
 }

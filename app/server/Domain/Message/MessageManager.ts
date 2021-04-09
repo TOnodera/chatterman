@@ -1,10 +1,11 @@
 import messages from '../Message/Messages';
 import { Socket } from "socket.io";
-import { MessageOptions, SendMessageToClient } from "server/@types/types";
+import { ApproveOptions, MessageOptions, SendMessageToClient } from "server/@types/types";
 import logger from "../Utility/logger";
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
 import { transaction } from '../Utility/Connection';
+import Exception from '../Exception/Exception';
 
 class MessageManager {
 
@@ -72,6 +73,10 @@ class MessageManager {
 
         logger.info(`2/2 MessageManager.getLatest() -> 送信完了 room_id: ${room_id}, socket_id: ${this.socket.id}`);
 
+    }
+
+    async getMessageOptionFromPolymorphicId(polymorphic_id: string): Promise<ApproveOptions>{
+        throw new Exception();
     }
 
 }

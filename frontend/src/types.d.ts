@@ -44,17 +44,12 @@ interface FromServerMessage{
     user_id: string,
     user_name: string,
     message_id: string,
-    approve_option?: ApproveOptions,//認証メッセージの場合は付いてくる
     message: string,
-    created_at: string
+    created_at: string,
+    options?: Options
 }
 
 //メッセージに付いてくる可能性のある付加オプション
-interface MessageOptions{
-    polimorphic_table: string,
+interface Options{
     polimorphic_id: string | number
-}
-
-interface ApproveOptions extends MessageOptions{
-    user_id: string
 }

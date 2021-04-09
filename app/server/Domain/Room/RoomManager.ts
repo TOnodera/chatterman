@@ -71,7 +71,6 @@ class RoomManager {
 
     async joinUser(user: User,socket: Socket){
         for(let room_id of await user.accessAbleRooms()){
-            logger.warn(room_id);
             this.join(room_id,socket);
         }
     }

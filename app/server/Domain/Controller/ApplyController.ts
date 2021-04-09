@@ -1,7 +1,7 @@
 import loginManager from "../User/LoginManager";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
-import { ApproveOptions, UserBasicInfo } from "server/@types/types";
+import { ApproveOptions, MessageOptions, UserBasicInfo } from "server/@types/types";
 import apply from '../Apply/Apply';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
@@ -46,7 +46,7 @@ class ApplyController {
 
             const apply_id: string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
-            const approveOptions: ApproveOptions = { polymorphic_table: 'requests',polymorphic_id: apply_id ,user_id: info.user.id };
+            const approveOptions: MessageOptions = { polymorphic_table: 'requests',polymorphic_id: apply_id };
             //送信テキスト生成
             const messageTxt = applyService.makeMessage(info.user.name, apply_id, info.user.id);
 

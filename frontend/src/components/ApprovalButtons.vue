@@ -10,11 +10,8 @@ import swal from '../util/swal';
 export default {
     name: 'ApprovalButtons',
     props: {
-        apply_id: {
+        unique_id: {
             required: true, type: Number
-        },
-        user_id: {
-            required: true, type: String
         }
     },
     methods: {
