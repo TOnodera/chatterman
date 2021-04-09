@@ -29,7 +29,11 @@ class Message {
         this.store.clear();
     }
 
-    send(message: string, me: User, room_id: string) {
+    send(message: string, me: User, room_id: string,isNoticeRoom: boolean) {
+        if(isNoticeRoom){
+            swal.error("このルームにメッセージを送信することは出来ません。");
+            return;
+        }
         if(this.validate(message,me,room_id) == false){
             return;
         }
