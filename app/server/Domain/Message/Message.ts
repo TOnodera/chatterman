@@ -37,5 +37,6 @@ class Message {
         }
         return await this.repository.delete(this.message_id);
     }
+    
 }
 export default Message;

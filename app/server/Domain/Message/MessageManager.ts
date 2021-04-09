@@ -23,7 +23,7 @@ class MessageManager {
 
         if(options){
             //ポリモーフィック関連テーブルに登録する
-            
+            await MessageService.addPolymorphic(toClient.message_id,options);
         }
 
         this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient, options);

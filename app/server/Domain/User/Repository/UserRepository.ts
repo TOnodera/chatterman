@@ -6,12 +6,12 @@ import AuthenticationException from '../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
 import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
-import Exception from '../../Exception/Exception';
 import Config from '../../../config';
+import { Pool } from 'mysql2/promise';
 
 class UserRepository implements IUserRepository {
 
-    private connector: any;
+    private connector: Pool;
 
     constructor(connector: any) {
         this.connector = connector;

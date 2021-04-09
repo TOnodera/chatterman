@@ -6,13 +6,14 @@ import UserFactory from '../../User/Factory/UserFactory';
 import User from '../../User/User';
 import MessageRegister from '../MessageRegister';
 import MessageFactory from '../Factory/MessageFactory';
+import { Pool } from 'mysql2/promise';
 
 class MessageRepository implements IMessageRepository {
 
     private connector;
     private nums: number;
     
-    constructor(connector: any) {
+    constructor(connector: Pool) {
         this.connector = connector;
         this.nums = 20;
     }
@@ -87,7 +88,7 @@ class MessageRepository implements IMessageRepository {
     }
 
     async save(message: Message): Promise<boolean> {
-        const [result] = await this.connector.query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
+        const [result]: any[] = await this.connector.query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
         return result.affectedRows == 1;
     }
     
