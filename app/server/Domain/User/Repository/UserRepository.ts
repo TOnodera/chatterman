@@ -1,13 +1,13 @@
-import IUserRepository from './Repository/IUserRepository';
-import User from './User';
-import Bcrypt from '../Utility/Bcrypt';
-import Message from '../Message/Message';
-import AuthenticationException from '../Exception/AuthenticationException';
-import UserRegister from './UserRegister';
-import UserFactory from './UserFactory';
-import DomainException from '../Exception/DomainException';
-import Exception from '../Exception/Exception';
-import Config from '../../config';
+import IUserRepository from './IUserRepository';
+import User from '../User';
+import Bcrypt from '../../Utility/Bcrypt';
+import Message from '../../Message/Message';
+import AuthenticationException from '../../Exception/AuthenticationException';
+import UserRegister from '../UserRegister';
+import UserFactory from '../UserFactory';
+import DomainException from '../../Exception/DomainException';
+import Exception from '../../Exception/Exception';
+import Config from '../../../config';
 
 class UserRepository implements IUserRepository {
 

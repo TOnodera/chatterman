@@ -1,5 +1,5 @@
 import IUserRepository from '../Repository/IUserRepository';
-import UserRepository from '../UserRepository';
+import UserRepository from '../Repository/UserRepository';
 import { mySqlConnector } from '../../Utility/Connection';
 class UserRepositoryFactory{
     static create(): IUserRepository{
