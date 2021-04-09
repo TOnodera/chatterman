@@ -1,11 +1,11 @@
 import IMessageRepository from './IMessageRepository';
-import Message from './Message';
-import Exception from '../Exception/Exception';
-import Datetime from '../Utility/Datetime';
-import UserFactory from '../User/UserFactory';
-import User from '../User/User';
-import MessageRegister from './MessageRegister';
-import MessageFactory from './MessageFactory';
+import Message from '../Message';
+import Exception from '../../Exception/Exception';
+import Datetime from '../../Utility/Datetime';
+import UserFactory from '../../User/UserFactory';
+import User from '../../User/User';
+import MessageRegister from '../MessageRegister';
+import MessageFactory from '../Factory/MessageFactory';
 
 class MessageRepository implements IMessageRepository {
 

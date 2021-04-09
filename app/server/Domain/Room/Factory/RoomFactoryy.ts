@@ -1,7 +1,7 @@
-import Exception from '../Exception/Exception';
-import Datetime from '../Utility/Datetime';
-import Room from './Room';
-import repository from './RoomRepository';
+import Exception from '../../Exception/Exception';
+import Datetime from '../../Utility/Datetime';
+import Room from '../Room';
+import repository from '../Repository/RoomRepository';
 
 class RoomFactory {
     static async create(id: string): Promise<Room>{

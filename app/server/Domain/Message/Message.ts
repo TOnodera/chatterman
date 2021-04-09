@@ -2,8 +2,8 @@ import AuthenticationException from "../Exception/AuthenticationException";
 import Exception from "../Exception/Exception";
 import User from "../User/User";
 import Datetime from "../Utility/Datetime";
-import IMessageRepository from './IMessageRepository';
-import MessageRepositoryFactory from './MessageRepositoryFactory';
+import IMessageRepository from './Repository/IMessageRepository';
+import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 
 class Message {
 

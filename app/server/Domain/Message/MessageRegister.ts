@@ -2,8 +2,8 @@ import uuid from "node-uuid";
 import AuthenticationException from "../Exception/AuthenticationException";
 import Exception from "../Exception/Exception";
 import User from "../User/User";
-import IMessageRepository from './IMessageRepository';
-import MessageRepositoryFactory from './MessageRepositoryFactory';
+import IMessageRepository from './Repository/IMessageRepository';
+import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 
 class MessageRegister{
 

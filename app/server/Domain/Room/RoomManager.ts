@@ -4,9 +4,9 @@ import User from '../User/User';
 import UserFactory from '../User/UserFactory';
 import logger from '../Utility/logger';
 import Room from './Room';
-import RoomFactory from './RoomFactoryy';
+import RoomFactory from './Factory/RoomFactoryy';
 import RoomRegister from './RoomRegister';
-import repository from './RoomRepository';
+import repository from './Repository/RoomRepository';
 import config from '../../config';
 
 class RoomManager {

@@ -1,12 +1,11 @@
-import { RoomInfo, RoomType } from 'server/@types/types';
-import Exception from '../Exception/Exception';
-import {mySqlConnector} from '../Utility/Connection';
-import logger from '../Utility/logger';
-import Room from './Room';
-import RoomRegister from './RoomRegister';
+import { Pool } from 'mysql2/promise';
+import { RoomInfo } from 'server/@types/types';
+import Exception from '../../Exception/Exception';
+import {mySqlConnector} from '../../Utility/Connection';
+import RoomRegister from '../RoomRegister';
 class RoomRepository{
 
-    private connector: any;
+    private connector: Pool;
 
     constructor(){
         this.connector = mySqlConnector;

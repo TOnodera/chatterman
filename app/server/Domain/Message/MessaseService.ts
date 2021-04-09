@@ -2,7 +2,7 @@ import User from "../User/User";
 import { SendMessageToClient } from "server/@types/types";
 import UserFactory from "../User/UserFactory";
 import MessageRegister from "./MessageRegister";
-import MessageFactory from "./MessageFactory";
+import MessageFactory from "./Factory/MessageFactory";
 import { transaction } from '../Utility/Connection';
 
 class MessageService {
