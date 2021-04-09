@@ -1,4 +1,4 @@
-import UserRepositoryFactory from './UserRepositoryFactory';
+import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import { Client } from 'server/@types/types';
 import User from './User';

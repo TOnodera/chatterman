@@ -1,6 +1,6 @@
 import ILoginManager from "./ILoginManager";
 import IUserRepository from "./IUserRepository";
-import UserRepositoryFactory from "./UserRepositoryFactory";
+import UserRepositoryFactory from "./Factory/UserRepositoryFactory";
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from "./User";
 import AuthenticationException from "../Exception/AuthenticationException";

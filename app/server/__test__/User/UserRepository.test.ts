@@ -1,7 +1,7 @@
 import User from '../../Domain/User/User';
 import { mySqlConnector } from '../../Domain/Utility/Connection';
 import IUserRepository from '../../Domain/User/IUserRepository';
-import UserRepositoryFactory from '../../Domain/User/UserRepositoryFactory';
+import UserRepositoryFactory from '../../Domain/User/Factory/UserRepositoryFactory';
 import AuthenticationException from '../../Domain/Exception/AuthenticationException';
 require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
 

@@ -1,5 +1,5 @@
 import uuid from 'node-uuid';
-import UserRepositoryFactory from './UserRepositoryFactory';
+import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
 import Exception from '../Exception/Exception';
