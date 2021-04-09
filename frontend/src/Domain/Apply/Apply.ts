@@ -2,6 +2,7 @@ import swal from '../../util/swal';
 import socketStore from '../Socket';
 
 class Apply {
+
     apply(target_user: string,basicInfo: UserBasicInfo){
         if(!target_user || !basicInfo.credentials.email || !basicInfo.credentials.password){
             swal.error('不正なリクエストが行われました。');
@@ -9,6 +10,7 @@ class Apply {
         }
         socketStore.socket.emit('user:apply-directmessage',target_user,basicInfo);
     }
+
     async showApplyForm(target_user: string,basicInfo: UserBasicInfo) {
         /**
          * 申請処理
