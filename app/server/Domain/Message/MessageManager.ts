@@ -4,6 +4,7 @@ import { MessageOptions, SendMessageToClient } from "server/@types/types";
 import logger from "../Utility/logger";
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
+import { transaction } from '../Utility/Connection';
 
 class MessageManager {
 
@@ -15,16 +16,22 @@ class MessageManager {
         this.messageEventEmitter = new MessageEventEmitter(socket);
     }
 
-    async add(message: string, user_id: string, room_id: string, options?:MessageOptions) {
+    async add(message: string, user_id: string, room_id: string, options?: MessageOptions) {
 
         logger.info(`1/2 MessageManager.add -> 送信処理開始:user_id->${user_id},socket_id:${this.socket.id}`);
 
-        const toClient: SendMessageToClient = await MessageService.add(message, user_id, room_id);
+        const [toClient]: SendMessageToClient[] = await transaction(async ():Promise<SendMessageToClient[]> => {
 
-        if(options){
-            //ポリモーフィック関連テーブルに登録する
-            await MessageService.addPolymorphic(toClient.message_id,options);
-        }
+            const toClient: SendMessageToClient = await MessageService.add(message, user_id, room_id);
+
+            if (options) {
+                //ポリモーフィック関連テーブルに登録する
+                await MessageService.addPolymorphic(toClient.message_id, options);
+            }
+
+            return [toClient];
+
+        });
 
         this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient, options);
         this.messageEventEmitter.sendUserSendMessageEvent(toClient, options);
