@@ -16,7 +16,7 @@ export default {
     },
     methods: {
         approve(){
-            swal.success("承認しました。");
+            
         },
         deny(){
             swal.warning("申請を拒否しました。");
