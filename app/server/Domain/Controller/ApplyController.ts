@@ -1,7 +1,7 @@
 import loginManager from "../User/LoginManager";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
-import { UserBasicInfo } from "server/@types/types";
+import { ApproveOptions, UserBasicInfo } from "server/@types/types";
 import apply from '../Apply/Apply';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
@@ -46,12 +46,12 @@ class ApplyController {
 
             const apply_id: string = await apply.apply(target_id, info.user.id);
             const information_room = await apply.getUserinformationRoomId(target_id);
-            const metaData = { apply_id: apply, user_id: info.user.id };
+            const approveOptions: ApproveOptions = { polimorphic_table: 'requests',polimorphic_id: apply_id ,user_id: info.user.id };
             //送信テキスト生成
             const messageTxt = applyService.makeMessage(info.user.name, apply_id, info.user.id);
 
             //相手のお知らせルームにメッセージを送信
-            await this.notifyManager.sendNoticeMessage(messageTxt, information_room, metaData);
+            await this.notifyManager.sendNoticeMessage(messageTxt, information_room, approveOptions);
             //相手に新規お知らせの通知イベント発行
             this.applyEventEmitter.sendNewNotice(information_room);
 

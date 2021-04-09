@@ -40,7 +40,7 @@ interface SendMessageToClient{
 
 //メッセージの付加オプション
 interface MessageOptions{
-    polimorphic_table: string,
+    polimorphic_table: 'requests',//ポリモーフィック関連でテーブル名を受け付けるので設定されている以外の値が代入されないようにする
     polimorphic_id: string | number
 }
 
