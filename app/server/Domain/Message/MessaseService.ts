@@ -6,9 +6,18 @@ import MessageFactory from "./Factory/MessageFactory";
 import { transaction } from '../Utility/Connection';
 import MessageOptionsRepositoryFactory from './Factory/MessageOptionsRepositoryFactory';
 import IMessageOptionsRepository from "./Repository/IMessageOptionsRepository";
+import Datetime from "../Utility/Datetime";
+import Message from "./Message";
 
 class MessageService {
 
+    /**
+     * 
+     * @param strMessage 
+     * @param user_id 
+     * @param room_id 
+     * メッセージ登録
+     */
     async add(strMessage: string, user_id: string, room_id: string): Promise<SendMessageToClient> {
 
         const [result]: SendMessageToClient[] = await transaction(async () => {
@@ -26,18 +35,31 @@ class MessageService {
                 message: strMessage,
                 created_at: registered.created_at.get()
             };
-
             return [toClient];
-        
         });
-
         return result;
 
     }
 
-    async addPolymorphic(message_id: string,options: MessageOptions): Promise<boolean>{
-        const reposiotry:IMessageOptionsRepository = MessageOptionsRepositoryFactory.create();
-        return reposiotry.add(message_id,options);
+    /**
+     * 
+     * @param message_id 
+     * @param options 
+     * メッセージに付加情報を付けて送る場合はここで付加情報を保存する
+     */
+    async addPolymorphic(message_id: string, options: MessageOptions): Promise<boolean> {
+        const reposiotry: IMessageOptionsRepository = MessageOptionsRepositoryFactory.create();
+        return reposiotry.add(message_id, options);
+    }
+
+    /**
+     * 
+     * @param message_id 
+     * 登録日時を取得
+     */
+    async getCreatedAt(message_id: string): Promise<Datetime> {
+        const message: Message = await MessageFactory.create(message_id);
+        return message.created_at;
     }
 }
 export default new MessageService();

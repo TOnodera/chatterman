@@ -1,12 +1,16 @@
 import messages from '../Message/Messages';
 import { Socket } from "socket.io";
-import { ApproveOptions, MessageOptions, SendMessageToClient } from "server/@types/types";
+import { MessageOptions, SendMessageToClient } from "server/@types/types";
 import logger from "../Utility/logger";
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
 import { transaction } from '../Utility/Connection';
-import Exception from '../Exception/Exception';
 
+/**
+ * メッセージ管理クラス
+ * 外部パッケージから使う場合はこのマネージャーを呼び出して使う
+ * サービスとか直接触らない
+ */
 class MessageManager {
 
     private socket: Socket;
@@ -56,10 +60,10 @@ class MessageManager {
     async moreMessages(room_id: string, message_id: string) {
 
         logger.info(`1/2 MessageManager.moreMessages() -> 追加メッセージ送信要求 room_id: ${room_id}, message_id: ${message_id},socket_id: ${this.socket.id}`);
-
         const response: SendMessageToClient[] = await messages.more(room_id, message_id);
-        this.messageEventEmitter.sendSendMessagesDataEvent(response);
-
+        if(response.length > 0){
+            this.messageEventEmitter.sendSendMessagesDataEvent(response);
+        }
         logger.info(`2/2 MessageManager.moreMessages() -> 送信完了 room_id: ${room_id}, message_id: ${message_id},socket_id: ${this.socket.id}`);
 
     }

@@ -24,17 +24,19 @@ class MessageRepository implements IMessageRepository {
         return [];
     }
 
-    async getCreatedAt(message_id: string): Promise<Datetime> {
-        const message: Message = await MessageFactory.create(message_id);
-        return message.created_at;
-    }
-
     async roomIncludeMessage(room_id: string, message_id: string): Promise<boolean> {
         const message: Message = await MessageFactory.create(message_id);
         return message.room_id == room_id;
     }
 
-    async more(room_id: string, message_id: string, nums: number): Promise<Message[]> {
+    async more(room_id: string, created_at: Datetime, nums: number): Promise<any[]> {
+
+        const [rows]: any[] = await this.connector.query('SELECT id FROM messages WHERE room_id = ? AND deleted_at IS NULL AND created_at < ? ORDER BY created_at DESC LIMIT ? ', [room_id, created_at.get(), nums]);
+        if (rows.length > 0) {
+            return rows;
+        }
+        return [];
+        /*
         if (await this.roomIncludeMessage(room_id, message_id) == false) {
             throw new Exception(`指定されたルームに${message_id}のメッセージは存在しません。`);
         }
@@ -50,6 +52,7 @@ class MessageRepository implements IMessageRepository {
         } else {
             return [];
         }
+        */
     }
 
     async add(message: MessageRegister): Promise<boolean> {
