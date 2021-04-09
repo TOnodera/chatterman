@@ -2,6 +2,7 @@ import swal from '../../util/swal';
 import socketStore from '../Socket';
 
 class Apply {
+
     apply(target_user: string,basicInfo: UserBasicInfo){
         if(!target_user || !basicInfo.credentials.email || !basicInfo.credentials.password){
             swal.error('不正なリクエストが行われました。');
@@ -9,29 +10,13 @@ class Apply {
         }
         socketStore.socket.emit('user:apply-directmessage',target_user,basicInfo);
     }
-    hasRequest() {
 
-    }
-    alreadyRequests(){
-
-    }
     async showApplyForm(target_user: string,basicInfo: UserBasicInfo) {
-
-        /*
-        //リクエストが無いか確認
-        if(this.hasRequest()){
-            //ある場合は承認画面を表示
-            showApproveFrom();
-            return;
-        }
-        
-        //申請済みか確認
-        if(this.alreadyRequests()){
-            swal.info('申請済みです。承認されるまでお待ち下さい。');
-        }
-        */
-
-        //未申請の場合は申請
+        /**
+         * 申請処理
+         * 受付・申請済・受信中などの処理はサーバー側で判断してメッセージ通知
+         * イベントハンドラでそれぞれの処理を実装する
+         */
         if(await this.applyForm()){
             this.apply(target_user,basicInfo);
         }

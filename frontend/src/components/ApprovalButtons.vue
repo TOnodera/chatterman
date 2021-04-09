@@ -7,18 +7,25 @@
 
 <script>
 import swal from '../util/swal';
+import reaction from '../Domain/Apply/Reaction';
+
 export default {
     name: 'ApprovalButtons',
     props: {
         unique_id: {
             required: true, type: Number
+        },
+        user_id: {
+            required: true, type: String
         }
     },
     methods: {
         approve(){
-            swal.success("承認しました。");
+            reaction.approve(this.unique_id,this.user_id);
+            swal.success("許可しました。");
         },
         deny(){
+            reaction.deny(this.unique_id,this.user_id);
             swal.warning("申請を拒否しました。");
         }
     },
