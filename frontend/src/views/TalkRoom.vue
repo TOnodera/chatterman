@@ -52,7 +52,7 @@ export default defineComponent({
     },
     methods: {
         send(msg: string) {
-            message.send(msg, user.me.user, room.current);
+            message.send(msg, user.me.user, room.current,this.isNoticeRoom);
         },
         typing() {
             message.typing(user.me.user, room.current);
