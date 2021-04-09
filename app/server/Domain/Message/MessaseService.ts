@@ -1,6 +1,6 @@
 import User from "../User/User";
 import { SendMessageToClient } from "server/@types/types";
-import UserFactory from "../User/UserFactory";
+import UserFactory from "../User/Factory/UserFactory";
 import MessageRegister from "./MessageRegister";
 import MessageFactory from "./Factory/MessageFactory";
 import { transaction } from '../Utility/Connection';

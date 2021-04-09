@@ -1,7 +1,7 @@
 import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
 import { Socket } from 'socket.io';
 import User from '../User/User';
-import UserFactory from '../User/UserFactory';
+import UserFactory from '../User/Factory/UserFactory';
 import logger from '../Utility/logger';
 import Room from './Room';
 import RoomFactory from './Factory/RoomFactoryy';

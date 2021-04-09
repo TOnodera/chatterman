@@ -4,7 +4,7 @@ import Bcrypt from '../../Utility/Bcrypt';
 import Message from '../../Message/Message';
 import AuthenticationException from '../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
-import UserFactory from '../UserFactory';
+import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
 import Exception from '../../Exception/Exception';
 import Config from '../../../config';

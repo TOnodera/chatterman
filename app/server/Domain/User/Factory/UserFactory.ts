@@ -1,5 +1,5 @@
-import User from "./User";
-import repositoryFactory from './Factory/UserRepositoryFactory';
+import User from "../User";
+import repositoryFactory from './UserRepositoryFactory';
 class UserFactory{
     static async create(id: string): Promise<User>{
         const repository = repositoryFactory.create();
