@@ -35,9 +35,6 @@ export default defineComponent({
     },
     components: {
         ApprovalButtons
-    },
-    mounted(){
-        console.log("options:",this.options);
     }
 });
 </script>
