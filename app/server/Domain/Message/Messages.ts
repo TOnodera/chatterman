@@ -2,6 +2,7 @@ import { SendMessageToClient } from 'server/@types/types';
 import IMessageRepository from './Repository/IMessageRepository';
 import Message from './Message';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
+import MessageFactory from './Factory/MessageFactory';
 
 class Messages{
 
@@ -12,9 +13,23 @@ class Messages{
         this.repository = MessageRepositoryFactory.create();
     }
 
+    /**
+     * 
+     * @param rows message_idの配列
+     */
     async latest(room_id: string): Promise<SendMessageToClient[]> {
-        const result = await this.repository.latest(room_id,this.nums);
-        return this.toClient(result); 
+
+        const rows: any[] = await this.repository.latest(room_id,this.nums);
+        if (rows.length > 0) {
+            const messages: Message[] = [];
+            for (let row of rows) {
+                const  message: Message = await MessageFactory.create(row.id);
+                messages.push(message);                    
+            }
+            return this.toClient(messages); 
+        }
+        return [];        
+
     }
 
     /**

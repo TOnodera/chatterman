@@ -69,14 +69,12 @@ class MessageManager {
         logger.info(`1/2 MessageManager.getLatest() -> 新規メッセージ送信要求 room_id: ${room_id}, socket_id: ${this.socket.id}`);
 
         const response: SendMessageToClient[] = await messages.latest(room_id);
-        this.messageEventEmitter.sendSendLatestMessagesEvent(response);
+        if(response.length > 0){
+            this.messageEventEmitter.sendSendLatestMessagesEvent(response);
+        }
 
         logger.info(`2/2 MessageManager.getLatest() -> 送信完了 room_id: ${room_id}, socket_id: ${this.socket.id}`);
 
-    }
-
-    async getMessageOptionFromPolymorphicId(polymorphic_id: string): Promise<ApproveOptions>{
-        throw new Exception();
     }
 
 }

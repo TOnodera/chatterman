@@ -28,7 +28,7 @@ class MessageFactory {
             new Datetime(result.created_at),
             options
         );
-        
+
     }
 }
 
