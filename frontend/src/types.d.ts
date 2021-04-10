@@ -1,3 +1,7 @@
+/**
+ * いまサーバー側とフロントで定義ファイル別れてるのでやり方調べて統一する
+ */
+
 interface Me{
     user: User,
     credentials: Credentials,
@@ -53,3 +57,8 @@ interface FromServerMessage{
 interface Options{
     polimorphic_id: string | number
 }
+
+const APPLY_REACTIONS = {
+    approve: 1,
+    deny: 2
+} as const;
