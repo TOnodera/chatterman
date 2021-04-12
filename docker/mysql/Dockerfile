@@ -1,4 +1,8 @@
 FROM mysql:5.7
-RUN usermod -o -u 1000 mysql && \ 
-    groupmod -o -g 1000 mysql && \
+
+ARG HOST_USER_ID
+ARG HOST_GROUP_ID
+
+RUN usermod -o -u ${HOST_USER_ID} mysql && \ 
+    groupmod -o -g ${HOST_GROUP_ID} mysql && \
     chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql
