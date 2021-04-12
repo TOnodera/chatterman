@@ -57,8 +57,3 @@ interface FromServerMessage{
 interface Options{
     polimorphic_id: string | number
 }
-
-const APPLY_REACTIONS = {
-    approve: 1,
-    deny: 2
-} as const;
