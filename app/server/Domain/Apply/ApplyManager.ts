@@ -8,6 +8,7 @@ import { transaction } from '../Utility/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
+import Message from "../Message/Message";
 
 class ApplyManager{
 
@@ -46,14 +47,14 @@ class ApplyManager{
 
             const [information_room]: any[] = await transaction(async ()=>{
 
-                const options: MessageOptions = await applyService.registeApplication(target_id,info.user.id);
+                const polymorphic_id: number = await applyService.registeApplication(target_id,info.user.id);
                 const information_room = await roomManager.getInformationRoomId(target_id);
                 //送信テキスト生成
-                const messageTxt = applyService.makeMessage(info.user.name, options.unique_id, info.user.id);
-                //相手のお知らせルームにメッセージを送信
-                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, options);
-
-                logger.debug(messageTxt,info,information_room,options);
+                const messageTxt = applyService.makeMessage(info.user.name);
+                //相手のお知らせルームにメッセージを登録
+                const messageOption: MessageOptions = {polymorphic_table: PolymorphicTables.requests,polymorphic_id: polymorphic_id};
+                logger.debug(messageOption);
+                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
 
                 return [information_room];
             });
