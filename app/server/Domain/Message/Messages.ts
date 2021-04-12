@@ -4,6 +4,7 @@ import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import MessageFactory from './Factory/MessageFactory';
 import Datetime from '../Utility/Datetime';
 import messageService from './MessaseService';
+import logger from '../Utility/logger';
 
 class Messages{
 
@@ -25,9 +26,9 @@ class Messages{
             const messages: Message[] = [];
             for (let row of rows) {
                 const  message: Message = await MessageFactory.create(row.id);
-                messages.push(message);                    
+                messages.push(message);
             }
-            return this.toClient(messages); 
+            return messageService.toClient(messages); 
         }
         return [];        
 
@@ -53,33 +54,10 @@ class Messages{
                 const message: Message = await MessageFactory.create(row.id);
                 messages.push(message);
             }
-            return await this.toClient(messages);
+            return await messageService.toClient(messages);
         } 
         return [];
         
-    }
-
-    /**
-     * 
-     * @param messages 
-     * メッセージオブジェクトにはUserオブジェクトが含まれていてbroadcast配信する必要のないデータがある。
-     * 送信に必要なデータだけここでピックアップして送る。
-     */
-    toClient(messages: Message[]): SendMessageToClient[]{
-        let toClient: SendMessageToClient[] = [];
-        for(let message of messages){
-            const client: SendMessageToClient = {
-                room_id: message.room_id,
-                user_id: message.user.id,
-                user_name: message.user.name,
-                message_id: message.message_id,
-                message: message.message,
-                created_at: message.created_at.get(),
-                options: message.options
-            };
-            toClient.push(client);
-        }
-        return toClient;
     }
 
 }
