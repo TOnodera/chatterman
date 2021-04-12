@@ -33,5 +33,9 @@ class Service{
     async getInfromationRoomId(user_id: string): Promise<string>{
         return await roomManager.getInformationRoomId(user_id);
     }
+
+    async getUserById(user_id: string): Promise<User>{
+        return await this.repository.getUserById(user_id);
+    }
 }
 export default new Service();
