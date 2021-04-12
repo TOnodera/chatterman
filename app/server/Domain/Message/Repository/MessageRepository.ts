@@ -36,23 +36,6 @@ class MessageRepository implements IMessageRepository {
             return rows;
         }
         return [];
-        /*
-        if (await this.roomIncludeMessage(room_id, message_id) == false) {
-            throw new Exception(`指定されたルームに${message_id}のメッセージは存在しません。`);
-        }
-        const created_at = await this.getCreatedAt(message_id);
-        const [rows]: any[] = await this.connector.query('SELECT id FROM messages WHERE room_id = ? AND deleted_at IS NULL AND created_at < ? ORDER BY created_at DESC LIMIT ? ', [room_id, created_at.get(), nums]);
-        if (rows.length > 0) {
-            const messages: Message[] = [];
-            for (let row of rows) {
-                const message: Message = await MessageFactory.create(row.id);
-                messages.push(message);
-            }
-            return messages.reverse();
-        } else {
-            return [];
-        }
-        */
     }
 
     async add(message: MessageRegister): Promise<boolean> {
@@ -66,7 +49,7 @@ class MessageRepository implements IMessageRepository {
     }
 
     async get(message_id: string): Promise<any> {
-        const [rows]: any[] = await this.connector.query('SELECT messages.*,message_polymorphics.id as unique_id FROM messages LEFT JOIN message_polymorphics ON message_polymorphics.message_id = messages.id WHERE messages.id = ? LIMIT 1', [message_id]);
+        const [rows]: any[] = await this.connector.query('SELECT messages.*,message_polymorphics.unique_id as unique_id FROM messages LEFT JOIN message_polymorphics ON message_polymorphics.message_id = messages.id WHERE messages.id = ? LIMIT 1', [message_id]);
         if (rows.length > 0) {
             return rows[0];
         }
