@@ -58,7 +58,7 @@ interface RoomType{
 }
 
 interface Options{
-    unique_id: string
+    unique_id: number
 }
 
 interface ApproveOptions extends Options{
@@ -69,7 +69,7 @@ interface ApproveOptions extends Options{
 //メッセージの付加オプション
 interface MessageOptions{
     polymorphic_table: 'requests',//ポリモーフィック関連でテーブル名を受け付けるので設定されている以外の値が代入されないようにする
-    unique_id: number
+    polymorphic_id: number
 }
 
 type ApplyReactionType = typeof APPLY_REACTION;
