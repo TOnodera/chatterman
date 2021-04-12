@@ -1,4 +1,5 @@
 import { Pool } from "mysql2/promise";
+import { APPLY_REACTION, APPLY_SENDER_NOTICE, PolymorphicTables } from "../../../enum/enum";
 import logger from "../../../Domain/Utility/logger";
 import Exception from "../../Exception/Exception";
 
@@ -34,8 +35,9 @@ class ApplyRepository{
         throw new Exception("DM申請テーブル（requests）で申請IDに紐づくユーザーIDが取得出来ませんでした。想定されない処理です。");
     }
 
+    //TODO polymorphicテーブル管理するクラス作って経由するようにしたほうがいい
     async registeApplyReaction(unique_id: string, reaction: number): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT message_id,polymorphic_table as table FROM message_polymorphics WHERE id = ? ',[unique_id]);
+        const [rows]: any[] = await this.connector.query('SELECT message_id,polymorphic_table as table FROM message_polymorphics WHERE unique_id = ? ',[unique_id]);
         const message_id = rows[0].message_id;
         if(rows.length == 1 && rows[0].table == PolymorphicTables.requests) {
             const [result]: any[] = await this.connector.query('UPDATE requests SET is_accept = ? WHERE message_id = ? ',[reaction,message_id]);
@@ -45,7 +47,7 @@ class ApplyRepository{
     }
 
     async isThePerson(unique_id: string, user_id: string): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM message_polymorphics WHERE id = ? ',[unique_id]);
+        const [rows]: any[] = await this.connector.query('SELECT * FROM message_polymorphics WHERE unique_id = ? ',[unique_id]);
         const message_id = rows[0].message_id;
         
         if(rows.length == 1 && rows[0].table == PolymorphicTables.requests){
