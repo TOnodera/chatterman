@@ -1,15 +1,17 @@
 <template>
     <div class="buttons mb-0 mt-2">
-        <button class="button is-success is-light" @click="approve">承認</button>
-        <button class="button is-danger is-light" @click="deny">拒否</button>
+        <button class="button is-success is-light" @click="reaction(APPLY_REACTIONS.APPROVE)">承認</button>
+        <button class="button is-danger is-light" @click="reaction(APPLY_REACTIONS.DENY)">拒否</button>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import reactionDomain from '../Domain/Apply/Reaction';
+import { APPLY_REACTIONS } from '../Enum';
+import { defineComponent } from 'vue';
 import swal from '../util/swal';
-import reaction from '../Domain/Apply/Reaction';
 
-export default {
+export default defineComponent({
     name: 'ApprovalButtons',
     props: {
         unique_id: {
@@ -19,18 +21,20 @@ export default {
             required: true, type: String
         }
     },
+    data(){
+        return {
+            APPLY_REACTIONS: APPLY_REACTIONS
+        };
+    },
     methods: {
-        approve(){
-            reaction.approve(this.unique_id,this.user_id);
-            swal.success("許可しました。");
-        },
-        deny(){
-            reaction.deny(this.unique_id,this.user_id);
-            swal.warning("申請を拒否しました。");
+        reaction(reaction: APPLY_REACTIONS){
+            reactionDomain.send(this.unique_id,this.user_id,reaction);
+            if(reaction == APPLY_REACTIONS.APPROVE){
+                swal.success("承認しました。");
+            }else{
+                swal.warning("拒否しました。");
+            }
         }
-    },
-    mounted() {
-        console.log(this.user_id);
-    },
-};
+    }
+});
 </script>
