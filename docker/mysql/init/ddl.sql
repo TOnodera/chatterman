@@ -47,8 +47,9 @@ CREATE TABLE IF NOT EXISTS requests (
 );
 
 CREATE TABLE IF NOT EXISTS message_polymorphics(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    massage_id VARCHAR(255) NOT NULL,
-    table_name VARCHAR(255) NOT NULL,
+    unique_id INT AUTO_INCREMENT PRIMARY KEY,
+    message_id VARCHAR(255) NOT NULL,
+    polymorphic_id VARCHAR(255) NOT NULL,
+    polymorphic_table VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL
 );
