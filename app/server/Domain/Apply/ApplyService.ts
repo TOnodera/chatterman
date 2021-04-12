@@ -1,8 +1,7 @@
 import ApplyRepositoryFactory from './Factory/ApplyRepositoryFactory';
 import ApplyRepository from './Repository/ApplyRepository';
 import apply from './Apply';
-import Message from '../Message/Message';
-import logger from '../Utility/logger';
+import { APPLY_REACTION } from '../../enum/enum';
 
 class ApplyService{
 
@@ -38,6 +37,12 @@ class ApplyService{
 
     async isThePerson(unique_id: string,user_id: string): Promise<boolean>{
         return await this.repository.isThePerson(unique_id,user_id);
+    }
+
+    messageTxt(name: string,reaction: APPLY_REACTION){
+        return reaction == APPLY_REACTION.IS_ACCEPT_ARROW
+        ? `${name}さんへのDM申請が許可されました。`
+        : `${name}さんへのDM申請が拒否されました。`;
     }
 }
 
