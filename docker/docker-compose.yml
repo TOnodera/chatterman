@@ -34,6 +34,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       SYSTEM_USER: ${SYSTEM_USER}
+      ARROWED_CORS: ${ARROWED_CORS}
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
