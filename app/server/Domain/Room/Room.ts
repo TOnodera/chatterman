@@ -1,4 +1,3 @@
-import { RoomType } from 'server/@types/types';
 import Datetime from '../Utility/Datetime';
 class Room {
 

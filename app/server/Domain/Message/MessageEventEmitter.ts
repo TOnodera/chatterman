@@ -1,4 +1,3 @@
-import { SendMessageToClient } from "server/@types/types";
 import { Socket } from "socket.io";
 
 class MessageEventEmitter {

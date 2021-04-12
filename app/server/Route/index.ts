@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import UserController from "../Domain/Controller/UserController";
 import HttpExceptionHandler from "../Domain/Exception/HttpExceptionHandler";
-import { UserRegisteInfo } from "server/@types/types";
 import logger from "../Domain/Utility/logger";
 
 const route = (app: any)=>{

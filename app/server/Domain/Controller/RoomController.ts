@@ -1,4 +1,3 @@
-import { RoomAndUserId, RoomInfo, RoomType } from 'server/@types/types';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/RoomEventEmitter';

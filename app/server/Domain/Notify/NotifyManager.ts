@@ -1,4 +1,3 @@
-import { MessageOptions } from 'server/@types/types';
 import { Socket } from 'socket.io';
 import Config from '../../config';
 import MessageManager from '../Message/MessageManager';

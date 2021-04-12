@@ -1,4 +1,3 @@
-import { SendMessageToClient } from 'server/@types/types';
 import IMessageRepository from './Repository/IMessageRepository';
 import Message from './Message';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';

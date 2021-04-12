@@ -1,4 +1,3 @@
-import { Options } from 'server/@types/types';
 import UserFactory from '../../User/Factory/UserFactory';
 import User from '../../User/User';
 import Datetime from '../../Utility/Datetime';

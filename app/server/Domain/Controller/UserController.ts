@@ -3,7 +3,6 @@ import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import roomManager from "../Room/RoomManager";
 import userService from '../User/Service';
-import { AfterLoginInfo, Client, RoomType, UserRegisteInfo } from "server/@types/types";
 import UserRegister from "../User/UserRegister";
 import { transaction } from '../Utility/Connection';
 import User from '../User/User';

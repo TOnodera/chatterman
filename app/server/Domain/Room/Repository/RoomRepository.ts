@@ -1,5 +1,4 @@
 import { Pool } from 'mysql2/promise';
-import { RoomInfo } from 'server/@types/types';
 import Exception from '../../Exception/Exception';
 import {mySqlConnector} from '../../Utility/Connection';
 import RoomRegister from '../RoomRegister';

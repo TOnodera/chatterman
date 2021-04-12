@@ -9,20 +9,8 @@ class Apply{
         this.repository = factory.create();
     }
 
-    async apply(target_id: string,user_id: string): Promise<string>{
+    async apply(target_id: string,user_id: string): Promise<number>{
         return await this.repository.apply(target_id,user_id);
-    }
-
-    async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{
-        return await this.repository.hasAlreadyRequested(target_id,user_id);
-    }
-
-    async hasAccepted(target_id: string,user_id: string): Promise<boolean>{
-        return await this.repository.hasAccepted(target_id,user_id);
-    }
-
-    async getUserinformationRoomId(user_id: string): Promise<string>{
-        return await userService.getInfromationRoomId(user_id);
     }
 
 }

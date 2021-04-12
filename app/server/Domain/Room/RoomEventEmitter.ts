@@ -1,4 +1,3 @@
-import { RoomInfo } from "server/@types/types";
 import { Socket } from "socket.io";
 
 class RoomEventEmitter{

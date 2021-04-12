@@ -1,5 +1,4 @@
 import uuid from 'node-uuid';
-import { RoomType } from 'server/@types/types';
 import repository from './Repository/RoomRepository';
 class RoomRegister {
 

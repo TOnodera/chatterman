@@ -1,4 +1,3 @@
-import { ApproveOptions, MessageOptions } from "server/@types/types";
 import ApplyRepositoryFactory from "../Apply/Factory/ApplyRepositoryFactory";
 import ApplyRepository from "../Apply/Repository/ApplyRepository";
 import Exception from "../Exception/Exception";

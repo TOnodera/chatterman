@@ -1,14 +1,16 @@
 export default {
     mysql: {
-        host: "mysql",
-        database: 'chater',
-        user: "root",
-        password: "password"
+        host: 'mysql',
+        database: process.env.MYSQL_DATABASE,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD
     },
+    /*
     mysql_test: {
-        host: "mysql",
-        database: 'chater_test',
-        user: "root",
-        password: "password"
-    }
+        host: 'mysql_test',
+        database: process.env.MYSQL_DATABASE,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD
+    },
+    */
 }

@@ -1,6 +1,5 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import loginUsersStore from '../../Store/LoginUsersStore';
-import { Client } from 'server/@types/types';
 import User from './User';
 import logger from '../Utility/logger';
 import roomManager from '../Room/RoomManager';

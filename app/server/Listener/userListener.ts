@@ -1,7 +1,6 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import { RoomType, UserBasicInfo } from "server/@types/types";
 import ApplyController from "../Domain/Controller/ApplyController";
 
 module.exports =  (socket: Socket) => {

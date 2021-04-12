@@ -1,5 +1,3 @@
-
-import { MessageOptions } from "server/@types/types";
 import IMessageOptionsRepository from "./IMessageOptionsRepository";
 import { Pool } from "mysql2/promise";
 import Exception from "../../Exception/Exception";

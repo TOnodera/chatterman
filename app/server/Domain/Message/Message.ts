@@ -4,7 +4,6 @@ import User from "../User/User";
 import Datetime from "../Utility/Datetime";
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
-import { Options } from "server/@types/types";
 
 class Message {
 

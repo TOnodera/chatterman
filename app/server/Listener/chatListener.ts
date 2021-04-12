@@ -1,4 +1,3 @@
-import { RoomAndUserId } from "server/@types/types";
 import logger from "../Domain/Utility/logger";
 import { Socket } from "socket.io";
 import MessageController from '../Domain/Controller/MessasgeController';
