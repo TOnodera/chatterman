@@ -63,7 +63,6 @@ class RoomController {
 
         logger.info(`1/2 トークルーム取得処理開始: user_id: ${user_id},socket_id: ${this.socket.id}`);
         try {
-
             //トークルームとお知らせルームを取得
             const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user_id);
             const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user_id);

@@ -2,6 +2,7 @@ import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
 import ApplyController from "../Domain/Controller/ApplyController";
+import logger from "../Domain/Utility/logger";
 
 module.exports =  (socket: Socket) => {
 
@@ -36,6 +37,7 @@ module.exports =  (socket: Socket) => {
 
     //ダイレクトメッセージの許可申請
     const applyDirectMessage = async (target_id: string,basicInfo: UserBasicInfo) => {
+      logger.debug("listen 1");
       applyController.apply(target_id,basicInfo);
     };
 

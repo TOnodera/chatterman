@@ -45,7 +45,7 @@ class ApplyRepository{
     async isThePerson(unique_id: string, user_id: string): Promise<boolean> {
         const [row]: any[] = await this.connector.query('SELECT * FROM message_polymorphics WHERE id = ? ',[unique_id]);
         const message_id = row.message_id;
-        const options: MessageOptions = {polymorphic_table: row.polymorphic_table,polymorphic_id: row.polymorphic_id};
+        const options: MessageOptions = {polymorphic_table: row.polymorphic_table,unique_id: row.unique_id};
         
         if(row.length == 1){
             const [rows]: any[] = await this.connector.query(`SELECT * FROM  ${options.polymorphic_table} WHERE message_id = ? AND user_id = ?`,[message_id,user_id]);

@@ -18,10 +18,13 @@ class RoomManager {
     }
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
+        logger.info("入場　試行");
         const user: User = await UserFactory.create(info.user_id);
         if (await user.isAccessable(info.room_id)) {
+            logger.info("入場　成功",user.name);
             return true;
         }
+        logger.info("入場　拒否");
         return false;
     }
 

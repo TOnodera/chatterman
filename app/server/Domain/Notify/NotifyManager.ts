@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import Config from '../../config';
 import MessageManager from '../Message/MessageManager';
+import logger from '../Utility/logger';
 
 class NotifyManager extends MessageManager {
 
@@ -9,8 +10,10 @@ class NotifyManager extends MessageManager {
     }
 
     async sendNoticeMessage(message: string, room_id: string, options?: MessageOptions) {
+        logger.debug("オプション",options);
         await this.add(message, Config.system.superuser, room_id, options);
     }
+    
 }
 
 export default NotifyManager;

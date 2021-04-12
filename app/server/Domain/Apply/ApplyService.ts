@@ -12,11 +12,9 @@ class ApplyService{
         this.repository = ApplyRepositoryFactory.create();        
     }
 
-    makeMessage(name: string,polymorphic_id: number,request_user: string){
+    makeMessage(name: string,unique_id: number,request_user: string){
         return `
             ${name}さんからダイレクトメッセージの許可申請が届きました。
-            リンクをクリックして申請を処理して下さい。
-            ${Config.system.baseUrl}/api/applys/${polymorphic_id}/${request_user}
         `;
     }
 
@@ -30,7 +28,7 @@ class ApplyService{
 
     async registeApplication(target_id: string,user_id: string): Promise<MessageOptions>{
         const apply_id: number = await apply.apply(target_id, user_id);
-        const options: MessageOptions = { polymorphic_table: 'requests',polymorphic_id: apply_id };
+        const options: MessageOptions = { polymorphic_table: 'requests',unique_id: apply_id };
         return options;
     }
 

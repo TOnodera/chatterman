@@ -42,17 +42,24 @@ class ApplyManager{
                 return;
             }
 
+            logger.debug("申請送信処理開始");
+
             const [information_room]: any[] = await transaction(async ()=>{
 
                 const options: MessageOptions = await applyService.registeApplication(target_id,info.user.id);
                 const information_room = await roomManager.getInformationRoomId(target_id);
                 //送信テキスト生成
-                const messageTxt = applyService.makeMessage(info.user.name, options.polymorphic_id, info.user.id);
+                const messageTxt = applyService.makeMessage(info.user.name, options.unique_id, info.user.id);
                 //相手のお知らせルームにメッセージを送信
                 await this.notifyManager.sendNoticeMessage(messageTxt, information_room, options);
 
+                logger.debug(messageTxt,info,information_room,options);
+
                 return [information_room];
             });
+
+            logger.debug("申請送信処理終了");
+
 
             //相手に新規お知らせの通知イベント発行
             this.applyEventEmitter.sendNewNotice(information_room);
