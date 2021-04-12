@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import logger from "../Utility/logger";
 
 class MessageEventEmitter {
 
@@ -8,11 +9,12 @@ class MessageEventEmitter {
         this.socket = socket;
     }
 
-    broadcastUserSendMessageEvent(room_id: string, toClient: SendMessageToClient, options: any = {}) {
+    broadcastUserSendMessageEvent(room_id: string, toClient: SendMessageToClient, options?: ApproveOptions) {
         this.socket.to(room_id).emit('broadcast:user-send-message', toClient, options);
     }
 
-    sendUserSendMessageEvent(toClient: SendMessageToClient, options: any = {}) {
+    sendUserSendMessageEvent(toClient: SendMessageToClient, options?: ApproveOptions) {
+        logger.debug(options);
         this.socket.emit('broadcast:user-send-message', toClient, options);
     }
 
