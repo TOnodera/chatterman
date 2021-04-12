@@ -4,6 +4,7 @@ import logger from "../Utility/logger";
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
 import { transaction } from '../Utility/Connection';
+import Message from './Message';
 
 /**
  * メッセージ管理クラス
@@ -24,21 +25,29 @@ class MessageManager {
 
         logger.info(`1/2 MessageManager.add -> 送信処理開始:user_id->${user_id},socket_id:${this.socket.id}`);
 
-        const [toClient]: SendMessageToClient[] = await transaction(async ():Promise<SendMessageToClient[]> => {
+        const [toClient]: SendMessageToClient[] = await transaction(async (): Promise<SendMessageToClient[]> => {
 
-            const toClient: SendMessageToClient = await MessageService.add(message, user_id, room_id);
+            const message_id: string = await MessageService.add(message, user_id, room_id);
 
             if (options) {
+                logger.debug(message_id,"add()");
                 //ポリモーフィック関連テーブルに登録する
-                await MessageService.addPolymorphic(toClient.message_id, options);
+                await MessageService.addPolymorphic(message_id, options);
             }
 
-            return [toClient];
+            //データ取得して返す
+            const registeredNow:Message = await MessageService.get(message_id);
+            const toClient: SendMessageToClient[] = await MessageService.toClient([registeredNow]);
+
+            return toClient;
 
         });
 
-        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient, options);
-        this.messageEventEmitter.sendUserSendMessageEvent(toClient, options);
+
+        logger.debug("add:2",toClient);
+        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);
+        this.messageEventEmitter.sendUserSendMessageEvent(toClient);
+
 
         logger.info(`2/2 MessageManager.add -> 送信処理完了:user_id->${user_id},socket_id:${this.socket.id}`);
 
@@ -60,7 +69,7 @@ class MessageManager {
 
         logger.info(`1/2 MessageManager.moreMessages() -> 追加メッセージ送信要求 room_id: ${room_id}, message_id: ${message_id},socket_id: ${this.socket.id}`);
         const response: SendMessageToClient[] = await messages.more(room_id, message_id);
-        if(response.length > 0){
+        if (response.length > 0) {
             this.messageEventEmitter.sendSendMessagesDataEvent(response);
         }
         logger.info(`2/2 MessageManager.moreMessages() -> 送信完了 room_id: ${room_id}, message_id: ${message_id},socket_id: ${this.socket.id}`);
@@ -72,7 +81,7 @@ class MessageManager {
         logger.info(`1/2 MessageManager.getLatest() -> 新規メッセージ送信要求 room_id: ${room_id}, socket_id: ${this.socket.id}`);
 
         const response: SendMessageToClient[] = await messages.latest(room_id);
-        if(response.length > 0){
+        if (response.length > 0) {
             this.messageEventEmitter.sendSendLatestMessagesEvent(response);
         }
 
