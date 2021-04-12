@@ -15,8 +15,8 @@ class MessageOptionsRepository implements IMessageOptionsRepository{
         return rows.affectedRows == 1;
     }
 
-    async get(unique_id: string): Promise<MessageOptions>{
-        const [rows]: any[] = await this.connector.query("SELECT * FROM message_polymorphics WHERE id = ?",[unique_id]);
+    async get(unique_id: number): Promise<MessageOptions>{
+        const [rows]: any[] = await this.connector.query("SELECT * FROM message_polymorphics WHERE unique_id = ?",[unique_id]);
         if(rows.length > 0){
             const result = rows[0];
             return {polymorphic_table: result.polymorphic_table,polymorphic_id: result.polymorphic_id} as  MessageOptions;
