@@ -22,6 +22,7 @@ SQLTXT
 
 SQL=$DDL_SQL$DML_SQL
 
+echo -n > ../initdb.d/init.sql;
 echo $SQL >> ../initdb.d/init.sql
 
 
