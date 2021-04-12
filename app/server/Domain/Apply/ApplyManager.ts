@@ -8,7 +8,6 @@ import { transaction } from '../Utility/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
-import Message from "../Message/Message";
 
 class ApplyManager{
 
@@ -85,6 +84,7 @@ class ApplyManager{
         if(await applyService.isThePerson(unique_id,user_id) == false){
             throw new Exception('unique_idに紐づくuser_idが送られてきたuser_idと一致しません。不正アクセスの可能性があります。');
         }
+        logger.debug("in reaction:",unique_id,user_id,reaction);
         switch(reaction){
             case APPLY_REACTION.IS_ACCEPT_ARROW:
             case APPLY_REACTION.IS_ACCEPT_DENY:

@@ -14,7 +14,6 @@ class ApplyController {
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
-        console.log("listen 2: apply controller");
         await this.applyManager.apply(target_id,info);        
     }
 
