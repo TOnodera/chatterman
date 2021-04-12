@@ -1,7 +1,6 @@
 import ApplyRepositoryFactory from "../Apply/Factory/ApplyRepositoryFactory";
 import ApplyRepository from "../Apply/Repository/ApplyRepository";
 import Exception from "../Exception/Exception";
-import logger from "../Utility/logger";
 import MessageOptionsRepositoryFactory from "./Factory/MessageOptionsRepositoryFactory";
 import MessageOptionsRepository from "./Repository/MessageOptionsRepository";
 

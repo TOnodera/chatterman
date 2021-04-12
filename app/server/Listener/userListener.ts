@@ -35,11 +35,7 @@ module.exports =  (socket: Socket) => {
       await roomController.getTalkRooms(user_id);
     };
 
-    //ダイレクトメッセージの許可申請
-    const applyDirectMessage = async (target_id: string,basicInfo: UserBasicInfo) => {
-      logger.debug("listen 1");
-      applyController.apply(target_id,basicInfo);
-    };
+    
 
     //ハンドラ登録
     socket.on('user:after-login', afterLogin);
@@ -47,6 +43,5 @@ module.exports =  (socket: Socket) => {
     socket.on('user:create-room',createRoom);
     socket.on('user:require-members',requireUsers);
     socket.on('user:require-rooms',requireRooms);
-    socket.on('user:apply-directmessage',applyDirectMessage);
 
 }
