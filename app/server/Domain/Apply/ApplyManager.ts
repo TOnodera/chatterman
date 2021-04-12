@@ -8,6 +8,9 @@ import { transaction } from '../Utility/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
+import userManager from "../User/UserManager";
+import { APPLY_REACTION, PolymorphicTables } from "../../enum/enum";
+import User from "../User/User";
 
 class ApplyManager{
 
@@ -93,6 +96,11 @@ class ApplyManager{
             default:
                 throw new Exception("到達不能なコード");
         }
+        //申請者にメッセージ送信
+        const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(user_id);
+        const user: User = await userManager.getUserById(user_id);
+        const message: string = applyService.messageTxt(user.name,reaction);
+        this.notifyManager.sendNoticeMessage(message,roomInfo.id);
     }
 }
 
