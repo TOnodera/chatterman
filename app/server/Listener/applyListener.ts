@@ -15,7 +15,7 @@ module.exports = (socket: Socket) => {
     //申請に対する処理（申請された側の処理受付）
     const applyReaction = async (unique_id: string, user_id: string, reaction: number) => {
         logger.debug(unique_id,user_id,reaction);
-        //await applyController.reaction(unique_id, user_id, reaction);
+        await applyController.reaction(unique_id, user_id, reaction);
     }
 
     socket.on('user:apply-reaction', applyReaction);
