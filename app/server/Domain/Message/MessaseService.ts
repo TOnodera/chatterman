@@ -7,6 +7,7 @@ import MessageOptionsRepositoryFactory from './Factory/MessageOptionsRepositoryF
 import IMessageOptionsRepository from "./Repository/IMessageOptionsRepository";
 import Datetime from "../Utility/Datetime";
 import Message from "./Message";
+import logger from "../Utility/logger";
 
 class MessageService {
 
@@ -17,27 +18,23 @@ class MessageService {
      * @param room_id 
      * メッセージ登録
      */
-    async add(strMessage: string, user_id: string, room_id: string): Promise<SendMessageToClient> {
+    async add(strMessage: string, user_id: string, room_id: string): Promise<string> {
 
-        const [result]: SendMessageToClient[] = await transaction(async () => {
+        const [message_id]: string[] = await transaction(async () => {
 
             const user: User = await UserFactory.create(user_id);
             const message: MessageRegister = new MessageRegister(strMessage, user, room_id);
             const message_id: string = await message.add();
-            const registered = await MessageFactory.create(message_id);
-
-            const toClient: SendMessageToClient = {
-                room_id: room_id,
-                user_id: user_id,
-                user_name: registered.user.name,
-                message_id: registered.message_id,
-                message: strMessage,
-                created_at: registered.created_at.get()
-            };
-            return [toClient];
+            
+            return [message_id];
         });
-        return result;
 
+        return message_id;
+    }
+
+    async get(message_id: string): Promise<Message>{
+        const message: Message = await MessageFactory.create(message_id);
+        return message;
     }
 
     /**
@@ -48,6 +45,7 @@ class MessageService {
      */
     async addPolymorphic(message_id: string, options: MessageOptions): Promise<boolean> {
         const reposiotry: IMessageOptionsRepository = MessageOptionsRepositoryFactory.create();
+        logger.debug("addPolymorphic()",message_id,options);
         return reposiotry.add(message_id, options);
     }
 
@@ -57,8 +55,31 @@ class MessageService {
      * 登録日時を取得
      */
     async getCreatedAt(message_id: string): Promise<Datetime> {
-        const message: Message = await MessageFactory.create(message_id);
+        const message: Message = await this.get(message_id);
         return message.created_at;
+    }
+
+    /**
+     * 
+     * @param messages 
+     * メッセージオブジェクトにはUserオブジェクトが含まれていてbroadcast配信する必要のないデータがある。
+     * 送信に必要なデータだけここでピックアップして送る。
+     */
+    toClient(messages: Message[]): SendMessageToClient[]{
+        let toClient: SendMessageToClient[] = [];
+        for(let message of messages){
+            const client: SendMessageToClient = {
+                room_id: message.room_id,
+                user_id: message.user.id,
+                user_name: message.user.name,
+                message_id: message.message_id,
+                message: message.message,
+                created_at: message.created_at.get(),
+                options: message.options
+            };
+            toClient.push(client);
+        }
+        return toClient;
     }
 }
 export default new MessageService();
