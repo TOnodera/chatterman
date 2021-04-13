@@ -1,17 +1,11 @@
-import { Pool } from "mysql2/promise";
+import { query } from "../../../Utility/Connection/Connection";
 import Exception from "../../../../Domain/Exception/Exception";
 import { PolymorphicTables } from "../../../../enum/enum";
 
 class ApplyPolymorphicRepository{
 
-    private connector: Pool;
-
-    constructor(connector: Pool){
-        this.connector = connector;
-    }
-
     async getRequestUserId(polymorphic_id: number): Promise<string>{
-        const [rows]: any[] = await this.connector.query(`SELECT request_user FROM ${PolymorphicTables.requests} WHERE id = ? `, [polymorphic_id]);
+        const [rows]: any[] = await query(`SELECT request_user FROM ${PolymorphicTables.requests} WHERE id = ? `, [polymorphic_id]);
         if(rows.length > 0){
             return rows[0].request_user;
         }

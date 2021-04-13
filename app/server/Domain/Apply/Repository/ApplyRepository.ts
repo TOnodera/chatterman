@@ -1,34 +1,28 @@
-import { Pool } from "mysql2/promise";
-import { APPLY_REACTION, APPLY_SENDER_NOTICE, PolymorphicTables } from "../../../enum/enum";
+import { APPLY_REACTION, APPLY_SENDER_NOTICE } from "../../../enum/enum";
 import logger from "../../../Domain/Utility/logger";
 import Exception from "../../Exception/Exception";
+import { query } from '../../Utility/Connection/Connection';
 
 class ApplyRepository {
 
-    private connector: Pool;
-
-    constructor(connector: Pool) {
-        this.connector = connector;
-    }
-
     async apply(target_id: string, user_id: string): Promise<string> {
-        const [result]: any[] = await this.connector.query('INSERT INTO requests SET target_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();', [target_id, user_id, APPLY_REACTION.IS_ACCEPT_UNTREATED, APPLY_SENDER_NOTICE.IS_NOTIFIED_YET]);
+        const [result]: any[] = await query('INSERT INTO requests SET target_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();', [target_id, user_id, APPLY_REACTION.IS_ACCEPT_UNTREATED, APPLY_SENDER_NOTICE.IS_NOTIFIED_YET]);
         logger.debug(result.insertId);
         return result.insertId;
     }
 
     async hasAlreadyRequested(target_id: string, user_id: string): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? AND deleted_at IS NULL ', [target_id, user_id]);
+        const [rows]: any[] = await query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? AND deleted_at IS NULL ', [target_id, user_id]);
         return rows.length > 0;
     }
 
     async hasAccepted(target_id: string, user_id: string): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? AND deleted_at IS NULL ', [user_id, target_id]);
+        const [rows]: any[] = await query('SELECT * FROM requests WHERE target_user = ? AND request_user = ? AND deleted_at IS NULL ', [user_id, target_id]);
         return rows.length > 0;
     }
 
     async getUserId(polymorphic_id: number): Promise<string> {
-        const [rows]: any[] = await this.connector.query("SELECT request_user FROM requests WHERE id = ?", [polymorphic_id]);
+        const [rows]: any[] = await query("SELECT request_user FROM requests WHERE id = ?", [polymorphic_id]);
         if (rows.length > 0) {
             return rows[0].request_user;
         }
@@ -36,12 +30,12 @@ class ApplyRepository {
     }
 
     async registeApplyReaction(polymorphicInfo: PolymorphicInfo, reaction: number): Promise<boolean> {
-        const [result]: any[] = await this.connector.query('UPDATE requests SET is_accept = ? WHERE id = ? ', [reaction, polymorphicInfo.polymorphic_id]);
+        const [result]: any[] = await query('UPDATE requests SET is_accept = ? WHERE id = ? ', [reaction, polymorphicInfo.polymorphic_id]);
         return result.affectedRows == 1;
     }
 
     async isThePerson(polymorphicInfo: PolymorphicInfo, user_id: string): Promise<boolean> {
-        const [results]: any[] = await this.connector.query(`SELECT * FROM  requests WHERE request_user = ? AND id = ? `, [user_id, polymorphicInfo.polymorphic_id]);
+        const [results]: any[] = await query(`SELECT * FROM  requests WHERE request_user = ? AND id = ? `, [user_id, polymorphicInfo.polymorphic_id]);
         return results.length == 1;
     }
 

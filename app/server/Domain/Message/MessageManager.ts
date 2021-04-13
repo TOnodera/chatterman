@@ -3,8 +3,9 @@ import { Socket } from "socket.io";
 import logger from "../Utility/logger";
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
-import { transaction } from '../Utility/Connection';
+import { transaction } from '../Utility/Connection/Connection';
 import Message from './Message';
+import Exception from '../Exception/Exception';
 
 /**
  * メッセージ管理クラス
@@ -35,6 +36,10 @@ class MessageManager {
                 await MessageService.addPolymorphic(message_id, options);
             }
 
+            logger.debug("期待する実行順序: 2");
+            //test
+            throw new Exception("ロールバックテスト");
+
             //データ取得して返す
             const registeredNow:Message = await MessageService.get(message_id);
             const toClient: SendMessageToClient[] = await MessageService.toClient([registeredNow]);
@@ -42,7 +47,6 @@ class MessageManager {
             return toClient;
 
         });
-
 
         logger.debug("add:2",toClient);
         this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);

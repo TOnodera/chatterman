@@ -1,5 +1,5 @@
 import User from '../../Domain/User/User';
-import { mySqlConnector } from '../../Domain/Utility/Connection';
+import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import IUserRepository from '../../Domain/User/Repository/IUserRepository';
 import UserRepositoryFactory from '../../Domain/User/Factory/UserRepositoryFactory';
 import AuthenticationException from '../../Domain/Exception/AuthenticationException';

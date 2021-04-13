@@ -1,4 +1,3 @@
-import { Pool } from 'mysql2/typings/mysql';
 import User from '../../User/User';
 import userManager from '../../User/UserManager';
 import ApplyPolymorphicRepositoryFactory from './Factory/ApplyPolymorphicRepositoryFactory';

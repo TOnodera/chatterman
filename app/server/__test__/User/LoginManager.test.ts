@@ -1,4 +1,4 @@
-import { mySqlConnector } from "../../Domain/Utility/Connection";
+import { mySqlConnector } from "../../Domain/Utility/Connection/Connection";
 import LoginManager from "../../Domain/User/LoginManager";
 import User from "../../Domain/User/User";
 

@@ -3,9 +3,9 @@ import User from '../User/User';
 import UserFactory from '../User/Factory/UserFactory';
 import logger from '../Utility/logger';
 import Room from './Room';
-import RoomFactory from './Factory/RoomFactoryy';
+import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
-import repository from './Repository/RoomRepository';
+import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import config from '../../config';
 
 class RoomManager {
@@ -14,7 +14,7 @@ class RoomManager {
     private SUPER_USER = config.system.superuser;
     private repository: any;
     constructor() {
-        this.repository = repository;
+        this.repository = roomRepositoryFactory.create();
     }
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {

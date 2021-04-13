@@ -7,33 +7,27 @@ import UserRegister from '../UserRegister';
 import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
 import Config from '../../../config';
-import { Pool } from 'mysql2/promise';
+import { query } from '../../Utility/Connection/Connection';
 
 class UserRepository implements IUserRepository {
 
-    private connector: Pool;
-
-    constructor(connector: any) {
-        this.connector = connector;
-    }
-
     async registe(user: UserRegister): Promise<boolean> {
-        const [result]: any[] = await this.connector.query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password]);
+        const [result]: any[] = await query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password]);
         return result.affectedRows == 1;
     }
 
     async thisEmailIsAlreadyUsed(email: string): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [email]);
+        const [rows]: any[] = await query('SELECT * FROM users WHERE email = ? ', [email]);
         return rows.length > 0;
     }
 
     async thisNameIsAlreadyUsed(name: string): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE name = ? ', [name]);
+        const [rows]: any[] = await query('SELECT * FROM users WHERE name = ? ', [name]);
         return rows.length > 0;
     }
 
     async getUserByCredentials(credentials: Credentials): Promise<User> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+        const [rows]: any[] = await query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
         if (rows.length > 0 && await Bcrypt.compare(credentials.password, rows[0].password)) {
             return await UserFactory.create(rows[0].id);
         }
@@ -41,7 +35,7 @@ class UserRepository implements IUserRepository {
     }
 
     async credentials(credentials: Credentials): Promise<boolean>{
-        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+        const [rows]: any[] = await query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
         if (rows.length > 0){
             return await Bcrypt.compare(credentials.password, rows[0].password);
         }
@@ -49,12 +43,12 @@ class UserRepository implements IUserRepository {
     }
     
     async hasMessage(message: Message): Promise<boolean> {
-        const [rows] : any[] = await this.connector.query("SELECT * FROM messages WHERE user_id = ? AND id = ?",[message.user?.id,message.message_id]);
+        const [rows] : any[] = await query("SELECT * FROM messages WHERE user_id = ? AND id = ?",[message.user?.id,message.message_id]);
         return rows.length > 0;
     }
 
     async get(user_id: string): Promise<any>{
-        const [rows]: any[] = await this.connector.query('SELECT * FROM users WHERE id = ? ',[user_id]);
+        const [rows]: any[] = await query('SELECT * FROM users WHERE id = ? ',[user_id]);
         if(rows.length > 0){
             const credentials: Credentials = {
                 email: rows[0].email as string,
@@ -71,8 +65,8 @@ class UserRepository implements IUserRepository {
     }
 
     async getMembers(user_id: string): Promise<any[]>{
-        const [users]: any[] = await this.connector.query('SELECT users.id,users.name FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
-        const [accessable_rooms]: any[] = await this.connector.query('SELECT rooms.id,rooms.creater_id FROM rooms JOIN accessable_rooms ON accessable_rooms.room_id = rooms.id AND accessable_rooms.user_id = ? WHERE rooms.room_type = "directmessage" AND rooms.deleted_at IS NULL AND accessable_rooms.deleted_at IS NULL',[user_id]);
+        const [users]: any[] = await query('SELECT users.id,users.name FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
+        const [accessable_rooms]: any[] = await query('SELECT rooms.id,rooms.creater_id FROM rooms JOIN accessable_rooms ON accessable_rooms.room_id = rooms.id AND accessable_rooms.user_id = ? WHERE rooms.room_type = "directmessage" AND rooms.deleted_at IS NULL AND accessable_rooms.deleted_at IS NULL',[user_id]);
         const result: any[] = 
             users.map( (user: any) => {
                 let room_id = null;

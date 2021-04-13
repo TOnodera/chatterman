@@ -4,7 +4,7 @@ import logger from "../Utility/logger";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import applyService from '../Apply/ApplyService';
 import roomManager from '../Room/RoomManager';
-import { transaction } from '../Utility/Connection';
+import { transaction } from '../Utility/Connection/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";

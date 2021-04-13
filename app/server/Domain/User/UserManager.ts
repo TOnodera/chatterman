@@ -1,4 +1,4 @@
-import { transaction } from '../Utility/Connection';
+import { transaction } from '../Utility/Connection/Connection';
 import userService from './Service';
 import UserRegister from './UserRegister';
 import roomManager from '../Room/RoomManager';
