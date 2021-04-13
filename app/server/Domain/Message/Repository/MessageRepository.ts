@@ -49,7 +49,7 @@ class MessageRepository implements IMessageRepository {
     }
 
     async get(message_id: string): Promise<any> {
-        const [rows]: any[] = await this.connector.query('SELECT messages.*,message_polymorphics.unique_id as unique_id FROM messages LEFT JOIN message_polymorphics ON message_polymorphics.message_id = messages.id WHERE messages.id = ? LIMIT 1', [message_id]);
+        const [rows]: any[] = await this.connector.query('SELECT * FROM messages WHERE id = ? LIMIT 1', [message_id]);
         if (rows.length > 0) {
             return rows[0];
         }

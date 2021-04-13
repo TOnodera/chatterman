@@ -1,6 +1,9 @@
 import Exception from "../Exception/Exception";
+import User from "../User/User";
+import logger from "../Utility/logger";
 import PolymorphicRepositoryFactory from "./Factory/PolymorphicRepositoryFactory";
 import PolymorphicRepository from "./Repository/PolymorphicRepository";
+import applyPolymorphicManager from './ApplyPolymorphic/ApplyPolymorphicManager';
 
 /**
  * ポリモーフィック関連テーブル(message_polymorphics)の管理クラス
@@ -14,24 +17,43 @@ class PolymorphicManager{
         this.repository = PolymorphicRepositoryFactory.create();
     }
 
-    async getUniqueId(polymorphic_table: string,polymorphic_id: string): Promise<string>{
-        throw new Exception();
+    async getUniqueId(polymorphicInfo: PolymorphicInfo): Promise<number>{
+        return await this.repository.getUniqueId(polymorphicInfo);
     }
 
-    async getPolymorphicInfo(unique_id: string): Promise<PolymorphicInfo>{
-        throw new Exception();
-    }
-
-    async exists(unique_id: string): Promise<boolean>{
-        throw new Exception();
+    async getPolymorphicInfo(unique_id: number): Promise<PolymorphicInfo>{
+        return await this.repository.getPolymorphicInfo(unique_id);
     }
 
     async save(message_id: string,polymorphicInfo: PolymorphicInfo): Promise<boolean>{
-        throw new Exception();
+        return await this.repository.save(message_id,polymorphicInfo);
     }
 
-    async get(unique_id: string): Promise<PolymorphicInfo>{
-        throw new Exception();
+    async getMessageOptionsByMessageId(message_id: string): Promise<Options | null>{
+        const unique_id: number | null = await this.repository.getUniqueIdByMessageId(message_id);
+        if(unique_id){
+            const option: Options = {
+                unique_id: unique_id
+            };
+            return option;
+        }
+        return null;
+    }
+
+    async getMessageApproveOptionByMessageId(message_id: string): Promise<ApproveOptions | null>{
+
+        const result: Options | null = await this.getMessageOptionsByMessageId(message_id);
+
+        if(result){
+            const polymorphicInfo: PolymorphicInfo = await this.getPolymorphicInfo(result.unique_id);
+            const user: User = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
+            const option: ApproveOptions = {
+                unique_id: result.unique_id,
+                user_id: user.id
+            };
+            return option;
+        }
+        return null;
     }
 }
 export default new PolymorphicManager;
