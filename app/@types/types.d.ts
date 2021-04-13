@@ -49,7 +49,7 @@ interface AfterLoginInfo{
 }
 
 interface RoomInfo{
-    id: string,
+    room_id: string,
     name: string
 }
 
