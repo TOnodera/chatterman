@@ -82,13 +82,19 @@ class RoomManager {
     }
 
     async getAccessableRooms(user_id: string): Promise<string[]>{
-        const rooms = await this.repository.getAccessableRooms(user_id);
-        logger.debug("アクセス可能なルーム：",rooms);
-        return rooms;
+        return await this.repository.getAccessableRooms(user_id);
     }
 
     async getInformationRoomId(user_id: string): Promise<string>{
         return await this.repository.getInformationRoomId(user_id);
+    }
+
+    async getDirectMessageRoom(user1: string,user2: string): Promise<Room | null>{
+        const room_id: string | null = await this.repository.getDirectMessageRoom(user1,user2);
+        if(room_id){
+            return RoomFactory.create(room_id);
+        }
+        return null;
     }
 
 }

@@ -4,39 +4,42 @@ import User from './User';
 import logger from '../Utility/logger';
 import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
+import Room from '../Room/Room';
 
-class Service{
+class Service {
 
     private repository: any;
-    constructor(){
+    constructor() {
         this.repository = UserRepositoryFactory.create();
     }
 
-    async getMembers(user_id: string): Promise<Client[]>{
-        logger.info('1/3 User/Service.getMembers() -> ユーザー情報取得開始');
-        const users: Client[] = await this.repository.getMembers(user_id);
-        logger.info('2/3 User/Service.getMembers() -> ログイン中のユーザー情報取得開始');
-        for(let user of users){
-            if(loginUsersStore.inUsers(user.id)){
-                user.isLogin = true;
-            }else{
-                user.isLogin = false;
-            }
+    async getMembers(my_id: string): Promise<Client[]> {
+        
+        const user_ids: string[] = await this.repository.getMembers();
+
+        const users: Client[] = [];
+        for(const user_id of user_ids){
+            const user: User = await this.getUserById(user_id);
+            const result: Client = {id: user.id, name: user.name };
+            const room: Room | null = await roomManager.getDirectMessageRoom(user.id,my_id);
+            result.room_id = room ? room.id : user.id;
+            result.isLogin = loginUsersStore.inUsers(user.id);
+            users.push(result);
         }
-        logger.info('3/3 User/Service.getMembers() -> return users;');
+
         return users;
     }
 
     //TODO 実装やりなおし
-    async getUserByCredentials(credentials: Credentials): Promise<User>{
+    async getUserByCredentials(credentials: Credentials): Promise<User> {
         return await this.repository.getUserByCredentials(credentials);
     }
 
-    async getInfromationRoomId(user_id: string): Promise<string>{
+    async getInfromationRoomId(user_id: string): Promise<string> {
         return await roomManager.getInformationRoomId(user_id);
     }
 
-    async getUserById(user_id: string): Promise<User>{
+    async getUserById(user_id: string): Promise<User> {
         return await UserFactory.create(user_id);
     }
 }

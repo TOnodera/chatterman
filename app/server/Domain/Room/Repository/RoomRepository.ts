@@ -64,5 +64,13 @@ class RoomRepository{
         throw new Exception("指定されたユーザーのルームIDは存在しません。");
     }
 
+    async getDirectMessageRoom(user1: string,user2: string): Promise<string | null>{
+        const [rows]: any[] = await query("SELECT * FROM accessable_rooms WHERE ( target_user = ? AND request_user = ?) OR ( request_user = ? AND target_user = ?)",[user1,user2,user1,user2]);
+        if(rows.length > 0){
+            return rows[0].room_id;
+        }
+        return null;
+    }
+
 }
 export default RoomRepository;
