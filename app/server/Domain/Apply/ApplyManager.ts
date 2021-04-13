@@ -84,14 +84,20 @@ class ApplyManager{
      * 申請に対するリアクションを処理
      */
     async reaction(unique_id: string,user_id: string,reaction: number){
+
         if(await applyService.isThePerson(unique_id,user_id) == false){
             throw new Exception('unique_idに紐づくuser_idが送られてきたuser_idと一致しません。不正アクセスの可能性があります。');
         }
-        logger.debug("in reaction:",unique_id,user_id,reaction);
+        
         switch(reaction){
             case APPLY_REACTION.IS_ACCEPT_ARROW:
             case APPLY_REACTION.IS_ACCEPT_DENY:
+                //リアクションを登録
                 await applyService.registeApplyReaction(unique_id,reaction);
+                //申請者とのDMに使うルームを受信者側で新規作成
+                //roomManager.createRoom();
+                //申請者が入場できるように許可を設定する
+                //roomManager.addAccessableRooms();
                 break;
             default:
                 throw new Exception("到達不能なコード");
