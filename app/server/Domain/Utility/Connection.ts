@@ -1,5 +1,7 @@
 import { createPool } from 'mysql2/promise';
 import config from '../../config';
+import Datetime from './Datetime';
+import logger from './logger';
 
 const mySqlConnector = createPool(config.database.mysql);
 
@@ -13,6 +15,8 @@ const transaction = async (func: Function): Promise<any[]> => {
 
         let checker: any = null;
 
+        logger.info("トランザクション開始",new Datetime());
+
         (await connection).beginTransaction();
         checker = await func();
 
@@ -22,8 +26,12 @@ const transaction = async (func: Function): Promise<any[]> => {
 
         (await connection).commit();
 
+        logger.info("トランザクション正常終了",new Datetime());
+
+
     }catch(e){
         (await connection).rollback();
+        logger.info("トランザクションエラー発生",new Datetime());
         throw e;
     }
     return response;
