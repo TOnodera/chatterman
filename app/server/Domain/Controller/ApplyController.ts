@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import ApplyManager from "../Apply/ApplyManager";
+import logger from "../Utility/logger";
 
 
 class ApplyController {
@@ -17,7 +18,8 @@ class ApplyController {
         await this.applyManager.apply(target_id,info);        
     }
 
-    async reaction(unique_id: string,user_id: string,reaction: number){
+    async reaction(unique_id: number,user_id: string,reaction: number){
+        logger.debug("リアクションメッセージ受信");
         await this.applyManager.reaction(unique_id,user_id,reaction);
     }
 

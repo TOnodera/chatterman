@@ -49,14 +49,17 @@ class ApplyManager{
 
             const [information_room]: any[] = await transaction(async ()=>{
 
+                logger.debug("申請登録");
                 const polymorphic_id: number = await applyService.registeApplication(target_id,info.user.id);
+
+                logger.debug("お知らせルーム情報取得");
                 const information_room = await roomManager.getInformationRoomId(target_id);
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
-                //相手のお知らせルームにメッセージを登録
+
+                logger.debug("相手のお知らせルームにメッセージ送信");
                 const messageOption: MessageOptions = {polymorphic_table: PolymorphicTables.requests,polymorphic_id: polymorphic_id};
-                logger.debug(messageOption);
-                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
+                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);;
 
                 return [information_room];
             });
@@ -83,17 +86,23 @@ class ApplyManager{
      * @param reaction 
      * 申請に対するリアクションを処理
      */
-    async reaction(unique_id: string,user_id: string,reaction: number){
+    async reaction(unique_id: number,user_id: string,reaction: number){
+
+        logger.debug("reaction() 本人確認開始",unique_id,user_id);
 
         if(await applyService.isThePerson(unique_id,user_id) == false){
             throw new Exception('unique_idに紐づくuser_idが送られてきたuser_idと一致しません。不正アクセスの可能性があります。');
         }
+
+        logger.debug("reaction() 本人確認完了",unique_id);
         
         switch(reaction){
             case APPLY_REACTION.IS_ACCEPT_ARROW:
             case APPLY_REACTION.IS_ACCEPT_DENY:
+                logger.debug("reaction 登録処理開始");
                 //リアクションを登録
                 await applyService.registeApplyReaction(unique_id,reaction);
+                logger.debug("reaction 登録処理完了");
                 //申請者とのDMに使うルームを受信者側で新規作成
                 //roomManager.createRoom();
                 //申請者が入場できるように許可を設定する
