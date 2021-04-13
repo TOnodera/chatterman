@@ -1,4 +1,3 @@
-import Exception from "../Exception/Exception";
 import User from "../User/User";
 import logger from "../Utility/logger";
 import PolymorphicRepositoryFactory from "./Factory/PolymorphicRepositoryFactory";
@@ -54,6 +53,13 @@ class PolymorphicManager{
             return option;
         }
         return null;
+    }
+
+    /**
+     * ./Apply/ApplyPolymorphicManagerのインスタンス取得用
+     */
+    applyManager(){
+        return applyPolymorphicManager;
     }
 }
 export default new PolymorphicManager;

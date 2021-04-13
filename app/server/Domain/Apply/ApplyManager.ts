@@ -9,10 +9,13 @@ import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
 import userManager from "../User/UserManager";
-import { APPLY_REACTION, PolymorphicTables } from "../../enum/enum";
+import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../enum/enum";
 import User from "../User/User";
+import polymorphicManager from '../Polymorphic/PolymorphicManager';
+import uuid from "node-uuid";
+import Room from "../Room/Room";
 
-class ApplyManager{
+class ApplyManager {
 
     private socket: Socket;
     private notifyManager: NotifyManager;
@@ -23,7 +26,7 @@ class ApplyManager{
         this.notifyManager = new NotifyManager(socket);
         this.applyEventEmitter = new ApplyEventEmitter(socket);
     }
-    
+
     async apply(target_id: string, info: UserBasicInfo) {
 
         logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${target_id}, request_user: ${info.credentials.email}`);
@@ -47,10 +50,10 @@ class ApplyManager{
 
             logger.debug("申請送信処理開始");
 
-            const [information_room]: any[] = await transaction(async ()=>{
+            const [information_room]: any[] = await transaction(async () => {
 
                 logger.debug("申請登録");
-                const polymorphic_id: number = await applyService.registeApplication(target_id,info.user.id);
+                const polymorphic_id: number = await applyService.registeApplication(target_id, info.user.id);
 
                 logger.debug("お知らせルーム情報取得");
                 const information_room = await roomManager.getInformationRoomId(target_id);
@@ -58,7 +61,7 @@ class ApplyManager{
                 const messageTxt = applyService.makeMessage(info.user.name);
 
                 logger.debug("相手のお知らせルームにメッセージ送信");
-                const messageOption: MessageOptions = {polymorphic_table: PolymorphicTables.requests,polymorphic_id: polymorphic_id};
+                const messageOption: MessageOptions = { polymorphic_table: PolymorphicTables.requests, polymorphic_id: polymorphic_id };
                 await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);;
 
                 return [information_room];
@@ -82,40 +85,49 @@ class ApplyManager{
     /**
      * 
      * @param unique_id 
-     * @param user_id 
+     * @param request_user_id 
      * @param reaction 
      * 申請に対するリアクションを処理
      */
-    async reaction(unique_id: number,user_id: string,reaction: number){
+    async reaction(unique_id: number, request_user_id: string, reaction: number) {
 
-        logger.debug("reaction() 本人確認開始",unique_id,user_id);
+        logger.debug("reaction() 本人確認開始", unique_id, request_user_id);
 
-        if(await applyService.isThePerson(unique_id,user_id) == false){
-            throw new Exception('unique_idに紐づくuser_idが送られてきたuser_idと一致しません。不正アクセスの可能性があります。');
+        if (await applyService.isThePerson(unique_id, request_user_id) == false) {
+            throw new Exception('unique_idに紐づくrequest_user_idが送られてきたrequest_user_idと一致しません。不正アクセスの可能性があります。');
         }
 
-        logger.debug("reaction() 本人確認完了",unique_id);
-        
-        switch(reaction){
+        logger.debug("reaction() 本人確認完了", unique_id);
+
+        switch (reaction) {
             case APPLY_REACTION.IS_ACCEPT_ARROW:
             case APPLY_REACTION.IS_ACCEPT_DENY:
+
                 logger.debug("reaction 登録処理開始");
+
                 //リアクションを登録
-                await applyService.registeApplyReaction(unique_id,reaction);
+                await applyService.registeApplyReaction(unique_id, reaction);
                 logger.debug("reaction 登録処理完了");
+
                 //申請者とのDMに使うルームを受信者側で新規作成
-                //roomManager.createRoom();
-                //申請者が入場できるように許可を設定する
-                //roomManager.addAccessableRooms();
+                const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
+                const target_user: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+                const information_room: Room = await roomManager.createRoom(uuid.v4(), target_user.id, ROOM_TYPE.directmessage);
+
+                //申請者と受信者が入場できるように許可を設定する
+                await roomManager.addAccessableRooms(request_user_id, information_room.id);
+                await roomManager.addAccessableRooms(target_user.id,information_room.id);
+
+                //申請者にメッセージ送信
+                const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
+                const message: string = applyService.messageTxt(target_user.name, reaction);
+                this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
+
                 break;
             default:
                 throw new Exception("到達不能なコード");
         }
-        //申請者にメッセージ送信
-        const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(user_id);
-        const user: User = await userManager.getUserById(user_id);
-        const message: string = applyService.messageTxt(user.name,reaction);
-        this.notifyManager.sendNoticeMessage(message,roomInfo.room_id);
+
     }
 }
 

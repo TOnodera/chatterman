@@ -19,6 +19,12 @@ class ApplyPolymorphicManager{
         const user: User = await userManager.getUserById(request_user);
         return user;
     }
+
+    async getTargetUser(polymorphic_id: number): Promise<User>{
+        const request_user: string = await this.repository.getTargetUserId(polymorphic_id);
+        const user: User = await userManager.getUserById(request_user);
+        return user;
+    }
 }
 
 export default new ApplyPolymorphicManager;
