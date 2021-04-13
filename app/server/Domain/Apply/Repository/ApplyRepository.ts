@@ -35,36 +35,14 @@ class ApplyRepository {
         throw new Exception("DM申請テーブル（requests）で申請IDに紐づくユーザーIDが取得出来ませんでした。想定されない処理です。");
     }
 
-    //TODO polymorphicテーブル管理するクラス作って経由するようにしたほうがいい
-    async registeApplyReaction(unique_id: string, reaction: number): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT polymorphic_table,polymorphic_id FROM message_polymorphics WHERE unique_id = ? ', [unique_id]);
-        const polymorphic_id = rows[0].polymorphic_id;
-        if (rows.length == 1 && rows[0].polymorphic_table == PolymorphicTables.requests) {
-            const [result]: any[] = await this.connector.query('UPDATE requests SET is_accept = ? WHERE id = ? ', [reaction, polymorphic_id]);
-            return result.affectedRows == 1;
-        }
-        throw new Exception("unique_idに一致するデータが見つかりませんでした。");
+    async registeApplyReaction(polymorphicInfo: PolymorphicInfo, reaction: number): Promise<boolean> {
+        const [result]: any[] = await this.connector.query('UPDATE requests SET is_accept = ? WHERE id = ? ', [reaction, polymorphicInfo.polymorphic_id]);
+        return result.affectedRows == 1;
     }
 
-    async isThePerson(unique_id: string, user_id: string): Promise<boolean> {
-
-        const [rows]: any[] = await this.connector.query('SELECT * FROM message_polymorphics WHERE unique_id = ? ', [unique_id]);
-
-        if (rows.length == 1 && rows[0].polymorphic_table == PolymorphicTables.requests) {
-            const [results]: any[] = await this.connector.query(`SELECT * FROM  requests WHERE request_user = ? AND id = ? `, [user_id, rows[0].polymorphic_id]);
-            return results.length == 1;
-        }
-
-        throw new Exception("unique_idに一致するデータが見つかりませんでした。");
-    }
-
-    async getMessageOptions(unique_id: number): Promise<any> {
-        const [rows]: any[] = await this.connector.query('SELECT * FROM message_polymorphics WHERE unique_id = ?', [unique_id]);
-        logger.debug('getMessageOptions', rows);
-        if (rows.length > 0) {
-            return rows[0];
-        }
-        throw new Exception("unique_idに一致するデータが見つかりませんでした。");
+    async isThePerson(polymorphicInfo: PolymorphicInfo, user_id: string): Promise<boolean> {
+        const [results]: any[] = await this.connector.query(`SELECT * FROM  requests WHERE request_user = ? AND id = ? `, [user_id, polymorphicInfo.polymorphic_id]);
+        return results.length == 1;
     }
 
 }

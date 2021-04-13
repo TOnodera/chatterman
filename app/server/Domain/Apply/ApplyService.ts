@@ -34,11 +34,12 @@ class ApplyService{
 
     async registeApplyReaction(unique_id: string,reaction: number): Promise<boolean>{
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        return await this.repository.registeApplyReaction(unique_id, reaction);
+        return await this.repository.registeApplyReaction(polymorphicInfo, reaction);
     }
 
     async isThePerson(unique_id: string,user_id: string): Promise<boolean>{
-        return await this.repository.isThePerson(unique_id,user_id);
+        const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
+        return await this.repository.isThePerson(polymorphicInfo,user_id);
     }
 
     messageTxt(name: string,reaction: APPLY_REACTION){
