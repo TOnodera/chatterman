@@ -100,7 +100,7 @@ class ApplyManager{
         const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(user_id);
         const user: User = await userManager.getUserById(user_id);
         const message: string = applyService.messageTxt(user.name,reaction);
-        this.notifyManager.sendNoticeMessage(message,roomInfo.id);
+        this.notifyManager.sendNoticeMessage(message,roomInfo.room_id);
     }
 }
 
