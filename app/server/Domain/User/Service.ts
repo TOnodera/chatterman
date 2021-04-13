@@ -3,6 +3,7 @@ import loginUsersStore from '../../Store/LoginUsersStore';
 import User from './User';
 import logger from '../Utility/logger';
 import roomManager from '../Room/RoomManager';
+import UserFactory from './Factory/UserFactory';
 
 class Service{
 
@@ -26,6 +27,7 @@ class Service{
         return users;
     }
 
+    //TODO 実装やりなおし
     async getUserByCredentials(credentials: Credentials): Promise<User>{
         return await this.repository.getUserByCredentials(credentials);
     }
@@ -35,7 +37,7 @@ class Service{
     }
 
     async getUserById(user_id: string): Promise<User>{
-        return await this.repository.getUserById(user_id);
+        return await UserFactory.create(user_id);
     }
 }
 export default new Service();
