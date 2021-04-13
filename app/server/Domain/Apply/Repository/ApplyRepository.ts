@@ -37,7 +37,7 @@ class ApplyRepository {
 
     //TODO polymorphicテーブル管理するクラス作って経由するようにしたほうがいい
     async registeApplyReaction(unique_id: string, reaction: number): Promise<boolean> {
-        const [rows]: any[] = await this.connector.query('SELECT polymorphic_table FROM message_polymorphics WHERE unique_id = ? ', [unique_id]);
+        const [rows]: any[] = await this.connector.query('SELECT polymorphic_table,polymorphic_id FROM message_polymorphics WHERE unique_id = ? ', [unique_id]);
         const polymorphic_id = rows[0].polymorphic_id;
         if (rows.length == 1 && rows[0].polymorphic_table == PolymorphicTables.requests) {
             const [result]: any[] = await this.connector.query('UPDATE requests SET is_accept = ? WHERE id = ? ', [reaction, polymorphic_id]);
