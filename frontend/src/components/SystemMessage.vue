@@ -3,7 +3,9 @@
         <div class="system-message">
             <div>
                 <p class="system-comment has-text-white has-background-info">{{message}}</p>
-                <ApprovalButtons :unique_id="options.unique_id" :user_id="options.user_id" v-if="options.unique_id"/> 
+                <template v-if="options">
+                    <ApprovalButtons :unique_id="options.unique_id" :user_id="options.user_id"/> 
+                </template>
                 <p class="user-info is-size-7">
                     <span>{{user_name}}</span>
                     <span>{{created_at}}</span>
