@@ -27,10 +27,10 @@ class UserRepository implements IUserRepository {
         return rows.length > 0;
     }
 
-    async getUserByCredentials(credentials: Credentials): Promise<User> {
+    async getUserIdByCredentials(credentials: Credentials): Promise<string> {
         const [rows]: any[] = await query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
         if (rows.length > 0 && await Bcrypt.compare(credentials.password, rows[0].password)) {
-            return await UserFactory.create(rows[0].id);
+            return rows[0].id;
         }
         throw new AuthenticationException("認証情報に一致するユーザーが見つかりませんでした。");
     }
@@ -65,9 +65,12 @@ class UserRepository implements IUserRepository {
         throw new DomainException("ユーザーが見つかりませんでした。");
     }
 
-    async getMembers(): Promise<any[]>{
-        const [users]: any[] = await query('SELECT users.id,users.name FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
-        return users;
+    //TODO ルームテーブルの参照修正
+    async getMembersId(user_id: string): Promise<string[]>{
+        const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
+        return rows.map((data: any)=>{
+            return data.id;
+        });
     }
 
 }
