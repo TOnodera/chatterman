@@ -51,5 +51,7 @@ CREATE TABLE IF NOT EXISTS message_polymorphics(
     message_id VARCHAR(255) NOT NULL,
     polymorphic_id VARCHAR(255) NOT NULL,
     polymorphic_table VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL
+    created_at DATETIME NOT NULL,
+    UNIQUE (message_id),
+    UNIQUE (polymorphic_table,polymorphic_id)
 );
