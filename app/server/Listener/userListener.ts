@@ -22,9 +22,9 @@ module.exports =  (socket: Socket) => {
       await roomController.createRoom(name,user_id,ROOM_TYPE.talkroom);
     };
 
-    //ユーザーデータ送信
+    //ダイレクトメッセージルーム情報送信
     const requireUsers = async (user_id: string) => {
-      await UserController.getMembers(user_id,socket);
+      await UserController.getDirectMessageRoomInfo(user_id,socket);
     }
 
     //入室権限があるルーム情報のデータを送信

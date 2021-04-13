@@ -5,10 +5,10 @@ interface IUserRepository{
     registe(user: UserRegister): Promise<boolean>;
     thisEmailIsAlreadyUsed(email: string): Promise<boolean>;
     thisNameIsAlreadyUsed(name: string): Promise<boolean>;
-    getUserByCredentials(credentials: Credentials): Promise<User>;
+    getUserIdByCredentials(credentials: Credentials): Promise<string>;
     credentials(credentials: Credentials): Promise<boolean>;
     hasMessage(message: Message): Promise<boolean>;
     get(id: string): Promise< User>;
-    getMembers(user_id: string): Promise<Client[]>;
+    getMembersId(user_id: string): Promise<string[]>;
 }
 export default IUserRepository;

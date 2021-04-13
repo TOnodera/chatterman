@@ -13,26 +13,30 @@ class Service {
         this.repository = UserRepositoryFactory.create();
     }
 
-    async getMembers(my_id: string): Promise<Client[]> {
+    async getDirectMessageRoomInfo(my_id: string): Promise<Client[]> {
         
-        const user_ids: string[] = await this.repository.getMembers();
+        const ids: string[] = await this.repository.getMembersId();
+        const users: User[] = await this.getUsersByIdArray(ids);
 
-        const users: Client[] = [];
-        for(const user_id of user_ids){
-            const user: User = await this.getUserById(user_id);
+        const members: Client[] = [];
+        for(const user of users){
             const result: Client = {id: user.id, name: user.name };
+            logger.debug("my_id,user.id",my_id,user.id);
             const room: Room | null = await roomManager.getDirectMessageRoom(user.id,my_id);
+            
             result.room_id = room ? room.id : user.id;
             result.isLogin = loginUsersStore.inUsers(user.id);
-            users.push(result);
+            members.push(result);
         }
 
-        return users;
+        logger.debug("members->",members);
+
+        return members;
     }
 
-    //TODO 実装やりなおし
     async getUserByCredentials(credentials: Credentials): Promise<User> {
-        return await this.repository.getUserByCredentials(credentials);
+        const id: string = await this.repository.getUserIdByCredentials(credentials);
+        return UserFactory.create(id);
     }
 
     async getInfromationRoomId(user_id: string): Promise<string> {
@@ -41,6 +45,15 @@ class Service {
 
     async getUserById(user_id: string): Promise<User> {
         return await UserFactory.create(user_id);
+    }
+
+    async getUsersByIdArray(user_ids: string[]): Promise<User[]>{
+        const users: User[] = [];
+        for(const id of user_ids){
+            const user: User = await this.getUserById(id);
+            users.push(user);
+        }
+        return users;
     }
 }
 export default new Service();

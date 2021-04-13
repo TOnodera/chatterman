@@ -30,6 +30,10 @@ class UserManager{
     async getUserById(user_id: string){
         return await userService.getUserById(user_id);
     }    
+
+    async getDirectMessageRoomInfo(my_id: string): Promise<Client[]>{
+        return userService.getDirectMessageRoomInfo(my_id);
+    }
 }
 
 export default new UserManager;

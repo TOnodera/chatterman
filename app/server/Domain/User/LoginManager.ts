@@ -22,7 +22,7 @@ class LoginManager implements ILoginManager{
     async login(credentials: Credentials): Promise<User> {
         if(await this.repository.credentials(credentials)){
             logger.info(`LoginManager.login() -> 1/2 ログイン処理開始:${credentials.email}`);
-            const user: User = await this.repository.getUserByCredentials(credentials);
+            const user: User = await userService.getUserByCredentials(credentials);
             logger.info(`LoginManager.login() -> 2/2 ログイン処理完了:${credentials.email}`);
             return user;
         }

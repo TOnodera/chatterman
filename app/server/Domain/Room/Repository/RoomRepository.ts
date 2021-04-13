@@ -2,6 +2,7 @@ import { query } from '../../Utility/Connection/Connection';
 import Exception from '../../Exception/Exception';
 import RoomRegister from '../RoomRegister';
 import { ROOM_TYPE } from '../../../enum/enum';
+import logger from '../../../Domain/Utility/logger';
 class RoomRepository{
 
     async getTalkRooms(user_id: string): Promise<RoomInfo[]>{
@@ -47,6 +48,7 @@ class RoomRepository{
     }
 
     async addAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
+        logger.debug(`addAccessableRooms(${user_id},${room_id})`);
         const [rows]: any[] = await query('INSERT INTO accessable_rooms SET user_id = ?,room_id = ?, created_at = NOW()',[user_id,room_id]);
         return rows.affectedRows == 1;
     }
@@ -64,13 +66,36 @@ class RoomRepository{
         throw new Exception("指定されたユーザーのルームIDは存在しません。");
     }
 
-    async getDirectMessageRoom(user1: string,user2: string): Promise<string | null>{
-        const [rows]: any[] = await query("SELECT * FROM accessable_rooms WHERE ( target_user = ? AND request_user = ?) OR ( request_user = ? AND target_user = ?)",[user1,user2,user1,user2]);
-        if(rows.length > 0){
-            return rows[0].room_id;
-        }
-        return null;
+    async getDirectMessageRoomId(user1: string,user2: string): Promise<string | null>{
+        //user1 == user2 のとき複数の結果が返ってくるが、自分用のDMルームは最初に作られるのでORDER BY created_at している
+        const [rows1]: any[] = await query("SELECT room_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id AND rooms.room_type = ? WHERE user_id = ? ORDER BY rooms.created_at ",[ROOM_TYPE.directmessage,user1]);
+        const [rows2]: any[] = await query("SELECT room_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id AND rooms.room_type = ? WHERE user_id = ? ORDER BY rooms.created_at ",[ROOM_TYPE.directmessage,user2]);
+
+        logger.debug("user1,user2",user1,user2);
+
+        const ary1: string[] = rows1.map((obj: any)=>{
+            return obj.room_id;
+        });
+        const ary2: string[] = rows2.map((obj: any)=>{
+            return obj.room_id;
+        })
+
+        logger.debug("rows1",ary1);
+        logger.debug("rows2",ary2);
+
+        const result = ary1.filter((room_id: string)=>{
+            logger.debug(room_id);
+            logger.debug(ary2.includes(room_id));
+            if(ary2.includes(room_id)){
+                return room_id;
+            }
+        })
+
+        logger.debug(result.length,result[0]);
+      
+        return result.length > 0 ? result[0] : null;
     }
+    
 
 }
 export default RoomRepository;

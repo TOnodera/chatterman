@@ -90,7 +90,7 @@ class RoomManager {
     }
 
     async getDirectMessageRoom(user1: string,user2: string): Promise<Room | null>{
-        const room_id: string | null = await this.repository.getDirectMessageRoom(user1,user2);
+        const room_id: string | null = await this.repository.getDirectMessageRoomId(user1,user2);
         if(room_id){
             return RoomFactory.create(room_id);
         }
