@@ -1,6 +1,7 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
+import { ROOM_TYPE } from "../enum/enum";
 
 module.exports =  (socket: Socket) => {
 
@@ -18,8 +19,7 @@ module.exports =  (socket: Socket) => {
 
     //ルーム作成
     const createRoom = async (name: string,user_id: string) => {
-      const roomType: RoomType = {Type: 'talkroom'};
-      await roomController.createRoom(name,user_id,roomType);
+      await roomController.createRoom(name,user_id,ROOM_TYPE.talkroom);
     };
 
     //ユーザーデータ送信

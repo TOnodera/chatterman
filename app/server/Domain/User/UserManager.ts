@@ -3,6 +3,7 @@ import userService from './Service';
 import UserRegister from './UserRegister';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
+import { ROOM_TYPE } from '../../enum/enum';
 
 class UserManager{
 
@@ -14,8 +15,7 @@ class UserManager{
         const [result]: boolean[] = await transaction(async () => {
 
             const user_id = await user.registe();
-            const roomType: RoomType = { Type: 'directmessage' };
-            if (user_id && await roomManager.createUserDefaultRoom(user_id, roomType) && roomManager.createInformationRoom(user_id)) { //デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
+            if (user_id && await roomManager.createUserDefaultRoom(user_id, ROOM_TYPE.directmessage) && roomManager.createInformationRoom(user_id)) { //デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
                 return true;
             }
             return false;

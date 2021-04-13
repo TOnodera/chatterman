@@ -1,4 +1,5 @@
 
+
 const PolymorphicTables = {
     requests: 'requests'
 } as const;
@@ -17,8 +18,16 @@ const APPLY_REACTION = {
 } as const;
 type APPLY_REACTION = typeof APPLY_REACTION[keyof typeof APPLY_REACTION];
 
+const ROOM_TYPE = {
+    talkroom: 'talkroom',
+    directmessage: 'directmessage',
+    information: 'information'
+} as const;
+type ROOM_TYPE = typeof ROOM_TYPE[keyof typeof ROOM_TYPE];
+
 export {
     PolymorphicTables,
     APPLY_SENDER_NOTICE,
-    APPLY_REACTION
+    APPLY_REACTION,
+    ROOM_TYPE
 }
