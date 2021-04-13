@@ -1,0 +1,25 @@
+import { Pool } from 'mysql2/typings/mysql';
+import User from '../../User/User';
+import userManager from '../../User/UserManager';
+import ApplyPolymorphicRepositoryFactory from './Factory/ApplyPolymorphicRepositoryFactory';
+import ApplyPolymorphicRepository from './Repository/ApplyPolymorphicRepository';
+
+/**
+ * PolymorphicManager内で使用。
+ * パッケージの外側から直接呼ばない
+ */
+class ApplyPolymorphicManager{
+
+    private repository: ApplyPolymorphicRepository;
+    constructor(){
+        this.repository = ApplyPolymorphicRepositoryFactory.create();
+    }
+
+    async getRequestUser(polymorphic_id: number): Promise<User>{
+        const request_user: string = await this.repository.getRequestUserId(polymorphic_id);
+        const user: User = await userManager.getUserById(request_user);
+        return user;
+    }
+}
+
+export default new ApplyPolymorphicManager;
