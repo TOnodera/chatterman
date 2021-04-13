@@ -7,6 +7,9 @@ import AuthenticationException from "../Exception/AuthenticationException";
 import { Socket } from "socket.io";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
+import roomManager from "../Room/RoomManager";
+import userService from '../User/Service';
+import userEventEmitter from '../User/UserEventEmitter';
 
 class LoginManager implements ILoginManager{
 
@@ -26,12 +29,25 @@ class LoginManager implements ILoginManager{
         throw new AuthenticationException('認証情報が間違っています。未登録の場合は登録して下さい。');
     }
 
-    async afterLogin(user: User,socket: Socket){
-        logger.info('1/2 LoginManager.afterLogin() -> ログイン後のソケット登録処理開始');
+    async afterCredentials(credentials: Credentials, socket: Socket) {
+       
+        const user: User = await userService.getUserByCredentials(credentials);
+        const information_room = await roomManager.getInformationRoomId(user.id);
+        const toMe: AfterLoginInfo = {id: user.id,name: user.name,information_room: information_room};
+        const toClient: Client = {id: user.id,name: user.name};
+
         loginUserStore.set(socket.id,user);
-        logger.info('2/2 LoginManager.afterLogin() -> ログイン後のソケット登録処理完了');
+        //入室可能なルームにソケットをジョイン
+        await roomManager.joinUser(user,socket);
+        //認証用セッション情報設定
+        socket.request.session.credentials = credentials;
+        //イベント発行
+        userEventEmitter.sendLoggedInEvent(toMe,socket);
+        userEventEmitter.broadcastUserLoginEvent(toClient,socket);
+ 
     }
 
+    
     async logout(credentials: Credentials,socket: Socket): Promise<boolean> {
         if(await this.repository.credentials(credentials)){
             this.logoutHandler(socket);

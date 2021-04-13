@@ -1,12 +1,9 @@
 import RoomController from "../Domain/Controller/RoomController";
 import { Socket } from "socket.io";
 import UserController from '../Domain/Controller/UserController';
-import ApplyController from "../Domain/Controller/ApplyController";
-import logger from "../Domain/Utility/logger";
 
 module.exports =  (socket: Socket) => {
 
-    const applyController = new ApplyController(socket);
     const roomController = new RoomController(socket);
 
     //ログイン直後
