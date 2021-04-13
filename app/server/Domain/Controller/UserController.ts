@@ -36,7 +36,7 @@ class UserController {
 
     async authenticate(credentials: Credentials, socket: Socket) {
         if (await this.loginManager.authenticate(credentials)) {
-
+            
         }
     }
 

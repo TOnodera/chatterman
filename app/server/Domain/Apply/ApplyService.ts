@@ -1,6 +1,7 @@
 import ApplyRepositoryFactory from './Factory/ApplyRepositoryFactory';
 import ApplyRepository from './Repository/ApplyRepository';
 import apply from './Apply';
+import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { APPLY_REACTION } from '../../enum/enum';
 
 class ApplyService{
@@ -8,7 +9,7 @@ class ApplyService{
     private repository: ApplyRepository;
 
     constructor(){
-        this.repository = ApplyRepositoryFactory.create();        
+        this.repository = ApplyRepositoryFactory.create();
     }
 
     makeMessage(name: string){
@@ -32,6 +33,7 @@ class ApplyService{
     }
 
     async registeApplyReaction(unique_id: string,reaction: number): Promise<boolean>{
+        const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
         return await this.repository.registeApplyReaction(unique_id, reaction);
     }
 
