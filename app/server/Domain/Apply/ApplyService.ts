@@ -44,6 +44,7 @@ class ApplyService{
         ? `${name}さんへのDM申請が許可されました。`
         : `${name}さんへのDM申請が拒否されました。`;
     }
+
 }
 
 export default new ApplyService;

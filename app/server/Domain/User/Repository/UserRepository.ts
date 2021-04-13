@@ -73,19 +73,20 @@ class UserRepository implements IUserRepository {
     async getMembers(user_id: string): Promise<any[]>{
         const [users]: any[] = await this.connector.query('SELECT users.id,users.name FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
         const [accessable_rooms]: any[] = await this.connector.query('SELECT rooms.id,rooms.creater_id FROM rooms JOIN accessable_rooms ON accessable_rooms.room_id = rooms.id AND accessable_rooms.user_id = ? WHERE rooms.room_type = "directmessage" AND rooms.deleted_at IS NULL AND accessable_rooms.deleted_at IS NULL',[user_id]);
-        const result: any[] = users.map( (user: any) => {
-            let room_id = null;
-            accessable_rooms.forEach( (room: any) => {
-                if(user.id == room.creater_id){
-                    room_id = room.id;
-                }
+        const result: any[] = 
+            users.map( (user: any) => {
+                let room_id = null;
+                accessable_rooms.forEach( (room: any) => {
+                    if(user.id == room.creater_id){
+                        room_id = room.id;
+                    }
+                });
+                return {
+                    id: user.id,
+                    name: user.name,
+                    room_id: room_id ? room_id : user.id
+                };
             });
-            return {
-                id: user.id,
-                name: user.name,
-                room_id: room_id ? room_id : user.id
-            };
-        });
         return result;
     }
 

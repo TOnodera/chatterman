@@ -49,6 +49,9 @@ class Room {
         });
     }
 
+    /**
+     * ルームデータ受信リスナ
+     */
     acceptRoomsListener(){
         socketStore.registeOnce('user:send-rooms-data',(rooms: any[])=>{
             acceptRoomsSubject.notify(rooms);
