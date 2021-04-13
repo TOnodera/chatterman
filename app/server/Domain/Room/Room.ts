@@ -1,13 +1,14 @@
+import { ROOM_TYPE } from '../../enum/enum';
 import Datetime from '../Utility/Datetime';
 class Room {
 
     id: string;
     name: string;
     creater_id: string;
-    room_type: RoomType;
+    room_type: ROOM_TYPE;
     created_at: Datetime;
 
-    constructor(id: string,name: string,creater_id: string,room_type: RoomType,created_at: Datetime) {
+    constructor(id: string,name: string,creater_id: string,room_type: ROOM_TYPE,created_at: Datetime) {
         this.id = id;
         this.name = name;
         this.creater_id = creater_id;

@@ -1,3 +1,4 @@
+import { ROOM_TYPE } from '../../enum/enum';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/RoomEventEmitter';
@@ -43,7 +44,7 @@ class RoomController {
 
     }
 
-    async createRoom(name: string, creater_id: string, room_type: RoomType) {
+    async createRoom(name: string, creater_id: string, room_type: ROOM_TYPE) {
 
         logger.info(`1/2 ルーム作成処理開始: user_id(作成者): ${creater_id}, name: ${name}`);
         try {

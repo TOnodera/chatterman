@@ -7,6 +7,7 @@ import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
 import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import config from '../../config';
+import { ROOM_TYPE } from '../../enum/enum';
 
 class RoomManager {
 
@@ -36,21 +37,20 @@ class RoomManager {
         return false;
     }
 
-    async createRoom(name: string,creater_id: string, room_type: RoomType): Promise<Room> {
+    async createRoom(name: string,creater_id: string, room_type: ROOM_TYPE): Promise<Room> {
         const register = new RoomRegister(name,creater_id,room_type);
         const id: string = await register.create();
         return await RoomFactory.create(id);
     }
 
-    async createUserDefaultRoom(user_id: string, room_typs: RoomType): Promise<boolean> {
+    async createUserDefaultRoom(user_id: string, room_typs: ROOM_TYPE): Promise<boolean> {
         const room: Room = await this.createRoom(user_id, user_id,room_typs);
         const result = await this.addAccessableRooms(user_id, room.id) && await this.addAccessableRooms(user_id, 'everybody');
         return result;
     }
 
     async createInformationRoom(user_id:string): Promise<boolean>{
-        const roomType: RoomType = {Type: 'information'};
-        const room: Room = await this.createRoom(this.INFORMATION_ROOM_NAME, user_id,roomType);
+        const room: Room = await this.createRoom(this.INFORMATION_ROOM_NAME, user_id,ROOM_TYPE.information);
         const result = await this.addAccessableRooms(user_id, room.id) && this.addAccessableRooms(this.SUPER_USER,room.id);
         return result;
     }
@@ -82,7 +82,9 @@ class RoomManager {
     }
 
     async getAccessableRooms(user_id: string): Promise<string[]>{
-        return await this.repository.getAccessableRooms(user_id);
+        const rooms = await this.repository.getAccessableRooms(user_id);
+        logger.debug("アクセス可能なルーム：",rooms);
+        return rooms;
     }
 
     async getInformationRoomId(user_id: string): Promise<string>{

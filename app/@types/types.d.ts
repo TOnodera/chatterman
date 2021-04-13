@@ -53,10 +53,6 @@ interface RoomInfo{
     name: string
 }
 
-interface RoomType{
-    Type: 'talkroom' | 'directmessage' | 'information' 
-}
-
 interface Options{
     unique_id: number
 }

@@ -1,20 +1,21 @@
 import { query } from '../../Utility/Connection/Connection';
 import Exception from '../../Exception/Exception';
 import RoomRegister from '../RoomRegister';
+import { ROOM_TYPE } from '../../../enum/enum';
 class RoomRepository{
 
     async getTalkRooms(user_id: string): Promise<RoomInfo[]>{
-        const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,'talkroom']);
+        const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,ROOM_TYPE.talkroom]);
         return rows.length > 0 ? rows : [];
     }
 
     async getInformationRoom(user_id: string): Promise<RoomInfo[]>{
-        const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,'information']);
+        const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,ROOM_TYPE.information]);
         return rows.length > 0 ? rows : [];
     }
 
     async getDirectMessageRooms(user_id: string): Promise<RoomInfo[]>{
-        const [rows]: any[] = await query('SELECT room_id,rooms.name,rooms.creater_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,'directmessage']);
+        const [rows]: any[] = await query('SELECT room_id,rooms.name,rooms.creater_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL',[user_id,ROOM_TYPE.directmessage]);
         return rows.length > 0 ? rows : [];
     }
 
@@ -36,7 +37,7 @@ class RoomRepository{
     }
 
     async createRoom(room: RoomRegister): Promise<boolean>{
-        const [rows]: any[] = await query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()',[room.id,room.name,room.creater_id,room.room_type.Type]);
+        const [rows]: any[] = await query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()',[room.id,room.name,room.creater_id,room.room_type]);
         return rows.affectedRows == 1;
     }
 
@@ -56,7 +57,7 @@ class RoomRepository{
     }
 
     async getInformationRoomId(user_id: string): Promise<string>{
-        const [rows]: any[] = await query("SELECT id FROM rooms JOIN accessable_rooms ON accessable_rooms.user_id = ? AND accessable_rooms.room_id = rooms.id WHERE rooms.room_type = ? AND rooms.deleted_at IS NULL",[user_id,'information']);
+        const [rows]: any[] = await query("SELECT id FROM rooms JOIN accessable_rooms ON accessable_rooms.user_id = ? AND accessable_rooms.room_id = rooms.id WHERE rooms.room_type = ? AND rooms.deleted_at IS NULL",[user_id,ROOM_TYPE.information]);
         if(rows.length > 0){
             return rows[0].id;
         }
