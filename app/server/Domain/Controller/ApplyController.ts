@@ -19,7 +19,6 @@ class ApplyController {
     }
 
     async reaction(unique_id: number,user_id: string,reaction: number){
-        logger.debug("リアクションメッセージ受信");
         await this.applyManager.reaction(unique_id,user_id,reaction);
     }
 

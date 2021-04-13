@@ -14,7 +14,6 @@ class MessageEventEmitter {
     }
 
     sendUserSendMessageEvent(toClient: SendMessageToClient, options?: ApproveOptions) {
-        logger.debug(options);
         this.socket.emit('broadcast:user-send-message', toClient, options);
     }
 

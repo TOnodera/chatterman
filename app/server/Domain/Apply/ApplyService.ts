@@ -34,18 +34,13 @@ class ApplyService{
     }
 
     async registeApplyReaction(unique_id: number,reaction: number): Promise<boolean>{
-        logger.debug("getPolymorphicInfo() start",unique_id);
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        logger.debug("getPolymorphicInfo() end");
 
         return await this.repository.registeApplyReaction(polymorphicInfo, reaction);
     }
 
     async isThePerson(unique_id: number,user_id: string): Promise<boolean>{
-        logger.debug("getPolymorphicInfo()　開始",unique_id,user_id);
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        logger.debug("getPolymorphicInfo()　完了",unique_id,user_id);
-
         return await this.repository.isThePerson(polymorphicInfo,user_id);
     }
 

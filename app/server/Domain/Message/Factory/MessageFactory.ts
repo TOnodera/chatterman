@@ -16,8 +16,6 @@ class MessageFactory {
         //オプションメッセージが付加されていたらその情報も取得
         const options: ApproveOptions | null = await polymorphicManager.getMessageApproveOptionByMessageId(message_id);
 
-        logger.debug("options",options);
-        
         return options 
         ? new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at), options)
         : new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at));

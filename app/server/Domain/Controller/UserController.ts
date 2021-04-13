@@ -1,7 +1,6 @@
 import LoginManager from '../User/LoginManager';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
-import userService from '../User/Service';
 import userManager from '../User/UserManager';
 import userEventEmitter from '../User/UserEventEmitter';
 import Exception from '../Exception/Exception';
@@ -40,9 +39,9 @@ class UserController {
         }
     }
 
-    async getMembers(user_id: string,socket: Socket) {
+    async getDirectMessageRoomInfo(user_id: string,socket: Socket) {
         try {
-            const clients: Client[] = await userService.getMembers(user_id);
+            const clients: Client[] = await userManager.getDirectMessageRoomInfo(user_id);
             userEventEmitter.sendSendUsersDataEvent(clients,socket);
         } catch (e) {
             SocketExceptionHandler.handle(e, socket);

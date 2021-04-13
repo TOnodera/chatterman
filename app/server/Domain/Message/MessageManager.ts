@@ -30,7 +30,6 @@ class MessageManager {
             const message_id: string = await MessageService.add(message, user_id, room_id);
 
             if (options) {
-                logger.debug(message_id,"add()");
                 //ポリモーフィック関連テーブルに登録する
                 await MessageService.addPolymorphic(message_id, options);
             }

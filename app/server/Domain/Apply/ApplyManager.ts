@@ -48,26 +48,19 @@ class ApplyManager {
                 return;
             }
 
-            logger.debug("申請送信処理開始");
 
             const [information_room]: any[] = await transaction(async () => {
 
-                logger.debug("申請登録");
                 const polymorphic_id: number = await applyService.registeApplication(target_id, info.user.id);
-
-                logger.debug("お知らせルーム情報取得");
                 const information_room = await roomManager.getInformationRoomId(target_id);
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
 
-                logger.debug("相手のお知らせルームにメッセージ送信");
                 const messageOption: MessageOptions = { polymorphic_table: PolymorphicTables.requests, polymorphic_id: polymorphic_id };
                 await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);;
 
                 return [information_room];
             });
-
-            logger.debug("申請送信処理終了");
 
 
             //相手に新規お知らせの通知イベント発行
@@ -91,32 +84,26 @@ class ApplyManager {
      */
     async reaction(unique_id: number, request_user_id: string, reaction: number) {
 
-        logger.debug("reaction() 本人確認開始", unique_id, request_user_id);
-
         if (await applyService.isThePerson(unique_id, request_user_id) == false) {
             throw new Exception('unique_idに紐づくrequest_user_idが送られてきたrequest_user_idと一致しません。不正アクセスの可能性があります。');
         }
-
-        logger.debug("reaction() 本人確認完了", unique_id);
 
         switch (reaction) {
             case APPLY_REACTION.IS_ACCEPT_ARROW:
             case APPLY_REACTION.IS_ACCEPT_DENY:
 
-                logger.debug("reaction 登録処理開始");
-
                 //リアクションを登録
                 await applyService.registeApplyReaction(unique_id, reaction);
-                logger.debug("reaction 登録処理完了");
 
                 //申請者とのDMに使うルームを受信者側で新規作成
                 const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
                 const target_user: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-                const information_room: Room = await roomManager.createRoom(uuid.v4(), target_user.id, ROOM_TYPE.directmessage);
+                const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user.id, ROOM_TYPE.directmessage);
 
                 //申請者と受信者が入場できるように許可を設定する
-                await roomManager.addAccessableRooms(request_user_id, information_room.id);
-                await roomManager.addAccessableRooms(target_user.id,information_room.id);
+                logger.debug(request_user_id,target_user.id);
+                await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
+                await roomManager.addAccessableRooms(target_user.id,directMessageRoom.id);
 
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
