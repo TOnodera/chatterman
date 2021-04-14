@@ -2,7 +2,7 @@ import ApplyRepositoryFactory from './Factory/ApplyRepositoryFactory';
 import ApplyRepository from './Repository/ApplyRepository';
 import apply from './Apply';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
-import { APPLY_REACTION } from '../../enum/enum';
+import { APPLY_REACTION } from '../../Enum/Enum';
 import logger from '../Utility/logger';
 
 class ApplyService{

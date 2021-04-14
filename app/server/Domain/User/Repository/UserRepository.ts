@@ -8,7 +8,7 @@ import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
 import Config from '../../../config';
 import { query } from '../../Utility/Connection/Connection';
-import { ROOM_TYPE } from '../../../enum/enum';
+import { ROOM_TYPE } from '../../../Enum/Enum';
 
 class UserRepository implements IUserRepository {
 

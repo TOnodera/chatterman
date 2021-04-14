@@ -1,4 +1,4 @@
-import { ROOM_TYPE } from '../../enum/enum';
+import { ROOM_TYPE } from '../../Enum/Enum';
 import Datetime from '../Utility/Datetime';
 class Room {
 

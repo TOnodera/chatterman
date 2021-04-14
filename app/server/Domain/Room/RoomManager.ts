@@ -7,7 +7,7 @@ import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
 import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import config from '../../config';
-import { ROOM_TYPE } from '../../enum/enum';
+import { ROOM_TYPE } from '../../Enum/Enum';
 
 class RoomManager {
 

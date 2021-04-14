@@ -3,7 +3,7 @@ import userService from './Service';
 import UserRegister from './UserRegister';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
-import { ROOM_TYPE } from '../../enum/enum';
+import { ROOM_TYPE } from '../../Enum/Enum';
 
 class UserManager{
 

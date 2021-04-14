@@ -9,7 +9,7 @@ import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
 import userManager from "../User/UserManager";
-import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../enum/enum";
+import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
 import User from "../User/User";
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import uuid from "node-uuid";
@@ -109,6 +109,9 @@ class ApplyManager {
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
                 const message: string = applyService.messageTxt(target_user.name, reaction);
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
+
+                //更新したDMルーム情報を申請者と受信者に送る
+                
 
                 break;
             default:

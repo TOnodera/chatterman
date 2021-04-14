@@ -1,4 +1,4 @@
-import { ROOM_TYPE } from '../../enum/enum';
+import { ROOM_TYPE } from '../../Enum/Enum';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/RoomEventEmitter';

@@ -1,6 +1,6 @@
 import { query } from "../../../Utility/Connection/Connection";
 import Exception from "../../../../Domain/Exception/Exception";
-import { PolymorphicTables } from "../../../../enum/enum";
+import { PolymorphicTables } from "../../../../Enum/Enum";
 
 class ApplyPolymorphicRepository{
 

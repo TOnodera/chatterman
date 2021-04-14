@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 const chatListener = require('./chatListener');
 const userListener = require('./userListener');
 const applyListener = require('./applyListener');
-const serverErrorListener = require("./ServerErrorListener");
+const serverErrorListener = require("./serverErrorListener");
 
 module.exports = (io:any) => {
     io.on('connection',(socket: Socket)=>{

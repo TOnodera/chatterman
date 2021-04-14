@@ -1,5 +1,5 @@
 import uuid from 'node-uuid';
-import { ROOM_TYPE } from '../../enum/enum';
+import { ROOM_TYPE } from '../../Enum/Enum';
 import RoomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import RoomRepository from './Repository/RoomRepository';
 class RoomRegister {
