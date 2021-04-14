@@ -54,6 +54,7 @@ class Room {
      */
     acceptRoomsListener(){
         socketStore.registeOnce('room:send-rooms-data',(rooms: any[])=>{
+            console.log("ルームデータ受信",rooms);
             acceptRoomsSubject.notify(rooms);
         });
     }    

@@ -1,4 +1,4 @@
-import loginManager from "../User/LoginManager";
+import { loginManager } from "../User/LoginManager";
 import Exception from "../Exception/Exception";
 import logger from "../Utility/logger";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
@@ -8,7 +8,6 @@ import { transaction } from '../Utility/Connection/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
-import userManager from "../User/UserManager";
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
 import User from "../User/User";
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
@@ -30,7 +29,7 @@ class ApplyManager {
     async apply(target_id: string, info: UserBasicInfo) {
 
         logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${target_id}, request_user: ${info.credentials.email}`);
-        if (await loginManager.authenticate(info.credentials) == false) {
+        if (await loginManager.getAfterLoginManager(this.socket).authenticate(info.credentials) == false) {
             throw new Exception("認証情報がない状態でDM申請を行ないました。不正な操作です。");
         }
 
@@ -101,9 +100,9 @@ class ApplyManager {
                 const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user.id, ROOM_TYPE.directmessage);
 
                 //申請者と受信者が入場できるように許可を設定する
-                logger.debug(request_user_id,target_user.id);
+                logger.debug(request_user_id, target_user.id);
                 await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
-                await roomManager.addAccessableRooms(target_user.id,directMessageRoom.id);
+                await roomManager.addAccessableRooms(target_user.id, directMessageRoom.id);
 
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
@@ -111,7 +110,24 @@ class ApplyManager {
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
                 //更新したDMルーム情報を申請者と受信者に送る
-                
+                /*
+                const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user_id);
+                const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user_id);
+                const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
+                */
+                logger.debug("双方に更新されたルームデータ送信 1");
+                //受信者に送信（申請された側）
+                const targetUserRoomInfo: Client[] = await roomManager.getDirectMessageRoomInfo(target_user.id);
+                roomManager.getRoomEventEmitter(this.socket).sendSendUsersDataEvent(targetUserRoomInfo);
+
+                logger.debug("双方に更新されたルームデータ送信 2");
+                //申請者に送信（申請した側）
+                const requestUserRoomInfo: Client[] = await roomManager.getDirectMessageRoomInfo(request_user_id);
+                roomManager.getRoomEventEmitter(this.socket).sendSendUsersDataEvent(requestUserRoomInfo);
+                logger.debug("双方に更新されたルームデータ送信 3");
+
+                logger.debug("送信データ: ",targetUserRoomInfo,requestUserRoomInfo);
+
 
                 break;
             default:

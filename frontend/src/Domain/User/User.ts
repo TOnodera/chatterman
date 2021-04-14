@@ -103,7 +103,8 @@ class UserDomain {
 	}
 
 	acceptUsersListener() {
-		socketStore.registeOnce('room:send-directmessage-members-data', (users: { id: string, name: string }[]) => {
+		socketStore.registeOnce('room:send-directmessage-members-data', (users: { id: string, name: string,room_id?: string, isLogin?: boolean }[]) => {
+			console.log("表示用メンバーデータ受信: ",users);
 			acceptUsersSubject.notify(users);
 		});
 	}

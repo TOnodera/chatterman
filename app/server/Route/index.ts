@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import userManager from '../Domain/User/UserManager';
 import HttpExceptionHandler from "../Domain/Exception/HttpExceptionHandler";
 import logger from "../Domain/Utility/logger";
-import loginManager from '../Domain/User/LoginManager';
+import { loginManager } from '../Domain/User/LoginManager';
 
 const route = (app: any)=>{
 

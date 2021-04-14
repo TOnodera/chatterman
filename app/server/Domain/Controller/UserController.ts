@@ -1,4 +1,4 @@
-import LoginManager from '../User/LoginManager';
+import { LoginManager,loginManager } from '../User/LoginManager';
 import { Socket } from "socket.io";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import userManager from '../User/UserManager';
@@ -7,10 +7,10 @@ import Exception from '../Exception/Exception';
 
 class UserController {
 
-    private loginManager: any;
+    private loginManager: LoginManager;
 
     constructor() {
-        this.loginManager = LoginManager;
+        this.loginManager = loginManager;
     }
 
     async registe(fromClient: UserRegisteInfo){
@@ -18,12 +18,13 @@ class UserController {
     }
 
     async afterCredentials(credentials: Credentials, socket: Socket) {
-        this.loginManager.afterCredentials(credentials,socket).catch((e: Exception)=>{SocketExceptionHandler.handle(e,socket)});;
+        this.loginManager.getAfterLoginManager(socket).afterCredentials(credentials)
+            .catch((e: Exception)=>{SocketExceptionHandler.handle(e,socket)});;
     }
 
     async logout(id: string, credentials: Credentials, socket: Socket) {
         try {
-            if (await this.loginManager.logout(credentials,socket)) {
+            if (await this.loginManager.getAfterLoginManager(socket).logout(credentials)) {
                 socket.request.session.credentials = { email: '', password: '' };
                 return;
             }
@@ -34,7 +35,7 @@ class UserController {
     }
 
     async authenticate(credentials: Credentials, socket: Socket) {
-        if (await this.loginManager.authenticate(credentials)) {
+        if (await this.loginManager.getAfterLoginManager(socket).authenticate(credentials)) {
             
         }
     }

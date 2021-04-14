@@ -1,6 +1,5 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import User from './User';
-import logger from '../Utility/logger';
 import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
 
@@ -42,5 +41,6 @@ class Service {
         const users: User[] = await this.getUsersByIdArray(idArray);
         return users;
     }
+
 }
 export default new Service();
