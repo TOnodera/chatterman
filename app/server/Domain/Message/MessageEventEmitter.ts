@@ -22,11 +22,11 @@ class MessageEventEmitter {
     }
 
     sendSendMessagesDataEvent(response: SendMessageToClient[]) {
-        this.socket.emit('user:send-messages-data', response);
+        this.socket.emit('message:send-messages-data', response);
     }
 
     sendSendLatestMessagesEvent(response: SendMessageToClient[]) {
-        this.socket.emit('user:send-latest-messages', response);
+        this.socket.emit('message:send-latest-messages', response);
     }
 
 }

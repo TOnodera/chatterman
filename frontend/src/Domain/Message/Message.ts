@@ -103,12 +103,12 @@ class Message {
             AcceptMessageSubject.notify(fromServer);
         });
         //送信要求への応答として送られたメッセージの処理
-        socketStore.registeOnce('user:send-messages-data', (fromServer: any[]) => {
-            console.log('user:send-messages-data');
+        socketStore.registeOnce('message:send-messages-data', (fromServer: any[]) => {
+            console.log('message:send-messages-data');
             this.acceptMessageHandling(fromServer);
         });
-        socketStore.registeOnce('user:send-latest-messages', (fromServer: any[]) => {
-            console.log('user:send-latest-messages');
+        socketStore.registeOnce('message:send-latest-messages', (fromServer: any[]) => {
+            console.log('message:send-latest-messages');
             this.acceptMessageHandling(fromServer);
         });
     }
