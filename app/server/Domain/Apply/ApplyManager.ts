@@ -8,11 +8,13 @@ import { transaction } from '../Utility/Connection/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
+import userManager from "../User/UserManager";
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
 import User from "../User/User";
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import uuid from "node-uuid";
 import Room from "../Room/Room";
+import SocketService from "../Utility/SocketService";
 
 class ApplyManager {
 
@@ -109,24 +111,18 @@ class ApplyManager {
                 const message: string = applyService.messageTxt(target_user.name, reaction);
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
-                //更新したDMルーム情報を申請者と受信者に送る
-                /*
-                const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user_id);
-                const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user_id);
-                const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
-                */
-                logger.debug("双方に更新されたルームデータ送信 1");
-                //受信者に送信（申請された側）
-                const targetUserRoomInfo: Client[] = await roomManager.getDirectMessageRoomInfo(target_user.id);
-                roomManager.getRoomEventEmitter(this.socket).sendSendUsersDataEvent(targetUserRoomInfo);
+                //DMルーム情報の更新をするために更新要求を送る
+                const targetUserSockets: string[] = SocketService.getSocketsFromUserId(target_user.id);
+                for(const socket_id of targetUserSockets){
+                    logger.debug(`更新要求送信： socket.id=${socket_id},user=${target_user.name}`);
+                    this.socket.to(socket_id).emit('room:data-update');
+                }
 
-                logger.debug("双方に更新されたルームデータ送信 2");
-                //申請者に送信（申請した側）
-                const requestUserRoomInfo: Client[] = await roomManager.getDirectMessageRoomInfo(request_user_id);
-                roomManager.getRoomEventEmitter(this.socket).sendSendUsersDataEvent(requestUserRoomInfo);
-                logger.debug("双方に更新されたルームデータ送信 3");
-
-                logger.debug("送信データ: ",targetUserRoomInfo,requestUserRoomInfo);
+                const requestUserSockets: string[] = SocketService.getSocketsFromUserId(request_user_id);
+                for(const socket_id of requestUserSockets){
+                    logger.debug(`更新要求送信： socket.id=${socket_id},user=${request_user_id}`);
+                    this.socket.to(socket_id).emit('room:data-update');
+                }
 
 
                 break;
