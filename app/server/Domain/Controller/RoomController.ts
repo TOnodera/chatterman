@@ -3,6 +3,7 @@ import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/RoomEventEmitter';
 import roomManager from '../Room/RoomManager';
+import userManager from '../User/UserManager';
 import logger from '../Utility/logger';
 class RoomController {
 
@@ -75,6 +76,15 @@ class RoomController {
         }
         logger.info(`2/2 トークルーム取得処理完了: user_id: ${user_id},socket_id: ${this.socket.id}`);
         
+    }
+
+    async getDirectMessageRoomInfo(user_id: string,socket: Socket) {
+        try {
+            const clients: Client[] = await userManager.getDirectMessageRoomInfo(user_id);
+            this.roomEventEmitter.sendSendUsersDataEvent(clients,socket);
+        } catch (e) {
+            SocketExceptionHandler.handle(e, socket);
+        }
     }
 
 }

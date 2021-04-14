@@ -103,7 +103,7 @@ class UserDomain {
 	}
 
 	acceptUsersListener() {
-		socketStore.registeOnce('user:send-users-data', (users: { id: string, name: string }[]) => {
+		socketStore.registeOnce('user:send-members-data', (users: { id: string, name: string }[]) => {
 			acceptUsersSubject.notify(users);
 		});
 	}

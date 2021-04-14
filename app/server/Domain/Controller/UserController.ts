@@ -39,14 +39,5 @@ class UserController {
         }
     }
 
-    async getDirectMessageRoomInfo(user_id: string,socket: Socket) {
-        try {
-            const clients: Client[] = await userManager.getDirectMessageRoomInfo(user_id);
-            userEventEmitter.sendSendUsersDataEvent(clients,socket);
-        } catch (e) {
-            SocketExceptionHandler.handle(e, socket);
-        }
-    }
-
 }
 export default new UserController();

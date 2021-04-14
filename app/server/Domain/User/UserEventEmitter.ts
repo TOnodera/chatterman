@@ -14,10 +14,6 @@ class UserEventEmitter{
         socket.emit('user:logout-failure', id);
     }
 
-    sendSendUsersDataEvent(clients: Client[],socket: Socket){
-        socket.emit('user:send-users-data',clients);       
-    }
-
 }
 
 export default new UserEventEmitter;

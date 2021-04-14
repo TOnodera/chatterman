@@ -1,5 +1,4 @@
 import RoomController from "../Domain/Controller/RoomController";
-import UserController from "../Domain/Controller/UserController";
 import { ROOM_TYPE } from "../Enum/Enum";
 import { Socket } from "socket.io";
 
@@ -14,7 +13,7 @@ module.exports = (socket: Socket) => {
 
     //ダイレクトメッセージルーム情報送信
     const requireUsers = async (user_id: string) => {
-        await UserController.getDirectMessageRoomInfo(user_id, socket);
+        await roomController.getDirectMessageRoomInfo(user_id, socket);
     }
 
     //入室権限があるルーム情報のデータを送信

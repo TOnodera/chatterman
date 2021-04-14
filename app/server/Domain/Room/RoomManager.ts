@@ -8,6 +8,8 @@ import RoomRegister from './RoomRegister';
 import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import config from '../../config';
 import { ROOM_TYPE } from '../../Enum/Enum';
+import userService from '../User/Service';
+import loginUsersStore from '../../Store/LoginUsersStore';
 
 class RoomManager {
 
@@ -96,6 +98,28 @@ class RoomManager {
         }
         return null;
     }
+
+    async getDirectMessageRoomInfo(my_id: string): Promise<Client[]> {
+        
+        const ids: string[] = await this.repository.getMembersId();
+        const users: User[] = await userService.getUsersByIdArray(ids);
+
+        const members: Client[] = [];
+        for(const user of users){
+            const result: Client = {id: user.id, name: user.name };
+            logger.debug("my_id,user.id",my_id,user.id);
+            const room: Room | null = await this.getDirectMessageRoom(user.id,my_id);
+            
+            result.room_id = room ? room.id : user.id;
+            result.isLogin = loginUsersStore.inUsers(user.id);
+            members.push(result);
+        }
+
+        logger.debug("members->",members);
+
+        return members;
+    }
+
 
 }
 export default new RoomManager();
