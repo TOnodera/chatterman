@@ -1,19 +1,31 @@
 import { Socket } from 'socket.io';
 import loginUserStore from '../../Store/LoginUsersStore'
 import User from '../User/User';
-class SocketManager{
+class SocketService{
 
-    //ソケットIDからuserを取得。userが使用しているソケット数を返す
+    /**
+     * 
+     * @param socket 
+     * ソケットIDからuserを取得。userが使用しているソケット数を返す
+     */
     getSocketNumsUsingThisUser(socket: Socket): number{
         return loginUserStore.getSocketNumUsingThisUser(socket.id);
     }
 
-    //user_idからソケットを取得する
-    getSocketFromUserId(user_id: string): string | undefined{
-        const socket_id = loginUserStore.getSocketByUserId(user_id);
-        return socket_id == '' ? undefined : socket_id;
+    /**
+     * @param user_id 
+     * user_idからソケットIDを取得する
+     */
+    getSocketsFromUserId(user_id: string): string[]{
+        return loginUserStore.getSocketsByUserId(user_id);
     }
 
+    /**
+     * 
+     * @param user 
+     * @param socket 
+     * ユーザーをソケットにジョイン
+     */
     async joinUser(user: User,socket: Socket){
         for(let room_id of await user.accessAbleRooms()){
             socket.join(room_id);
@@ -21,4 +33,4 @@ class SocketManager{
     }
 }
 
-export default new SocketManager;
+export default new SocketService;

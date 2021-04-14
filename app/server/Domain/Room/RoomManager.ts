@@ -9,7 +9,6 @@ import config from '../../config';
 import { ROOM_TYPE } from '../../Enum/Enum';
 import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';
-import RoomSocketManager from './RoomSocketManager.ts/RoomSocketManager';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
 
 class RoomManager {
@@ -60,10 +59,6 @@ class RoomManager {
 
     async getInformationRoom(user_id: string): Promise<RoomInfo[]> {
         return await this.repository.getInformationRoom(user_id);
-    }
-
-    getRoomSocketManager(socket: Socket): RoomSocketManager{
-        return new RoomSocketManager(socket);
     }
 
     async isAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
