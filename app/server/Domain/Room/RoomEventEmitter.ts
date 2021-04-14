@@ -21,11 +21,11 @@ class RoomEventEmitter{
     }
 
     sendRoomCreatedEvent(){
-        this.socket.emit('room-created');
+        this.socket.emit('room:room-created');
     }
 
     sendRoomCreatedFailureEvnet(){
-        this.socket.emit('room-created-failure');
+        this.socket.emit('room:room-created-failure');
     }
 
     sendRoomDataEvent(rooms: RoomInfo[]){
