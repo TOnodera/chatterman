@@ -8,7 +8,6 @@ import { transaction } from '../Utility/Connection/Connection';
 import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
-import userManager from "../User/UserManager";
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
 import User from "../User/User";
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
@@ -112,17 +111,11 @@ class ApplyManager {
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
                 //DMルーム情報の更新をするために更新要求を送る
-                const targetUserSockets: string[] = SocketService.getSocketsFromUserId(target_user.id);
-                for(const socket_id of targetUserSockets){
-                    logger.debug(`更新要求送信： socket.id=${socket_id},user=${target_user.name}`);
-                    this.socket.to(socket_id).emit('room:data-update');
-                }
-
+                //自分（許可した側）に送信
+                this.socket.emit('room:data-update');
+                //相手に送信
                 const requestUserSockets: string[] = SocketService.getSocketsFromUserId(request_user_id);
-                for(const socket_id of requestUserSockets){
-                    logger.debug(`更新要求送信： socket.id=${socket_id},user=${request_user_id}`);
-                    this.socket.to(socket_id).emit('room:data-update');
-                }
+                this.socket.to(requestUserSockets[0]).emit('room:data-update');
 
 
                 break;
