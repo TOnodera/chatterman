@@ -20,6 +20,11 @@ class ApplyRepository {
         return rows.length > 0;
     }
 
+    async hasHandled(target_id: string, user_id: string): Promise<boolean>{
+        const [rows]: any[] = await query('SELECT * FROM requests WHERE (( target_user = ? AND request_user = ? ) OR ( request_user = ? AND target_user = ? )) AND deleted_at IS NULL AND is_accept > 0', [target_id, user_id, target_id, user_id]);
+        return rows.length > 0;
+    }
+
     async getUserId(polymorphic_id: number): Promise<string> {
         const [rows]: any[] = await query("SELECT request_user FROM requests WHERE id = ?", [polymorphic_id]);
         if (rows.length > 0) {

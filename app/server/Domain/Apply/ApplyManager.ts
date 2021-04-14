@@ -9,11 +9,13 @@ import { Socket } from "socket.io";
 import NotifyManager from "../Notify/NotifyManager";
 import ApplyEventEmitter from "./ApplyEventEmitter";
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
+import SocketService from "../Utility/SocketService";
 import User from "../User/User";
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
-import uuid from "node-uuid";
-import Room from "../Room/Room";
-import SocketService from "../Utility/SocketService";
+
+/**
+ * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
+ */
 
 class ApplyManager {
 
@@ -56,6 +58,7 @@ class ApplyManager {
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
 
+                //システムから対象者にメッセージ送信
                 const messageOption: MessageOptions = { polymorphic_table: PolymorphicTables.requests, polymorphic_id: polymorphic_id };
                 await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);;
 
@@ -82,41 +85,44 @@ class ApplyManager {
      * @param reaction 
      * 申請に対するリアクションを処理
      */
-    async reaction(unique_id: number, request_user_id: string, reaction: number) {
+    async reaction(unique_id: number, request_user_id: string, reaction: APPLY_REACTION) {
 
         if (await applyService.isThePerson(unique_id, request_user_id) == false) {
             throw new Exception('unique_idに紐づくrequest_user_idが送られてきたrequest_user_idと一致しません。不正アクセスの可能性があります。');
         }
 
+        const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
+        const targetUser: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+
+        //処理済みか確認
+        if (await applyService.hasHandled(targetUser.id, request_user_id)) {
+            this.applyEventEmitter.sendAlreadyApplicationHasHandledEvent();
+            return;
+        }
+
         switch (reaction) {
-            case APPLY_REACTION.IS_ACCEPT_ARROW:
-            case APPLY_REACTION.IS_ACCEPT_DENY:
 
-                //リアクションを登録
-                await applyService.registeApplyReaction(unique_id, reaction);
+            case APPLY_REACTION.IS_ACCEPT_ARROW://許可
 
-                //申請者とのDMに使うルームを受信者側で新規作成
-                const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-                const target_user: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-                const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user.id, ROOM_TYPE.directmessage);
-
-                //申請者と受信者が入場できるように許可を設定する
-                logger.debug(request_user_id, target_user.id);
-                await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
-                await roomManager.addAccessableRooms(target_user.id, directMessageRoom.id);
+                //登録
+                await applyService.registeAccept(unique_id, request_user_id, targetUser.id, reaction);
 
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
-                const message: string = applyService.messageTxt(target_user.name, reaction);
+                const message: string = applyService.messageTxt(targetUser.name, reaction);
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
-                //DMルーム情報の更新をするために更新要求を送る
-                //自分（許可した側）に送信
-                this.socket.emit('room:data-update');
-                //相手に送信
+                //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
+                this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();
                 const requestUserSockets: string[] = SocketService.getSocketsFromUserId(request_user_id);
-                this.socket.to(requestUserSockets[0]).emit('room:data-update');
+                this.applyEventEmitter.sendRoomUpdateEventToRequestUser(requestUserSockets[0]);
 
+                break;
+
+            case APPLY_REACTION.IS_ACCEPT_DENY://拒否
+
+                //リアクションを登録
+                await applyService.registeApplyReaction(unique_id, reaction);
 
                 break;
             default:

@@ -2,53 +2,74 @@ import ApplyRepositoryFactory from './Factory/ApplyRepositoryFactory';
 import ApplyRepository from './Repository/ApplyRepository';
 import apply from './Apply';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
-import { APPLY_REACTION } from '../../Enum/Enum';
+import { APPLY_REACTION, ROOM_TYPE } from '../../Enum/Enum';
 import logger from '../Utility/logger';
+import User from '../User/User';
+import Room from '../Room/Room';
+import uuid from 'node-uuid';
+import roomManager from '../Room/RoomManager';
 
-class ApplyService{
+class ApplyService {
 
     private repository: ApplyRepository;
 
-    constructor(){
+    constructor() {
         this.repository = ApplyRepositoryFactory.create();
     }
 
-    makeMessage(name: string){
+    makeMessage(name: string) {
         return `
             ${name}さんからダイレクトメッセージの許可申請が届きました。
         `;
     }
 
-    async hasAlreadyRequested(target_id: string,user_id: string): Promise<boolean>{
-        return await this.repository.hasAlreadyRequested(target_id,user_id);
+    async hasAlreadyRequested(target_id: string, user_id: string): Promise<boolean> {
+        return await this.repository.hasAlreadyRequested(target_id, user_id);
     }
 
-    async hasAccepted(target_id: string,user_id: string): Promise<boolean>{
-        return await this.repository.hasAccepted(target_id,user_id);
+    async hasAccepted(target_id: string, user_id: string): Promise<boolean> {
+        return await this.repository.hasAccepted(target_id, user_id);
     }
 
-    async registeApplication(target_id: string,user_id: string): Promise<number>{
+    async hasHandled(target_id: string, user_id: string): Promise<boolean> {
+        return await this.repository.hasHandled(target_id, user_id);
+    }
+
+    async registeApplication(target_id: string, user_id: string): Promise<number> {
         const polymorphic_id: number = await apply.apply(target_id, user_id);
         return polymorphic_id;
 
     }
 
-    async registeApplyReaction(unique_id: number,reaction: number): Promise<boolean>{
+    async registeApplyReaction(unique_id: number, reaction: number): Promise<boolean> {
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
 
         return await this.repository.registeApplyReaction(polymorphicInfo, reaction);
     }
 
-    async isThePerson(unique_id: number,user_id: string): Promise<boolean>{
+    async isThePerson(unique_id: number, user_id: string): Promise<boolean> {
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        return await this.repository.isThePerson(polymorphicInfo,user_id);
+        return await this.repository.isThePerson(polymorphicInfo, user_id);
     }
 
-    messageTxt(name: string,reaction: APPLY_REACTION){
+    messageTxt(name: string, reaction: APPLY_REACTION) {
         return reaction == APPLY_REACTION.IS_ACCEPT_ARROW
-        ? `${name}さんへのDM申請が許可されました。`
-        : `${name}さんへのDM申請が拒否されました。`;
+            ? `${name}さんへのDM申請が許可されました。`
+            : `${name}さんへのDM申請が拒否されました。`;
     }
+
+    async registeAccept(unique_id: number, request_user_id: string, target_user_id: string,reaction: APPLY_REACTION) {
+
+        //リアクションを登録
+        await this.registeApplyReaction(unique_id, reaction);
+        //DMルーム作成
+        const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user_id, ROOM_TYPE.directmessage);
+        //申請者と受信者が入場できるように許可を設定する
+        await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
+        await roomManager.addAccessableRooms(target_user_id, directMessageRoom.id);
+
+    }
+    
 
 }
 

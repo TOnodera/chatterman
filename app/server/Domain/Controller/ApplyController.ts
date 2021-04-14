@@ -1,3 +1,4 @@
+import { APPLY_REACTION } from "server/Enum/Enum";
 import { Socket } from "socket.io";
 import ApplyManager from "../Apply/ApplyManager";
 import logger from "../Utility/logger";
@@ -18,7 +19,7 @@ class ApplyController {
         await this.applyManager.apply(target_id,info);        
     }
 
-    async reaction(unique_id: number,user_id: string,reaction: number){
+    async reaction(unique_id: number,user_id: string,reaction: APPLY_REACTION){
         await this.applyManager.reaction(unique_id,user_id,reaction);
     }
 
