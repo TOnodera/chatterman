@@ -1,5 +1,3 @@
-
-import logger from "../Domain/Utility/logger";
 import { Socket } from "socket.io";
 import ApplyController from '../Domain/Controller/ApplyController';
 

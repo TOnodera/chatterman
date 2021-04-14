@@ -57,13 +57,13 @@ export default {
         }
         return 0;
     },
-    getSocketByUserId(user_id: string): string{
-        let socket_id: string = '';
+    getSocketsByUserId(user_id: string): string[]{
+        let sockets: string[] = [];
         this.users.forEach((user,socketId)=>{
             if(user_id == user.id){
-                socket_id = socketId;
+                sockets.push(socketId);
             }
         });
-        return socket_id;
+        return sockets;
     }
 }
