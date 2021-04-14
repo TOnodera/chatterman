@@ -9,15 +9,15 @@ class RoomEventEmitter{
     }
 
     sendUserJoinRoomEvent(room_id: string){
-        this.socket.emit('user:join-room', room_id);
+        this.socket.emit('room:join-room', room_id);
     }
 
     sendDeniedToEnterRoomEvent(room_id: string){
-        this.socket.emit('user:denied-to-enter-room',room_id);
+        this.socket.emit('room:denied-to-enter-room',room_id);
     }
 
     sendUserLeftRoomEvent(room_id: string){
-        this.socket.emit('user:left-room', room_id);
+        this.socket.emit('room:left-room', room_id);
     }
 
     sendRoomCreatedEvent(){
@@ -29,7 +29,7 @@ class RoomEventEmitter{
     }
 
     sendRoomDataEvent(rooms: RoomInfo[]){
-        this.socket.emit('user:send-rooms-data', rooms);
+        this.socket.emit('room:send-rooms-data', rooms);
     }
 
     sendSendUsersDataEvent(clients: Client[],socket: Socket){

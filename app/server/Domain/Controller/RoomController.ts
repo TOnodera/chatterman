@@ -70,7 +70,7 @@ class RoomController {
             const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user_id);
             const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
 
-            this.socket.emit('user:send-rooms-data', rooms);        
+            this.roomEventEmitter.sendRoomDataEvent(rooms);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
