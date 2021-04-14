@@ -13,7 +13,7 @@ module.exports = (socket: Socket) => {
 
     //ダイレクトメッセージルーム情報送信
     const requireUsers = async (user_id: string) => {
-        await roomController.getDirectMessageRoomInfo(user_id, socket);
+        await roomController.getDirectMessageRoomInfo(user_id);
     }
 
     //入室権限があるルーム情報のデータを送信

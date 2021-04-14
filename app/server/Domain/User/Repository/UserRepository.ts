@@ -65,8 +65,7 @@ class UserRepository implements IUserRepository {
         throw new DomainException("ユーザーが見つかりませんでした。");
     }
 
-    //TODO ルームテーブルの参照修正
-    async getMembersId(user_id: string): Promise<string[]>{
+    async getMembersId(): Promise<string[]>{
         const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name',[Config.system.superuser]);
         return rows.map((data: any)=>{
             return data.id;

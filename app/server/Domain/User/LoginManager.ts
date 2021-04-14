@@ -38,7 +38,7 @@ class LoginManager implements ILoginManager{
 
         loginUserStore.set(socket.id,user);
         //入室可能なルームにソケットをジョイン
-        await roomManager.joinUser(user,socket);
+        await roomManager.getRoomSocketManager(socket).joinUser(user);
         //認証用セッション情報設定
         socket.request.session.credentials = credentials;
         //イベント発行

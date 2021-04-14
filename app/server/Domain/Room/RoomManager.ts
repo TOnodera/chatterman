@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 import User from '../User/User';
 import UserFactory from '../User/Factory/UserFactory';
-import logger from '../Utility/logger';
 import Room from './Room';
 import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
@@ -10,33 +9,26 @@ import config from '../../config';
 import { ROOM_TYPE } from '../../Enum/Enum';
 import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';
+import RoomSocketManager from './RoomSocketManager.ts/RoomSocketManager';
 
 class RoomManager {
 
     private INFORMATION_ROOM_NAME = "お知らせ";
     private SUPER_USER = config.system.superuser;
     private repository: any;
+    
     constructor() {
         this.repository = roomRepositoryFactory.create();
     }
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
-        logger.info("入場　試行");
         const user: User = await UserFactory.create(info.user_id);
-        if (await user.isAccessable(info.room_id)) {
-            logger.info("入場　成功",user.name);
-            return true;
-        }
-        logger.info("入場　拒否");
-        return false;
+        return await user.isAccessable(info.room_id)
     }
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        if (await user.isAccessable(info.room_id)) {
-            return true;
-        }
-        return false;
+        return await user.isAccessable(info.room_id);
     }
 
     async createRoom(name: string,creater_id: string, room_type: ROOM_TYPE): Promise<Room> {
@@ -69,14 +61,8 @@ class RoomManager {
         return await this.repository.getInformationRoom(user_id);
     }
 
-    join(room_id: string,socket: Socket){
-        socket.join(room_id);
-    }
-
-    async joinUser(user: User,socket: Socket){
-        for(let room_id of await user.accessAbleRooms()){
-            this.join(room_id,socket);
-        }
+    getRoomSocketManager(socket: Socket): RoomSocketManager{
+        return new RoomSocketManager(socket);
     }
 
     async isAccessableRooms(user_id: string,room_id: string): Promise<boolean>{
@@ -101,21 +87,19 @@ class RoomManager {
 
     async getDirectMessageRoomInfo(my_id: string): Promise<Client[]> {
         
-        const ids: string[] = await this.repository.getMembersId();
-        const users: User[] = await userService.getUsersByIdArray(ids);
+        const users: User[] = await userService.getAllUsers();
 
         const members: Client[] = [];
         for(const user of users){
+
             const result: Client = {id: user.id, name: user.name };
-            logger.debug("my_id,user.id",my_id,user.id);
             const room: Room | null = await this.getDirectMessageRoom(user.id,my_id);
             
-            result.room_id = room ? room.id : user.id;
+            result.room_id = room ? room.id : user.id; //既にDM出来る相手の場合はそのルームIDを設定
             result.isLogin = loginUsersStore.inUsers(user.id);
             members.push(result);
-        }
 
-        logger.debug("members->",members);
+        }
 
         return members;
     }

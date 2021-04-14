@@ -32,8 +32,8 @@ class RoomEventEmitter{
         this.socket.emit('room:send-rooms-data', rooms);
     }
 
-    sendSendUsersDataEvent(clients: Client[],socket: Socket){
-        socket.emit('room:send-directmessage-members-data',clients);       
+    sendSendUsersDataEvent(clients: Client[]){
+        this.socket.emit('room:send-directmessage-members-data',clients);       
     }    
 }
 
