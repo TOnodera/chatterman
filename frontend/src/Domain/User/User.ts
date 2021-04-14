@@ -104,8 +104,16 @@ class UserDomain {
 
 	acceptUsersListener() {
 		socketStore.registeOnce('room:send-directmessage-members-data', (users: { id: string, name: string,room_id?: string, isLogin?: boolean }[]) => {
-			console.log("表示用メンバーデータ受信: ",users);
 			acceptUsersSubject.notify(users);
+		});
+	}
+
+	memberInfoUpdateListener(){
+		socketStore.registeOnce('room:data-update',()=>{
+			console.log("更新要求を受信しました。");
+			//更新情報受信したらデーター送信要求
+			this.getMembers(this.me.user.id);
+			console.log("更新要求を送信しました。");
 		});
 	}
 
@@ -125,6 +133,7 @@ class UserDomain {
 		this.acceptUsersListener();
 		this.logoutListener();
 		this.anotherUserLoginListener();
+		this.memberInfoUpdateListener();
 	}
 }
 
