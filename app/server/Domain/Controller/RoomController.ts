@@ -1,10 +1,11 @@
 import { ROOM_TYPE } from '../../Enum/Enum';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import RoomEventEmitter from '../Room/RoomEventEmitter';
+import RoomEventEmitter from '../Room/Emitter/RoomEventEmitter';
 import roomManager from '../Room/RoomManager';
-import userManager from '../User/UserManager';
 import logger from '../Utility/logger';
+
+
 class RoomController {
 
     private socket: Socket;
@@ -17,13 +18,14 @@ class RoomController {
 
     async attemptToEnter(info: RoomAndUserId) {
         
+
         logger.info(`1/2 ルームへの入場処理開始: user_id: ${info.user_id},room_id: ${info.room_id}`);
         try {
             if (await roomManager.attemptToEnter(info)) {
-                this.roomEventEmitter.sendUserJoinRoomEvent(info.room_id);
+                roomManager.getRoomEventEmitter(this.socket).sendUserJoinRoomEvent(info.room_id);
                 return;
-            } 
-            this.roomEventEmitter.sendDeniedToEnterRoomEvent(info.room_id);
+            }
+            roomManager.getRoomEventEmitter(this.socket).sendDeniedToEnterRoomEvent(info.room_id);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }

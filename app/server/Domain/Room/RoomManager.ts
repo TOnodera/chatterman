@@ -10,6 +10,7 @@ import { ROOM_TYPE } from '../../Enum/Enum';
 import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomSocketManager from './RoomSocketManager.ts/RoomSocketManager';
+import RoomEventEmitter from './Emitter/RoomEventEmitter';
 
 class RoomManager {
 
@@ -23,7 +24,7 @@ class RoomManager {
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        return await user.isAccessable(info.room_id)
+        return await user.isAccessable(info.room_id);
     }
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
@@ -102,6 +103,10 @@ class RoomManager {
         }
 
         return members;
+    }
+
+    getRoomEventEmitter(socket: Socket){
+        return new RoomEventEmitter(socket);
     }
 
 
