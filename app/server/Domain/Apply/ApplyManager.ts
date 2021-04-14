@@ -96,6 +96,7 @@ class ApplyManager {
 
         //処理済みか確認
         if (await applyService.hasHandled(targetUser.id, request_user_id)) {
+            logger.debug("処理済み");
             this.applyEventEmitter.sendAlreadyApplicationHasHandledEvent();
             return;
         }

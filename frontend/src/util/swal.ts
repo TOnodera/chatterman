@@ -12,40 +12,40 @@ class CustomSwal{
         this.swal = sweetalert2;
     }
 
-    info(msg: string){
-        this.swal.fire({
+    async info(msg: string){
+        await this.swal.fire({
             title: 'Info',
             text: msg,
             icon: 'info'            
         });
     }
 
-    success(msg: string){
-        this.swal.fire({
+    async success(msg: string){
+        await this.swal.fire({
             title: 'Success',
             text: msg,
             icon: 'success'
         });
     }
 
-    error(msg: string){
-        this.swal.fire({
+    async error(msg: string){
+        await this.swal.fire({
             title: 'Error',
             text: msg,
             icon: 'error'
         });
     }
 
-    warning(msg: string){
-        this.swal.fire({
+    async warning(msg: string){
+        await this.swal.fire({
             title: 'Warning',
             text: msg,
             icon: 'warning'
         });
     }
 
-    question(msg: string){
-        this.swal.fire({
+    async question(msg: string){
+        await this.swal.fire({
             title: 'Question',
             text: msg,
             icon: 'question'
@@ -53,7 +53,7 @@ class CustomSwal{
     }
 
     async fire(options: SweetAlertOptions): Promise<SweetAlertResult>{
-        return this.swal.fire(options);
+        return await this.swal.fire(options);
     }
 
 }
