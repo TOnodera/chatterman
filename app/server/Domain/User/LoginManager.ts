@@ -8,26 +8,25 @@ import logger from "../Utility/logger";
 import userService from '../User/Service';
 import AfterLoginManager from "./AfterLoginManager";
 
-class LoginManager implements ILoginManager{
+class LoginManager implements ILoginManager {
 
     repository: IUserRepository;
 
-    constructor(){
+    constructor() {
         this.repository = UserRepositoryFactory.create();
     }
 
-    async login(credentials: Credentials): Promise<User> {
-        if(await this.repository.credentials(credentials)){
-            logger.info(`LoginManager.login() -> 1/2 ログイン処理開始:${credentials.email}`);
-            const user: User = await userService.getUserByCredentials(credentials);
+    async login(credentials: Credentials): Promise<boolean> {
+        logger.info(`LoginManager.login() -> 1/2 ログイン処理開始:${credentials.email}`);
+        if (await this.repository.credentials(credentials)) {
             logger.info(`LoginManager.login() -> 2/2 ログイン処理完了:${credentials.email}`);
-            return user;
+            return true;
         }
         throw new AuthenticationException('認証情報が間違っています。未登録の場合は登録して下さい。');
     }
 
-    getAfterLoginManager(socket: Socket){
-        return new AfterLoginManager(socket);   
+    getAfterLoginManager(socket: Socket) {
+        return new AfterLoginManager(socket);
     }
 
 }

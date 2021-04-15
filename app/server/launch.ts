@@ -1,9 +1,12 @@
 import { NextFunction } from "express";
 import express = require("express");
 import { Socket } from "socket.io";
-import route from "./Route";
+import route from "./Http";
 import Config from "./config";
 import logger from "./Domain/Utility/logger";
+import { loginManager } from './Domain/User/LoginManager';
+import AuthenticationException from "./Domain/Exception/AuthenticationException";
+import SocketExceptionHandler from "./Domain/Exception/SocketExceptionHandler";
 
 logger.info(Config.system.cors);
 
@@ -30,9 +33,29 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(session);
 io.use((socket: Socket, next: NextFunction) => {
   session(socket.request, {}, next);
+});
+app.use(session);
+//ソケットのガード設定
+io.use(async (socket: Socket, next: NextFunction) => {
+  //@ts-ignore
+  logger.debug(socket.request);
+  /*
+  try {
+    logger.debug("in auth middleware...");
+    logger.debug(socket.request.session);
+    if (await loginManager.getAfterLoginManager(socket).authenticate(socket.request.session.credentials)) {
+      logger.debug("next()");
+      next();
+    } else {
+      throw new AuthenticationException("ログインして下さい。");
+    }
+  } catch (e) {
+    SocketExceptionHandler.handle(e, socket);
+  }
+  */
+  next();
 });
 //app.use(express.static(path.join(__dirname, '../../dist')));
 socketListener(io);

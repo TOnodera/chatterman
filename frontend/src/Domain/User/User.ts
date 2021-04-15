@@ -6,6 +6,7 @@ import logoutSubject from './Subject/LogoutSubject';
 import anotherUserLoginSubject from './Subject/AnoterUserLoginSubject';
 import http from '@/util/axios';
 import error from '@/util/HttpError';
+import cookie from 'js-cookie';
 
 class UserDomain {
 
@@ -60,8 +61,8 @@ class UserDomain {
 			return false;
 		}
 
-		const response = await http.post('/api/users',newUser);
-		if(error.hasHttpError(response.data)){
+		const response = await http.post('/api/users', newUser);
+		if (error.hasHttpError(response.data)) {
 			error.showError(response.data);
 			return false;
 		}
@@ -71,26 +72,32 @@ class UserDomain {
 	async attemptLogin(credentials: Credentials) {
 
 		this.me.credentials = credentials;
-		const response = await http.post('/api/login',credentials);
+
+		const response = await http.post('/api/login', credentials);
 		const data: any = response.data;
 
-		if(error.hasHttpError(data)){
+		if (error.hasHttpError(data)) {
+			socketStore.socket.close();
 			error.showError(data);
 			return;
 		}
 
-		//ログイン完了イベント発行
-		socketStore.socket.emit('user:after-login',credentials);
-		
+		if (await socketStore.start()) {
+			console.log("cookie:", cookie.get('connect.sid'));
+			//ログイン完了イベント発行
+			socketStore.socket.emit('user:after-login', credentials);
+		}
+
+
 	}
 
-	logout(id: string,credentials: Credentials) {
+	logout(id: string, credentials: Credentials) {
 		socketStore.socket.emit('user:logout', id, credentials);
 		this.me.isLogin = false;
 	}
 
 	getMembers(user_id: string) {
-		socketStore.socket.emit('user:require-members',user_id);
+		socketStore.socket.emit('user:require-members', user_id);
 	}
 
 	loginSuccessListener() {
@@ -103,13 +110,13 @@ class UserDomain {
 	}
 
 	acceptUsersListener() {
-		socketStore.registeOnce('room:send-directmessage-members-data', (users: { id: string, name: string,room_id?: string, isLogin?: boolean }[]) => {
+		socketStore.registeOnce('room:send-directmessage-members-data', (users: { id: string, name: string, room_id?: string, isLogin?: boolean }[]) => {
 			acceptUsersSubject.notify(users);
 		});
 	}
 
-	memberInfoUpdateListener(){
-		socketStore.registeOnce('room:data-update',()=>{
+	memberInfoUpdateListener() {
+		socketStore.registeOnce('room:data-update', () => {
 			console.log("更新要求を受信しました。");
 			//更新情報受信したらデーター送信要求
 			this.getMembers(this.me.user.id);
@@ -117,19 +124,19 @@ class UserDomain {
 		});
 	}
 
-	logoutListener(){
-		socketStore.registeOnce('broadcast:user-logout',(id: string)=>{
+	logoutListener() {
+		socketStore.registeOnce('broadcast:user-logout', (id: string) => {
 			logoutSubject.notify(id);
 		});
 	}
 
-	anotherUserLoginListener(){
-		socketStore.registeOnce('broadcast:user-login',(id:string)=>{
+	anotherUserLoginListener() {
+		socketStore.registeOnce('broadcast:user-login', (id: string) => {
 			anotherUserLoginSubject.notify(id);
 		});
 	}
 
-	launchListener(){
+	launchListener() {
 		this.acceptUsersListener();
 		this.logoutListener();
 		this.anotherUserLoginListener();
