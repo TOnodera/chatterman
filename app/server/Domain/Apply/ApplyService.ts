@@ -6,11 +6,10 @@ import { APPLY_REACTION, ROOM_TYPE } from '../../Enum/Enum';
 import logger from '../Utility/logger';
 import User from '../User/User';
 import Room from '../Room/Room';
-import uuid from 'node-uuid';
+import uuid = require('node-uuid');
 import roomManager from '../Room/RoomManager';
 
 class ApplyService {
-
     private repository: ApplyRepository;
 
     constructor() {
@@ -38,7 +37,6 @@ class ApplyService {
     async registeApplication(target_id: string, user_id: string): Promise<number> {
         const polymorphic_id: number = await apply.apply(target_id, user_id);
         return polymorphic_id;
-
     }
 
     async registeApplyReaction(unique_id: number, reaction: number): Promise<boolean> {
@@ -58,19 +56,19 @@ class ApplyService {
             : `${name}さんへのDM申請が拒否されました。`;
     }
 
-    async registeAccept(unique_id: number, request_user_id: string, target_user_id: string,reaction: APPLY_REACTION) {
-
+    async registeAccept(unique_id: number, request_user_id: string, target_user_id: string, reaction: APPLY_REACTION) {
         //リアクションを登録
         await this.registeApplyReaction(unique_id, reaction);
         //DMルーム作成
-        const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user_id, ROOM_TYPE.directmessage);
+        const directMessageRoom: Room = await roomManager.createRoom(
+            uuid.v4(),
+            target_user_id,
+            ROOM_TYPE.directmessage
+        );
         //申請者と受信者が入場できるように許可を設定する
         await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
         await roomManager.addAccessableRooms(target_user_id, directMessageRoom.id);
-
     }
-    
-
 }
 
-export default new ApplyService;
+export default new ApplyService();

@@ -1,6 +1,6 @@
-import log4js from 'log4js';
+import log4js = require("log4js");
 
 const logger = log4js.getLogger();
-logger.level = 'all';
+logger.level = "all";
 
 export default logger;

@@ -1,11 +1,10 @@
-import uuid from 'node-uuid';
+import uuid = require('node-uuid');
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
 import Exception from '../Exception/Exception';
 
 class UserRegister {
-
     id: string;
     credentials: Credentials;
     name: string;
@@ -19,7 +18,6 @@ class UserRegister {
     }
 
     async registe(): Promise<string> {
-
         if (!this.credentials || !this.name) {
             throw new Exception('このインスタンスを生成したコンストラクタではこのメソッドは呼び出せません。');
         }
@@ -34,7 +32,6 @@ class UserRegister {
         await this.repository.registe(this);
 
         return this.id;
-
     }
 }
 

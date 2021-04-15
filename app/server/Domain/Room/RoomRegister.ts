@@ -1,16 +1,15 @@
-import uuid from 'node-uuid';
+import uuid = require('node-uuid');
 import { ROOM_TYPE } from '../../Enum/Enum';
 import RoomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import RoomRepository from './Repository/RoomRepository';
 class RoomRegister {
-
     id: string;
     name: string;
     creater_id: string;
     room_type: ROOM_TYPE;
     private repository: RoomRepository;
 
-    constructor(name: string,creater_id: string,room_type:ROOM_TYPE) {
+    constructor(name: string, creater_id: string, room_type: ROOM_TYPE) {
         this.repository = RoomRepositoryFactory.create();
         this.id = uuid.v4();
         this.name = name;
@@ -22,7 +21,6 @@ class RoomRegister {
         await this.repository.createRoom(this);
         return this.id;
     }
-
 }
 
 export default RoomRegister;

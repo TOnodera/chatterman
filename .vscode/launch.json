@@ -7,7 +7,7 @@
         "request": "launch",
         "runtimeArgs": [
           "--inspect-brk",
-          "${workspaceRoot}/node_modules/.bin/jest",
+          "${workspaceRoot}/app/node_modules/.bin/jest",
           "--runInBand",
           "--detectOpenHandles"
         ],
@@ -20,10 +20,10 @@
         "type": "node",
         "request": "launch",
         "runtimeArgs": [
-          "${workspaceRoot}/node_modules/.bin/ts-node",
+          "${workspaceRoot}/app/node_modules/.bin/ts-node",
           "--files",
           "-r",
-          "${workspaceRoot}/server"
+          "${workspaceRoot}/app/server"
         ],
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",
