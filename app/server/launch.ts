@@ -22,33 +22,12 @@ const io = require('socket.io')(server, {
 	}
 });
 
-app.use(
-	cors({
-		origin: Config.system.cors,
-		credentials: true
-	})
-);
-app.use(express.json());
 
+//セッション共有用
 MiddlewareLoader.sessionMiddleware(app, io);
+//ソケット用ミドルウェア設定
+MiddlewareLoader.socketMiddlewareLoader(io);
 
-//ソケットのガード設定
-io.use(async (socket: Socket, next: NextFunction) => {
-
-	try {
-		logger.debug("ソケット通信の認証開始　セッション内容 -> ", socket.request.session);
-		if (await loginManager.getAfterLoginManager(socket).authenticate(socket.request.session.credentials)) {
-			logger.debug("認証成功 -> ", socket.request.session);
-			next();
-		} else {
-			throw new AuthenticationException("ログインして下さい。");
-		}
-	} catch (e) {
-		logger.debug("認証成功 -> ", socket.request.session);
-		SocketExceptionHandler.handle(e, socket);
-	}
-	next();
-});
 //app.use(express.static(path.join(__dirname, '../../dist')));
 socketListener(io);
 //expressルート定義

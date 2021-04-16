@@ -1,9 +1,15 @@
+import { NextFunction } from 'express';
 import * as core from 'express-serve-static-core';
 import { Socket } from 'socket.io';
+import authenticationMiddleware from './authenticationMiddleware';
+import express = require('express');
 const session = require('express-session')({
     secret: 'St5Q3wPtv4TJ',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true
+    }
 });
 /**
  * 起動時に読み込むミドルウェアの設定
@@ -16,7 +22,7 @@ class MiddlewareLoader {
      * socket.ioに適用するミドルウェア
      */
     static socketMiddlewareLoader(io: any) {
-
+        io.use(authenticationMiddleware);
     }
 
     /**
@@ -25,6 +31,13 @@ class MiddlewareLoader {
      * expressに適用するミドルウェア
      */
     static httpMiddlewareLoader(app: core.Express) {
+        app.use(
+            cors({
+                origin: Config.system.cors,
+                credentials: true
+            })
+        );
+        app.use(express.json());
 
     }
 
@@ -37,7 +50,7 @@ class MiddlewareLoader {
     static sessionMiddleware(app: core.Express, io: any) {
         //httpリクエストのセッションをソケット接続開始する時に共有する
         app.use(session);
-        io.use((socket: Socket, next?: any) => {
+        io.use((socket: Socket, next?: NextFunction) => {
             session(socket.request, {}, next);
         });
     }
