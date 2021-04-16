@@ -27,8 +27,8 @@ class UserDomain {
 		this.users = [];
 	}
 
-	isLogin() {
-		return;
+	isLogin(): boolean {
+		return this.me.isLogin;
 	}
 
 	addUser(user: User) {
@@ -89,8 +89,7 @@ class UserDomain {
 
 	logout() {
 		socketStore.socket.disconnect();
-		localStorage.isLogin = false;
-		this.me.isLogin = localStorage.isLogin;
+		this.me.isLogin = false;
 	}
 
 	getMembers() {

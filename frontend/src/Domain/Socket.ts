@@ -9,10 +9,7 @@ class ClientSocket {
       withCredentials: true,
       reconnection: false
     })
-    this.onError()
-    setInterval(() => {
-      console.log('接続状態:', this.socket.connected)
-    }, 3000)
+    this.onErrorListener()
   }
 
   /**
@@ -45,7 +42,7 @@ class ClientSocket {
     return true;
   }
 
-  onError() {
+  onErrorListener() {
     this.registeOnce('desconnect', (reason: string) => {
       swal.error('サーバーから切断されました。')
     })
