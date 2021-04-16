@@ -6,13 +6,6 @@ module.exports = (socket: Socket) => {
     const afterLogin = async (credendtials: Credentials) => {
         await UserController.afterCredentials(credendtials, socket);
     };
-
-    //ログアウト
-    const userLogout = async (id: string, credentials: Credentials) => {
-        await UserController.logout(id, credentials, socket);
-    };
-
     //ハンドラ登録
     socket.on('user:after-login', afterLogin);
-    socket.on('user:logout', userLogout);
 };

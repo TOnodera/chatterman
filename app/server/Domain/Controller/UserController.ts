@@ -24,22 +24,5 @@ class UserController {
                 SocketExceptionHandler.handle(e, socket);
             });
     }
-
-    async logout(id: string, credentials: Credentials, socket: Socket) {
-        try {
-            if (await this.loginManager.getAfterLoginManager(socket).logout(credentials)) {
-                socket.request.session.credentials = { email: '', password: '' };
-                return;
-            }
-            userEventEmitter.sendLogoutFailureEvent(id, socket);
-        } catch (e) {
-            SocketExceptionHandler.handle(e, socket);
-        }
-    }
-
-    async authenticate(credentials: Credentials, socket: Socket) {
-        if (await this.loginManager.getAfterLoginManager(socket).authenticate(credentials)) {
-        }
-    }
 }
 export default new UserController();

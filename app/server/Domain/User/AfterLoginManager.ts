@@ -34,31 +34,22 @@ class AfterLoginManager {
         userEventEmitter.broadcastUserLoginEvent(toClient, this.socket);
     }
 
-    async logout(credentials: Credentials): Promise<boolean> {
-        if (await this.repository.credentials(credentials)) {
-            this.logoutHandler(this.socket);
-            return true;
-        }
-        return false;
-    }
-
-    //切断によるログアウト
-    disconnectedLogout(socket: Socket) {
-        this.logoutHandler(socket);
-    }
-
     //ログアウト
-    logoutHandler(socket: Socket) {
-        if (socketService.getSocketNumsUsingThisUser(socket) == 1) {
-            const { user, exist } = loginUserStore.getUserInUsersMap(socket.id);
-            if (exist) {
-                //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
-                userEventEmitter.broadcastUserLogout(user!.id, socket);
-            } else {
-                throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${socket.id}`);
+    async logout() {
+
+        if (await this.authenticate(this.socket.request.session.credentials)) {
+            if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
+                const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
+                if (exist) {
+                    //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
+                    userEventEmitter.broadcastUserLogout(user!.id, this.socket);
+                } else {
+                    throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${this.socket.id}`);
+                }
             }
+            logger.debug("ログアウト処理完了：　ソケット切断済");
         }
-        logger.debug("ログアウト処理完了：　ソケット切断済");
+
     }
 
     async authenticate(credentials: Credentials): Promise<boolean> {

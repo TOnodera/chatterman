@@ -8,12 +8,12 @@ module.exports = (socket: Socket) => {
 
     //切断中まだ切断されていない
     socket.on('disconnecting', (reason: string) => {
-        logger.info('disconnectiong...:', socket.id);
+        logger.info('切断中...:', socket.id);
         switch (reason) {
 
             //クライアントからのログアウト命令で切断
             case DISCONNECTED_REASON.CLIENT_NAMESPACE_DISCONNECT:
-                loginManager.getAfterLoginManager(socket).disconnectedLogout(socket);
+                loginManager.getAfterLoginManager(socket).logout();
                 break;
 
             //接続切り替え(wifi -> 4G or 5G 等)による切断
@@ -25,7 +25,7 @@ module.exports = (socket: Socket) => {
 
     //切断
     socket.on('disconnect', (reason: string) => {
-        logger.info('disconnected:', reason, socket.id);
+        logger.info('切断完了...:', reason, socket.id);
     });
 
 
