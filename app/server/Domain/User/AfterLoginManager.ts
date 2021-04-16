@@ -9,6 +9,7 @@ import userService from '../User/Service';
 import userEventEmitter from '../User/UserEventEmitter';
 import socketService from '../Utility/SocketService';
 import AuthenticationException from '../Exception/AuthenticationException';
+import logger from '../Utility/logger';
 
 class AfterLoginManager {
     private socket: Socket;
@@ -57,7 +58,7 @@ class AfterLoginManager {
                 throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${socket.id}`);
             }
         }
-        loginUserStore.delete(socket.id);
+        logger.debug("ログアウト処理完了：　ソケット切断済");
     }
 
     async authenticate(credentials: Credentials): Promise<boolean> {
