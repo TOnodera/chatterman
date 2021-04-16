@@ -7,17 +7,12 @@ import logger from './Domain/Utility/logger';
 import { loginManager } from './Domain/User/LoginManager';
 import AuthenticationException from './Domain/Exception/AuthenticationException';
 import SocketExceptionHandler from './Domain/Exception/SocketExceptionHandler';
-
-logger.info(Config.system.cors);
+import MiddlewareLoader from './Middleware/MiddlewareLoader';
 
 const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
-const session = require('express-session')({
-	secret: 'St5Q3wPtv4TJ',
-	resave: false,
-	saveUninitialized: true
-});
+
 const socketListener = require('./Listener');
 const io = require('socket.io')(server, {
 	cors: {
@@ -26,6 +21,7 @@ const io = require('socket.io')(server, {
 		credentials: true
 	}
 });
+
 app.use(
 	cors({
 		origin: Config.system.cors,
@@ -33,10 +29,9 @@ app.use(
 	})
 );
 app.use(express.json());
-io.use((socket: Socket, next: NextFunction) => {
-	session(socket.request, {}, next);
-});
-app.use(session);
+
+MiddlewareLoader.sessionMiddleware(app, io);
+
 //ソケットのガード設定
 io.use(async (socket: Socket, next: NextFunction) => {
 
@@ -49,7 +44,7 @@ io.use(async (socket: Socket, next: NextFunction) => {
 			throw new AuthenticationException("ログインして下さい。");
 		}
 	} catch (e) {
-		logger.debug("認証失敗 -> ", socket.request.session);
+		logger.debug("認証成功 -> ", socket.request.session);
 		SocketExceptionHandler.handle(e, socket);
 	}
 	next();
