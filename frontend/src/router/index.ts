@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Main from '@/views/Main.vue'
-import TalkRoom from '@/views/TalkRoom.vue'
-import User from '@/views/User.vue'
-import Room from '@/views/Room.vue'
-import Login from '@/views/Login.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import Main from '@/views/Main.vue';
+import TalkRoom from '@/views/TalkRoom.vue';
+import User from '@/views/User.vue';
+import Room from '@/views/Room.vue';
+import Login from '@/views/Login.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,11 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'User',
     component: User
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-export default router
+export default router;

@@ -1,5 +1,5 @@
-import sweetalert2, { SweetAlertArrayOptions, SweetAlertOptions, SweetAlertResult } from 'sweetalert2'
-import 'sweetalert2/dist/sweetalert2.min.css'
+import sweetalert2, { SweetAlertArrayOptions, SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 /**
  * 基本的な装飾だけはデフォルトで出せるようにここでカスタム
@@ -8,7 +8,7 @@ class CustomSwal {
     private swal;
 
     constructor () {
-      this.swal = sweetalert2
+      this.swal = sweetalert2;
     }
 
     async info (msg: string) {
@@ -16,7 +16,7 @@ class CustomSwal {
         title: 'Info',
         text: msg,
         icon: 'info'
-      })
+      });
     }
 
     async success (msg: string) {
@@ -24,7 +24,7 @@ class CustomSwal {
         title: 'Success',
         text: msg,
         icon: 'success'
-      })
+      });
     }
 
     async error (msg: string) {
@@ -32,7 +32,7 @@ class CustomSwal {
         title: 'Error',
         text: msg,
         icon: 'error'
-      })
+      });
     }
 
     async warning (msg: string) {
@@ -40,7 +40,7 @@ class CustomSwal {
         title: 'Warning',
         text: msg,
         icon: 'warning'
-      })
+      });
     }
 
     async question (msg: string) {
@@ -48,12 +48,12 @@ class CustomSwal {
         title: 'Question',
         text: msg,
         icon: 'question'
-      })
+      });
     }
 
     async fire (options: SweetAlertOptions): Promise<SweetAlertResult> {
-      return await this.swal.fire(options)
+      return await this.swal.fire(options);
     }
 }
 
-export default new CustomSwal()
+export default new CustomSwal();

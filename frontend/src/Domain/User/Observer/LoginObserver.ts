@@ -2,10 +2,10 @@ class LoginObserver {
     static handler: Function;
     static update () {
       if (this.handler) {
-        this.handler()
-        return
+        this.handler();
+        return;
       }
-      throw new Error('イベントハンドラがない状態で呼び出されました。')
+      throw new Error('イベントハンドラがない状態で呼び出されました。');
     }
 }
-export default LoginObserver
+export default LoginObserver;

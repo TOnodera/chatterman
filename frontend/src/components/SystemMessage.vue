@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ApprovalButtons from './ApprovalButtons.vue'
+import { defineComponent } from 'vue';
+import ApprovalButtons from './ApprovalButtons.vue';
 
 export default defineComponent({
   name: 'SystemMessage',
@@ -39,9 +39,9 @@ export default defineComponent({
     ApprovalButtons
   },
   mounted () {
-    console.log(this.options)
+    console.log(this.options);
   }
-})
+});
 </script>
 
 <style lang="scss" scope>

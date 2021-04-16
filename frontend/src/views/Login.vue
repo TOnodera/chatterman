@@ -63,10 +63,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import user from '../Domain/User/User'
-import swal from '../util/swal'
-import LoginObserver from '../Domain/User/Observer/LoginObserver'
+import { defineComponent } from 'vue';
+import user from '../Domain/User/User';
+import swal from '../util/swal';
+import LoginObserver from '../Domain/User/Observer/LoginObserver';
 
 export default defineComponent({
   name: 'Login',
@@ -76,23 +76,23 @@ export default defineComponent({
         email: '',
         password: ''
       } as Credentials
-    }
+    };
   },
   methods: {
     async attempt () {
-      user.attemptLogin(this.credentials)
+      user.attemptLogin(this.credentials);
     },
     toRegisterPage () {
-      this.$router.push({ name: 'User' })
+      this.$router.push({ name: 'User' });
     }
   },
   mounted () {
     LoginObserver.handler = () => {
-      swal.success('ログインしました。')
-      this.$router.push({ name: 'TalkRoom', params: { room_id: 'everybody' } })
-    }
+      swal.success('ログインしました。');
+      this.$router.push({ name: 'TalkRoom', params: { room_id: 'everybody' } });
+    };
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

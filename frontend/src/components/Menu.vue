@@ -47,17 +47,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import user from '../Domain/User/User'
-import AcceptUsersObserver from '../Domain/User/Observer/AcceptUsersObserver'
-import LogoutObserver from '../Domain/User/Observer/LogoutObserver'
-import AnotherUserLoginObserver from '../Domain/User/Observer/AnotherUserLoginObserver'
-import FlashIcon from './FlashIcon.vue'
-import AcceptRoomsObserver from '../Domain/Room/Observer/AcceptRoomsObserver'
-import NoticeObserver from '../Domain/Notice/Observer/NoticeObserver'
-import swal from '../util/swal'
+import { defineComponent } from 'vue';
+import user from '../Domain/User/User';
+import AcceptUsersObserver from '../Domain/User/Observer/AcceptUsersObserver';
+import LogoutObserver from '../Domain/User/Observer/LogoutObserver';
+import AnotherUserLoginObserver from '../Domain/User/Observer/AnotherUserLoginObserver';
+import FlashIcon from './FlashIcon.vue';
+import AcceptRoomsObserver from '../Domain/Room/Observer/AcceptRoomsObserver';
+import NoticeObserver from '../Domain/Notice/Observer/NoticeObserver';
+import swal from '../util/swal';
 
-import room from '../Domain/Room/Room'
+import room from '../Domain/Room/Room';
 export default defineComponent({
   name: 'Menu',
   props: ['test'],
@@ -69,72 +69,72 @@ export default defineComponent({
       isHiddenFlashIcon: true,
       // debug
       isMounted: false
-    }
+    };
   },
   components: {
     FlashIcon
   },
   methods: {
     async logout () {
-      await user.logout(this.me.id, user.me.credentials)
-      this.$router.push({ name: 'Login' })
+      await user.logout(this.me.id, user.me.credentials);
+      this.$router.push({ name: 'Login' });
     },
     lookAtInformationRoom () {
-      swal.info('新しいお知らせを受信しています。確認して下さい。')
+      swal.info('新しいお知らせを受信しています。確認して下さい。');
     }
   },
   async mounted () {
-    this.isMounted = true
+    this.isMounted = true;
     /**
          * イベントハンドラ設定
          */
 
     // 表示用メンバーデータ受信時の処理
     AcceptUsersObserver.handler = (users: any[]) => {
-      this.users = users
-    }
+      this.users = users;
+    };
     // 表示用ルームデータ受信時の処理
     AcceptRoomsObserver.handler = (rooms: any[]) => {
-      this.rooms = rooms
-    }
+      this.rooms = rooms;
+    };
     // ログアウトイベント受信時の処理
     LogoutObserver.handler = (id: string) => {
       this.users = this.users.map((user: User) => {
         if (user.id == id) {
-          user.isLogin = false
+          user.isLogin = false;
         }
-        return user
-      })
-    }
+        return user;
+      });
+    };
     // 別のユーザーのログインイベントの処理
     AnotherUserLoginObserver.handler = (loginUser: User) => {
       this.users = this.users.map((user: User) => {
         if (user.id == loginUser.id) {
-          user.isLogin = true
+          user.isLogin = true;
         }
-        return user
-      })
-    }
+        return user;
+      });
+    };
     // 新規お知らせメッセージ受信時
     NoticeObserver.handler = () => {
-      this.isHiddenFlashIcon = false
-    }
+      this.isHiddenFlashIcon = false;
+    };
 
     /**
          * イベント送信
          */
 
     // ユーザーデータ送信要求
-    user.getMembers(user.me.user.id)
+    user.getMembers(user.me.user.id);
     // ルームデータ送信要求
-    room.getRooms(user.me.user.id)
+    room.getRooms(user.me.user.id);
 
-    console.log('mounted: ', this.users, this.rooms, this.test)
+    console.log('mounted: ', this.users, this.rooms, this.test);
   },
   updated () {
-    console.log('updated: ', this.users, this.rooms, this.test)
+    console.log('updated: ', this.users, this.rooms, this.test);
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

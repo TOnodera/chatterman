@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import AnotherUserMessage from '../components/AnotherUserMessage.vue'
-import MyMessage from '../components/MyMessage.vue'
+import AnotherUserMessage from '../components/AnotherUserMessage.vue';
+import MyMessage from '../components/MyMessage.vue';
 export default {
   name: 'Messages',
   components: {
@@ -36,5 +36,5 @@ export default {
       type: String, required: true
     }
   }
-}
+};
 </script>

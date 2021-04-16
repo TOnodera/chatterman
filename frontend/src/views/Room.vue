@@ -23,29 +23,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import swal from '../util/swal'
-import room from '../Domain/Room/Room'
-import user from '../Domain/User/User'
+import { defineComponent } from 'vue';
+import swal from '../util/swal';
+import room from '../Domain/Room/Room';
+import user from '../Domain/User/User';
 
 export default defineComponent({
   name: 'User',
   data () {
     return {
       name: ''
-    }
+    };
   },
   methods: {
     cancel () {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     register () {
       if (!this.name) {
-        swal.warning('ルーム名を入力して下さい。')
-        return
+        swal.warning('ルーム名を入力して下さい。');
+        return;
       }
-      room.createRoom(this.name, user.me.user.id)
+      room.createRoom(this.name, user.me.user.id);
     }
   }
-})
+});
 </script>

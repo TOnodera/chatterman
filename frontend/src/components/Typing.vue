@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import room from '../Domain/Room/Room'
-import typingEventObserver from '../Domain/Message/Observer/TypingEventObserver'
+import { defineComponent } from 'vue';
+import room from '../Domain/Room/Room';
+import typingEventObserver from '../Domain/Message/Observer/TypingEventObserver';
 
 export default defineComponent({
   name: 'Typing',
@@ -23,33 +23,33 @@ export default defineComponent({
       isTyping: false,
       typingUser: '',
       typingTimer: 3000 // タイピングアイコンの表示時間
-    }
+    };
   },
   mounted () {
     // 「入力中...」の表示
-    let count = 1
+    let count = 1;
     setInterval(() => {
-      this.dot += '.'
+      this.dot += '.';
       if (count > 4) {
-        this.dot = ''
-        count = 0
+        this.dot = '';
+        count = 0;
       }
-      count++
-    }, 300)
+      count++;
+    }, 300);
 
     // タイピングイベント受信時の処理
     typingEventObserver.handle = (info: {user_name: string, room_id: string}) => {
       if (this.isTyping == false && room.current == info.room_id) {
-        this.isTyping = true
-        this.typingUser = info.user_name
+        this.isTyping = true;
+        this.typingUser = info.user_name;
         const id = setTimeout(() => {
-          this.isTyping = false
-          clearTimeout(id)
-        }, this.typingTimer)
+          this.isTyping = false;
+          clearTimeout(id);
+        }, this.typingTimer);
       }
-    }
+    };
   }
-})
+});
 </script>
 
 <style lang="scss">

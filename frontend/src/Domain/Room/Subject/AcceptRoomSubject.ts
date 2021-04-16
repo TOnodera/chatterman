@@ -1,9 +1,9 @@
-import AcceptRoomsObserver from '../Observer/AcceptRoomsObserver'
+import AcceptRoomsObserver from '../Observer/AcceptRoomsObserver';
 
 class AcceptRoomSubject {
   notify (rooms: any[]) {
-    AcceptRoomsObserver.update(rooms)
+    AcceptRoomsObserver.update(rooms);
   }
 }
 
-export default new AcceptRoomSubject()
+export default new AcceptRoomSubject();

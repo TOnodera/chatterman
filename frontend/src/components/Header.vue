@@ -28,10 +28,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import FlashIcon from './FlashIcon.vue'
-import Menu from './Menu.vue'
-import viewStore from '../store/view'
+import { defineComponent } from 'vue';
+import FlashIcon from './FlashIcon.vue';
+import Menu from './Menu.vue';
+import viewStore from '../store/view';
 
 export default defineComponent({
   name: 'Header',
@@ -42,15 +42,15 @@ export default defineComponent({
   data () {
     return {
       isMenuButtonClicked: false
-    }
+    };
   },
   methods: {
     toggle () {
-      this.isMenuButtonClicked = !this.isMenuButtonClicked
-      viewStore.set(this.isMenuButtonClicked)
+      this.isMenuButtonClicked = !this.isMenuButtonClicked;
+      viewStore.set(this.isMenuButtonClicked);
     }
   }
-})
+});
 </script>
 
 <style lang="scss">

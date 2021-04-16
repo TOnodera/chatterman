@@ -1,9 +1,9 @@
-import NoticeObserver from '../Observer/NoticeObserver'
+import NoticeObserver from '../Observer/NoticeObserver';
 
 class NoticeSubject {
   notify () {
-    NoticeObserver.update()
+    NoticeObserver.update();
   }
 }
 
-export default new NoticeSubject()
+export default new NoticeSubject();

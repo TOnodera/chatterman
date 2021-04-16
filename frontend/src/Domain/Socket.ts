@@ -2,11 +2,12 @@ import io, { Socket } from 'socket.io-client'
 import swal from '../util/swal'
 class ClientSocket {
   socket: typeof Socket;
-  constructor () {
+  constructor() {
     this.socket = io('http://localhost:3000', {
       autoConnect: false,
       // @ts-ignore
-      withCredentials: true
+      withCredentials: true,
+      reconnection: false
     })
     this.onError()
     setInterval(() => {
@@ -20,28 +21,39 @@ class ClientSocket {
    * @param func
    * リスナが未登録の場合のみ登録する
    */
-  registeOnce (event: string, func: Function) {
+  registeOnce(event: string, func: Function) {
     if (this.socket.hasListeners(event) == false) {
       this.socket.on(event, func)
     }
   }
 
-  async start () {
-    console.log('start connect()')
-    this.socket.connect()
-    const result = await new Promise((resolve, reject) => {
-      this.socket.on('connect', () => {
-        resolve(this.socket.connected)
-        console.log('done connect()')
-      })
-    })
-      .then(result => result)
-    console.log('end connect()')
+  async start() {
 
-    return result
+    if (!this.socket.connected) {
+
+      console.log('start connect()')
+      const result = await new Promise((resolve, reject) => {
+
+        this.socket.connect()
+        this.socket.on('connect', () => {
+
+          resolve(this.socket.connected)
+          console.log('done connect()')
+
+        })
+
+      }).then(result => result)
+
+      console.log('end connect()')
+
+      return result;
+    }
+
+    console.log("既に接続済みです");
+    return true;
   }
 
-  onError () {
+  onError() {
     this.registeOnce('desconnect', (reason: string) => {
       swal.error('サーバーから切断されました。')
     })

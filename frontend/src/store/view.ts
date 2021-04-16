@@ -3,13 +3,13 @@ class ViewStore {
     static handler: Function;
 
     static set (value: boolean) {
-      this.isVisibleSideMenu = value
-      this.handler(this.isVisibleSideMenu)
+      this.isVisibleSideMenu = value;
+      this.handler(this.isVisibleSideMenu);
     }
 
     static get () {
-      this.isVisibleSideMenu
+      this.isVisibleSideMenu;
     }
 }
 
-export default ViewStore
+export default ViewStore;

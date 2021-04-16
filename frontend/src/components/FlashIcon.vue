@@ -10,10 +10,10 @@ export default {
   name: 'FlashIcon',
   methods: {
     clicked () {
-      this.$emit('info-clicked')
+      this.$emit('info-clicked');
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

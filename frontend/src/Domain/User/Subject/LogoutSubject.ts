@@ -1,7 +1,7 @@
-import LogoutObserver from '../Observer/LogoutObserver'
+import LogoutObserver from '../Observer/LogoutObserver';
 class LogoutSubject {
   notify (id: string) {
-    LogoutObserver.update(id)
+    LogoutObserver.update(id);
   }
 }
-export default new LogoutSubject()
+export default new LogoutSubject();

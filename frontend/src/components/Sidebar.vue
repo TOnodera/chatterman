@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Menu from './Menu.vue'
-import viewStore from '../store/view'
+import { defineComponent } from 'vue';
+import Menu from './Menu.vue';
+import viewStore from '../store/view';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -17,14 +17,14 @@ export default defineComponent({
   data () {
     return {
       isMenuShow: false
-    }
+    };
   },
   mounted () {
     viewStore.handler = (isMenuButtonClicked: boolean) => {
-      this.isMenuShow = isMenuButtonClicked
-    }
+      this.isMenuShow = isMenuButtonClicked;
+    };
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

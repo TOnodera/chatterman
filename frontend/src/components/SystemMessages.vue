@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import SystemMessage from '../components/SystemMessage.vue'
+import SystemMessage from '../components/SystemMessage.vue';
 export default {
   name: 'SystemMessages',
   components: {
@@ -24,5 +24,5 @@ export default {
       type: Array
     }
   }
-}
+};
 </script>

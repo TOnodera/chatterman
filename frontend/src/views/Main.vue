@@ -15,11 +15,11 @@
 </template>
 
 <script lang="ts">
-import Header from '@/components/Header.vue'
-import Sidebar from '@/components/Sidebar.vue'
-import { defineComponent } from 'vue'
-import { launchAtLoggedIn as listen } from '../Domain/Listener'
-import { emitAtLoggedIn } from '../Domain/InitEmitter'
+import Header from '@/components/Header.vue';
+import Sidebar from '@/components/Sidebar.vue';
+import { defineComponent } from 'vue';
+import { launchAtLoggedIn as listen } from '../Domain/Listener';
+import { emitAtLoggedIn } from '../Domain/InitEmitter';
 
 export default defineComponent({
   name: 'Main',
@@ -29,11 +29,11 @@ export default defineComponent({
   },
   mounted () {
     // ログイン後に送信するイベント
-    emitAtLoggedIn()
+    emitAtLoggedIn();
     // ログイン後に必要になるサーバーからイベントリスナ設定
-    listen()
+    listen();
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
     <div class="app-wrapper">
         <div class="app-contents">
-            <router-view/>
+            <router-view />
         </div>
         <div class="app-footer">
             <Footer />
@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import Footer from './components/Footer.vue'
-import { launchAtAppUped } from './Domain/Listener'
-import { emitAtAppUped } from './Domain/InitEmitter'
-import { defineComponent } from 'vue'
+import Footer from './components/Footer.vue';
+import { launchAtAppUped } from './Domain/Listener';
+import { emitAtAppUped } from './Domain/InitEmitter';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'App',
@@ -21,10 +21,10 @@ export default defineComponent({
     Footer
   },
   mounted () {
-    emitAtAppUped()// アプリ起動時に送信するイベント
-    launchAtAppUped()// アプリ起動時に起動するリスナ
+    emitAtAppUped(); // アプリ起動時に送信するイベント
+    launchAtAppUped(); // アプリ起動時に起動するリスナ
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

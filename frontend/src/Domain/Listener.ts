@@ -1,9 +1,9 @@
-import serverException from '@/Domain/Exception/ServerException'
-import user from './User/User'
-import room from './Room/Room'
-import message from './Message/Message'
-import apply from './Apply/Apply'
-import notice from './Notice/Notice'
+import serverException from '@/Domain/Exception/ServerException';
+import user from './User/User';
+import room from './Room/Room';
+import message from './Message/Message';
+import apply from './Apply/Apply';
+import notice from './Notice/Notice';
 
 /**
  * サーバーから受信するイベントのリスナー
@@ -11,19 +11,19 @@ import notice from './Notice/Notice'
  */
 
 const launchAtLoggedIn = () => {
-  user.launchListener()
-  room.launchListener()
-  message.launchListener()
-  apply.launchListener()
-  notice.launchListener()
-}
+  user.launchListener();
+  room.launchListener();
+  message.launchListener();
+  apply.launchListener();
+  notice.launchListener();
+};
 
 const launchAtAppUped = () => {
-  serverException.launchListener()
-  user.loginSuccessListener()
-}
+  serverException.launchListener();
+  user.loginSuccessListener();
+};
 
 export {
   launchAtLoggedIn,
   launchAtAppUped
-}
+};
