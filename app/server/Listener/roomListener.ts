@@ -20,7 +20,17 @@ module.exports = (socket: Socket) => {
         await roomController.getTalkRooms(user_id);
     };
 
+    const attemptToEnter = async (info: RoomAndUserId) => {
+        await roomController.attemptToEnter(info);
+    };
+
+    const leaveCurrentRoom = async (info: RoomAndUserId) => {
+        await roomController.leaveCurrentRoom(info);
+    };
+
     socket.on('user:create-room', createRoom);
     socket.on('user:require-members', requireUsers);
     socket.on('user:require-rooms', requireRooms);
+    socket.on('user:attempt-to-enter-room', attemptToEnter);
+    socket.on('user:leave-room', leaveCurrentRoom);
 };

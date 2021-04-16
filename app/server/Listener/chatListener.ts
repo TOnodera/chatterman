@@ -19,15 +19,6 @@ module.exports = (socket: Socket) => {
         console.log('deleteMessage...');
     };
 
-    const attemptToEnter = async (info: RoomAndUserId) => {
-        logger.info(`次のユーザーが入室しようとしました。 user:${info.user_id} -> room:${info.room_id}`);
-        await roomController.attemptToEnter(info);
-    };
-
-    const leaveCurrentRoom = async (info: RoomAndUserId) => {
-        await roomController.leaveCurrentRoom(info);
-    };
-
     const userTyping = (user: { id: string; name: string }, room_id: string) => {
         messageController.typing(user, room_id);
     };
@@ -44,8 +35,6 @@ module.exports = (socket: Socket) => {
     socket.on('user:send-message', userSendMessage);
     socket.on('user:edit-message', userEditMessage);
     socket.on('user:delete-message', deleteMessage);
-    socket.on('user:attempt-to-enter-room', attemptToEnter);
-    socket.on('user:leave-room', leaveCurrentRoom);
     socket.on('user:typing', userTyping);
     socket.on('user:latest-messages', latestMessages);
     socket.on('user:more-messages', moreMessages);
