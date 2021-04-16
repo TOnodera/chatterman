@@ -21,6 +21,9 @@ class AfterLoginManager {
     }
 
     async afterCredentials(credentials: Credentials) {
+
+        logger.debug('in afterLogin: afterCredentials');
+
         const user: User = await userService.getUserByCredentials(credentials);
         const information_room = await roomManager.getInformationRoomId(user.id);
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };

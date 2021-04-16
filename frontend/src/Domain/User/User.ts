@@ -83,6 +83,7 @@ class UserDomain {
 		if (await socketStore.start()) {
 			// ログイン完了イベント発行
 			socketStore.socket.emit('user:after-login', credentials);
+			console.log("send after-login");
 		}
 	}
 

@@ -27,29 +27,21 @@ class ClientSocket {
     }
   }
 
+  awaitForConnect() {
+    return new Promise(resolve => {
+      this.socket.on("connect", () => resolve(this.socket.connected));
+    })
+      .then(result => result);
+  }
+
   async start() {
 
     if (!this.socket.connected) {
-
-      console.log("接続開始");
       this.socket.connect()
-      const result = await new Promise((resolve) => {
-
-        this.registeOnce('connect', () => {
-          resolve(this.socket.connected)
-          console.log('接続！')
-        })
-
-      })
-        .then(result => result)
-        .catch((e) => { throw new Error("接続に失敗しました。") })
-
-      console.log("接続完了");
-
+      const result = await this.awaitForConnect().catch(() => { throw new Error("接続に失敗しました。") })
       return result;
     }
 
-    console.log("既に接続済みです");
     return true;
   }
 
