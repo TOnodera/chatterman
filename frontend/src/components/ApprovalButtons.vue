@@ -6,35 +6,35 @@
 </template>
 
 <script lang="ts">
-import reactionDomain from '../Domain/Apply/Reaction';
-import { APPLY_REACTIONS } from '../Enum';
-import { defineComponent } from 'vue';
-import swal from '../util/swal';
+import reactionDomain from '../Domain/Apply/Reaction'
+import { APPLY_REACTIONS } from '../Enum'
+import { defineComponent } from 'vue'
+import swal from '../util/swal'
 
 export default defineComponent({
-    name: 'ApprovalButtons',
-    props: {
-        unique_id: {
-            required: true, type: Number
-        },
-        user_id: {
-            required: true, type: String
-        }
+  name: 'ApprovalButtons',
+  props: {
+    unique_id: {
+      required: true, type: Number
     },
-    data(){
-        return {
-            APPLY_REACTIONS: APPLY_REACTIONS
-        };
-    },
-    methods: {
-        reaction(reaction: APPLY_REACTIONS){
-            reactionDomain.send(this.unique_id,this.user_id,reaction);
-            if(reaction == APPLY_REACTIONS.APPROVE){
-                swal.success("承認しました。");
-            }else{
-                swal.warning("拒否しました。");
-            }
-        }
+    user_id: {
+      required: true, type: String
     }
-});
+  },
+  data () {
+    return {
+      APPLY_REACTIONS: APPLY_REACTIONS
+    }
+  },
+  methods: {
+    reaction (reaction: APPLY_REACTIONS) {
+      reactionDomain.send(this.unique_id, this.user_id, reaction)
+      if (reaction == APPLY_REACTIONS.APPROVE) {
+        swal.success('承認しました。')
+      } else {
+        swal.warning('拒否しました。')
+      }
+    }
+  }
+})
 </script>

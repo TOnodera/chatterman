@@ -10,21 +10,21 @@
 </template>
 
 <script lang="ts">
-import Footer from './components/Footer.vue';
-import { launchAtAppUped } from './Domain/Listener';
-import { emitAtAppUped } from './Domain/InitEmitter';
-import { defineComponent } from 'vue';
+import Footer from './components/Footer.vue'
+import { launchAtAppUped } from './Domain/Listener'
+import { emitAtAppUped } from './Domain/InitEmitter'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     Footer
   },
-  mounted() {
-    emitAtAppUped();//アプリ起動時に送信するイベント
-    launchAtAppUped();//アプリ起動時に起動するリスナ
+  mounted () {
+    emitAtAppUped()// アプリ起動時に送信するイベント
+    launchAtAppUped()// アプリ起動時に起動するリスナ
   }
-});
+})
 </script>
 
 <style lang="scss" scoped>

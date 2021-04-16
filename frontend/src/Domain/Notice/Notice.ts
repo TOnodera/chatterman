@@ -1,18 +1,16 @@
-import socketStore from '../Socket';
-import noticeSubject from './Subject/NoticeSubject';
+import socketStore from '../Socket'
+import noticeSubject from './Subject/NoticeSubject'
 
-class Notice{
+class Notice {
+  launchListener () {
+    this.noticeListener()
+  }
 
-    launchListener(){
-        this.noticeListener();
-    }
-
-    noticeListener(){
-        socketStore.registeOnce('user:new-notice',()=>{
-            noticeSubject.notify();
-        });
-    }
-
+  noticeListener () {
+    socketStore.registeOnce('user:new-notice', () => {
+      noticeSubject.notify()
+    })
+  }
 }
 
-export default new Notice;
+export default new Notice()

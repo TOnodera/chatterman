@@ -13,16 +13,16 @@
 </template>
 
 <script>
-import SystemMessage from "../components/SystemMessage.vue";
+import SystemMessage from '../components/SystemMessage.vue'
 export default {
-    name: "SystemMessages",
-    components: {
-        SystemMessage
-    },
-    props: {
-        messages: {
-            type: Array
-        }
+  name: 'SystemMessages',
+  components: {
+    SystemMessage
+  },
+  props: {
+    messages: {
+      type: Array
     }
-};
+  }
+}
 </script>

@@ -73,37 +73,37 @@
 </template>
 
 <script lang="ts">
-import swal from "../util/swal";
-import user from "../Domain/User/User";
-import { defineComponent } from "vue";
+import swal from '../util/swal'
+import user from '../Domain/User/User'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: "User",
-    data() {
-        return {
-            newUser: {
-                name: "",
-                credentials: {
-                    email: "",
-                    password: ""
-                }
-            } as UserRegisteInfo
-        };
-    },
-    methods: {
-        toLoginPage() {
-            this.$router.push({ name: "Login" });
-        },
-        async register() {
-            try {
-                if (await user.registe(this.newUser)) {
-                    swal.success("登録しました。ログインして下さい。");
-                    this.$router.push({ name: "Login" });
-                } 
-            } catch (e) {
-                swal.warning(e.message);
-            }
+  name: 'User',
+  data () {
+    return {
+      newUser: {
+        name: '',
+        credentials: {
+          email: '',
+          password: ''
         }
+      } as UserRegisteInfo
     }
-});
+  },
+  methods: {
+    toLoginPage () {
+      this.$router.push({ name: 'Login' })
+    },
+    async register () {
+      try {
+        if (await user.registe(this.newUser)) {
+          swal.success('登録しました。ログインして下さい。')
+          this.$router.push({ name: 'Login' })
+        }
+      } catch (e) {
+        swal.warning(e.message)
+      }
+    }
+  }
+})
 </script>

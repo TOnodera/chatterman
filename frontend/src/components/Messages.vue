@@ -20,21 +20,21 @@
 </template>
 
 <script>
-import AnotherUserMessage from "../components/AnotherUserMessage.vue";
-import MyMessage from "../components/MyMessage.vue";
+import AnotherUserMessage from '../components/AnotherUserMessage.vue'
+import MyMessage from '../components/MyMessage.vue'
 export default {
-    name: "Messages",
-    components: {
-        AnotherUserMessage,
-        MyMessage
+  name: 'Messages',
+  components: {
+    AnotherUserMessage,
+    MyMessage
+  },
+  props: {
+    messages: {
+      type: Array
     },
-    props: {
-        messages: {
-            type: Array
-        },
-        user_id: {
-            type: String,required: true
-        }
+    user_id: {
+      type: String, required: true
     }
-};
+  }
+}
 </script>

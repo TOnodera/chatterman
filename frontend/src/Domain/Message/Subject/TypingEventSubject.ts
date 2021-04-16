@@ -1,7 +1,7 @@
-import TypingEventObserver from '../Observer/TypingEventObserver';
-class TypingEventSubject{
-    notify(info: {user_name: string,room_id: string}){
-        TypingEventObserver.update(info);
-    }
+import TypingEventObserver from '../Observer/TypingEventObserver'
+class TypingEventSubject {
+  notify (info: {user_name: string, room_id: string}) {
+    TypingEventObserver.update(info)
+  }
 }
-export default new TypingEventSubject();
+export default new TypingEventSubject()

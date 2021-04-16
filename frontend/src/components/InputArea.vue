@@ -15,22 +15,22 @@
 
 <script>
 export default {
-    name: 'InputArea',
-    data(){
-        return {
-            message: ''
-        };
+  name: 'InputArea',
+  data () {
+    return {
+      message: ''
+    }
+  },
+  methods: {
+    send () {
+      this.$emit('message-send', this.message)
+      this.message = ''
     },
-    methods: {
-        send(){
-            this.$emit('message-send',this.message);
-            this.message = '';
-        },
-        typing(){
-            this.$emit('typing');
-        }
-    },
-};
+    typing () {
+      this.$emit('typing')
+    }
+  }
+}
 </script>
 
 <style lang="scss">

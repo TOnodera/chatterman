@@ -4,7 +4,7 @@
             <div>
                 <p class="system-comment has-text-white has-background-info">{{message}}</p>
                 <template v-if="options">
-                    <ApprovalButtons :unique_id="options.unique_id" :user_id="options.user_id"/> 
+                    <ApprovalButtons :unique_id="options.unique_id" :user_id="options.user_id"/>
                 </template>
                 <p class="user-info is-size-7">
                     <span>{{user_name}}</span>
@@ -16,32 +16,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import ApprovalButtons from './ApprovalButtons.vue';
+import { defineComponent } from 'vue'
+import ApprovalButtons from './ApprovalButtons.vue'
 
 export default defineComponent({
-    name: "SystemMessage",
-    props: {
-        message: {
-            type: String
-        },
-        user_name: {
-            type: String
-        },
-        created_at: {
-            type: String
-        },
-        options: {
-            type: Object
-        }
+  name: 'SystemMessage',
+  props: {
+    message: {
+      type: String
     },
-    components: {
-        ApprovalButtons
+    user_name: {
+      type: String
     },
-    mounted(){
-        console.log(this.options);
+    created_at: {
+      type: String
+    },
+    options: {
+      type: Object
     }
-});
+  },
+  components: {
+    ApprovalButtons
+  },
+  mounted () {
+    console.log(this.options)
+  }
+})
 </script>
 
 <style lang="scss" scope>

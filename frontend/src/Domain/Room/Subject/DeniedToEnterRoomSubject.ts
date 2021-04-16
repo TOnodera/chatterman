@@ -1,9 +1,9 @@
-import DeniedToEnterRoomObserver from "../Observer/DeniedToEnterRoomObserver";
+import DeniedToEnterRoomObserver from '../Observer/DeniedToEnterRoomObserver'
 
-class DeniedToEnterRoomSubject{
-    notify(denied: string){
-        DeniedToEnterRoomObserver.update(denied);
-    }
+class DeniedToEnterRoomSubject {
+  notify (denied: string) {
+    DeniedToEnterRoomObserver.update(denied)
+  }
 }
 
-export default new DeniedToEnterRoomSubject;
+export default new DeniedToEnterRoomSubject()

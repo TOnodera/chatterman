@@ -1,9 +1,9 @@
-import ArrowedToEnterRoomObserver from "../Observer/ArrowedToEnterRoomObserver";
+import ArrowedToEnterRoomObserver from '../Observer/ArrowedToEnterRoomObserver'
 
-class ArrowedToEnterRoomSubject{
-    notify(room_id: string){
-        ArrowedToEnterRoomObserver.update(room_id);
-    }
+class ArrowedToEnterRoomSubject {
+  notify (room_id: string) {
+    ArrowedToEnterRoomObserver.update(room_id)
+  }
 }
 
-export default new ArrowedToEnterRoomSubject;
+export default new ArrowedToEnterRoomSubject()

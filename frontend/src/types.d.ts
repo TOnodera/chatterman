@@ -52,7 +52,7 @@ interface FromServerMessage {
     options?: Options;
 }
 
-//メッセージに付いてくる可能性のある付加オプション
+// メッセージに付いてくる可能性のある付加オプション
 interface FromServerOptions {
     polimorphic_id: string | number;
 }

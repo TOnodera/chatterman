@@ -24,33 +24,33 @@
             </div>
         </div>
     </nav>
-    
+
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import FlashIcon from "./FlashIcon.vue";
-import Menu from './Menu.vue';
-import viewStore from '../store/view';
+import { defineComponent } from 'vue'
+import FlashIcon from './FlashIcon.vue'
+import Menu from './Menu.vue'
+import viewStore from '../store/view'
 
 export default defineComponent({
-    name: "Header",
-    components: {
-        FlashIcon,
-        Menu
-    },
-    data() {
-        return {
-            isMenuButtonClicked: false
-        };
-    },
-    methods: {
-        toggle() {
-            this.isMenuButtonClicked = !this.isMenuButtonClicked;
-            viewStore.set(this.isMenuButtonClicked);
-        }
+  name: 'Header',
+  components: {
+    FlashIcon,
+    Menu
+  },
+  data () {
+    return {
+      isMenuButtonClicked: false
     }
-});
+  },
+  methods: {
+    toggle () {
+      this.isMenuButtonClicked = !this.isMenuButtonClicked
+      viewStore.set(this.isMenuButtonClicked)
+    }
+  }
+})
 </script>
 
 <style lang="scss">
