@@ -3,14 +3,18 @@ import * as core from 'express-serve-static-core';
 import { Socket } from 'socket.io';
 import authenticationMiddleware from './authenticationMiddleware';
 import express = require('express');
+import cors = require('cors');
+import Config from '../Config';
+
 const session = require('express-session')({
-    secret: 'St5Q3wPtv4TJ',
+    secret: Config.system.cookie_secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true
     }
 });
+
 /**
  * 起動時に読み込むミドルウェアの設定
  */
@@ -38,7 +42,6 @@ class MiddlewareLoader {
             })
         );
         app.use(express.json());
-
     }
 
     /**

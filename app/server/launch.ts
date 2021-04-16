@@ -1,18 +1,11 @@
-import { NextFunction } from 'express';
+
 import express = require('express');
-import { Socket } from 'socket.io';
 import route from './Http';
 import Config from './Config';
-import logger from './Domain/Utility/logger';
-import { loginManager } from './Domain/User/LoginManager';
-import AuthenticationException from './Domain/Exception/AuthenticationException';
-import SocketExceptionHandler from './Domain/Exception/SocketExceptionHandler';
 import MiddlewareLoader from './Middleware/MiddlewareLoader';
 
-const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
-
 const socketListener = require('./Listener');
 const io = require('socket.io')(server, {
 	cors: {
@@ -22,9 +15,10 @@ const io = require('socket.io')(server, {
 	}
 });
 
-
 //セッション共有用
 MiddlewareLoader.sessionMiddleware(app, io);
+//Http用ミドルウェア設定
+MiddlewareLoader.httpMiddlewareLoader(app);
 //ソケット用ミドルウェア設定
 MiddlewareLoader.socketMiddlewareLoader(io);
 
@@ -32,6 +26,8 @@ MiddlewareLoader.socketMiddlewareLoader(io);
 socketListener(io);
 //expressルート定義
 route(app);
+
+//起動
 const launch = (port: number) => {
 	server.listen(port, () => {
 		console.log('Server listening at port %d', port);
