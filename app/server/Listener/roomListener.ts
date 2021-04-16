@@ -19,8 +19,8 @@ module.exports = (socket: Socket) => {
     };
 
     //入室権限があるルーム情報のデータを送信
-    const requireRooms = async (user_id: string) => {
-        await roomController.getTalkRooms(user_id);
+    const requireRooms = async () => {
+        await roomController.getTalkRooms();
     };
 
     const attemptToEnter = async (info: RoomAndUserId) => {

@@ -29,8 +29,8 @@ class Room {
     socketStore.socket.emit('user:create-room', name, user_id);
   }
 
-  getRooms(user_id: string) {
-    socketStore.socket.emit('user:require-rooms', user_id);
+  getRooms() {
+    socketStore.socket.emit('user:require-rooms');
   }
 
   // roomへのアクセス許可が出た場合のリスナ

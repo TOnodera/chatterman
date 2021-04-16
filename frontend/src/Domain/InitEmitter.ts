@@ -19,7 +19,7 @@ const emitAtLoggedIn = () => {
   // ユーザーデータ送信要求
   user.getMembers();
   // ルームデータ送信要求
-  room.getRooms(user.me.user.id);
+  room.getRooms();
 };
 
 export {
