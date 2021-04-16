@@ -6,7 +6,6 @@ import logoutSubject from './Subject/LogoutSubject';
 import anotherUserLoginSubject from './Subject/AnoterUserLoginSubject';
 import http from '@/util/axios';
 import error from '@/util/HttpError';
-import cookie from 'js-cookie';
 
 class UserDomain {
 
@@ -83,7 +82,6 @@ class UserDomain {
 		}
 
 		if (await socketStore.start()) {
-			console.log("cookie:", cookie.get('connect.sid'));
 			//ログイン完了イベント発行
 			socketStore.socket.emit('user:after-login', credentials);
 		}

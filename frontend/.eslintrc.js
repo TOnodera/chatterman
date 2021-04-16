@@ -1,24 +1,18 @@
 module.exports = {
-    root: true,
-    parserOptions: {
-      parser: 'babel-eslint',
-      sourceType: 'module',
-    },
-    env: {
-      browser: true,
-      node: true,
-    },
-    extends: [
-      'eslint:recommended',
-      'airbnb-base',
-      'plugin:prettier/recommended',
-      'plugin:vue/recommended',
-      'prettier/vue',
-    ],
-    plugins: ['vue', 'prettier'],
-    rules: {
-      'global-require': 0,
-      'import/no-unresolved': 0,
-      'no-param-reassign': 0,
-    }
-  };
+  root: true,
+  env: {
+    node: true
+  },
+  extends: [
+    'plugin:vue/vue3-essential',
+    '@vue/standard',
+    '@vue/typescript/recommended'
+  ],
+  parserOptions: {
+    ecmaVersion: 2020
+  },
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+  }
+}
