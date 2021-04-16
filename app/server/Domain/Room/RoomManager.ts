@@ -5,7 +5,7 @@ import Room from './Room';
 import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
 import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
-import config from '../../config';
+import config from '../../Config';
 import { ROOM_TYPE } from '../../Enum/Enum';
 import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';

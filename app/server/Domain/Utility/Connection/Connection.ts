@@ -1,11 +1,11 @@
 import { Connection, createConnection } from 'mysql2/promise';
-import Config from '../../../config';
+import Config from '../../../Config';
 import Datetime from '../Datetime';
 import logger from '../logger';
 
 class MySqlConnection {
     private static connection: any = null;
-    private constructor() {}
+    private constructor() { }
 
     static async getConnection(): Promise<Connection> {
         if (!this.connection) {

@@ -6,7 +6,7 @@ import AuthenticationException from '../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
 import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
-import Config from '../../../config';
+import Config from '../../../Config';
 import { query } from '../../Utility/Connection/Connection';
 import { ROOM_TYPE } from '../../../Enum/Enum';
 

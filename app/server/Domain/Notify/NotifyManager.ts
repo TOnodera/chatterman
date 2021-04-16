@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import Config from '../../config';
+import Config from '../../Config';
 import MessageManager from '../Message/MessageManager';
 
 class NotifyManager extends MessageManager {
