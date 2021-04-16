@@ -23,7 +23,9 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"donjayamanne.githistory"
+		"donjayamanne.githistory",
+		"dbaeumer.vscode-eslint",
+		"rvest.vs-code-prettier-eslint"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
