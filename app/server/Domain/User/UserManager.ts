@@ -27,6 +27,10 @@ class UserManager {
     async getUserById(user_id: string) {
         return await userService.getUserById(user_id);
     }
+
+    async getUserIdByCredentials(credentials: Credentials): Promise<string> {
+        return userService.getUserIdByCredentials(credentials);
+    }
 }
 
 export default new UserManager();

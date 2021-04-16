@@ -4,6 +4,7 @@ import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/Emitter/RoomEventEmitter';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
+import userService from '../User/Service';
 
 class RoomController {
     private socket: Socket;
@@ -69,9 +70,10 @@ class RoomController {
         logger.info(`2/2 トークルーム取得処理完了: user_id: ${user_id},socket_id: ${this.socket.id}`);
     }
 
-    async getDirectMessageRoomInfo(user_id: string) {
+    async getDirectMessageRoomInfo() {
         try {
-            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(user_id);
+            const id: string = await userService.getUserIdByCredentials(this.socket.request.session.credentials);
+            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(id);
             this.roomEventEmitter.sendSendUsersDataEvent(clients);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);

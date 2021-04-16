@@ -28,7 +28,7 @@ class UserDomain {
 	}
 
 	isLogin() {
-		return this.me.isLogin;
+		return;
 	}
 
 	addUser(user: User) {
@@ -83,17 +83,18 @@ class UserDomain {
 		if (await socketStore.start()) {
 			// ログイン完了イベント発行
 			socketStore.socket.emit('user:after-login', credentials);
-			console.log("send after-login");
+			this.me.isLogin = localStorage.isLogin;
 		}
 	}
 
 	logout() {
 		socketStore.socket.disconnect();
-		this.me.isLogin = false;
+		localStorage.isLogin = false;
+		this.me.isLogin = localStorage.isLogin;
 	}
 
-	getMembers(user_id: string) {
-		socketStore.socket.emit('user:require-members', user_id);
+	getMembers() {
+		socketStore.socket.emit('user:require-members');
 	}
 
 	loginSuccessListener() {
@@ -115,7 +116,7 @@ class UserDomain {
 	memberInfoUpdateListener() {
 		socketStore.registeOnce('room:data-update', () => {
 			// 更新情報受信したらデーター送信要求
-			this.getMembers(this.me.user.id);
+			this.getMembers();
 			console.log('更新要求を送信しました。');
 		});
 	}

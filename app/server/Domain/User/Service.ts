@@ -18,6 +18,10 @@ class Service {
         return await roomManager.getInformationRoomId(user_id);
     }
 
+    async getUserIdByCredentials(credentials: Credentials) {
+        return await this.repository.getUserIdByCredentials(credentials);
+    }
+
     async getUserById(user_id: string): Promise<User> {
         return await UserFactory.create(user_id);
     }

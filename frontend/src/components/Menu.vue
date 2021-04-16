@@ -126,15 +126,6 @@ export default defineComponent({
             this.isHiddenFlashIcon = false;
         };
 
-        /**
-         * イベント送信
-         */
-
-        // ユーザーデータ送信要求
-        user.getMembers(user.me.user.id);
-        // ルームデータ送信要求
-        room.getRooms(user.me.user.id);
-
         console.log("mounted: ", this.users, this.rooms, this.test);
     },
     updated() {
