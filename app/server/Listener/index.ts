@@ -14,4 +14,9 @@ module.exports = (io: any) => {
         roomListener(socket);
         serverDisconnectedListener(socket);
     });
+    logger.debug("リスナ登録");
+    setInterval(() => {
+        logger.info("接続中のソケット数 -> ", io.of('/').sockets.size);
+    }, 3000);
+
 };
