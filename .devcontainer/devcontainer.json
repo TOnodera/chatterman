@@ -25,7 +25,8 @@
 	"extensions": [
 		"donjayamanne.githistory",
 		"dbaeumer.vscode-eslint",
-		"rvest.vs-code-prettier-eslint"
+		"rvest.vs-code-prettier-eslint",
+		"esbenp.prettier-vscode"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
