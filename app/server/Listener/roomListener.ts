@@ -1,6 +1,7 @@
 import RoomController from '../Domain/Controller/RoomController';
 import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
+import logger from '../Domain/Utility/logger';
 
 module.exports = (socket: Socket) => {
     const roomController = new RoomController(socket);
@@ -33,4 +34,5 @@ module.exports = (socket: Socket) => {
     socket.on('user:require-rooms', requireRooms);
     socket.on('user:attempt-to-enter-room', attemptToEnter);
     socket.on('user:leave-room', leaveCurrentRoom);
+
 };

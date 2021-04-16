@@ -67,6 +67,7 @@ class Message {
   }
 
   requireFirstMessages(room_id: string) {
+    console.log("送信要求発信", this.store.has(room_id));
     if (this.store.has(room_id) == false) {
       socketStore.socket.emit('user:latest-messages', room_id);
     }

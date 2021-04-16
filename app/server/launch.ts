@@ -3,6 +3,7 @@ import express = require('express');
 import route from './Http';
 import Config from './Config';
 import MiddlewareLoader from './Middleware/MiddlewareLoader';
+import logger from './Domain/Utility/logger';
 
 const app = express();
 const server = require('http').createServer(app);

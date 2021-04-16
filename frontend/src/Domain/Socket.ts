@@ -31,20 +31,20 @@ class ClientSocket {
 
     if (!this.socket.connected) {
 
-      console.log('start connect()')
-      const result = await new Promise((resolve, reject) => {
+      console.log("接続開始");
+      this.socket.connect()
+      const result = await new Promise((resolve) => {
 
-        this.socket.connect()
-        this.socket.on('connect', () => {
-
+        this.registeOnce('connect', () => {
           resolve(this.socket.connected)
-          console.log('done connect()')
-
+          console.log('接続！')
         })
 
-      }).then(result => result)
+      })
+        .then(result => result)
+        .catch((e) => { throw new Error("接続に失敗しました。") })
 
-      console.log('end connect()')
+      console.log("接続完了");
 
       return result;
     }
