@@ -1,7 +1,7 @@
 import ApplyPolymorphicRepository from '../Repository/ApplyPolymorphicRepository';
 
-class ApplyPolymorphicRepositoryFactory{
-    static create(){
+class ApplyPolymorphicRepositoryFactory {
+    static create() {
         return new ApplyPolymorphicRepository();
     }
 }

@@ -4,7 +4,6 @@ import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
 
 class Service {
-
     private repository: any;
     constructor() {
         this.repository = UserRepositoryFactory.create();
@@ -23,24 +22,23 @@ class Service {
         return await UserFactory.create(user_id);
     }
 
-    async getUsersByIdArray(user_ids: string[]): Promise<User[]>{
+    async getUsersByIdArray(user_ids: string[]): Promise<User[]> {
         const users: User[] = [];
-        for(const id of user_ids){
+        for (const id of user_ids) {
             const user: User = await this.getUserById(id);
             users.push(user);
         }
         return users;
     }
 
-    async getMembersId(): Promise<string[]>{
+    async getMembersId(): Promise<string[]> {
         return await this.repository.getMembersId();
     }
 
-    async getAllUsers(): Promise<User[]>{
+    async getAllUsers(): Promise<User[]> {
         const idArray: string[] = await this.getMembersId();
         const users: User[] = await this.getUsersByIdArray(idArray);
         return users;
     }
-
 }
 export default new Service();

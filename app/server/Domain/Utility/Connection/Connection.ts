@@ -3,11 +3,9 @@ import Config from '../../../config';
 import Datetime from '../Datetime';
 import logger from '../logger';
 
-
 class MySqlConnection {
-
     private static connection: any = null;
-    private constructor() { }
+    private constructor() {}
 
     static async getConnection(): Promise<Connection> {
         if (!this.connection) {
@@ -17,21 +15,18 @@ class MySqlConnection {
     }
 }
 
-
 /**
-* @param func トランザクションを囲うコールバック関数
-* トランザクション処理を行う場合はこの中で書いてください。値を返す場合は必ず配列で返して下さい。
-*/
+ * @param func トランザクションを囲うコールバック関数
+ * トランザクション処理を行う場合はこの中で書いてください。値を返す場合は必ず配列で返して下さい。
+ */
 const transaction = async (func: Function): Promise<any[]> => {
-
-    const connection = await MySqlConnection.getConnection()
+    const connection = await MySqlConnection.getConnection();
     let response: any[] = [];
 
     try {
-
         let checker: any = null;
 
-        logger.info("トランザクション開始", new Datetime());
+        logger.info('トランザクション開始', new Datetime());
 
         await connection.beginTransaction();
 
@@ -43,29 +38,24 @@ const transaction = async (func: Function): Promise<any[]> => {
 
         await connection.commit();
 
-        logger.info("トランザクション正常終了", new Datetime());
-
-
+        logger.info('トランザクション正常終了', new Datetime());
     } catch (e) {
         await connection.rollback();
-        logger.info("トランザクションエラー発生", new Datetime());
+        logger.info('トランザクションエラー発生', new Datetime());
         throw e;
     }
     return response;
-}
+};
 
 /**
- * 
+ *
  * @param sql : string
  * @param values : any[]
- * 普通のクエリ実行関数 
+ * 普通のクエリ実行関数
  */
-const query = async (sql: string,values: any[]) => {
+const query = async (sql: string, values: any[]) => {
     const connection: Connection = await MySqlConnection.getConnection();
-    return await connection.query(sql,values);
-}
-
-export {
-    query,
-    transaction
+    return await connection.query(sql, values);
 };
+
+export { query, transaction };

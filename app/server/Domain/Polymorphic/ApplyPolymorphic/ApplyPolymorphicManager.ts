@@ -7,24 +7,23 @@ import ApplyPolymorphicRepository from './Repository/ApplyPolymorphicRepository'
  * PolymorphicManager内で使用。
  * パッケージの外側から直接呼ばない
  */
-class ApplyPolymorphicManager{
-
+class ApplyPolymorphicManager {
     private repository: ApplyPolymorphicRepository;
-    constructor(){
+    constructor() {
         this.repository = ApplyPolymorphicRepositoryFactory.create();
     }
 
-    async getRequestUser(polymorphic_id: number): Promise<User>{
+    async getRequestUser(polymorphic_id: number): Promise<User> {
         const request_user: string = await this.repository.getRequestUserId(polymorphic_id);
         const user: User = await userManager.getUserById(request_user);
         return user;
     }
 
-    async getTargetUser(polymorphic_id: number): Promise<User>{
+    async getTargetUser(polymorphic_id: number): Promise<User> {
         const request_user: string = await this.repository.getTargetUserId(polymorphic_id);
         const user: User = await userManager.getUserById(request_user);
         return user;
     }
 }
 
-export default new ApplyPolymorphicManager;
+export default new ApplyPolymorphicManager();

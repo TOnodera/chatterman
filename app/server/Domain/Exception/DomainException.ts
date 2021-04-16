@@ -1,9 +1,9 @@
 import Exception from './Exception';
-class DomainException extends Exception{
-    constructor(message?: string | undefined,status: number = 422){
-        super(message,status);
+class DomainException extends Exception {
+    constructor(message?: string | undefined, status: number = 422) {
+        super(message, status);
     }
-    get(): Exception{
+    get(): Exception {
         return this;
     }
 }

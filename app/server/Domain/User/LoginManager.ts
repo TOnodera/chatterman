@@ -1,15 +1,14 @@
-import ILoginManager from "./ILoginManager";
-import IUserRepository from "./Repository/IUserRepository";
-import UserRepositoryFactory from "./Factory/UserRepositoryFactory";
-import User from "./User";
-import AuthenticationException from "../Exception/AuthenticationException";
-import { Socket } from "socket.io";
-import logger from "../Utility/logger";
+import ILoginManager from './ILoginManager';
+import IUserRepository from './Repository/IUserRepository';
+import UserRepositoryFactory from './Factory/UserRepositoryFactory';
+import User from './User';
+import AuthenticationException from '../Exception/AuthenticationException';
+import { Socket } from 'socket.io';
+import logger from '../Utility/logger';
 import userService from '../User/Service';
-import AfterLoginManager from "./AfterLoginManager";
+import AfterLoginManager from './AfterLoginManager';
 
 class LoginManager implements ILoginManager {
-
     repository: IUserRepository;
 
     constructor() {
@@ -28,11 +27,7 @@ class LoginManager implements ILoginManager {
     getAfterLoginManager(socket: Socket) {
         return new AfterLoginManager(socket);
     }
-
 }
 
 const loginManager = new LoginManager();
-export {
-    loginManager,
-    LoginManager
-}
+export { loginManager, LoginManager };

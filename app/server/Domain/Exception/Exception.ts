@@ -1,6 +1,6 @@
-class Exception extends Error{
+class Exception extends Error {
     status: number;
-    constructor(message?: string | undefined,status: number = 500){
+    constructor(message?: string | undefined, status: number = 500) {
         super(message);
         this.status = status;
     }

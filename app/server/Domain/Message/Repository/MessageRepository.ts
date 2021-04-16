@@ -8,9 +8,7 @@ import { query } from '../../Utility/Connection/Connection';
 import logger from '../../Utility/logger';
 
 class MessageRepository implements IMessageRepository {
-
     async latest(room_id: string, nums: number): Promise<any[]> {
-
         const [rows]: any[] = await query('SELECT id FROM messages WHERE room_id = ? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT ?', [room_id, nums]);
         if (rows.length > 0) {
             return rows;
@@ -24,7 +22,6 @@ class MessageRepository implements IMessageRepository {
     }
 
     async more(room_id: string, created_at: Datetime, nums: number): Promise<any[]> {
-
         const [rows]: any[] = await query('SELECT id FROM messages WHERE room_id = ? AND deleted_at IS NULL AND created_at < ? ORDER BY created_at DESC LIMIT ? ', [room_id, created_at.get(), nums]);
         if (rows.length > 0) {
             return rows;
@@ -54,7 +51,6 @@ class MessageRepository implements IMessageRepository {
         const [result]: any[] = await query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
         return result.affectedRows == 1;
     }
-
 }
 
 export default MessageRepository;

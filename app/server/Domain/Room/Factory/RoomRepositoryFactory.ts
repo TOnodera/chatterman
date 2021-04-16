@@ -1,7 +1,7 @@
 import RoomRepository from '../Repository/RoomRepository';
 
-class RepositoryFactory{
-    static create(){
+class RepositoryFactory {
+    static create() {
         return new RoomRepository();
     }
 }

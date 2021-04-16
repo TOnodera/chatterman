@@ -1,10 +1,9 @@
-import { mySqlConnector } from "../../Domain/Utility/Connection/Connection";
-import Message from "../../Domain/Message/Message";
-import User from "../../Domain/User/User";
-import Datetime from "../../Domain/Utility/Datetime";
+import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
+import Message from '../../Domain/Message/Message';
+import User from '../../Domain/User/User';
+import Datetime from '../../Domain/Utility/Datetime';
 
 describe('Message', () => {
-
     const user: User = new User('tester', { email: 'test@test.com', password: 'password' }, new Datetime());
     let message_id: string;
 
@@ -38,5 +37,4 @@ describe('Message', () => {
             expect(await message.delete()).toBe(true);
         });
     });
-
 });

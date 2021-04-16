@@ -51,20 +51,14 @@ class ApplyService {
     }
 
     messageTxt(name: string, reaction: APPLY_REACTION) {
-        return reaction == APPLY_REACTION.IS_ACCEPT_ARROW
-            ? `${name}さんへのDM申請が許可されました。`
-            : `${name}さんへのDM申請が拒否されました。`;
+        return reaction == APPLY_REACTION.IS_ACCEPT_ARROW ? `${name}さんへのDM申請が許可されました。` : `${name}さんへのDM申請が拒否されました。`;
     }
 
     async registeAccept(unique_id: number, request_user_id: string, target_user_id: string, reaction: APPLY_REACTION) {
         //リアクションを登録
         await this.registeApplyReaction(unique_id, reaction);
         //DMルーム作成
-        const directMessageRoom: Room = await roomManager.createRoom(
-            uuid.v4(),
-            target_user_id,
-            ROOM_TYPE.directmessage
-        );
+        const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user_id, ROOM_TYPE.directmessage);
         //申請者と受信者が入場できるように許可を設定する
         await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
         await roomManager.addAccessableRooms(target_user_id, directMessageRoom.id);

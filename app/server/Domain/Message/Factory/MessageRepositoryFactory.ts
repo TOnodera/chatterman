@@ -1,6 +1,6 @@
 import MessageRepository from '../Repository/MessageRepository';
-class MessageRepositoryFactory{
-    static create(){
+class MessageRepositoryFactory {
+    static create() {
         return new MessageRepository();
     }
 }

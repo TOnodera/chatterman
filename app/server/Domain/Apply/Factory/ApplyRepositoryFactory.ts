@@ -1,7 +1,7 @@
 import ApplyRepository from '../Repository/ApplyRepository';
 
-class ApplyRepositoryFactory{
-    static create(){
+class ApplyRepositoryFactory {
+    static create() {
         return new ApplyRepository();
     }
 }

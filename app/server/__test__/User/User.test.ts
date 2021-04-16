@@ -5,9 +5,7 @@ import IUserRepository from '../../Domain/User/Repository/IUserRepository';
 require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
 
 describe('User', () => {
-
     describe('Userクラス', () => {
-
         let user: User;
         let email: string;
         let repository: IUserRepository;
@@ -18,7 +16,7 @@ describe('User', () => {
             repository = UserRepositoryFactory.create();
         });
 
-        afterEach(async ()=>{
+        afterEach(async () => {
             await mySqlConnector.query('TRUNCATE TABLE users');
         });
 
@@ -37,5 +35,4 @@ describe('User', () => {
             });
         });
     });
-
-})
+});

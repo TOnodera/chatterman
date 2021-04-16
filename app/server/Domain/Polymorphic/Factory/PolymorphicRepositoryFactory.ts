@@ -1,7 +1,7 @@
 import PolymorphicRepository from '../Repository/PolymorphicRepository';
 
-class PolymorphicRepositoryFactory{
-    static create(){
+class PolymorphicRepositoryFactory {
+    static create() {
         return new PolymorphicRepository();
     }
 }

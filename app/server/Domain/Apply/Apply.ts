@@ -1,17 +1,15 @@
 import factory from './Factory/ApplyRepositoryFactory';
 
-class Apply{
-
+class Apply {
     private repository: any;
 
-    constructor(){
+    constructor() {
         this.repository = factory.create();
     }
 
-    async apply(target_id: string,user_id: string): Promise<number>{
-        return await this.repository.apply(target_id,user_id);
+    async apply(target_id: string, user_id: string): Promise<number> {
+        return await this.repository.apply(target_id, user_id);
     }
-
 }
 
-export default new Apply;
+export default new Apply();

@@ -8,7 +8,6 @@ import polymorphicManager from '../../Polymorphic/PolymorphicManager';
 
 class MessageFactory {
     static async create(message_id: string): Promise<Message> {
-
         const repository = MessageRepositoryFactory.create();
         const result: any = await repository.get(message_id);
         const user: User = await UserFactory.create(result.user_id);
@@ -16,10 +15,7 @@ class MessageFactory {
         //オプションメッセージが付加されていたらその情報も取得
         const options: ApproveOptions | null = await polymorphicManager.getMessageApproveOptionByMessageId(message_id);
 
-        return options 
-        ? new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at), options)
-        : new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at));
-
+        return options ? new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at), options) : new Message(result.id, result.message, user, result.room_id, new Datetime(result.created_at));
     }
 }
 

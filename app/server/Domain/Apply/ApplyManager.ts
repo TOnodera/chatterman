@@ -1,16 +1,16 @@
-import { loginManager } from "../User/LoginManager";
-import Exception from "../Exception/Exception";
-import logger from "../Utility/logger";
-import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
+import { loginManager } from '../User/LoginManager';
+import Exception from '../Exception/Exception';
+import logger from '../Utility/logger';
+import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import applyService from '../Apply/ApplyService';
 import roomManager from '../Room/RoomManager';
 import { transaction } from '../Utility/Connection/Connection';
-import { Socket } from "socket.io";
-import NotifyManager from "../Notify/NotifyManager";
-import ApplyEventEmitter from "./ApplyEventEmitter";
-import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from "../../Enum/Enum";
-import SocketService from "../Utility/SocketService";
-import User from "../User/User";
+import { Socket } from 'socket.io';
+import NotifyManager from '../Notify/NotifyManager';
+import ApplyEventEmitter from './ApplyEventEmitter';
+import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
+import SocketService from '../Utility/SocketService';
+import User from '../User/User';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 
 /**
@@ -18,7 +18,6 @@ import polymorphicManager from '../Polymorphic/PolymorphicManager';
  */
 
 class ApplyManager {
-
     private socket: Socket;
     private notifyManager: NotifyManager;
     private applyEventEmitter: ApplyEventEmitter;
@@ -30,14 +29,12 @@ class ApplyManager {
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
-
         logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${target_id}, request_user: ${info.credentials.email}`);
-        if (await loginManager.getAfterLoginManager(this.socket).authenticate(info.credentials) == false) {
-            throw new Exception("認証情報がない状態でDM申請を行ないました。不正な操作です。");
+        if ((await loginManager.getAfterLoginManager(this.socket).authenticate(info.credentials)) == false) {
+            throw new Exception('認証情報がない状態でDM申請を行ないました。不正な操作です。');
         }
 
         try {
-
             //自分宛てのDM許可申請が無いか確認
             if (await applyService.hasAccepted(target_id, info.user.id)) {
                 this.applyEventEmitter.sendAlreadyApplicationIsAcceptedEvent();
@@ -50,44 +47,41 @@ class ApplyManager {
                 return;
             }
 
-
             const [information_room]: any[] = await transaction(async () => {
-
                 const polymorphic_id: number = await applyService.registeApplication(target_id, info.user.id);
                 const information_room = await roomManager.getInformationRoomId(target_id);
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
 
                 //システムから対象者にメッセージ送信
-                const messageOption: MessageOptions = { polymorphic_table: PolymorphicTables.requests, polymorphic_id: polymorphic_id };
-                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);;
+                const messageOption: MessageOptions = {
+                    polymorphic_table: PolymorphicTables.requests,
+                    polymorphic_id: polymorphic_id
+                };
+                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
 
                 return [information_room];
             });
 
-
             //相手に新規お知らせの通知イベント発行
             this.applyEventEmitter.sendNewNotice(information_room);
-
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
 
         this.applyEventEmitter.sendApplyRequestHasSentEvent();
         logger.info(`2/2 ApplyController.apply() -> 処理完了 request_user: ${info.credentials.email}`);
-
     }
 
     /**
-     * 
-     * @param unique_id 
-     * @param request_user_id 
-     * @param reaction 
+     *
+     * @param unique_id
+     * @param request_user_id
+     * @param reaction
      * 申請に対するリアクションを処理
      */
     async reaction(unique_id: number, request_user_id: string, reaction: APPLY_REACTION) {
-
-        if (await applyService.isThePerson(unique_id, request_user_id) == false) {
+        if ((await applyService.isThePerson(unique_id, request_user_id)) == false) {
             throw new Exception('unique_idに紐づくrequest_user_idが送られてきたrequest_user_idと一致しません。不正アクセスの可能性があります。');
         }
 
@@ -96,15 +90,13 @@ class ApplyManager {
 
         //処理済みか確認
         if (await applyService.hasHandled(targetUser.id, request_user_id)) {
-            logger.debug("処理済み");
+            logger.debug('処理済み');
             this.applyEventEmitter.sendAlreadyApplicationHasHandledEvent();
             return;
         }
 
         switch (reaction) {
-
-            case APPLY_REACTION.IS_ACCEPT_ARROW://許可
-
+            case APPLY_REACTION.IS_ACCEPT_ARROW: //許可
                 //登録
                 await applyService.registeAccept(unique_id, request_user_id, targetUser.id, reaction);
 
@@ -120,16 +112,14 @@ class ApplyManager {
 
                 break;
 
-            case APPLY_REACTION.IS_ACCEPT_DENY://拒否
-
+            case APPLY_REACTION.IS_ACCEPT_DENY: //拒否
                 //リアクションを登録
                 await applyService.registeApplyReaction(unique_id, reaction);
 
                 break;
             default:
-                throw new Exception("到達不能なコード");
+                throw new Exception('到達不能なコード');
         }
-
     }
 }
 

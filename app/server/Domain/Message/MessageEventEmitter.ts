@@ -1,8 +1,7 @@
-import { Socket } from "socket.io";
-import logger from "../Utility/logger";
+import { Socket } from 'socket.io';
+import logger from '../Utility/logger';
 
 class MessageEventEmitter {
-
     private socket: Socket;
 
     constructor(socket: Socket) {
@@ -28,7 +27,6 @@ class MessageEventEmitter {
     sendSendLatestMessagesEvent(response: SendMessageToClient[]) {
         this.socket.emit('message:send-latest-messages', response);
     }
-
 }
 
 export default MessageEventEmitter;

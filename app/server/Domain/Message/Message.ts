@@ -1,12 +1,11 @@
-import AuthenticationException from "../Exception/AuthenticationException";
-import Exception from "../Exception/Exception";
-import User from "../User/User";
-import Datetime from "../Utility/Datetime";
+import AuthenticationException from '../Exception/AuthenticationException';
+import Exception from '../Exception/Exception';
+import User from '../User/User';
+import Datetime from '../Utility/Datetime';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 
 class Message {
-
     private repository: IMessageRepository;
     message_id: string;
     message: string;
@@ -15,7 +14,7 @@ class Message {
     options?: Options;
     created_at: Datetime;
 
-    constructor(message_id: string, message: string, user: User, room_id: string, created_at: Datetime,options?: Options) {
+    constructor(message_id: string, message: string, user: User, room_id: string, created_at: Datetime, options?: Options) {
         this.repository = MessageRepositoryFactory.create();
         this.message_id = message_id;
         this.message = message;
@@ -26,7 +25,7 @@ class Message {
     }
 
     async edit(newMessage: string): Promise<boolean> {
-        if (await this.user.isEditable(this) == false) {
+        if ((await this.user.isEditable(this)) == false) {
             throw new AuthenticationException('このメッセージを編集できません。');
         }
         this.message = newMessage;
@@ -39,6 +38,5 @@ class Message {
         }
         return await this.repository.delete(this.message_id);
     }
-
 }
 export default Message;

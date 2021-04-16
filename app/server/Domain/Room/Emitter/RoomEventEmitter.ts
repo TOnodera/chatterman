@@ -1,39 +1,38 @@
-import { Socket } from "socket.io";
+import { Socket } from 'socket.io';
 
-class RoomEventEmitter{
-
+class RoomEventEmitter {
     socket: Socket;
 
-    constructor(socket: Socket){
+    constructor(socket: Socket) {
         this.socket = socket;
     }
 
-    sendUserJoinRoomEvent(room_id: string){
+    sendUserJoinRoomEvent(room_id: string) {
         this.socket.emit('room:join-room', room_id);
     }
 
-    sendDeniedToEnterRoomEvent(room_id: string){
-        this.socket.emit('room:denied-to-enter-room',room_id);
+    sendDeniedToEnterRoomEvent(room_id: string) {
+        this.socket.emit('room:denied-to-enter-room', room_id);
     }
 
-    sendUserLeftRoomEvent(room_id: string){
+    sendUserLeftRoomEvent(room_id: string) {
         this.socket.emit('room:left-room', room_id);
     }
 
-    sendRoomCreatedEvent(){
+    sendRoomCreatedEvent() {
         this.socket.emit('room:room-created');
     }
 
-    sendRoomCreatedFailureEvnet(){
+    sendRoomCreatedFailureEvnet() {
         this.socket.emit('room:room-created-failure');
     }
 
-    sendRoomDataEvent(rooms: RoomInfo[]){
+    sendRoomDataEvent(rooms: RoomInfo[]) {
         this.socket.emit('room:send-rooms-data', rooms);
     }
 
-    sendSendUsersDataEvent(clients: Client[]){
-        this.socket.emit('room:send-directmessage-members-data',clients);       
+    sendSendUsersDataEvent(clients: Client[]) {
+        this.socket.emit('room:send-directmessage-members-data', clients);
     }
 }
 

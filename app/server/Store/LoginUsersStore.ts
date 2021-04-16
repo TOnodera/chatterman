@@ -1,10 +1,10 @@
-import Exception from "../Domain/Exception/Exception";
-import DomainException from "../Domain/Exception/DomainException";
-import User from "../Domain/User/User";
-import logger from "../Domain/Utility/logger";
+import Exception from '../Domain/Exception/Exception';
+import DomainException from '../Domain/Exception/DomainException';
+import User from '../Domain/User/User';
+import logger from '../Domain/Utility/logger';
 export default {
     //users: [] as unknown as User[],
-    users: new Map as Map<string, User>,
+    users: new Map() as Map<string, User>,
     maxUserNum: 100,
     set(socket_id: string, user: User) {
         if (!user.id) {
@@ -28,14 +28,14 @@ export default {
     },
     inUsers(user_id: string) {
         let exists: boolean = false;
-        this.users.forEach(user => {
+        this.users.forEach((user) => {
             if (user.id == user_id) {
                 exists = true;
             }
         });
         return exists;
     },
-    getUserInUsersMap(socket_id: string): { user?: User, exist: boolean } {
+    getUserInUsersMap(socket_id: string): { user?: User; exist: boolean } {
         if (this.users.has(socket_id)) {
             return { user: this.users.get(socket_id), exist: true };
         }
@@ -66,4 +66,4 @@ export default {
         });
         return sockets;
     }
-}
+};

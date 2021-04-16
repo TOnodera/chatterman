@@ -1,12 +1,11 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 import userManager from '../Domain/User/UserManager';
-import HttpExceptionHandler from "../Domain/Exception/HttpExceptionHandler";
-import logger from "../Domain/Utility/logger";
+import HttpExceptionHandler from '../Domain/Exception/HttpExceptionHandler';
+import logger from '../Domain/Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';
 
 const route = (app: any) => {
-
-    app.post("/api/users", async (req: Request, res: Response) => {
+    app.post('/api/users', async (req: Request, res: Response) => {
         try {
             logger.info('HTTPリクエスト受信 UserControllerに処理委譲');
             const userInfo: UserRegisteInfo = req.body;
@@ -18,7 +17,7 @@ const route = (app: any) => {
         }
     });
 
-    app.post("/api/login", async (req: Request, res: Response) => {
+    app.post('/api/login', async (req: Request, res: Response) => {
         const credentials: Credentials = req.body;
         try {
             logger.info('HTTTPリクエスト受信  UserContorollerに処理委譲');
@@ -28,13 +27,11 @@ const route = (app: any) => {
 
                     res.json({ attempt: true });
                 });
-
             }
         } catch (e) {
             HttpExceptionHandler.handle(e, res);
         }
     });
-
-}
+};
 
 export default route;

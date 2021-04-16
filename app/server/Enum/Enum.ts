@@ -1,5 +1,3 @@
-
-
 const PolymorphicTables = {
     requests: 'requests'
 } as const;
@@ -25,9 +23,4 @@ const ROOM_TYPE = {
 } as const;
 type ROOM_TYPE = typeof ROOM_TYPE[keyof typeof ROOM_TYPE];
 
-export {
-    PolymorphicTables,
-    APPLY_SENDER_NOTICE,
-    APPLY_REACTION,
-    ROOM_TYPE
-}
+export { PolymorphicTables, APPLY_SENDER_NOTICE, APPLY_REACTION, ROOM_TYPE };

@@ -1,19 +1,16 @@
-import { Socket } from "socket.io";
-import IUserRepository from "./Repository/IUserRepository";
-import UserRepositoryFactory from "./Factory/UserRepositoryFactory";
-import loginUserStore from '../../Store/LoginUsersStore'
-import User from "./User";
-import Exception from "../Exception/Exception";
-import roomManager from "../Room/RoomManager";
+import { Socket } from 'socket.io';
+import IUserRepository from './Repository/IUserRepository';
+import UserRepositoryFactory from './Factory/UserRepositoryFactory';
+import loginUserStore from '../../Store/LoginUsersStore';
+import User from './User';
+import Exception from '../Exception/Exception';
+import roomManager from '../Room/RoomManager';
 import userService from '../User/Service';
 import userEventEmitter from '../User/UserEventEmitter';
 import socketService from '../Utility/SocketService';
-import AuthenticationException from "../Exception/AuthenticationException";
-
-
+import AuthenticationException from '../Exception/AuthenticationException';
 
 class AfterLoginManager {
-
     private socket: Socket;
     private repository: IUserRepository;
 
@@ -23,7 +20,6 @@ class AfterLoginManager {
     }
 
     async afterCredentials(credentials: Credentials) {
-
         const user: User = await userService.getUserByCredentials(credentials);
         const information_room = await roomManager.getInformationRoomId(user.id);
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
@@ -35,9 +31,7 @@ class AfterLoginManager {
         //イベント発行
         userEventEmitter.sendLoggedInEvent(toMe, this.socket);
         userEventEmitter.broadcastUserLoginEvent(toClient, this.socket);
-
     }
-
 
     async logout(credentials: Credentials): Promise<boolean> {
         if (await this.repository.credentials(credentials)) {
@@ -59,14 +53,12 @@ class AfterLoginManager {
             if (exist) {
                 //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
                 userEventEmitter.broadcastUserLogout(user!.id, socket);
-
             } else {
                 throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${socket.id}`);
             }
         }
         loginUserStore.delete(socket.id);
     }
-
 
     async authenticate(credentials: Credentials): Promise<boolean> {
         if (!credentials) {

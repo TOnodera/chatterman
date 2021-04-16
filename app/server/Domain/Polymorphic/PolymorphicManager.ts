@@ -1,7 +1,7 @@
-import User from "../User/User";
-import logger from "../Utility/logger";
-import PolymorphicRepositoryFactory from "./Factory/PolymorphicRepositoryFactory";
-import PolymorphicRepository from "./Repository/PolymorphicRepository";
+import User from '../User/User';
+import logger from '../Utility/logger';
+import PolymorphicRepositoryFactory from './Factory/PolymorphicRepositoryFactory';
+import PolymorphicRepository from './Repository/PolymorphicRepository';
 import applyPolymorphicManager from './ApplyPolymorphic/ApplyPolymorphicManager';
 
 /**
@@ -9,28 +9,27 @@ import applyPolymorphicManager from './ApplyPolymorphic/ApplyPolymorphicManager'
  * それぞれのパッケージ内のリポジトリで好き勝手にmessage_polymorphicsテーブルの処理するとわけわかんなくなるので
  * 多少当周りでもこのクラスを経由させる
  */
-class PolymorphicManager{
-
+class PolymorphicManager {
     private repository: PolymorphicRepository;
-    constructor(){
+    constructor() {
         this.repository = PolymorphicRepositoryFactory.create();
     }
 
-    async getUniqueId(polymorphicInfo: PolymorphicInfo): Promise<number>{
+    async getUniqueId(polymorphicInfo: PolymorphicInfo): Promise<number> {
         return await this.repository.getUniqueId(polymorphicInfo);
     }
 
-    async getPolymorphicInfo(unique_id: number): Promise<PolymorphicInfo>{
+    async getPolymorphicInfo(unique_id: number): Promise<PolymorphicInfo> {
         return await this.repository.getPolymorphicInfo(unique_id);
     }
 
-    async save(message_id: string,polymorphicInfo: PolymorphicInfo): Promise<boolean>{
-        return await this.repository.save(message_id,polymorphicInfo);
+    async save(message_id: string, polymorphicInfo: PolymorphicInfo): Promise<boolean> {
+        return await this.repository.save(message_id, polymorphicInfo);
     }
 
-    async getMessageOptionsByMessageId(message_id: string): Promise<Options | null>{
+    async getMessageOptionsByMessageId(message_id: string): Promise<Options | null> {
         const unique_id: number | null = await this.repository.getUniqueIdByMessageId(message_id);
-        if(unique_id){
+        if (unique_id) {
             const option: Options = {
                 unique_id: unique_id
             };
@@ -39,11 +38,10 @@ class PolymorphicManager{
         return null;
     }
 
-    async getMessageApproveOptionByMessageId(message_id: string): Promise<ApproveOptions | null>{
-
+    async getMessageApproveOptionByMessageId(message_id: string): Promise<ApproveOptions | null> {
         const result: Options | null = await this.getMessageOptionsByMessageId(message_id);
 
-        if(result){
+        if (result) {
             const polymorphicInfo: PolymorphicInfo = await this.getPolymorphicInfo(result.unique_id);
             const user: User = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
             const option: ApproveOptions = {
@@ -58,8 +56,8 @@ class PolymorphicManager{
     /**
      * ./Apply/ApplyPolymorphicManagerのインスタンス取得用
      */
-    applyManager(){
+    applyManager() {
         return applyPolymorphicManager;
     }
 }
-export default new PolymorphicManager;
+export default new PolymorphicManager();
