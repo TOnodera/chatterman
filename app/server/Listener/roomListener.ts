@@ -2,6 +2,8 @@ import RoomController from '../Domain/Controller/RoomController';
 import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
 import logger from '../Domain/Utility/logger';
+import socketService from '../Domain/Utility/SocketService';
+
 
 module.exports = (socket: Socket) => {
     const roomController = new RoomController(socket);
@@ -29,10 +31,10 @@ module.exports = (socket: Socket) => {
         await roomController.leaveCurrentRoom(info);
     };
 
-    socket.on('user:create-room', createRoom);
-    socket.on('user:require-members', requireUsers);
-    socket.on('user:require-rooms', requireRooms);
-    socket.on('user:attempt-to-enter-room', attemptToEnter);
-    socket.on('user:leave-room', leaveCurrentRoom);
+    socketService.registeOnce('user:create-room', createRoom, socket);
+    socketService.registeOnce('user:require-members', requireUsers, socket);
+    socketService.registeOnce('user:require-rooms', requireRooms, socket);
+    socketService.registeOnce('user:attempt-to-enter-room', attemptToEnter, socket);
+    socketService.registeOnce('user:leave-room', leaveCurrentRoom, socket);
 
 };

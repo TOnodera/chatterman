@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 import loginUserStore from '../../Store/LoginUsersStore';
 import User from '../User/User';
 class SocketService {
+
     /**
      *
      * @param socket
@@ -28,6 +29,19 @@ class SocketService {
     async joinUser(user: User, socket: Socket) {
         for (let room_id of await user.accessAbleRooms()) {
             socket.join(room_id);
+        }
+    }
+
+    /**
+     * 
+     * @param event 
+     * @param socket
+     *  イベントリスナが登録されていれば登録しない。
+     * 未登録の場合のみ登録
+     */
+    registeOnce(event: string, func: any, socket: Socket) {
+        if (socket.listenerCount(event) == 0) {
+            socket.on(event, func);
         }
     }
 }

@@ -1,11 +1,10 @@
 import logger from '../Domain/Utility/logger';
 import { Socket } from 'socket.io';
 import MessageController from '../Domain/Controller/MessasgeController';
-import RoomController from '../Domain/Controller/RoomController';
+import socketService from '../Domain/Utility/SocketService';
 
 module.exports = (socket: Socket) => {
     const messageController = new MessageController(socket);
-    const roomController = new RoomController(socket);
 
     const userSendMessage = async (fromClient: any) => {
         await messageController.add(fromClient.message, fromClient.user.id, fromClient.room_id);
@@ -32,10 +31,10 @@ module.exports = (socket: Socket) => {
         messageController.getLatest(room_id);
     };
 
-    socket.on('user:send-message', userSendMessage);
-    socket.on('user:edit-message', userEditMessage);
-    socket.on('user:delete-message', deleteMessage);
-    socket.on('user:typing', userTyping);
-    socket.on('user:latest-messages', latestMessages);
-    socket.on('user:more-messages', moreMessages);
+    socketService.registeOnce('user:send-message', userSendMessage, socket);
+    socketService.registeOnce('user:edit-message', userEditMessage, socket);
+    socketService.registeOnce('user:delete-message', deleteMessage, socket);
+    socketService.registeOnce('user:typing', userTyping, socket);
+    socketService.registeOnce('user:latest-messages', latestMessages, socket);
+    socketService.registeOnce('user:more-messages', moreMessages, socket);
 };

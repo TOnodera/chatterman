@@ -1,6 +1,7 @@
 import { APPLY_REACTION } from '../Enum/Enum';
 import { Socket } from 'socket.io';
 import ApplyController from '../Domain/Controller/ApplyController';
+import socketService from '../Domain/Utility/SocketService';
 
 module.exports = (socket: Socket) => {
     const applyController = new ApplyController(socket);
@@ -15,6 +16,6 @@ module.exports = (socket: Socket) => {
         await applyController.reaction(unique_id, user_id, reaction);
     };
 
-    socket.on('user:apply-reaction', applyReaction);
-    socket.on('user:apply-directmessage', applyDirectMessage);
+    socketService.registeOnce('user:apply-reaction', applyReaction, socket);
+    socketService.registeOnce('user:apply-directmessage', applyDirectMessage, socket);
 };
