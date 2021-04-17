@@ -14,11 +14,6 @@ module.exports = (io: any) => {
         applyListener(socket);
         roomListener(socket);
         serverDisconnectedListener(socket);
-
-        setInterval(() => {
-            logger.info("connectionイベントリスナ数 -> ", socket.listenerCount("user:after-login"));
-        }, 3000);
-
     });
     logger.debug("リスナ登録");
 
