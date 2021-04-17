@@ -1,20 +1,13 @@
 
 import express = require('express');
 import route from './Http';
-import Config from './Config';
+import Config, { corsSetting } from './Config';
 import MiddlewareLoader from './Middleware/MiddlewareLoader';
 import logger from './Domain/Utility/logger';
 
 const app = express();
 const server = require('http').createServer(app);
-const socketListener = require('./Listener');
-const io = require('socket.io')(server, {
-	cors: {
-		origin: Config.system.cors,
-		methods: ['GET', 'POST'],
-		credentials: true
-	}
-});
+const io = require('socket.io')(server, corsSetting);
 
 //セッション共有用
 MiddlewareLoader.sessionMiddleware(app, io);
@@ -24,6 +17,8 @@ MiddlewareLoader.httpMiddlewareLoader(app);
 MiddlewareLoader.socketMiddlewareLoader(io);
 
 //app.use(express.static(path.join(__dirname, '../../dist')));
+
+const socketListener = require('./Listener');
 socketListener(io);
 //expressルート定義
 route(app);
