@@ -1,9 +1,10 @@
 import io, { Socket } from 'socket.io-client'
 import swal from '../util/swal'
+import Config from '../Config/config';
 class ClientSocket {
   socket: typeof Socket;
   constructor() {
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(Config.baseUrl, {
       autoConnect: false,
       // @ts-ignore
       withCredentials: true,

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import Config from '../Config/config';
 
 const config = {
   withCredentials: true,
-  baseURL: 'http://localhost:3000'
+  baseURL: Config.baseUrl
 };
 const http = axios.create(config);
 
