@@ -41,6 +41,7 @@ class AfterLoginManager {
     async logout() {
 
         if (await this.authenticate(this.socket.request.session.credentials)) {
+            logger.debug("ユーザーが接続しているソケット数 -> ", socketService.getSocketNumsUsingThisUser(this.socket));
             if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
                 const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
                 if (exist) {
@@ -49,7 +50,10 @@ class AfterLoginManager {
                 } else {
                     throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${this.socket.id}`);
                 }
+                logger.debug("ログアウト処理完了");
             }
+            //ソケットとユーザーの紐付けMapから切断されたソケットを削除
+            loginUserStore.delete(this.socket.id);
             logger.debug("ログアウト処理完了：　ソケット切断済");
         }
 
