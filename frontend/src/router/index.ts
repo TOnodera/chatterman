@@ -42,7 +42,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-	if (to.name == 'Login' || to.name == 'Create') {
+	if (to.name == 'Login' || to.name == 'User') {
 		next();
 	} else {
 		if (user.isLogin()) {
