@@ -24,9 +24,9 @@ class SocketService {
      *
      * @param user
      * @param socket
-     * ユーザーをソケットにジョイン
+     * 自分アクセス可能なルームにジョイン
      */
-    async joinUser(user: User, socket: Socket) {
+    async joinMe(user: User, socket: Socket) {
         for (let room_id of await user.accessAbleRooms()) {
             socket.join(room_id);
         }

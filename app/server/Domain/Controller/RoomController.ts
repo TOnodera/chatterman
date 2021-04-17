@@ -76,7 +76,7 @@ class RoomController {
     async getDirectMessageRoomInfo() {
         try {
             const id: string = await userService.getUserIdByCredentials(this.socket.request.session.credentials);
-            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(id);
+            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(id, this.socket);
             this.roomEventEmitter.sendSendUsersDataEvent(clients);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);

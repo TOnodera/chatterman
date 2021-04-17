@@ -10,6 +10,7 @@ import { ROOM_TYPE } from '../../Enum/Enum';
 import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
+import socketService from '../Utility/SocketService';
 
 class RoomManager {
     private INFORMATION_ROOM_NAME = 'お知らせ';
@@ -80,8 +81,12 @@ class RoomManager {
         return null;
     }
 
-    async getDirectMessageRoomInfo(my_id: string): Promise<Client[]> {
+    async getDirectMessageRoomInfo(my_id: string, socket: Socket): Promise<Client[]> {
         const users: User[] = await userService.getAllUsers();
+
+        //入室可能なルームにソケットをジョイン
+        const me: User = await userService.getUserById(my_id);
+        await socketService.joinMe(me, socket);
 
         const members: Client[] = [];
         for (const user of users) {

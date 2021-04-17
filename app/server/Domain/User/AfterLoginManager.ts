@@ -30,8 +30,6 @@ class AfterLoginManager {
         const toClient: Client = { id: user.id, name: user.name };
 
         loginUserStore.set(this.socket.id, user);
-        //入室可能なルームにソケットをジョイン
-        await socketService.joinUser(user, this.socket);
         //イベント発行
         userEventEmitter.sendLoggedInEvent(toMe, this.socket);
         userEventEmitter.broadcastUserLoginEvent(toClient, this.socket);
@@ -52,8 +50,6 @@ class AfterLoginManager {
                 }
                 logger.debug("ログアウト処理完了");
             }
-            //ソケットとユーザーの紐付けMapから切断されたソケットを削除
-            loginUserStore.delete(this.socket.id);
             logger.debug("ログアウト処理完了：　ソケット切断済");
         }
 

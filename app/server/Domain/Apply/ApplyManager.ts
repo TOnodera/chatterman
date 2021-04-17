@@ -12,6 +12,7 @@ import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
 import SocketService from '../Utility/SocketService';
 import User from '../User/User';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
+import userManager from '../User/UserManager';
 
 /**
  * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
@@ -76,20 +77,22 @@ class ApplyManager {
     /**
      *
      * @param unique_id
-     * @param request_user_id
+     * @param requestUserId
      * @param reaction
      * 申請に対するリアクションを処理
      */
-    async reaction(unique_id: number, request_user_id: string, reaction: APPLY_REACTION) {
-        if ((await applyService.isThePerson(unique_id, request_user_id)) == false) {
-            throw new Exception('unique_idに紐づくrequest_user_idが送られてきたrequest_user_idと一致しません。不正アクセスの可能性があります。');
+    async reaction(unique_id: number, requestUserId: string, reaction: APPLY_REACTION) {
+        if ((await applyService.isThePerson(unique_id, requestUserId)) == false) {
+            throw new Exception('unique_idに紐づくrequestUserIdが送られてきたrequestUserIdと一致しません。不正アクセスの可能性があります。');
         }
 
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
         const targetUser: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+        const requestUser: User = await userManager.getUserById(requestUserId);
+
 
         //処理済みか確認
-        if (await applyService.hasHandled(targetUser.id, request_user_id)) {
+        if (await applyService.hasHandled(targetUser.id, requestUser.id)) {
             logger.debug('処理済み');
             this.applyEventEmitter.sendAlreadyApplicationHasHandledEvent();
             return;
@@ -98,17 +101,21 @@ class ApplyManager {
         switch (reaction) {
             case APPLY_REACTION.IS_ACCEPT_ARROW: //許可
                 //登録
-                await applyService.registeAccept(unique_id, request_user_id, targetUser.id, reaction);
+                await applyService.registeAccept(unique_id, requestUser.id, targetUser.id, reaction);
 
                 //申請者にメッセージ送信
-                const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(request_user_id);
+                const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
                 this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
                 //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
                 this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();
-                const requestUserSockets: string[] = SocketService.getSocketsFromUserId(request_user_id);
-                this.applyEventEmitter.sendRoomUpdateEventToRequestUser(requestUserSockets[0]);
+                //申請者側にも送る
+                const requestUserSockets: string[] = SocketService.getSocketsFromUserId(requestUser.id);
+                for (const socket_id of requestUserSockets) {
+                    //接続している全ての端末に更新要求を送る
+                    this.applyEventEmitter.sendRoomUpdateEventToRequestUser(socket_id);
+                }
 
                 break;
 
