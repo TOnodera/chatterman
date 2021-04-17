@@ -3,12 +3,19 @@ import { Socket } from 'socket.io';
 import logger from '../Domain/Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';
 import socketService from '../Domain/Utility/SocketService';
+import loginUserStore from '../Store/LoginUsersStore';
 
 module.exports = (socket: Socket) => {
 
     //切断中
     const disconnectingListener = (reason: string) => {
-        logger.info('切断中...:', socket.id);
+
+        logger.info(`${socket.id}の切断処理開始`);
+        logger.info(`ソケット接続状況 -> `, loginUserStore.users.has(socket.id));
+        //ソケットとユーザーの紐付けMapから切断されたソケットを削除
+        loginUserStore.delete(socket.id);
+        logger.info(`ソケット接続状況 -> `, loginUserStore.users.has(socket.id));
+
         switch (reason) {
             //クライアントからのログアウト命令で切断
             case DISCONNECTED_REASON.CLIENT_NAMESPACE_DISCONNECT:
@@ -22,6 +29,7 @@ module.exports = (socket: Socket) => {
             default:
                 logger.error(reason);
         }
+        logger.info(`${socket.id}処理完了`);
     }
 
     //切断

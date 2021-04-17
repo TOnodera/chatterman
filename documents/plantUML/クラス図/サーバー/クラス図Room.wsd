@@ -33,7 +33,7 @@ package Room{
         +addAccessableRooms()
         +getAllRooms()
         +join()
-        +joinUser()
+        +joinMe()
         +isAccessableRooms()
         +getAccessableRooms()
         +isAccessable(user: User)

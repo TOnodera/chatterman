@@ -23,11 +23,12 @@ module.exports = (socket: Socket) => {
     };
 
     const moreMessages = (room_id: string, message_id: string) => {
+        logger.info('追加メッセージ送信要求を受信 room_id -> ', room_id);
         messageController.moreMessages(room_id, message_id);
     };
 
     const latestMessages = (room_id: string) => {
-        logger.info('新規メッセージ送信要求を受信');
+        logger.info('新規メッセージ送信要求を受信 room_id -> ', room_id);
         messageController.getLatest(room_id);
     };
 

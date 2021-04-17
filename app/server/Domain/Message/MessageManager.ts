@@ -46,9 +46,9 @@ class MessageManager {
         logger.info(`2/2 MessageManager.add -> 送信処理完了:user_id->${user_id},socket_id:${this.socket.id}`);
     }
 
-    delete(): void {}
+    delete(): void { }
 
-    edit(): void {}
+    edit(): void { }
 
     typing(user: { id: string; name: string }, room_id: string): void {
         this.messageEventEmitter.broadcastUserTypingEvent(user.name, room_id);
