@@ -35,6 +35,7 @@ services:
       SYSTEM_USER: ${SYSTEM_USER}
       COOKIE_SECRET: ${COOKIE_SECRET}
       ARROWED_CORS: ${ARROWED_CORS}
+      TZ: ${TZ}
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -51,3 +52,6 @@ services:
       - 443:443
     volumes:
       - ./nginx/ssl:/etc/ssl/local
+    environment: 
+      TZ: ${TZ}
+

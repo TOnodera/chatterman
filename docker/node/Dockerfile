@@ -1,3 +1,7 @@
 FROM node:12
-RUN mkdir app && cd app && npm i -g @vue/cli && npm i
-RUN chown -R node:node ./app
+
+RUN apt-get update && apt-get install -y tzdata
+
+ARG TZ
+ENV TZ=${TZ}
+RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime
