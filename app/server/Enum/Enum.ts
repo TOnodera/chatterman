@@ -23,12 +23,12 @@ const ROOM_TYPE = {
 } as const;
 type ROOM_TYPE = typeof ROOM_TYPE[keyof typeof ROOM_TYPE];
 
-//サーバーdisconnected時の理由
+//サーバーdisconnected時の理由 socket.ioのサーバーサイドAPIで定義されているエラーコード https://socket.io/docs/v4/server-api/#Event-%E2%80%98disconnect%E2%80%99
 const DISCONNECTED_REASON = {
-    SERVER_NAMESPACE_DISCONNECT: 'SERVER_NAMESPACE_DISCONNECT',
-    CLIENT_NAMESPACE_DISCONNECT: 'CLIENT_NAMESPACE_DISCONNECT',
-    SERVER_SHUTTING_DOWN: 'SERVER_SHUTTING_DOWN',
-    TRANSPORT_CLOSE: 'TRANSPORT_CLOSE'
+    SERVER_NAMESPACE_DISCONNECT: 'server namespace disconnect',
+    CLIENT_NAMESPACE_DISCONNECT: 'client namespace disconnect',
+    SERVER_SHUTTING_DOWN: 'server shutting down',
+    TRANSPORT_CLOSE: 'transport close'
 
 } as const;
 type DISCONNECTED_REASON = typeof DISCONNECTED_REASON[keyof typeof DISCONNECTED_REASON];
