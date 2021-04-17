@@ -116,7 +116,6 @@ class UserDomain {
 		socketStore.registeOnce('room:data-update', () => {
 			// 更新情報受信したらデーター送信要求
 			this.getMembers();
-			console.log('更新要求を送信しました。');
 		});
 	}
 

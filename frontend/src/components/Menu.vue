@@ -125,11 +125,6 @@ export default defineComponent({
         NoticeObserver.handler = () => {
             this.isHiddenFlashIcon = false;
         };
-
-        console.log("mounted: ", this.users, this.rooms, this.test);
-    },
-    updated() {
-        console.log("updated: ", this.users, this.rooms, this.test);
     },
 });
 </script>

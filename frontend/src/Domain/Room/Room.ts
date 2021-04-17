@@ -36,7 +36,6 @@ class Room {
   // roomへのアクセス許可が出た場合のリスナ
   arrowedToEnterRoomListener() {
     socketStore.registeOnce('room:join-room', (room_id: string) => {
-      console.log("アクセス許可メッセージ受信");
       this.current = room_id;
       arrowedToEnterRoomSubject.notify(room_id);
     });
@@ -54,7 +53,6 @@ class Room {
    */
   acceptRoomsListener() {
     socketStore.registeOnce('room:send-rooms-data', (rooms: any[]) => {
-      console.log('ルームデータ受信', rooms);
       acceptRoomsSubject.notify(rooms);
     });
   }

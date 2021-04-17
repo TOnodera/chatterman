@@ -108,17 +108,12 @@ export default defineComponent({
     },
     watch: {
         $route(to) {
-            console.log("wath :", to);
             if (this.includeTalkroomPath(to.path)) {
                 const room_id: string = this.$route.params.room_id as string;
                 this.clear(room_id);
                 room.attemptToEnter(room_id, user.me.user);
                 // お知らせルームかチェック
                 this.isNoticeRoom = room_id == user.me.information_room;
-                console.log(
-                    `room_id:${room_id},information_room: ${user.me.information_room}`
-                );
-                console.log(room_id == user.me.information_room);
             }
         },
     },

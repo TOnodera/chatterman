@@ -67,7 +67,6 @@ class Message {
   }
 
   requireFirstMessages(room_id: string) {
-    console.log("送信要求発信", this.store.has(room_id));
     if (this.store.has(room_id) == false) {
       socketStore.socket.emit('user:latest-messages', room_id);
     }
@@ -99,18 +98,13 @@ class Message {
 
   acceptMessageListener() {
     socketStore.registeOnce('broadcast:user-send-message', (fromServer: any) => {
-      console.log("メッセージ受信 1");
       AcceptMessageSubject.notify(fromServer);
     });
     // 送信要求への応答として送られたメッセージの処理
     socketStore.registeOnce('message:send-messages-data', (fromServer: any[]) => {
-      console.log("メッセージ受信 2");
-      console.log('message:send-messages-data');
       this.acceptMessageHandling(fromServer);
     });
     socketStore.registeOnce('message:send-latest-messages', (fromServer: any[]) => {
-      console.log("メッセージ受信 3");
-      console.log('message:send-latest-messages');
       this.acceptMessageHandling(fromServer);
     });
   }
