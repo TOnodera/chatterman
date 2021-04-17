@@ -1,8 +1,9 @@
 
 import express = require('express');
 import route from './Http';
-import Config, { corsSetting } from './Config';
+import { corsSetting } from './Config';
 import MiddlewareLoader from './Middleware/MiddlewareLoader';
+import path = require('path');
 import logger from './Domain/Utility/logger';
 
 const app = express();
@@ -16,7 +17,7 @@ MiddlewareLoader.httpMiddlewareLoader(app);
 //ソケット用ミドルウェア設定
 MiddlewareLoader.socketMiddlewareLoader(io);
 
-//app.use(express.static(path.join(__dirname, '../../dist')));
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
 const socketListener = require('./Listener');
 socketListener(io);
