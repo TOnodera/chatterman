@@ -1,7 +1,3 @@
 @startuml
-client -> MessageContoroller
-MessageContoroller -> Message.all
-Message.all -> IMessageRepository
-IMessageRepository -> IMessageRepository:all()
-IMessageRepository -> Message.all
+
 @enduml

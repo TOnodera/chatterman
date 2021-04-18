@@ -6,7 +6,7 @@ package Message{
     }
 
     class RegisteMessage{
-        add()   
+        add()
     }
 
     class MessageManager(){
@@ -93,6 +93,10 @@ package User{
         getUserById()
         getUserIdByCreadentials()
         getAllUsers()
+    }
+
+    class UserRegister{
+        registe()
     }
 
 

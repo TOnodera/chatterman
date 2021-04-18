@@ -1,12 +1,3 @@
 @startuml
-client -> MessageContoroller
-MessageContoroller -> Message.edit
-Message.edit -> Message.edit:message.user.isAbleToAccess(message.room_id)
-note right:isAbleToAccessで送信可能なroomか検証。未許可ならDomainException
-Message.edit -> Message.edit:message.user.isEditable(message)
-note right:別のユーザーのメッセージを編集しようとしていないか検証。
-Message.edit -> IMessageRepository:get(message_id)
-IMessageRepository -> Message.edit: Message
-Message.edit -> IMessageRepository:save(message)
-IMessageRepository -> IMessageRepository:save(message)
+
 @enduml

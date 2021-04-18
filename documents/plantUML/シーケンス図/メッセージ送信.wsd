@@ -1,8 +1,3 @@
 @startuml
-client -> MessageContoroller
-MessageContoroller -> Message:add(message)
-Message -> Message:message.user.isAbleToAccess(message.room_id)
-note right:isAbleToAccessで送信可能なroomか検証。未許可ならAuthenticationException
-Message -> IMessageRepository:add(message)
-IMessageRepository -> IMessageRepository: add(message)
+
 @enduml
