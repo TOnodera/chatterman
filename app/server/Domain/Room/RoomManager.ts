@@ -1,13 +1,13 @@
 import { Socket } from 'socket.io';
 import User from '../User/User';
 import UserFactory from '../User/Factory/UserFactory';
+import userManager from '../User/UserManager';
 import Room from './Room';
 import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
 import roomRepositoryFactory from './Factory/RoomRepositoryFactory';
 import config from '../../Config';
 import { ROOM_TYPE } from '../../Enum/Enum';
-import userService from '../User/Service';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
 import socketService from '../Utility/SocketService';
@@ -82,10 +82,10 @@ class RoomManager {
     }
 
     async getDirectMessageRoomInfo(my_id: string, socket: Socket): Promise<Client[]> {
-        const users: User[] = await userService.getAllUsers();
+        const users: User[] = await userManager.getAllUsers();
 
         //入室可能なルームにソケットをジョイン
-        const me: User = await userService.getUserById(my_id);
+        const me: User = await userManager.getUserById(my_id);
         await socketService.joinMe(me, socket);
 
         const members: Client[] = [];
