@@ -23,12 +23,6 @@ class User {
         return this.id;
     }
 
-
-    async accessAbleRooms(): Promise<string[]> {
-        const rooms: string[] = await roomManager.getAccessableRooms(this.id);
-        return rooms;
-    }
-
     async isEditable(message: Message): Promise<boolean> {
         return await this.repository.hasMessage(message);
     }
