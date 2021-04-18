@@ -1,6 +1,6 @@
 import { APPLY_REACTION } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import ApplyController from '../Domain/Controller/ApplyController';
+import ApplyController from '../Controller/ApplyController';
 import socketService from '../Domain/Utility/SocketService';
 
 module.exports = (socket: Socket) => {

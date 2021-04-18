@@ -1,4 +1,4 @@
-import RoomController from '../Domain/Controller/RoomController';
+import RoomController from '../Controller/RoomController';
 import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
 import logger from '../Domain/Utility/logger';

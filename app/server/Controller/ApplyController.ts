@@ -1,7 +1,7 @@
-import { APPLY_REACTION } from '../../Enum/Enum';
+import { APPLY_REACTION } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import ApplyManager from '../Apply/ApplyManager';
-import logger from '../Utility/logger';
+import ApplyManager from '../Domain/Apply/ApplyManager';
+import logger from '../Domain/Utility/logger';
 
 class ApplyController {
     /**

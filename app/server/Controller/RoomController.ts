@@ -1,11 +1,11 @@
-import { ROOM_TYPE } from '../../Enum/Enum';
+import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import RoomEventEmitter from '../Room/Emitter/RoomEventEmitter';
-import roomManager from '../Room/RoomManager';
-import logger from '../Utility/logger';
-import userService from '../User/Service';
-import IUserEditor from '../User/Interface/IUserEditor';
+import SocketExceptionHandler from '../Domain/Exception/SocketExceptionHandler';
+import RoomEventEmitter from '../Domain/Room/Emitter/RoomEventEmitter';
+import roomManager from '../Domain/Room/RoomManager';
+import logger from '../Domain/Utility/logger';
+import userService from '../Domain/User/Service';
+import IUserEditor from '../Domain/User/Interface/IUserEditor';
 
 class RoomController {
     private socket: Socket;

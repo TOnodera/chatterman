@@ -1,6 +1,6 @@
 import logger from '../Domain/Utility/logger';
 import { Socket } from 'socket.io';
-import MessageController from '../Domain/Controller/MessasgeController';
+import MessageController from '../Controller/MessasgeController';
 import socketService from '../Domain/Utility/SocketService';
 
 module.exports = (socket: Socket) => {

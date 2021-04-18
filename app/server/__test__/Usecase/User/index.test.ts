@@ -1,5 +1,5 @@
 import { query } from '../../../Domain/Utility/Connection/Connection';
-import UserController from '../../../Domain/Controller/UserController';
+import UserController from '../../../Controller/UserController';
 import UserService from '../../../Domain/User/Service';
 
 describe('User', () => {

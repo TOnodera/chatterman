@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
-import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import MessageManager from '../Message/MessageManager';
+import SocketExceptionHandler from '../Domain/Exception/SocketExceptionHandler';
+import MessageManager from '../Domain/Message/MessageManager';
 
 class MessageController {
     private socket: Socket;
@@ -17,9 +17,9 @@ class MessageController {
         });
     }
 
-    delete(): void {}
+    delete(): void { }
 
-    edit(): void {}
+    edit(): void { }
 
     typing(user: { id: string; name: string }, room_id: string): void {
         this.messageManager.typing(user, room_id);

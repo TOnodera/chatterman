@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserController from '../Domain/Controller/UserController';
+import UserController from '../Controller/UserController';
 import HttpExceptionHandler from '../Domain/Exception/HttpExceptionHandler';
 import logger from '../Domain/Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';

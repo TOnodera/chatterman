@@ -1,9 +1,9 @@
-import { loginManager } from '../User/LoginManager';
+import { loginManager } from '../Domain/User/LoginManager';
 import { Socket } from 'socket.io';
-import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import Exception from '../Exception/Exception';
-import User from '../User/User';
-import UserRegister from '../User/UserRegister';
+import SocketExceptionHandler from '../Domain/Exception/SocketExceptionHandler';
+import Exception from '../Domain/Exception/Exception';
+import User from '../Domain/User/User';
+import UserRegister from '../Domain/User/UserRegister';
 
 class UserController {
 
