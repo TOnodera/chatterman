@@ -1,11 +1,106 @@
-@startuml 
-!include サーバー/クラス図Handler.wsd
-!include サーバー/クラス図Message.wsd
-!include サーバー/クラス図User.wsd
-!include サーバー/クラス図Room.wsd
+@startuml
+package Message{
 
-class ReadConfig{
-    +config()
+    class Message{
+        +edit()
+    }
+
+    class RegisteMessage{
+        add()   
+    }
+
+    class MessageManager(){
+        add()
+        typing()
+        moreMessages()
+        getLatest()
+    }
+
+    class Messages(){
+        latest()
+        more()        
+    }
+
+    class MessageService{
+        add()
+        get()
+        registe()
+        addPolymorphic()
+        getCreatedAt()
+        toClient()        
+    }
+
+
 }
+
+package Room{
+
+    class Room{}
+
+    class RoomRegister{
+        create()
+    }
+
+    class RoomManager{
+        attemptToEnter()
+        leaveCurrentRoom()
+        createRoom()
+        createUserDefaultRoom()
+        createInformationRoom()
+        addAccessableRooms()
+        getTalkRooms()
+        getInformationRoom()
+        isAccessableRooms()
+        getAccessableRooms()
+        getInformationRoomId()
+        getDirectMessageRoom()
+        getDirectMessageRoomInfo()
+        getRoomEventEmitter()
+    }
+
+}
+
+package User{
+
+    class User{
+        getId()
+        isAccessable()
+        accessAbleRooms()
+        isEditable()
+    }
+
+    class LoginManager{
+        Login()
+    }
+
+    class AfterCredentials{
+        afterCredentials()
+        logout()
+        authenticate()
+    }
+
+    class Service{
+        getUserByCredentials()
+        getInfromationRoomId()
+        getUserIdByCredentials()
+        getUserById()
+        getUsersByIdArray()
+        getMembersId()
+    }
+
+    class UserManager{
+        registe()
+        getUserById()
+        getUserIdByCreadentials()
+        getAllUsers()
+    }
+
+
+}
+
+
+
+
+
 
 @enduml
