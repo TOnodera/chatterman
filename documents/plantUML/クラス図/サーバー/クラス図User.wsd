@@ -2,78 +2,35 @@
 
 package User{
 
-    package user-core{
-        
-        class User{
-            -id: string
-            -credentials: Credentials
-            -name: string
-            -created_at: Datetime
-            -accessAbleRooms: array<string>
-            -repository: IUserRepository
-            -users: UserEditor[]
-            +constructor(id: string)
-            +isAccessable(room_id: string): boolean
-            +isEditable(message: Message): boolean
-            +trimCredentials(): void
-        }
-
-        class UserRegister{
-            -credentials: Credentials
-            -name: string
-            -repository: IUserRepository
-            +constructor(name: string,credentials: Credentials)
-            +registe(): void
-        }
+    interface User{
+        +userRegister: IUserRegister
+        +userEditor: IUserEditor
+        +constructor(userRegister,userEditor)
     }
 
-    Interface ILoginManager{
-        +repository: IUserRepository
-        +login(credentials: Credentials): boolean
-        +logout(credentials: Credentials): boolean
-        +authentiate(credentials: Credentials): boolean
+    interface IUserRegister{
+        +registe()
     }
 
-    class LoginManager{
-        +users: Users[]
-        +getLoginUsersCount(room_id: string): number
-    }
-    note right of LoginManager::users
-    ユーザー情報をインメモリで保管するキュー
-    endnote
-
-    Interface IUserRepository{
-        +registe(user: User): boolean
-        +getUserByEmail(email: string): User
-        +getUserByPassword(plainPassword: string): User
-        +getUserByName(name: string): User
-        +getUserByCredentials(credentials: Credentials): User
-        +hasMessage(message: Message): boolean
+    interface IUserEditor{
+        +edit()
+        +delete()
     }
 
-    class UserRepository
-
-    class UserController{
-        +registe(user: User): void
-        +login(credentials: Credentials): void
-        +logout(credentials: Credentials): void
-        +authentiate(credentials: Credentials): void
+    class UserRegister{
+        +registe()
     }
 
-    class UserRepositoryFactory{
-        +create()
+    class UserEditor{
+        +edit()
+        +delete()
     }
+
+    IUserEditor <|.. UserEditor
+    IUserRegister <|.. UserRegister
+    User <.. IUserRegister
+    User <.. IUserEditor
 
 }
-
-User <-- UserController
-ILoginManager <|.. LoginManager
-IUserRepository <.. User
-IUserRepository <.. LoginManager
-ReadConfig <.. UserRepositoryFactory
-IUserRepository <|.. UserRepository
-UserRepository <.. UserRepositoryFactory : <<create>>
-LoginManager <-- UserController
-RoomManager <-- User
 
 @enduml
