@@ -5,6 +5,9 @@ package User{
     interface IUser{
         +userRegister: IUserRegister
         +userEditor: IUserEditor
+        +registe(name: string,credentials: Credentials)
+        +edit(message: string)
+        +delete()
     }
 
     interface IUserRegister{
@@ -25,6 +28,10 @@ package User{
         +delete()
     }
 
+    class UserFactory{
+        +create(id: string): IUser
+    }
+
     class User
 
     IUserEditor <|.. UserEditor
@@ -32,6 +39,7 @@ package User{
     IUserRegister <.. IUser
     IUserEditor <.. IUser
     IUser <|.. User
+    UserEditor <.. UserFactory: <<create>>
 
 }
 
