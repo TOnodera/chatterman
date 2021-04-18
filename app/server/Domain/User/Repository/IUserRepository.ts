@@ -7,7 +7,6 @@ interface IUserRepository {
     thisNameIsAlreadyUsed(name: string): Promise<boolean>;
     getUserIdByCredentials(credentials: Credentials): Promise<string>;
     credentials(credentials: Credentials): Promise<boolean>;
-    hasMessage(message: Message): Promise<boolean>;
     get(id: string): Promise<User>;
     getMembersId(user_id: string): Promise<string[]>;
 }

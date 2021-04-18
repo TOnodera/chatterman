@@ -39,11 +39,6 @@ class UserRepository implements IUserRepository {
         return false;
     }
 
-    async hasMessage(message: Message): Promise<boolean> {
-        const [rows]: any[] = await query('SELECT * FROM messages WHERE user_id = ? AND id = ?', [message.user?.id, message.message_id]);
-        return rows.length > 0;
-    }
-
     async get(user_id: string): Promise<any> {
         const [rows]: any[] = await query('SELECT * FROM users WHERE id = ? ', [user_id]);
         if (rows.length > 0) {

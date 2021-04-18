@@ -8,5 +8,6 @@ interface IMessageRepository {
     latest(room_id: string, nums: number): Promise<any[]>;
     more(room_id: string, created_at: Datetime, nums: number): Promise<any[]>;
     get(message_id: string): Promise<Message>;
+    hasMessage(message: Message): Promise<boolean>;
 }
 export default IMessageRepository;

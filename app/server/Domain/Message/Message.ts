@@ -25,11 +25,15 @@ class Message {
     }
 
     async edit(newMessage: string): Promise<boolean> {
-        if ((await this.user.isEditable(this)) == false) {
+        if ((await this.isEditable(this)) == false) {
             throw new AuthenticationException('このメッセージを編集できません。');
         }
         this.message = newMessage;
         return await this.repository.save(this);
+    }
+
+    async isEditable(message: Message): Promise<boolean> {
+        return await this.repository.hasMessage(message);
     }
 
     async delete(): Promise<boolean> {

@@ -51,6 +51,11 @@ class MessageRepository implements IMessageRepository {
         const [result]: any[] = await query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
         return result.affectedRows == 1;
     }
+
+    async hasMessage(message: Message): Promise<boolean> {
+        const [rows]: any[] = await query('SELECT * FROM messages WHERE user_id = ? AND id = ?', [message.user?.id, message.message_id]);
+        return rows.length > 0;
+    }
 }
 
 export default MessageRepository;

@@ -22,10 +22,6 @@ class User {
     getId(): string {
         return this.id;
     }
-
-    async isEditable(message: Message): Promise<boolean> {
-        return await this.repository.hasMessage(message);
-    }
 }
 
 export default User;
