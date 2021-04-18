@@ -1,6 +1,6 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import LoginManager from '../../Domain/User/LoginManager';
-import User from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/User';
 
 describe('LoginManager', () => {
     const credentials: Credentials = {
@@ -8,7 +8,7 @@ describe('LoginManager', () => {
         password: 'password'
     };
     const loginManager: LoginManager = new LoginManager();
-    const user: User = new User('tester', credentials);
+    const user: UserEditor = new User('tester', credentials);
 
     describe('Login()', () => {
         it('ログイン出来る', async () => {

@@ -1,5 +1,5 @@
 import UserFactory from '../../User/Factory/UserFactory';
-import User from '../../User/User';
+import UserEditor from '../../User/User';
 import Datetime from '../../Utility/Datetime';
 import logger from '../../Utility/logger';
 import MessageEditor from '../MessageEditor';
@@ -10,7 +10,7 @@ class MessageFactory {
     static async create(message_id: string): Promise<MessageEditor> {
         const repository = MessageRepositoryFactory.create();
         const result: any = await repository.get(message_id);
-        const user: User = await UserFactory.create(result.user_id);
+        const user: UserEditor = await UserFactory.create(result.user_id);
 
         //オプションメッセージが付加されていたらその情報も取得
         const options: ApproveOptions | null = await polymorphicManager.getMessageApproveOptionByMessageId(message_id);

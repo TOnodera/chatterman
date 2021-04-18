@@ -1,5 +1,5 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
-import User from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/User';
 import LoginUsersStore from '../../Store/LoginUsersStore';
 
 describe('LoginStore', () => {
@@ -7,7 +7,7 @@ describe('LoginStore', () => {
         email: 'test@test.com',
         password: 'password'
     };
-    const user: User = new User('tester', credentials);
+    const user: UserEditor = new User('tester', credentials);
     beforeAll(() => {
         user.registe();
     });

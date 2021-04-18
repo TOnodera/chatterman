@@ -1,4 +1,4 @@
-import User from '../User';
+import UserEditor from '../User';
 import MessageEditor from '../../Message/MessageEditor';
 import UserRegister from '../UserRegister';
 interface IUserRepository {
@@ -7,7 +7,7 @@ interface IUserRepository {
     thisNameIsAlreadyUsed(name: string): Promise<boolean>;
     getUserIdByCredentials(credentials: Credentials): Promise<string>;
     credentials(credentials: Credentials): Promise<boolean>;
-    get(id: string): Promise<User>;
+    get(id: string): Promise<UserEditor>;
     getMembersId(user_id: string): Promise<string[]>;
 }
 export default IUserRepository;

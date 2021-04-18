@@ -2,7 +2,7 @@ import Datetime from '../Utility/Datetime';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 
-class User {
+class UserEditor {
     id: string;
     credentials: Credentials;
     name: string;
@@ -22,4 +22,4 @@ class User {
     }
 }
 
-export default User;
+export default UserEditor;

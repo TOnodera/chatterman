@@ -1,4 +1,4 @@
-import User from '../User/User';
+import UserEditor from '../User/User';
 import UserFactory from '../User/Factory/UserFactory';
 import MessageRegister from './MessageRegister';
 import MessageFactory from './Factory/MessageFactory';
@@ -16,7 +16,7 @@ class MessageService {
      * メッセージ登録
      */
     async add(strMessage: string, user_id: string, room_id: string): Promise<string> {
-        const user: User = await UserFactory.create(user_id);
+        const user: UserEditor = await UserFactory.create(user_id);
         const message: MessageRegister = new MessageRegister(strMessage, user, room_id);
         const message_id: string = await message.add();
 

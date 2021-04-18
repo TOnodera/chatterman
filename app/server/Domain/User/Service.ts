@@ -1,5 +1,5 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import User from './User';
+import UserEditor from './User';
 import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
 
@@ -9,7 +9,7 @@ class Service {
         this.repository = UserRepositoryFactory.create();
     }
 
-    async getUserByCredentials(credentials: Credentials): Promise<User> {
+    async getUserByCredentials(credentials: Credentials): Promise<UserEditor> {
         const id: string = await this.repository.getUserIdByCredentials(credentials);
         return UserFactory.create(id);
     }
@@ -22,14 +22,14 @@ class Service {
         return await this.repository.getUserIdByCredentials(credentials);
     }
 
-    async getUserById(user_id: string): Promise<User> {
+    async getUserById(user_id: string): Promise<UserEditor> {
         return await UserFactory.create(user_id);
     }
 
-    async getUsersByIdArray(user_ids: string[]): Promise<User[]> {
-        const users: User[] = [];
+    async getUsersByIdArray(user_ids: string[]): Promise<UserEditor[]> {
+        const users: UserEditor[] = [];
         for (const id of user_ids) {
-            const user: User = await this.getUserById(id);
+            const user: UserEditor = await this.getUserById(id);
             users.push(user);
         }
         return users;

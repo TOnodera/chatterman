@@ -10,7 +10,7 @@ import NotifyManager from '../Notify/NotifyManager';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
 import SocketService from '../Utility/SocketService';
-import User from '../User/User';
+import UserEditor from '../User/User';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userManager from '../User/UserManager';
 
@@ -87,8 +87,8 @@ class ApplyManager {
         }
 
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        const targetUser: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-        const requestUser: User = await userManager.getUserById(requestUserId);
+        const targetUser: UserEditor = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+        const requestUser: UserEditor = await userManager.getUserById(requestUserId);
 
 
         //処理済みか確認

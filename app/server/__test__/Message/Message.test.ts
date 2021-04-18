@@ -1,10 +1,10 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import MessageEditor from '../../Domain/Message/MessageEditor';
-import User from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/User';
 import Datetime from '../../Domain/Utility/Datetime';
 
 describe('Message', () => {
-    const user: User = new User('tester', { email: 'test@test.com', password: 'password' }, new Datetime());
+    const user: UserEditor = new User('tester', { email: 'test@test.com', password: 'password' }, new Datetime());
     let message_id: string;
 
     beforeAll(async () => {

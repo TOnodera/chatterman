@@ -4,7 +4,7 @@ import UserRegister from './UserRegister';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
 import { ROOM_TYPE } from '../../Enum/Enum';
-import User from './User';
+import UserEditor from './User';
 
 class UserManager {
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {
@@ -33,9 +33,9 @@ class UserManager {
         return userService.getUserIdByCredentials(credentials);
     }
 
-    async getAllUsers(): Promise<User[]> {
+    async getAllUsers(): Promise<UserEditor[]> {
         const idArray: string[] = await userService.getMembersId();
-        const users: User[] = await userService.getUsersByIdArray(idArray);
+        const users: UserEditor[] = await userService.getUsersByIdArray(idArray);
         return users;
     }
 }

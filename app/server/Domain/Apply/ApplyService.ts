@@ -4,7 +4,7 @@ import apply from './Apply';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { APPLY_REACTION, ROOM_TYPE } from '../../Enum/Enum';
 import logger from '../Utility/logger';
-import User from '../User/User';
+import UserEditor from '../User/User';
 import Room from '../Room/Room';
 import uuid = require('node-uuid');
 import roomManager from '../Room/RoomManager';

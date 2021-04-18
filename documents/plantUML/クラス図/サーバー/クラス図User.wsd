@@ -11,7 +11,7 @@ package User{
             -created_at: Datetime
             -accessAbleRooms: array<string>
             -repository: IUserRepository
-            -users: User[]
+            -users: UserEditor[]
             +constructor(id: string)
             +isAccessable(room_id: string): boolean
             +isEditable(message: Message): boolean

@@ -1,4 +1,4 @@
-import User from '../User/User';
+import UserEditor from '../User/User';
 import logger from '../Utility/logger';
 import PolymorphicRepositoryFactory from './Factory/PolymorphicRepositoryFactory';
 import PolymorphicRepository from './Repository/PolymorphicRepository';
@@ -43,7 +43,7 @@ class PolymorphicManager {
 
         if (result) {
             const polymorphicInfo: PolymorphicInfo = await this.getPolymorphicInfo(result.unique_id);
-            const user: User = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
+            const user: UserEditor = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
             const option: ApproveOptions = {
                 unique_id: result.unique_id,
                 user_id: user.id
