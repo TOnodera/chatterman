@@ -4,7 +4,7 @@ import UserRepositoryFactory from '../Factory/UserRepositoryFactory';
 import AuthenticationException from '../../../Exception/AuthenticationException';
 import { Socket } from 'socket.io';
 import logger from '../../../Utility/logger';
-import AfterLoginManager from '../AfterLoginManager';
+import AfterLoginManager from './AfterLoginManager';
 
 class LoginManager implements ILoginManager {
     repository: IUserRepository;
