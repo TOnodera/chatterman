@@ -8,7 +8,6 @@ import roomManager from '../../Room/RoomManager';
 import userService from '../Service';
 import userEventEmitter from '../UserEventEmitter';
 import socketService from '../../../Utility/SocketService';
-import AuthenticationException from '../../../Exception/AuthenticationException';
 import logger from '../../../Utility/logger';
 
 class AfterLoginManager {
