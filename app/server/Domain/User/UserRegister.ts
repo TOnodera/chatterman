@@ -1,8 +1,8 @@
 import uuid = require('node-uuid');
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import Bcrypt from '../Utility/Bcrypt';
-import DomainException from '../Exception/DomainException';
-import Exception from '../Exception/Exception';
+import DomainException from '../../Exception/DomainException';
+import Exception from '../../Exception/Exception';
 
 class UserRegister implements IUserRegister {
     id: string;

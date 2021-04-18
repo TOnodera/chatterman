@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UserController from '../Controller/UserController';
-import HttpExceptionHandler from '../Domain/Exception/HttpExceptionHandler';
+import HttpExceptionHandler from '../Exception/HttpExceptionHandler';
 import logger from '../Domain/Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';
 

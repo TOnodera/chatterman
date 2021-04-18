@@ -3,12 +3,12 @@ import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import loginUserStore from '../../Store/LoginUsersStore';
 import UserEditor from './UserEditor';
-import Exception from '../Exception/Exception';
+import Exception from '../../Exception/Exception';
 import roomManager from '../Room/RoomManager';
 import userService from '../User/Service';
 import userEventEmitter from '../User/UserEventEmitter';
 import socketService from '../Utility/SocketService';
-import AuthenticationException from '../Exception/AuthenticationException';
+import AuthenticationException from '../../Exception/AuthenticationException';
 import logger from '../Utility/logger';
 
 class AfterLoginManager {

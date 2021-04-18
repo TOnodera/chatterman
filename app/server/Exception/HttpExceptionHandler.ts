@@ -1,5 +1,5 @@
 import Exception from './Exception';
-import logger from '../Utility/logger';
+import logger from '../Domain/Utility/logger';
 import { Response } from 'express';
 
 class HttpExceptionHandler {

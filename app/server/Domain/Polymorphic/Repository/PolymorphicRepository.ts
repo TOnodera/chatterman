@@ -1,6 +1,6 @@
 import { query } from '../../Utility/Connection/Connection';
 import logger from '../../../Domain/Utility/logger';
-import Exception from '../../../Domain/Exception/Exception';
+import Exception from '../../../Exception/Exception';
 
 class PolymorphicRepository {
     async getUniqueId(polymorphicInfo: PolymorphicInfo): Promise<number> {

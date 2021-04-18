@@ -1,7 +1,7 @@
 import ILoginManager from './Interface/ILoginManager';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import AuthenticationException from '../Exception/AuthenticationException';
+import AuthenticationException from '../../Exception/AuthenticationException';
 import { Socket } from 'socket.io';
 import logger from '../Utility/logger';
 import AfterLoginManager from './AfterLoginManager';

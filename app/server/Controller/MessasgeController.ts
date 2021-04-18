@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import SocketExceptionHandler from '../Domain/Exception/SocketExceptionHandler';
+import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import MessageManager from '../Domain/Message/MessageManager';
 
 class MessageController {

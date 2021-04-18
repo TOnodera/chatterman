@@ -1,6 +1,6 @@
 import { APPLY_REACTION, APPLY_SENDER_NOTICE } from '../../../Enum/Enum';
 import logger from '../../../Domain/Utility/logger';
-import Exception from '../../Exception/Exception';
+import Exception from '../../../Exception/Exception';
 import { query } from '../../Utility/Connection/Connection';
 
 class ApplyRepository {

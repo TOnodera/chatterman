@@ -1,7 +1,7 @@
 import { loginManager } from '../User/LoginManager';
-import Exception from '../Exception/Exception';
+import Exception from '../../Exception/Exception';
 import logger from '../Utility/logger';
-import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
+import SocketExceptionHandler from '../../Exception/SocketExceptionHandler';
 import applyService from '../Apply/ApplyService';
 import roomManager from '../Room/RoomManager';
 import { transaction } from '../Utility/Connection/Connection';

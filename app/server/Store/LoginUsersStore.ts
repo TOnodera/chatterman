@@ -1,5 +1,5 @@
-import Exception from '../Domain/Exception/Exception';
-import DomainException from '../Domain/Exception/DomainException';
+import Exception from '../Exception/Exception';
+import DomainException from '../Exception/DomainException';
 import IUserEditor from '../Domain/User/Interface/IUserEditor';
 import logger from '../Domain/Utility/logger';
 export default {

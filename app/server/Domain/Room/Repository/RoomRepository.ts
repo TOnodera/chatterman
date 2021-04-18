@@ -1,5 +1,5 @@
 import { query } from '../../Utility/Connection/Connection';
-import Exception from '../../Exception/Exception';
+import Exception from '../../../Exception/Exception';
 import RoomRegister from '../RoomRegister';
 import { ROOM_TYPE } from '../../../Enum/Enum';
 import logger from '../../../Domain/Utility/logger';

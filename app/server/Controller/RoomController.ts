@@ -1,6 +1,6 @@
 import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import SocketExceptionHandler from '../Domain/Exception/SocketExceptionHandler';
+import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Domain/Room/Emitter/RoomEventEmitter';
 import roomManager from '../Domain/Room/RoomManager';
 import logger from '../Domain/Utility/logger';

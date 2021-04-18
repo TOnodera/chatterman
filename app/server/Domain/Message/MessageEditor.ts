@@ -1,5 +1,5 @@
-import AuthenticationException from '../Exception/AuthenticationException';
-import Exception from '../Exception/Exception';
+import AuthenticationException from '../../Exception/AuthenticationException';
+import Exception from '../../Exception/Exception';
 import Datetime from '../Utility/Datetime';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
