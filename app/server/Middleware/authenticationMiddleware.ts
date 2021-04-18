@@ -1,7 +1,7 @@
 import { NextFunction } from "express";
 import AuthenticationException from "../Exception/AuthenticationException";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
-import { loginManager } from "../Domain/User/LoginManager";
+import { loginManager } from "../Domain/User/Login/LoginManager";
 import logger from "../Utility/logger";
 import { Socket } from "socket.io";
 

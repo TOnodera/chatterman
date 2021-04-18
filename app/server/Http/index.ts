@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import UserController from '../Controller/UserController';
 import HttpExceptionHandler from '../Exception/HttpExceptionHandler';
 import logger from '../Utility/logger';
-import { loginManager } from '../Domain/User/LoginManager';
+import { loginManager } from '../Domain/User/Login/LoginManager';
 
 const route = (app: any) => {
     app.post('/api/users', async (req: Request, res: Response) => {

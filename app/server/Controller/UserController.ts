@@ -1,4 +1,4 @@
-import { loginManager } from '../Domain/User/LoginManager';
+import { loginManager } from '../Domain/User/Login/LoginManager';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import Exception from '../Exception/Exception';

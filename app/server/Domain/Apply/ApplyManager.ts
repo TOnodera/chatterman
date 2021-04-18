@@ -1,4 +1,4 @@
-import { loginManager } from '../User/LoginManager';
+import { loginManager } from '../User/Login/LoginManager';
 import Exception from '../../Exception/Exception';
 import logger from '../../Utility/logger';
 import SocketExceptionHandler from '../../Exception/SocketExceptionHandler';

@@ -1,7 +1,7 @@
 import { DISCONNECTED_REASON } from '../Enum/Enum';
 import { Socket } from 'socket.io';
 import logger from '../Utility/logger';
-import { loginManager } from '../Domain/User/LoginManager';
+import { loginManager } from '../Domain/User/Login/LoginManager';
 import socketService from '../Utility/SocketService';
 import loginUserStore from '../Store/LoginUsersStore';
 
