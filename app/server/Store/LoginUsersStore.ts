@@ -3,7 +3,7 @@ import DomainException from '../Exception/DomainException';
 import IUserEditor from '../Domain/User/Interface/IUserEditor';
 import logger from '../Utility/logger';
 export default {
-    //users: [] as unknown as User[],
+
     users: new Map() as Map<string, IUserEditor>,
     maxUserNum: 100,
     set(socket_id: string, user: IUserEditor) {

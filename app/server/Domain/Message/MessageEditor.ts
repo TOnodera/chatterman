@@ -3,6 +3,7 @@ import Exception from '../../Exception/Exception';
 import Datetime from '../../Utility/Datetime';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
+import IUserEditor from '../User/Interface/IUserEditor';
 
 
 /**
@@ -13,12 +14,12 @@ class MessageEditor {
     private repository: IMessageRepository;
     message_id: string;
     message: string;
-    user: User;
+    user: IUserEditor;
     room_id: string;
     options?: Options;
     created_at: Datetime;
 
-    constructor(message_id: string, message: string, user: User, room_id: string, created_at: Datetime, options?: Options) {
+    constructor(message_id: string, message: string, user: IUserEditor, room_id: string, created_at: Datetime, options?: Options) {
         this.repository = MessageRepositoryFactory.create();
         this.message_id = message_id;
         this.message = message;

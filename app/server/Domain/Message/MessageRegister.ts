@@ -4,6 +4,7 @@ import Exception from '../../Exception/Exception';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import roomManager from '../Room/RoomManager';
+import IUserEditor from '../User/Interface/IUserEditor';
 
 
 /**
@@ -13,10 +14,10 @@ class MessageRegister {
     private repository: IMessageRepository;
     message_id: string;
     message: string;
-    user: User;
+    user: IUserEditor;
     room_id: string;
 
-    constructor(message: string, user: User, room_id: string) {
+    constructor(message: string, user: IUserEditor, room_id: string) {
         this.repository = MessageRepositoryFactory.create();
         this.message_id = uuid.v4();
         this.message = message;
