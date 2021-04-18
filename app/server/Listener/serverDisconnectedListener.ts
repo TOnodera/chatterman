@@ -1,8 +1,8 @@
 import { DISCONNECTED_REASON } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';
-import socketService from '../Domain/Utility/SocketService';
+import socketService from '../Utility/SocketService';
 import loginUserStore from '../Store/LoginUsersStore';
 
 module.exports = (socket: Socket) => {

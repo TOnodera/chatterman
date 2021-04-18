@@ -1,6 +1,6 @@
 import Exception from './Exception';
 import { Socket } from 'socket.io';
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 
 class SocketExceptionHandler {
     static handle(exception: Exception, socket: Socket) {

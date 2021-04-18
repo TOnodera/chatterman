@@ -1,7 +1,7 @@
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 import { Socket } from 'socket.io';
 import MessageController from '../Controller/MessasgeController';
-import socketService from '../Domain/Utility/SocketService';
+import socketService from '../Utility/SocketService';
 
 module.exports = (socket: Socket) => {
     const messageController = new MessageController(socket);

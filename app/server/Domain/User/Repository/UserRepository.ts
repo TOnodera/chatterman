@@ -1,11 +1,11 @@
 import IUserRepository from './IUserRepository';
-import Bcrypt from '../../Utility/Bcrypt';
+import Bcrypt from '../../../Utility/Bcrypt';
 import MessageEditor from '../../Message/MessageEditor';
 import AuthenticationException from '../../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
 import DomainException from '../../../Exception/DomainException';
 import Config from '../../../Config';
-import { query } from '../../Utility/Connection/Connection';
+import { query } from '../../../Utility/Connection/Connection';
 
 class UserRepository implements IUserRepository {
     async registe(user: UserRegister): Promise<boolean> {

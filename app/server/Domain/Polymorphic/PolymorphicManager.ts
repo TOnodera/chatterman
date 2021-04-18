@@ -1,5 +1,5 @@
 import UserEditor from '../User/UserEditor';
-import logger from '../Utility/logger';
+import logger from '../../Utility/logger';
 import PolymorphicRepositoryFactory from './Factory/PolymorphicRepositoryFactory';
 import PolymorphicRepository from './Repository/PolymorphicRepository';
 import applyPolymorphicManager from './ApplyPolymorphic/ApplyPolymorphicManager';

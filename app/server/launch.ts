@@ -4,7 +4,7 @@ import route from './Http';
 import { corsSetting } from './Config';
 import MiddlewareLoader from './Middleware/MiddlewareLoader';
 import path = require('path');
-import logger from './Domain/Utility/logger';
+import logger from './Utility/logger';
 
 const app = express();
 const server = require('http').createServer(app);

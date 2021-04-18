@@ -1,11 +1,11 @@
 import IMessageRepository from './IMessageRepository';
 import MessageEditor from '../MessageEditor';
 import Exception from '../../../Exception/Exception';
-import Datetime from '../../Utility/Datetime';
+import Datetime from '../../../Utility/Datetime';
 import MessageRegister from '../MessageRegister';
 import MessageFactory from '../Factory/MessageFactory';
-import { query } from '../../Utility/Connection/Connection';
-import logger from '../../Utility/logger';
+import { query } from '../../../Utility/Connection/Connection';
+import logger from '../../../Utility/logger';
 
 class MessageRepository implements IMessageRepository {
     async latest(room_id: string, nums: number): Promise<any[]> {

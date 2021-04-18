@@ -1,5 +1,5 @@
 import { Connection, createConnection } from 'mysql2/promise';
-import Config from '../../../Config';
+import Config from '../../Config';
 import Datetime from '../Datetime';
 import logger from '../logger';
 

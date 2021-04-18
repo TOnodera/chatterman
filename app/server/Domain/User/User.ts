@@ -1,5 +1,5 @@
 import { ROOM_TYPE } from "../../Enum/Enum";
-import { transaction } from "../Utility/Connection/Connection";
+import { transaction } from "../../Utility/Connection/Connection";
 import roomManager from '../Room/RoomManager';
 
 class User implements IUser {

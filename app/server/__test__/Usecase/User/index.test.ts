@@ -1,4 +1,4 @@
-import { query } from '../../../Domain/Utility/Connection/Connection';
+import { query } from '../../../Utility/Connection/Connection';
 import UserController from '../../../Controller/UserController';
 import UserService from '../../../Domain/User/Service';
 

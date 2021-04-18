@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Domain/Room/Emitter/RoomEventEmitter';
 import roomManager from '../Domain/Room/RoomManager';
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 import userService from '../Domain/User/Service';
 import IUserEditor from '../Domain/User/Interface/IUserEditor';
 

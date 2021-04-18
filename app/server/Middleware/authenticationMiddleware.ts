@@ -2,7 +2,7 @@ import { NextFunction } from "express";
 import AuthenticationException from "../Exception/AuthenticationException";
 import SocketExceptionHandler from "../Exception/SocketExceptionHandler";
 import { loginManager } from "../Domain/User/LoginManager";
-import logger from "../Domain/Utility/logger";
+import logger from "../Utility/logger";
 import { Socket } from "socket.io";
 
 const authenticationMiddleware = async (socket: Socket, next: NextFunction) => {

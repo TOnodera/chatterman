@@ -1,7 +1,7 @@
 import Exception from '../Exception/Exception';
 import DomainException from '../Exception/DomainException';
 import IUserEditor from '../Domain/User/Interface/IUserEditor';
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 export default {
     //users: [] as unknown as User[],
     users: new Map() as Map<string, IUserEditor>,

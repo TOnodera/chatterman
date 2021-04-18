@@ -1,4 +1,4 @@
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 import { Socket } from 'socket.io';
 const chatListener = require('./chatListener');
 const userListener = require('./userListener');

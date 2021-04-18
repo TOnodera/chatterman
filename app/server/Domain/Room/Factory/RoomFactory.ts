@@ -1,5 +1,5 @@
 import Exception from '../../../Exception/Exception';
-import Datetime from '../../Utility/Datetime';
+import Datetime from '../../../Utility/Datetime';
 import Room from '../Room';
 import roomRepositoryFactory from './RoomRepositoryFactory';
 

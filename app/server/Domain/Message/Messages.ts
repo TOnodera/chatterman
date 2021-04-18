@@ -2,9 +2,9 @@ import IMessageRepository from './Repository/IMessageRepository';
 import MessageEditor from './MessageEditor';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import MessageFactory from './Factory/MessageFactory';
-import Datetime from '../Utility/Datetime';
+import Datetime from '../../Utility/Datetime';
 import messageService from './MessaseService';
-import logger from '../Utility/logger';
+import logger from '../../Utility/logger';
 
 class Messages {
     private repository: IMessageRepository;

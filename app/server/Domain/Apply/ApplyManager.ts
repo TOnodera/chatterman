@@ -1,15 +1,15 @@
 import { loginManager } from '../User/LoginManager';
 import Exception from '../../Exception/Exception';
-import logger from '../Utility/logger';
+import logger from '../../Utility/logger';
 import SocketExceptionHandler from '../../Exception/SocketExceptionHandler';
 import applyService from '../Apply/ApplyService';
 import roomManager from '../Room/RoomManager';
-import { transaction } from '../Utility/Connection/Connection';
+import { transaction } from '../../Utility/Connection/Connection';
 import { Socket } from 'socket.io';
 import NotifyManager from '../Notify/NotifyManager';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
-import SocketService from '../Utility/SocketService';
+import SocketService from '../../Utility/SocketService';
 import UserEditor from '../User/UserEditor';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userService from '../User/Service';

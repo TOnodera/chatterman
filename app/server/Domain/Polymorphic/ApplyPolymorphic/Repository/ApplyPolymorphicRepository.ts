@@ -1,4 +1,4 @@
-import { query } from '../../../Utility/Connection/Connection';
+import { query } from '../../../../Utility/Connection/Connection';
 import Exception from '../../../../Exception/Exception';
 import { PolymorphicTables } from '../../../../Enum/Enum';
 

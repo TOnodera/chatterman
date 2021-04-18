@@ -1,5 +1,5 @@
-import { query } from '../../Utility/Connection/Connection';
-import logger from '../../../Domain/Utility/logger';
+import { query } from '../../../Utility/Connection/Connection';
+import logger from '../../../Utility/logger';
 import Exception from '../../../Exception/Exception';
 
 class PolymorphicRepository {

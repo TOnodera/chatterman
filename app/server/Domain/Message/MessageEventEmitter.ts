@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import logger from '../Utility/logger';
+import logger from '../../Utility/logger';
 
 class MessageEventEmitter {
     private socket: Socket;

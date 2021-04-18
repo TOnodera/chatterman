@@ -1,5 +1,5 @@
 import { ROOM_TYPE } from '../../Enum/Enum';
-import Datetime from '../Utility/Datetime';
+import Datetime from '../../Utility/Datetime';
 class Room {
     id: string;
     name: string;

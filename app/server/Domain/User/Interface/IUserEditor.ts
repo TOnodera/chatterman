@@ -1,4 +1,4 @@
-import Datetime from "../../Utility/Datetime";
+import Datetime from "../../../Utility/Datetime";
 import IUserRepository from "../Repository/IUserRepository";
 
 interface IUserEditor {

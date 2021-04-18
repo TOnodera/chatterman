@@ -1,4 +1,4 @@
-import Datetime from 'server/Domain/Utility/Datetime';
+import Datetime from 'server/Utility/Datetime';
 import MessageEditor from '../MessageEditor';
 import MessageRegister from '../MessageRegister';
 interface IMessageRepository {

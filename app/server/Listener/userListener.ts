@@ -1,7 +1,7 @@
-import logger from '../Domain/Utility/logger';
+import logger from '../Utility/logger';
 import { Socket } from 'socket.io';
 import UserController from '../Controller/UserController';
-import socketService from '../Domain/Utility/SocketService';
+import socketService from '../Utility/SocketService';
 
 module.exports = (socket: Socket) => {
     //ログイン直後

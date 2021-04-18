@@ -7,9 +7,9 @@ import Exception from '../../Exception/Exception';
 import roomManager from '../Room/RoomManager';
 import userService from '../User/Service';
 import userEventEmitter from '../User/UserEventEmitter';
-import socketService from '../Utility/SocketService';
+import socketService from '../../Utility/SocketService';
 import AuthenticationException from '../../Exception/AuthenticationException';
-import logger from '../Utility/logger';
+import logger from '../../Utility/logger';
 
 class AfterLoginManager {
     private socket: Socket;

@@ -1,8 +1,8 @@
 import RoomController from '../Controller/RoomController';
 import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
-import logger from '../Domain/Utility/logger';
-import socketService from '../Domain/Utility/SocketService';
+import logger from '../Utility/logger';
+import socketService from '../Utility/SocketService';
 
 
 module.exports = (socket: Socket) => {

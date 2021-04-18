@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
-import loginUserStore from '../../Store/LoginUsersStore';
-import roomManager from '../Room/RoomManager';
-import IUserEditor from '../User/Interface/IUserEditor';
+import loginUserStore from '../Store/LoginUsersStore';
+import roomManager from '../Domain/Room/RoomManager';
+import IUserEditor from '../Domain/User/Interface/IUserEditor';
 
 class SocketService {
 

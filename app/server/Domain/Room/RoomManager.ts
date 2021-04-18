@@ -10,7 +10,7 @@ import config from '../../Config';
 import { ROOM_TYPE } from '../../Enum/Enum';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
-import socketService from '../Utility/SocketService';
+import socketService from '../../Utility/SocketService';
 import IUserEditor from '../User/Interface/IUserEditor';
 
 class RoomManager {
