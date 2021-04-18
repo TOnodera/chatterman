@@ -4,7 +4,7 @@ import Bcrypt from '../Utility/Bcrypt';
 import DomainException from '../Exception/DomainException';
 import Exception from '../Exception/Exception';
 
-class UserRegister {
+class UserRegister implements IUserRegister {
     id: string;
     credentials: Credentials;
     name: string;
@@ -18,6 +18,7 @@ class UserRegister {
     }
 
     async registe(): Promise<string> {
+
         if (!this.credentials || !this.name) {
             throw new Exception('このインスタンスを生成したコンストラクタではこのメソッドは呼び出せません。');
         }
