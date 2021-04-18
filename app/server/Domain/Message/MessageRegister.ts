@@ -4,6 +4,7 @@ import Exception from '../Exception/Exception';
 import User from '../User/User';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
+import roomManager from '../Room/RoomManager';
 
 class MessageRegister {
     private repository: IMessageRepository;
@@ -21,7 +22,7 @@ class MessageRegister {
     }
 
     async add(): Promise<string> {
-        if ((await this.user.isAccessable(this.room_id)) == false) {
+        if (await roomManager.isAccessableRooms(this.user.id, this.room_id) == false) {
             throw new AuthenticationException('このトークルームには投稿できません。');
         }
         this.message_id = uuid.v4();

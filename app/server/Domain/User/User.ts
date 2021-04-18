@@ -23,9 +23,6 @@ class User {
         return this.id;
     }
 
-    async isAccessable(room_id: string): Promise<boolean> {
-        return await roomManager.isAccessableRooms(this.id, room_id);
-    }
 
     async accessAbleRooms(): Promise<string[]> {
         const rooms: string[] = await roomManager.getAccessableRooms(this.id);

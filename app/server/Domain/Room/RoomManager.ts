@@ -23,12 +23,12 @@ class RoomManager {
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        return await user.isAccessable(info.room_id);
+        return await this.isAccessableRooms(user.id, info.room_id);
     }
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
         const user: User = await UserFactory.create(info.user_id);
-        return await user.isAccessable(info.room_id);
+        return await this.isAccessableRooms(user.id, info.room_id);
     }
 
     async createRoom(name: string, creater_id: string, room_type: ROOM_TYPE): Promise<Room> {
