@@ -8,12 +8,12 @@ interface UserRegisteInfo {
     credentials: Credentials
 }
 
-interface RoomAndUserId{
+interface RoomAndUserId {
     room_id: string,
     user_id: string
 }
 
-interface UserBasicInfo{
+interface UserBasicInfo {
     user: {
         id: string,
         name: string
@@ -25,7 +25,7 @@ interface UserBasicInfo{
  * クライアントに送る情報
  */
 
-interface SendMessageToClient{
+interface SendMessageToClient {
     room_id: string,
     user_id: string,
     user_name: string,
@@ -35,42 +35,41 @@ interface SendMessageToClient{
     created_at: string
 }
 
-interface Client{
+interface Client {
     id: string,
     name: string,
     room_id?: string,
     isLogin?: boolean
 }
 
-interface AfterLoginInfo{
+interface AfterLoginInfo {
     id: string,
     name: string,
     information_room: string
 }
 
-interface RoomInfo{
+interface RoomInfo {
     room_id: string,
     name: string
 }
 
-interface Options{
+interface Options {
     unique_id: number
 }
 
-interface ApproveOptions extends Options{
+interface ApproveOptions extends Options {
     user_id: string
 }
 
 
-interface PolymorphicInfo{
+interface PolymorphicInfo {
     polymorphic_table: 'requests',//ポリモーフィック関連でテーブル名を受け付けるので設定されている以外の値が代入されないようにする
     polymorphic_id: number
 }
 
 //データ登録時に使用
 //メッセージの付加オプション
-interface MessageOptions extends PolymorphicInfo{
+interface MessageOptions extends PolymorphicInfo {
 }
 
-type ApplyReactionType = typeof APPLY_REACTION;
-type ApplySenderNoticeType = typeof APPLY_SENDER_NOTICE;
+
