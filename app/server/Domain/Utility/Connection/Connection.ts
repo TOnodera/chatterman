@@ -9,7 +9,9 @@ class MySqlConnection {
 
     static async getConnection(): Promise<Connection> {
         if (!this.connection) {
-            this.connection = await createConnection(Config.database.mysql);
+            this.connection = process.env.NODE_ENV == 'development'
+                ? await createConnection(Config.database.mysql)
+                : await createConnection(Config.database.mysql_test);
         }
         return this.connection;
     }

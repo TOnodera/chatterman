@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server:start": "$(npm bin)/ts-node --files -r ./server",
-    "test": "jest --detectOpenHandles"
+    "test": "NODE_ENV=test && jest --detectOpenHandles --verbose"
   },
   "keywords": [],
   "author": "",
