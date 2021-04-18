@@ -1,4 +1,4 @@
-import UserEditor from '../User/User';
+import UserEditor from '../User/UserEditor';
 import UserFactory from '../User/Factory/UserFactory';
 import MessageRegister from './MessageRegister';
 import MessageFactory from './Factory/MessageFactory';

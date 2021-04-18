@@ -1,5 +1,5 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
-import UserEditor from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/UserEditor';
 import LoginUsersStore from '../../Store/LoginUsersStore';
 
 describe('LoginStore', () => {

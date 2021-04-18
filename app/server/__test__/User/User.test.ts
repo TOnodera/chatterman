@@ -1,4 +1,4 @@
-import UserEditor from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/UserEditor';
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import UserRepositoryFactory from '../../Domain/User/Factory/UserRepositoryFactory';
 import IUserRepository from '../../Domain/User/Repository/IUserRepository';

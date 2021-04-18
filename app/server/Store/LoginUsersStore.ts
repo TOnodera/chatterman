@@ -1,6 +1,6 @@
 import Exception from '../Domain/Exception/Exception';
 import DomainException from '../Domain/Exception/DomainException';
-import UserEditor from '../Domain/User/User';
+import UserEditor from '../Domain/User/UserEditor';
 import logger from '../Domain/Utility/logger';
 export default {
     //users: [] as unknown as User[],

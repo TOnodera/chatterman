@@ -1,4 +1,4 @@
-import UserEditor from '../User/User';
+import UserEditor from '../User/UserEditor';
 import logger from '../Utility/logger';
 import PolymorphicRepositoryFactory from './Factory/PolymorphicRepositoryFactory';
 import PolymorphicRepository from './Repository/PolymorphicRepository';

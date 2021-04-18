@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import loginUserStore from '../../Store/LoginUsersStore';
-import UserEditor from './User';
+import UserEditor from './UserEditor';
 import Exception from '../Exception/Exception';
 import roomManager from '../Room/RoomManager';
 import userService from '../User/Service';

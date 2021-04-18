@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import UserEditor from '../User/User';
+import UserEditor from '../User/UserEditor';
 import UserFactory from '../User/Factory/UserFactory';
 import userManager from '../User/UserManager';
 import Room from './Room';

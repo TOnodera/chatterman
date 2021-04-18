@@ -1,4 +1,4 @@
-import UserEditor from '../../User/User';
+import UserEditor from '../../User/UserEditor';
 import userManager from '../../User/UserManager';
 import ApplyPolymorphicRepositoryFactory from './Factory/ApplyPolymorphicRepositoryFactory';
 import ApplyPolymorphicRepository from './Repository/ApplyPolymorphicRepository';

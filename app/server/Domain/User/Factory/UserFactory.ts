@@ -1,4 +1,4 @@
-import UserEditor from '../User';
+import UserEditor from '../UserEditor';
 import repositoryFactory from './UserRepositoryFactory';
 class UserFactory {
     static async create(id: string): Promise<UserEditor> {

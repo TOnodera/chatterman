@@ -1,5 +1,5 @@
 import UserFactory from '../../User/Factory/UserFactory';
-import UserEditor from '../../User/User';
+import UserEditor from '../../User/UserEditor';
 import Datetime from '../../Utility/Datetime';
 import logger from '../../Utility/logger';
 import MessageEditor from '../MessageEditor';

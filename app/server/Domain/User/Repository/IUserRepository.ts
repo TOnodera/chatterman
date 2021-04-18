@@ -1,4 +1,4 @@
-import UserEditor from '../User';
+import UserEditor from '../UserEditor';
 import MessageEditor from '../../Message/MessageEditor';
 import UserRegister from '../UserRegister';
 interface IUserRepository {

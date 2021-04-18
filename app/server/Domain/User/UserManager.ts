@@ -4,7 +4,7 @@ import UserRegister from './UserRegister';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
 import { ROOM_TYPE } from '../../Enum/Enum';
-import UserEditor from './User';
+import UserEditor from './UserEditor';
 
 class UserManager {
     async registe(fromClient: UserRegisteInfo): Promise<boolean> {

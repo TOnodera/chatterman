@@ -1,6 +1,6 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import LoginManager from '../../Domain/User/LoginManager';
-import UserEditor from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/UserEditor';
 
 describe('LoginManager', () => {
     const credentials: Credentials = {

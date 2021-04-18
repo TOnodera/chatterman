@@ -1,6 +1,6 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
 import MessageEditor from '../../Domain/Message/MessageEditor';
-import UserEditor from '../../Domain/User/User';
+import UserEditor from '../../Domain/User/UserEditor';
 import Datetime from '../../Domain/Utility/Datetime';
 
 describe('Message', () => {

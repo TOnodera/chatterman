@@ -10,7 +10,7 @@ import NotifyManager from '../Notify/NotifyManager';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
 import SocketService from '../Utility/SocketService';
-import UserEditor from '../User/User';
+import UserEditor from '../User/UserEditor';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userManager from '../User/UserManager';
 
