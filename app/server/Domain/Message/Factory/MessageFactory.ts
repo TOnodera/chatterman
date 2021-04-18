@@ -2,7 +2,7 @@ import UserFactory from '../../User/Factory/UserFactory';
 import User from '../../User/User';
 import Datetime from '../../Utility/Datetime';
 import logger from '../../Utility/logger';
-import MessageEditor from '../Message';
+import MessageEditor from '../MessageEditor';
 import MessageRepositoryFactory from './MessageRepositoryFactory';
 import polymorphicManager from '../../Polymorphic/PolymorphicManager';
 

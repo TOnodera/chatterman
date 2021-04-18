@@ -1,5 +1,5 @@
 import IMessageRepository from './IMessageRepository';
-import MessageEditor from '../Message';
+import MessageEditor from '../MessageEditor';
 import Exception from '../../Exception/Exception';
 import Datetime from '../../Utility/Datetime';
 import MessageRegister from '../MessageRegister';

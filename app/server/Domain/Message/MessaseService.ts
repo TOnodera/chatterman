@@ -3,7 +3,7 @@ import UserFactory from '../User/Factory/UserFactory';
 import MessageRegister from './MessageRegister';
 import MessageFactory from './Factory/MessageFactory';
 import Datetime from '../Utility/Datetime';
-import MessageEditor from './Message';
+import MessageEditor from './MessageEditor';
 import logger from '../Utility/logger';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { transaction } from '../Utility/Connection/Connection';

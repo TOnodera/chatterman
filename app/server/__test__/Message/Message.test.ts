@@ -1,5 +1,5 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
-import MessageEditor from '../../Domain/Message/Message';
+import MessageEditor from '../../Domain/Message/MessageEditor';
 import User from '../../Domain/User/User';
 import Datetime from '../../Domain/Utility/Datetime';
 

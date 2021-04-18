@@ -1,5 +1,5 @@
 import IMessageRepository from './Repository/IMessageRepository';
-import MessageEditor from './Message';
+import MessageEditor from './MessageEditor';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import MessageFactory from './Factory/MessageFactory';
 import Datetime from '../Utility/Datetime';

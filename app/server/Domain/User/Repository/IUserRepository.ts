@@ -1,5 +1,5 @@
 import User from '../User';
-import MessageEditor from '../../Message/Message';
+import MessageEditor from '../../Message/MessageEditor';
 import UserRegister from '../UserRegister';
 interface IUserRepository {
     registe(user: UserRegister): Promise<boolean>;

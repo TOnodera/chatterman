@@ -1,5 +1,5 @@
 import Datetime from 'server/Domain/Utility/Datetime';
-import MessageEditor from '../Message';
+import MessageEditor from '../MessageEditor';
 import MessageRegister from '../MessageRegister';
 interface IMessageRepository {
     add(message: MessageRegister): Promise<boolean>;
