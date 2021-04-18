@@ -1,5 +1,5 @@
 import IMessageRepository from './Repository/IMessageRepository';
-import Message from './Message';
+import MessageEditor from './Message';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import MessageFactory from './Factory/MessageFactory';
 import Datetime from '../Utility/Datetime';
@@ -21,9 +21,9 @@ class Messages {
     async latest(room_id: string): Promise<SendMessageToClient[]> {
         const rows: any[] = await this.repository.latest(room_id, this.nums);
         if (rows.length > 0) {
-            const messages: Message[] = [];
+            const messages: MessageEditor[] = [];
             for (let row of rows) {
-                const message: Message = await MessageFactory.create(row.id);
+                const message: MessageEditor = await MessageFactory.create(row.id);
                 messages.push(message);
             }
             return messageService.toClient(messages);
@@ -45,9 +45,9 @@ class Messages {
         const created_at: Datetime = await messageService.getCreatedAt(message_id);
         const rows: any[] = await this.repository.more(room_id, created_at, this.nums);
         if (rows.length > 0) {
-            const messages: Message[] = [];
+            const messages: MessageEditor[] = [];
             for (let row of rows) {
-                const message: Message = await MessageFactory.create(row.id);
+                const message: MessageEditor = await MessageFactory.create(row.id);
                 messages.push(message);
             }
             return await messageService.toClient(messages);

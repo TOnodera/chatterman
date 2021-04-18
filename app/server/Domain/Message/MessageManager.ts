@@ -3,8 +3,6 @@ import { Socket } from 'socket.io';
 import logger from '../Utility/logger';
 import MessageService from '../Message/MessaseService';
 import MessageEventEmitter from '../Message/MessageEventEmitter';
-import { transaction } from '../Utility/Connection/Connection';
-import Message from './Message';
 
 /**
  * メッセージ管理クラス

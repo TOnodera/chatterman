@@ -1,6 +1,6 @@
 import IUserRepository from './IUserRepository';
 import Bcrypt from '../../Utility/Bcrypt';
-import Message from '../../Message/Message';
+import MessageEditor from '../../Message/Message';
 import AuthenticationException from '../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
 import DomainException from '../../Exception/DomainException';

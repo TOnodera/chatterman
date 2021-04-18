@@ -3,12 +3,10 @@ import UserFactory from '../User/Factory/UserFactory';
 import MessageRegister from './MessageRegister';
 import MessageFactory from './Factory/MessageFactory';
 import Datetime from '../Utility/Datetime';
-import Message from './Message';
+import MessageEditor from './Message';
 import logger from '../Utility/logger';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { transaction } from '../Utility/Connection/Connection';
-import { Send } from 'express';
-
 class MessageService {
     /**
      *
@@ -25,8 +23,8 @@ class MessageService {
         return message_id;
     }
 
-    async get(message_id: string): Promise<Message> {
-        const message: Message = await MessageFactory.create(message_id);
+    async get(message_id: string): Promise<MessageEditor> {
+        const message: MessageEditor = await MessageFactory.create(message_id);
         return message;
     }
 
@@ -42,7 +40,7 @@ class MessageService {
                 }
 
                 //データ取得して返す
-                const registeredNow: Message = await this.get(message_id);
+                const registeredNow: MessageEditor = await this.get(message_id);
                 const toClient: SendMessageToClient[] = await this.toClient([registeredNow]);
 
                 return toClient;
@@ -69,7 +67,7 @@ class MessageService {
      * 登録日時を取得
      */
     async getCreatedAt(message_id: string): Promise<Datetime> {
-        const message: Message = await this.get(message_id);
+        const message: MessageEditor = await this.get(message_id);
         return message.created_at;
     }
 
@@ -79,7 +77,7 @@ class MessageService {
      * メッセージオブジェクトにはUserオブジェクトが含まれていてbroadcast配信する必要のないデータがある。
      * 送信に必要なデータだけここでピックアップして送る。
      */
-    toClient(messages: Message[]): SendMessageToClient[] {
+    toClient(messages: MessageEditor[]): SendMessageToClient[] {
         let toClient: SendMessageToClient[] = [];
         for (let message of messages) {
             const client: SendMessageToClient = {

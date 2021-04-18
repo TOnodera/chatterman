@@ -1,5 +1,5 @@
 import IMessageRepository from './IMessageRepository';
-import Message from '../Message';
+import MessageEditor from '../Message';
 import Exception from '../../Exception/Exception';
 import Datetime from '../../Utility/Datetime';
 import MessageRegister from '../MessageRegister';
@@ -17,7 +17,7 @@ class MessageRepository implements IMessageRepository {
     }
 
     async roomIncludeMessage(room_id: string, message_id: string): Promise<boolean> {
-        const message: Message = await MessageFactory.create(message_id);
+        const message: MessageEditor = await MessageFactory.create(message_id);
         return message.room_id == room_id;
     }
 
@@ -47,12 +47,12 @@ class MessageRepository implements IMessageRepository {
         throw new Exception(`メッセージが見つかりませんでした。 message_id: ${message_id}`);
     }
 
-    async save(message: Message): Promise<boolean> {
+    async save(message: MessageEditor): Promise<boolean> {
         const [result]: any[] = await query('UPDATE messages SET message = ? WHERE id = ? ', [message.message, message.message_id]);
         return result.affectedRows == 1;
     }
 
-    async hasMessage(message: Message): Promise<boolean> {
+    async hasMessage(message: MessageEditor): Promise<boolean> {
         const [rows]: any[] = await query('SELECT * FROM messages WHERE user_id = ? AND id = ?', [message.user?.id, message.message_id]);
         return rows.length > 0;
     }

@@ -1,5 +1,5 @@
 import { mySqlConnector } from '../../Domain/Utility/Connection/Connection';
-import Message from '../../Domain/Message/Message';
+import MessageEditor from '../../Domain/Message/Message';
 import User from '../../Domain/User/User';
 import Datetime from '../../Domain/Utility/Datetime';
 
@@ -18,7 +18,7 @@ describe('Message', () => {
 
     describe('add()', () => {
         it('追加出来る', async () => {
-            const message: Message = new Message('テストメッセージ', user, 'everybody');
+            const messageMessageEditor = new Message('テストメッセージ', user, 'everybody');
             expect(await message.add()).toBe(true);
             message_id = message.message_id!;
         });

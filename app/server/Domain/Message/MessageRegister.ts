@@ -6,6 +6,10 @@ import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import roomManager from '../Room/RoomManager';
 
+
+/**
+ * 新規メッセージの作成クラス
+ */
 class MessageRegister {
     private repository: IMessageRepository;
     message_id: string;

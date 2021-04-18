@@ -5,7 +5,12 @@ import Datetime from '../Utility/Datetime';
 import IMessageRepository from './Repository/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 
-class Message {
+
+/**
+ * 既存メッセージの編集クラス
+ */
+class MessageEditor {
+
     private repository: IMessageRepository;
     message_id: string;
     message: string;
@@ -32,7 +37,7 @@ class Message {
         return await this.repository.save(this);
     }
 
-    async isEditable(message: Message): Promise<boolean> {
+    async isEditable(message: MessageEditor): Promise<boolean> {
         return await this.repository.hasMessage(message);
     }
 
@@ -40,7 +45,10 @@ class Message {
         if (!this.message_id) {
             throw new Exception('message_idがない状態でdelete()は呼び出せません。');
         }
+        if ((await this.isEditable(this)) == false) {
+            throw new AuthenticationException('このメッセージを編集できません。');
+        }
         return await this.repository.delete(this.message_id);
     }
 }
-export default Message;
+export default MessageEditor;
