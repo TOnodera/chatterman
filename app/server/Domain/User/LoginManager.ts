@@ -1,4 +1,4 @@
-import ILoginManager from './ILoginManager';
+import ILoginManager from './Interface/ILoginManager';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import AuthenticationException from '../Exception/AuthenticationException';

@@ -1,4 +1,4 @@
-import IUserEditor from '../IUserEditor';
+import IUserEditor from '../Interface/IUserEditor';
 import UserEditor from '../UserEditor';
 import repositoryFactory from './UserRepositoryFactory';
 class UserFactory {

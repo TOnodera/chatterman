@@ -1,7 +1,7 @@
 import Datetime from '../Utility/Datetime';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import IUserEditor from './IUserEditor';
+import IUserEditor from './Interface/IUserEditor';
 
 class UserEditor implements IUserEditor {
 

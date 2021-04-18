@@ -11,7 +11,7 @@ import { ROOM_TYPE } from '../../Enum/Enum';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
 import socketService from '../Utility/SocketService';
-import IUserEditor from '../User/IUserEditor';
+import IUserEditor from '../User/Interface/IUserEditor';
 
 class RoomManager {
     private INFORMATION_ROOM_NAME = 'お知らせ';

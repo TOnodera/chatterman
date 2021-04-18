@@ -5,7 +5,7 @@ import RoomEventEmitter from '../Room/Emitter/RoomEventEmitter';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
 import userService from '../User/Service';
-import IUserEditor from '../User/IUserEditor';
+import IUserEditor from '../User/Interface/IUserEditor';
 
 class RoomController {
     private socket: Socket;

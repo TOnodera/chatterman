@@ -1,5 +1,5 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import IUserEditor from './IUserEditor';
+import IUserEditor from './Interface/IUserEditor';
 import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
 

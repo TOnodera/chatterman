@@ -1,5 +1,5 @@
-import Datetime from "../Utility/Datetime";
-import IUserRepository from "./Repository/IUserRepository";
+import Datetime from "../../Utility/Datetime";
+import IUserRepository from "../Repository/IUserRepository";
 
 interface IUserEditor {
     id: string;
