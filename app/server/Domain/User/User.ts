@@ -19,5 +19,6 @@ class User implements IUser {
         return result;
     }
 
+
 }
 export default new User;

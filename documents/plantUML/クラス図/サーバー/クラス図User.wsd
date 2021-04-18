@@ -27,7 +27,7 @@ package User{
     }
 
     class UserFactory{
-        +create(id: string): IUser
+        +create(id: string): IUserEditor
     }
 
     class User

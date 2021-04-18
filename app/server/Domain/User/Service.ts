@@ -4,7 +4,9 @@ import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
 
 class Service {
+
     private repository: any;
+
     constructor() {
         this.repository = UserRepositoryFactory.create();
     }
@@ -40,5 +42,6 @@ class Service {
         const users: IUserEditor[] = await this.getUsersByIdArray(idArray);
         return users;
     }
+
 }
 export default new Service;
