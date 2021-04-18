@@ -3,11 +3,9 @@
 package User{
 
     interface IUser{
-        +userRegister: IUserRegister
-        +userEditor: IUserEditor
-        +registe(name: string,credentials: Credentials)
-        +edit(message: string)
-        +delete()
+        +registe(name: string,credentials: Credentials,userRegister: IUserRegister)
+        +edit(message: string,userEditor: IUserEditor)
+        +delete(id: string,userEditor: IUserEditor)
     }
 
     interface IUserRegister{
@@ -33,6 +31,19 @@ package User{
     }
 
     class User
+
+    class Service{
+        +getUserByCredentials()
+        +getInfromationRoomId()
+        +getUserById()
+        +getUsersByIdArray()
+        +getMembersId()
+        +getAllUsers()
+    } 
+    note bottom of Service
+    このクラスの中のメソッドもUser
+    に移動してもいいと思う
+     end note
 
     IUserEditor <|.. UserEditor
     IUserRegister <|.. UserRegister
