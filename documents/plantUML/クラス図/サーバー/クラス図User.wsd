@@ -2,10 +2,9 @@
 
 package User{
 
-    interface User{
+    interface IUser{
         +userRegister: IUserRegister
         +userEditor: IUserEditor
-        +constructor(userRegister,userEditor)
     }
 
     interface IUserRegister{
@@ -26,10 +25,13 @@ package User{
         +delete()
     }
 
+    class User
+
     IUserEditor <|.. UserEditor
     IUserRegister <|.. UserRegister
-    User <.. IUserRegister
-    User <.. IUserEditor
+    IUserRegister <.. IUser
+    IUserEditor <.. IUser
+    IUser <|.. User
 
 }
 
