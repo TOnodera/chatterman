@@ -40,9 +40,12 @@ class AfterLoginManager {
 
         if (await this.authenticate(this.socket.request.session.credentials)) {
             logger.debug("ユーザーが接続しているソケット数 -> ", socketService.getSocketNumsUsingThisUser(this.socket));
+            logger.debug("socketService.getSocketNumsUsingThisUser(this.socket) -> ", socketService.getSocketNumsUsingThisUser(this.socket));
             if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
                 const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
+                logger.debug("loginUserStore.getUserInUsersMap(this.socket.id);");
                 if (exist) {
+                    logger.debug(`userEventEmitter.broadcastUserLogout(user!.id, this.socket);`);
                     //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
                     userEventEmitter.broadcastUserLogout(user!.id, this.socket);
                 } else {

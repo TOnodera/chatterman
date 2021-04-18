@@ -6,6 +6,8 @@ import Datetime from '../Utility/Datetime';
 import Message from './Message';
 import logger from '../Utility/logger';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
+import { transaction } from '../Utility/Connection/Connection';
+import { Send } from 'express';
 
 class MessageService {
     /**
@@ -26,6 +28,29 @@ class MessageService {
     async get(message_id: string): Promise<Message> {
         const message: Message = await MessageFactory.create(message_id);
         return message;
+    }
+
+    async registe(message: string, user_id: string, room_id: string, options?: MessageOptions): Promise<SendMessageToClient> {
+
+        const [toClient]: SendMessageToClient[] = await transaction(
+            async (): Promise<SendMessageToClient[]> => {
+                const message_id: string = await this.add(message, user_id, room_id);
+
+                if (options) {
+                    //ポリモーフィック関連テーブルに登録する
+                    await this.addPolymorphic(message_id, options);
+                }
+
+                //データ取得して返す
+                const registeredNow: Message = await this.get(message_id);
+                const toClient: SendMessageToClient[] = await this.toClient([registeredNow]);
+
+                return toClient;
+            }
+        );
+
+        return toClient;
+
     }
 
     /**

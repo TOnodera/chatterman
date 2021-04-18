@@ -23,22 +23,7 @@ class MessageManager {
     async add(message: string, user_id: string, room_id: string, options?: MessageOptions) {
         logger.info(`1/2 MessageManager.add -> 送信処理開始:user_id->${user_id},socket_id:${this.socket.id}`);
 
-        const [toClient]: SendMessageToClient[] = await transaction(
-            async (): Promise<SendMessageToClient[]> => {
-                const message_id: string = await MessageService.add(message, user_id, room_id);
-
-                if (options) {
-                    //ポリモーフィック関連テーブルに登録する
-                    await MessageService.addPolymorphic(message_id, options);
-                }
-
-                //データ取得して返す
-                const registeredNow: Message = await MessageService.get(message_id);
-                const toClient: SendMessageToClient[] = await MessageService.toClient([registeredNow]);
-
-                return toClient;
-            }
-        );
+        const toClient: SendMessageToClient = await MessageService.registe(message, user_id, room_id, options);
 
         this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);
         this.messageEventEmitter.sendUserSendMessageEvent(toClient);

@@ -8,12 +8,12 @@ import loginUserStore from '../Store/LoginUsersStore';
 module.exports = (socket: Socket) => {
 
     //切断中
-    const disconnectingListener = (reason: string) => {
+    const disconnectingListener = async (reason: string) => {
 
         switch (reason) {
             //クライアントからのログアウト命令で切断
             case DISCONNECTED_REASON.CLIENT_NAMESPACE_DISCONNECT:
-                loginManager.getAfterLoginManager(socket).logout();
+                await loginManager.getAfterLoginManager(socket).logout();
                 break;
 
             //接続切り替え(wifi -> 4G or 5G 等)による切断

@@ -1,14 +1,21 @@
 import { Socket } from 'socket.io';
 import Config from '../../Config';
-import MessageManager from '../Message/MessageManager';
+import MessageEventEmitter from '../Message/MessageEventEmitter';
+import MessageService from '../Message/MessaseService';
 
-class NotifyManager extends MessageManager {
+class NotifyManager {
+
+    private messageEventEmitter: MessageEventEmitter;
+
     constructor(socket: Socket) {
-        super(socket);
+        this.messageEventEmitter = new MessageEventEmitter(socket);
     }
 
     async sendNoticeMessage(message: string, room_id: string, options?: MessageOptions) {
-        await this.add(message, Config.system.superuser, room_id, options);
+
+        const toClient: SendMessageToClient = await MessageService.registe(message, Config.system.superuser, room_id, options);
+        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);
+
     }
 }
 
