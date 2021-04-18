@@ -4,7 +4,8 @@ import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Room/Emitter/RoomEventEmitter';
 import roomManager from '../Room/RoomManager';
 import logger from '../Utility/logger';
-import userManager from '../User/UserManager';
+import userService from '../User/Service';
+import IUserEditor from '../User/IUserEditor';
 
 class RoomController {
     private socket: Socket;
@@ -57,26 +58,27 @@ class RoomController {
 
     async getTalkRooms() {
 
-        const user_id: string = await userManager.getUserIdByCredentials(this.socket.request.session.credentials);
-        logger.info(`1/2 トークルーム取得処理開始: user_id: ${user_id},socket_id: ${this.socket.id}`);
+        const user: IUserEditor = await userService.getUserByCredentials(this.socket.request.session.credentials);
+        logger.info(`1/2 トークルーム取得処理開始: user_id: ${user.id},socket_id: ${this.socket.id}`);
         try {
 
             //トークルームとお知らせルームを取得
-            const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user_id);
-            const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user_id);
+            const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user.id);
+            const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user.id);
             const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
 
             this.roomEventEmitter.sendRoomDataEvent(rooms);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
-        logger.info(`2/2 トークルーム取得処理完了: user_id: ${user_id},socket_id: ${this.socket.id}`);
+        logger.info(`2/2 トークルーム取得処理完了: user_id: ${user.id},socket_id: ${this.socket.id}`);
+
     }
 
     async getDirectMessageRoomInfo() {
         try {
-            const id: string = await userManager.getUserIdByCredentials(this.socket.request.session.credentials);
-            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(id, this.socket);
+            const user: IUserEditor = await userService.getUserByCredentials(this.socket.request.session.credentials);
+            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(user.id, this.socket);
             this.roomEventEmitter.sendSendUsersDataEvent(clients);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import userManager from '../Domain/User/UserManager';
+import UserController from '../Domain/Controller/UserController';
 import HttpExceptionHandler from '../Domain/Exception/HttpExceptionHandler';
 import logger from '../Domain/Utility/logger';
 import { loginManager } from '../Domain/User/LoginManager';
@@ -9,7 +9,7 @@ const route = (app: any) => {
         try {
             logger.info('HTTPリクエスト受信 UserControllerに処理委譲');
             const userInfo: UserRegisteInfo = req.body;
-            await userManager.registe(userInfo);
+            await UserController.registe(userInfo);
             res.json({ registered: true });
             logger.info('HTTPレスポンス送信');
         } catch (e) {

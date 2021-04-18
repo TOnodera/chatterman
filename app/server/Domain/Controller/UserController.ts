@@ -10,7 +10,7 @@ class UserController {
     async registe(fromClient: UserRegisteInfo) {
         //別のタイプのユーザー登録したくなったらファクトリ作る
         const userRegister: IUserRegister = new UserRegister(fromClient.name, fromClient.credentials);
-        await User.registe(fromClient, userRegister);
+        await User.registe(userRegister);
     }
 
     async afterCredentials(credentials: Credentials, socket: Socket) {

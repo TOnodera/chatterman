@@ -1,3 +1,3 @@
 interface IUserRegister {
-    registe(fromClient: UserRegisteInfo): Promise<string>;
+    registe(): Promise<string>;
 }

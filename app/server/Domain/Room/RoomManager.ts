@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 import UserEditor from '../User/UserEditor';
 import UserFactory from '../User/Factory/UserFactory';
-import userManager from '../User/UserManager';
+import userService from '../User/Service';
 import Room from './Room';
 import RoomFactory from './Factory/RoomFactory';
 import RoomRegister from './RoomRegister';
@@ -11,6 +11,7 @@ import { ROOM_TYPE } from '../../Enum/Enum';
 import loginUsersStore from '../../Store/LoginUsersStore';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
 import socketService from '../Utility/SocketService';
+import IUserEditor from '../User/IUserEditor';
 
 class RoomManager {
     private INFORMATION_ROOM_NAME = 'お知らせ';
@@ -22,12 +23,12 @@ class RoomManager {
     }
 
     async attemptToEnter(info: RoomAndUserId): Promise<boolean> {
-        const user: UserEditor = await UserFactory.create(info.user_id);
+        const user: IUserEditor = await UserFactory.create(info.user_id);
         return await this.isAccessableRooms(user.id, info.room_id);
     }
 
     async leaveCurrentRoom(info: RoomAndUserId): Promise<boolean> {
-        const user: UserEditor = await UserFactory.create(info.user_id);
+        const user: IUserEditor = await UserFactory.create(info.user_id);
         return await this.isAccessableRooms(user.id, info.room_id);
     }
 
@@ -84,10 +85,10 @@ class RoomManager {
     }
 
     async getDirectMessageRoomInfo(my_id: string, socket: Socket): Promise<Client[]> {
-        const users: UserEditor[] = await userManager.getAllUsers();
+        const users: IUserEditor[] = await userService.getAllUsers();
 
         //入室可能なルームにソケットをジョイン
-        const me: UserEditor = await userManager.getUserById(my_id);
+        const me: IUserEditor = await userService.getUserById(my_id);
         await socketService.joinMe(me, socket);
 
         const members: Client[] = [];

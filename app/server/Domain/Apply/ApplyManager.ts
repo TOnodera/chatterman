@@ -12,7 +12,7 @@ import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
 import SocketService from '../Utility/SocketService';
 import UserEditor from '../User/UserEditor';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
-import userManager from '../User/UserManager';
+import userService from '../User/Service';
 
 /**
  * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
@@ -88,7 +88,7 @@ class ApplyManager {
 
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
         const targetUser: UserEditor = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-        const requestUser: UserEditor = await userManager.getUserById(requestUserId);
+        const requestUser: UserEditor = await userService.getUserById(requestUserId);
 
 
         //処理済みか確認

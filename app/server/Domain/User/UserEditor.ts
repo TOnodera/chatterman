@@ -1,8 +1,10 @@
 import Datetime from '../Utility/Datetime';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
+import IUserEditor from './IUserEditor';
 
-class UserEditor {
+class UserEditor implements IUserEditor {
+
     id: string;
     credentials: Credentials;
     name: string;
