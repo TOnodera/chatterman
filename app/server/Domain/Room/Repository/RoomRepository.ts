@@ -4,18 +4,13 @@ import RoomRegister from '../RoomRegister';
 import { ROOM_TYPE } from '../../../Enum/Enum';
 import logger from '../../../Domain/Utility/logger';
 class RoomRepository {
-    async getTalkRooms(user_id: string): Promise<RoomInfo[]> {
+    async getTalkRooms(user_id: string): Promise<any[]> {
         const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL', [user_id, ROOM_TYPE.talkroom]);
         return rows.length > 0 ? rows : [];
     }
 
-    async getInformationRoom(user_id: string): Promise<RoomInfo[]> {
+    async getInformationRoom(user_id: string): Promise<any[]> {
         const [rows]: any[] = await query('SELECT room_id,rooms.name FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL', [user_id, ROOM_TYPE.information]);
-        return rows.length > 0 ? rows : [];
-    }
-
-    async getDirectMessageRooms(user_id: string): Promise<RoomInfo[]> {
-        const [rows]: any[] = await query('SELECT room_id,rooms.name,rooms.creater_id FROM accessable_rooms JOIN rooms ON rooms.id = accessable_rooms.room_id WHERE accessable_rooms.user_id = ? AND room_type = ? AND accessable_rooms.deleted_at IS NULL', [user_id, ROOM_TYPE.directmessage]);
         return rows.length > 0 ? rows : [];
     }
 

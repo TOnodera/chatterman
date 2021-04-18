@@ -1,14 +1,11 @@
 import IUserRepository from './IUserRepository';
-import User from '../User';
 import Bcrypt from '../../Utility/Bcrypt';
 import Message from '../../Message/Message';
 import AuthenticationException from '../../Exception/AuthenticationException';
 import UserRegister from '../UserRegister';
-import UserFactory from '../Factory/UserFactory';
 import DomainException from '../../Exception/DomainException';
 import Config from '../../../Config';
 import { query } from '../../Utility/Connection/Connection';
-import { ROOM_TYPE } from '../../../Enum/Enum';
 
 class UserRepository implements IUserRepository {
     async registe(user: UserRegister): Promise<boolean> {

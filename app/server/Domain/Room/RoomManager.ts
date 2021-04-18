@@ -54,11 +54,13 @@ class RoomManager {
     }
 
     async getTalkRooms(user_id: string): Promise<RoomInfo[]> {
-        return await this.repository.getTalkRooms(user_id);
+        const roomInfos: RoomInfo[] = await this.repository.getTalkRooms(user_id);
+        return roomInfos;
     }
 
     async getInformationRoom(user_id: string): Promise<RoomInfo[]> {
-        return await this.repository.getInformationRoom(user_id);
+        const roomInfos: RoomInfo[] = await this.repository.getInformationRoom(user_id);
+        return roomInfos;
     }
 
     async isAccessableRooms(user_id: string, room_id: string): Promise<boolean> {

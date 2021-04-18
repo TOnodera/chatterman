@@ -1,11 +1,9 @@
 import ILoginManager from './ILoginManager';
 import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import User from './User';
 import AuthenticationException from '../Exception/AuthenticationException';
 import { Socket } from 'socket.io';
 import logger from '../Utility/logger';
-import userService from '../User/Service';
 import AfterLoginManager from './AfterLoginManager';
 
 class LoginManager implements ILoginManager {

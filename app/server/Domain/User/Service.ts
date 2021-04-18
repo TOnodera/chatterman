@@ -38,11 +38,5 @@ class Service {
     async getMembersId(): Promise<string[]> {
         return await this.repository.getMembersId();
     }
-
-    async getAllUsers(): Promise<User[]> {
-        const idArray: string[] = await this.getMembersId();
-        const users: User[] = await this.getUsersByIdArray(idArray);
-        return users;
-    }
 }
 export default new Service();
