@@ -17,9 +17,6 @@ class UserEditor {
         this.repository = UserRepositoryFactory.create();
     }
 
-    getId(): string {
-        return this.id;
-    }
 }
 
 export default UserEditor;
