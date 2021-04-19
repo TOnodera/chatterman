@@ -31,9 +31,6 @@ class ApplyManager {
 
     async apply(target_id: string, info: UserBasicInfo) {
         logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${target_id}, request_user: ${info.credentials.email}`);
-        if ((await loginManager.getAfterLoginManager(this.socket).authenticate(info.credentials)) == false) {
-            throw new Exception('認証情報がない状態でDM申請を行ないました。不正な操作です。');
-        }
 
         try {
             //自分宛てのDM許可申請が無いか確認
