@@ -22,7 +22,7 @@ class LoginManager implements ILoginManager {
         throw new AuthenticationException('認証情報が間違っています。未登録の場合は登録して下さい。');
     }
 
-    getAfterLoginManager(socket: Socket) {
+    getAfterLoginManager(socket: Socket): AfterLoginManager {
         return new AfterLoginManager(socket);
     }
 }

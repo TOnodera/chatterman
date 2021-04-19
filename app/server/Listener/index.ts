@@ -1,4 +1,3 @@
-import logger from '../Utility/logger';
 import { Socket } from 'socket.io';
 const chatListener = require('./chatListener');
 const userListener = require('./userListener');
@@ -15,7 +14,5 @@ module.exports = (io: any) => {
         roomListener(socket);
         serverDisconnectedListener(socket);
     });
-    logger.debug("リスナ登録");
-
 
 };
