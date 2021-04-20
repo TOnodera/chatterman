@@ -1,3 +1,3 @@
 interface IUser {
-    registe(userRegister: IUserRegister): Promise<boolean>;
+    registe(userRegister: IUserRegister): Promise<string>;
 }

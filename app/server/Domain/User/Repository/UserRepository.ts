@@ -6,6 +6,7 @@ import UserRegister from '../UserRegister';
 import DomainException from '../../../Exception/DomainException';
 import Config from '../../../Config';
 import { query } from '../../../Utility/Connection/Connection';
+import logger from '../../../Utility/logger';
 
 class UserRepository implements IUserRepository {
     async registe(user: UserRegister): Promise<boolean> {
@@ -25,7 +26,9 @@ class UserRepository implements IUserRepository {
 
     async getUserIdByCredentials(credentials: Credentials): Promise<string> {
         const [rows]: any[] = await query('SELECT * FROM users WHERE email = ? ', [credentials.email]);
+        logger.debug("条件分岐 -> ", rows.length > 0, credentials.password, (await Bcrypt.compare(credentials.password, rows[0].password)));
         if (rows.length > 0 && (await Bcrypt.compare(credentials.password, rows[0].password))) {
+            logger.debug("一致する認証情報がありました。");
             return rows[0].id;
         }
         throw new AuthenticationException('認証情報に一致するユーザーが見つかりませんでした。');
@@ -61,6 +64,11 @@ class UserRepository implements IUserRepository {
         return rows.map((data: any) => {
             return data.id;
         });
+    }
+
+    async delete(id: string): Promise<boolean> {
+        const [rows]: any[] = await query('DELETE FROM users WHERE id = ?', [id]);
+        return rows.affectedRows == 1;
     }
 }
 export default UserRepository;

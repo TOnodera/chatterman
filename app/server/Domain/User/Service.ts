@@ -2,6 +2,7 @@ import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import IUserEditor from './Interface/IUserEditor';
 import roomManager from '../Room/RoomManager';
 import UserFactory from './Factory/UserFactory';
+import logger from '../../Utility/logger';
 
 class Service {
 
@@ -41,6 +42,10 @@ class Service {
         const idArray: string[] = await this.getMembersId();
         const users: IUserEditor[] = await this.getUsersByIdArray(idArray);
         return users;
+    }
+
+    async delete(id: string) {
+        this.repository.delete(id);
     }
 
 }
