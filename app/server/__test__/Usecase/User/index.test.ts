@@ -1,11 +1,11 @@
-import { query } from '../../../Utility/Connection/Connection';
 import UserService from '../../../Domain/User/Service';
 import UserEditor from '../../../Domain/User/UserEditor';
 import UserRegister from '../../../Domain/User/UserRegister';
 import User from '../../../Domain/User/User';
 import { loginManager } from '../../../Domain/User/Login/LoginManager';
-//@ts-ignore
-import MockedSocket from 'socket.io-mock';
+import { Socket } from 'socket.io';
+const { launch, io } = require('../launch');
+import { clientSocket } from '../client';
 
 describe('User', () => {
     describe('登録、ログイン', () => {
@@ -31,15 +31,23 @@ describe('User', () => {
             user_id = await User.registe(userRegister);
             const user: UserEditor = await UserService.getUserByCredentials(loginUser);
             expect(user.credentials.email).toBe(fromClient.credentials.email);
+
         });
 
-        it('ログイン出来る', async () => {
+        it('HTTP,Socket両方ででログイン出来る', async (done) => {
+            launch();
             expect(await loginManager.login(loginUser)).toBeTruthy();
+            io.on('connection', (socket: Socket) => {
+                console.log("connected...");
+                socket.on("start", (message) => {
+                    expect(message).toBe("start");
+                    console.log(message);
+                });
+            });
+            clientSocket.emit("start", "start");
+
         });
 
-        it('ソケット側でも認証できる', async () => {
-            expect(await loginManager.getAfterLoginManager(MockedSocket).authenticate(loginUser)).toBeTruthy();
-        });
 
         afterAll(async () => {
             if (user_id) {
