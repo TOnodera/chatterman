@@ -117,3 +117,5 @@ CREATE TABLE IF NOT EXISTS message_polymorphics(
     UNIQUE (message_id),
     UNIQUE (polymorphic_table,polymorphic_id)
 );
+
+GRANT ALL PRIVILEGES ON `chatter_test`.* TO 'system-chatter-mysql'@'%' WITH GRANT OPTION;
