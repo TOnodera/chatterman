@@ -4,8 +4,6 @@ import UserRegister from '../../../Domain/User/UserRegister';
 import User from '../../../Domain/User/User';
 import { loginManager } from '../../../Domain/User/Login/LoginManager';
 import { Socket } from 'socket.io';
-const { launch, io } = require('../launch');
-import { clientSocket } from '../client';
 
 describe('User', () => {
     describe('登録、ログイン', () => {
@@ -33,21 +31,6 @@ describe('User', () => {
             expect(user.credentials.email).toBe(fromClient.credentials.email);
 
         });
-
-        it('HTTP,Socket両方ででログイン出来る', async (done) => {
-            launch();
-            expect(await loginManager.login(loginUser)).toBeTruthy();
-            io.on('connection', (socket: Socket) => {
-                console.log("connected...");
-                socket.on("start", (message) => {
-                    expect(message).toBe("start");
-                    console.log(message);
-                });
-            });
-            clientSocket.emit("start", "start");
-
-        });
-
 
         afterAll(async () => {
             if (user_id) {
