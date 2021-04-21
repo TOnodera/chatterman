@@ -3,6 +3,8 @@ import { query } from '../../../Utility/Connection/Connection';
 import { launch, io, close } from '../../../launch';
 import Client from 'socket.io-client';
 import Config from '../../../Config';
+import uuid from 'node-uuid';
+import loginUserStore from '../../../Store/LoginUsersStore';
 
 describe('User', () => {
 
@@ -11,18 +13,20 @@ describe('User', () => {
         "password": "1234"
     };
     const loginUser = {
-        name: 'test',
+        name: uuid.v4(),
         credentials: credentials
     };
     const testBaseUrl = `http://localhost:${Config.system.test_port}`;
+
     let cookies: string = '';
+    let beforeLoginSocketCount = 0;
 
     beforeAll(() => {
         launch(Config.system.test_port);
     });
 
     afterAll(async () => {
-        await query('DELETE FROM users WHERE id <> "system-chatter"', []);
+        await query('DELETE FROM users WHERE id <> ?', [Config.system.superuser]);
         close();
     });
 
@@ -36,12 +40,9 @@ describe('User', () => {
 
         });
 
-        it('httpでログイン後、socket側でもログイン出来る(Session情報受け渡し成功)', async (done) => {
+        describe('httpでログイン後、socket側でもログイン出来る(Session情報受け渡し成功)', () => {
 
-            const response = await http.post('/api/login', credentials);
-            expect(response.data.attempt).toBe(true);
-            cookies = response.headers['set-cookie'][0];
-
+            beforeLoginSocketCount = loginUserStore.users.size;
             const clientSocket = Client(testBaseUrl, {
                 withCredentials: true,
                 extraHeaders: {
@@ -49,7 +50,28 @@ describe('User', () => {
                 }
             });
 
-            clientSocket.on('connect', done);
+            it('ログイン開始', async () => {
+                const response = await http.post('/api/login', credentials);
+                expect(response.data.attempt).toBe(true);
+                cookies = response.headers['set-cookie'][0];
+            });
+
+
+            it('ログイン完了', (done) => {
+                clientSocket.emit('user:after-login', credentials);
+                clientSocket.on('user:logged-in', (user: any) => {
+                    expect(user.name).toBe(loginUser.name);
+                    done();
+                });
+            });
+
+            it('ログイン後ソケットストアにユーザー情報が格納される', () => {
+                expect(loginUserStore.users.size).toBeGreaterThan(beforeLoginSocketCount);
+            });
+
+        });
+
+        describe('ログアウト処理', () => {
 
         });
 
