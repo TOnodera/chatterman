@@ -87,7 +87,8 @@ class UserDomain {
 	}
 
 	logout() {
-		socketStore.socket.disconnect();
+		//socketStore.socket.disconnect();
+		socketStore.socket.emit('user:logout');
 		this.me.isLogin = false;
 	}
 

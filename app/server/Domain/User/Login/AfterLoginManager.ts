@@ -36,19 +36,16 @@ class AfterLoginManager {
 
     //ログアウト
     async logout() {
-
-        if (await this.authenticate(this.socket.request.session.credentials)) {
-            if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
-                const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
-                if (exist) {
-                    //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
-                    userEventEmitter.broadcastUserLogout(user!.id, this.socket);
-                } else {
-                    throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${this.socket.id}`);
-                }
+        console.log("切断処理が呼び出されました。");
+        if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
+            const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
+            if (exist) {
+                //ログアウトイベントのブロードキャストは接続数が１のときだけ発行する。（他の端末で接続している可能性もあるので）
+                userEventEmitter.broadcastUserLogout(user!.id, this.socket);
+            } else {
+                throw new Exception(`ログインしていない状態でログアウト処理が行われました。ログを確認して下さい。: socketid -> ${this.socket.id}`);
             }
         }
-
     }
 
     async authenticate(credentials: Credentials): Promise<boolean> {

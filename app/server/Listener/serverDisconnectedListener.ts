@@ -11,8 +11,11 @@ module.exports = (socket: Socket) => {
     const disconnectingListener = async (reason: string) => {
 
         switch (reason) {
-            //クライアントからのログアウト命令で切断
+
+            //ブラウザを閉じる、タブを閉じるなどで切断
+            //ログアウト時にdisconnectイベント発動された場合
             case DISCONNECTED_REASON.CLIENT_NAMESPACE_DISCONNECT:
+            case DISCONNECTED_REASON.SERVER_NAMESPACE_DISCONNECT:
                 await loginManager.getAfterLoginManager(socket).logout();
                 break;
 
@@ -23,20 +26,23 @@ module.exports = (socket: Socket) => {
             default:
                 logger.error(reason);
         }
-        logger.info(`${socket.id}の切断処理開始`);
-        logger.info(`ソケット接続状況 -> `, loginUserStore.users.has(socket.id));
+
         //ソケットとユーザーの紐付けMapから切断されたソケットを削除
         loginUserStore.delete(socket.id);
-        logger.info(`ソケット接続状況 -> `, loginUserStore.users.has(socket.id));
-        logger.info(`${socket.id}処理完了`);
     }
 
-    //切断
+    const userLogoutListener = () => {
+        socket.disconnect();
+    }
+
+    //disconnectingイベント完了後に発動
     const disconnectedListener = (reason: string) => {
         logger.info('切断完了...:', reason, socket.id);
     };
 
     socketService.registeOnce('disconnecting', disconnectingListener, socket);
     socketService.registeOnce('disconnected', disconnectedListener, socket);
+    socketService.registeOnce('user:logout', userLogoutListener, socket);
+    console.log(userLogoutListener);
 
 };
