@@ -31,4 +31,13 @@ const launch = (port: number) => {
 	});
 };
 
-export default launch;
+//切断
+const close = () => {
+	server.close();
+};
+
+export {
+	launch,
+	io,
+	close
+};
