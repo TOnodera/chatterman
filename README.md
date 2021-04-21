@@ -23,5 +23,8 @@ ci/cdサーバー構築してみたいので終わったらやる。
 ■DM申請承認メッセージ  
 ![image dmapplication](https://github.com/TOnodera/chatterman/blob/main/documents/image/dm.png)
 
+■ざっくりとしてインフラ構成  
+![image infle](https://github.com/TOnodera/chatterman/blob/main/documents/image/infla.png)
+
 ■ユーザーパッケージのUML(リファクタリング中)  
 ![image dmapplication](https://github.com/TOnodera/chatterman/blob/main/documents/image/user.png)
