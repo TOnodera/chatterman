@@ -83,7 +83,6 @@ class UserDomain {
 		if (await socketStore.start()) {
 			// ログイン完了イベント発行
 			socketStore.socket.emit('user:after-login', credentials);
-			this.me.isLogin = localStorage.isLogin;
 		}
 	}
 
