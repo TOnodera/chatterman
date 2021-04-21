@@ -1,6 +1,5 @@
 import { launch } from './launch';
 import logger from './Utility/logger';
-const port: number = 3000;
-launch(port);
-
-logger.info(process.env.NODE_ENV);
+import Config from './Config';
+launch(Config.system.prod_port);
+logger.info(Config.system.prod_port);

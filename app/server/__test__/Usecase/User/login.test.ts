@@ -1,13 +1,8 @@
-import UserService from '../../../Domain/User/Service';
-import UserEditor from '../../../Domain/User/UserEditor';
-import UserRegister from '../../../Domain/User/UserRegister';
-import User from '../../../Domain/User/User';
-import { loginManager } from '../../../Domain/User/Login/LoginManager';
-import { Socket } from 'socket.io';
 import http from '../http';
 import { query } from '../../../Utility/Connection/Connection';
 import { launch, io, close } from '../../../launch';
 import Client from 'socket.io-client';
+import Config from '../../../Config';
 
 describe('User', () => {
 
@@ -19,11 +14,11 @@ describe('User', () => {
         name: 'test',
         credentials: credentials
     };
-
+    const testBaseUrl = `http://localhost:${Config.system.test_port}`;
     let cookies: string = '';
 
     beforeAll(() => {
-        launch(3001);
+        launch(Config.system.test_port);
     });
 
     afterAll(async () => {
@@ -47,7 +42,7 @@ describe('User', () => {
             expect(response.data.attempt).toBe(true);
             cookies = response.headers['set-cookie'][0];
 
-            const clientSocket = Client('http://localhost:3001', {
+            const clientSocket = Client(testBaseUrl, {
                 withCredentials: true,
                 extraHeaders: {
                     'Cookie': cookies

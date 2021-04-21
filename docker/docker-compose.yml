@@ -35,6 +35,8 @@ services:
       SYSTEM_USER: ${SYSTEM_USER}
       COOKIE_SECRET: ${COOKIE_SECRET}
       ARROWED_CORS: ${ARROWED_CORS}
+      PROD_PORT: ${PROD_PORT}
+      TEST_PORT: ${TEST_PORT}
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
