@@ -1,0 +1,33 @@
+@startuml
+package Nodeサーバー{
+    
+
+    database db [
+        データベース
+        --
+        いまはMySql
+    ]
+
+    card app[
+        アプリケーション
+        --
+        node
+    ]
+
+    db -- app
+}
+
+card Nginx [
+    プロキシサーバー
+    --
+    Nginx
+    ここでhttpsに変換
+]
+
+actor ユーザー as user
+
+Nginx -- app
+user -- Nginx
+
+
+@enduml
