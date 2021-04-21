@@ -8,7 +8,7 @@ import loginUserStore from '../Store/LoginUsersStore';
 module.exports = (socket: Socket) => {
 
     //切断中
-    const disconnectingListener = async (reason: string) => {
+    const disconnectingListener = (reason: string) => {
 
         switch (reason) {
 
@@ -16,7 +16,7 @@ module.exports = (socket: Socket) => {
             //ログアウト時にdisconnectイベント発動された場合
             case DISCONNECTED_REASON.CLIENT_NAMESPACE_DISCONNECT:
             case DISCONNECTED_REASON.SERVER_NAMESPACE_DISCONNECT:
-                await loginManager.getAfterLoginManager(socket).logout();
+                loginManager.getAfterLoginManager(socket).logout();
                 break;
 
             //接続切り替え(wifi -> 4G or 5G 等)による切断

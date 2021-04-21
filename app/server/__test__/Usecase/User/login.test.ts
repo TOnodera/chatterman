@@ -20,6 +20,7 @@ describe('User', () => {
 
     let cookies: string = '';
     let beforeLoginSocketCount = 0;
+    let socketIncrement = 0;
 
     beforeAll(() => {
         launch(Config.system.test_port);
@@ -42,7 +43,7 @@ describe('User', () => {
 
         describe('httpでログイン後、socket側でもログイン出来る(Session情報受け渡し成功)', () => {
 
-            beforeLoginSocketCount = loginUserStore.users.size;
+            beforeLoginSocketCount = loginUserStore.users.size;//ログイン前のソケットストアの数保管
             const clientSocket = Client(testBaseUrl, {
                 withCredentials: true,
                 extraHeaders: {
@@ -61,17 +62,22 @@ describe('User', () => {
                 clientSocket.emit('user:after-login', credentials);
                 clientSocket.on('user:logged-in', (user: any) => {
                     expect(user.name).toBe(loginUser.name);
+                    socketIncrement = loginUserStore.users.size - beforeLoginSocketCount;//ソケットの増分を取得
                     done();
                 });
             });
 
             it('ログイン後ソケットストアにユーザー情報が格納される', () => {
-                expect(loginUserStore.users.size).toBeGreaterThan(beforeLoginSocketCount);
+                expect(loginUserStore.users.size).toBe(beforeLoginSocketCount + socketIncrement);
             });
 
-        });
-
-        describe('ログアウト処理', () => {
+            it('ログアウト処理が完了出来る', (done) => {
+                clientSocket.emit('user:logout');
+                clientSocket.on('disconnect', () => {
+                    expect(loginUserStore.users.size).toBe(beforeLoginSocketCount);//元のサイズに戻るはず
+                    done();
+                });
+            });
 
         });
 

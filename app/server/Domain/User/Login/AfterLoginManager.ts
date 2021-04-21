@@ -35,8 +35,7 @@ class AfterLoginManager {
     }
 
     //ログアウト
-    async logout() {
-        console.log("切断処理が呼び出されました。");
+    logout() {
         if (socketService.getSocketNumsUsingThisUser(this.socket) == 1) {
             const { user, exist } = loginUserStore.getUserInUsersMap(this.socket.id);
             if (exist) {
