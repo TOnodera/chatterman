@@ -1,21 +1,16 @@
 @startuml
-package Nodeサーバー{
-    
 
-    database db [
-        データベース
-        --
-        いまはMySql
-    ]
+card app [
+    アプリケーション
+    --
+    node
+]
 
-    card app[
-        アプリケーション
-        --
-        node
-    ]
-
-    db -- app
-}
+database db [
+    データベース
+    --
+    いまはMySql
+]
 
 card Nginx [
     プロキシサーバー
@@ -28,6 +23,6 @@ actor ユーザー as user
 
 Nginx -- app
 user -- Nginx
-
+db -- app
 
 @enduml
