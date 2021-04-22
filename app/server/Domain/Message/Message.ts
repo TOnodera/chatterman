@@ -1,6 +1,4 @@
 import { transaction } from "../../Utility/Connection/Connection";
-import UserFactory from "../User/Factory/UserFactory";
-import IUserEditor from "../User/Interface/IUserEditor";
 import MessageRegister from "./MessageRegister";
 import PolymorphicManager from '../Polymorphic/PolymorphicManager';
 import Exception from "../../Exception/Exception";
@@ -12,6 +10,7 @@ import IMessageRepository from "./Interface/IMessageRepository";
 import MessageRepositoryFactory from "./Factory/MessageRepositoryFactory";
 import Datetime from "../../Utility/Datetime";
 import IMessageEditor from "./Interface/IMessageEditor";
+import IMessageRegister from "./Interface/IMessageRegister";
 
 abstract class Message {
 
@@ -25,22 +24,6 @@ abstract class Message {
     }
 
     /**
-     *
-     * @param strMessage
-     * @param user_id
-     * @param room_id
-     * メッセージ登録。registe（）で呼び出すだけ。
-     */
-    private async add(strMessage: string, user_id: string, room_id: string): Promise<string> {
-
-        const user: IUserEditor = await UserFactory.create(user_id);
-        const message: IMessageRegister = new MessageRegister(strMessage, user, room_id);
-        const message_id: string = await message.registe();
-
-        return message_id;
-    }
-
-    /**
      * 
      * @param message 
      * @param user_id 
@@ -48,10 +31,11 @@ abstract class Message {
      * @param options 
      * メッセージを登録。オプションがあれば関連テーブルにまとめて登録(このメソッドが登録の実態)
      */
-    protected async registe(message: string, user_id: string, room_id: string, options?: MessageOptions): Promise<SendMessageToClient> {
+    protected async registe(messageRegister: IMessageRegister, options?: MessageOptions): Promise<SendMessageToClient> {
         const [toClient]: SendMessageToClient[] = await transaction(
             async (): Promise<SendMessageToClient[]> => {
-                const message_id: string = await this.add(message, user_id, room_id);
+
+                const message_id = await messageRegister.registe();
 
                 if (options) {
                     //ポリモーフィック関連テーブルに登録する
@@ -78,7 +62,7 @@ abstract class Message {
      * @param options 
      * 抽象メソッド　送信は方法は小クラスに任せる
      */
-    abstract send(message: string, room_id: string, user_id?: string, options?: MessageOptions): Promise<void>;
+    abstract send(messageRegister: MessageRegister, options?: MessageOptions): Promise<void>;
 
 
     async get(message_id: string): Promise<IMessageEditor> {

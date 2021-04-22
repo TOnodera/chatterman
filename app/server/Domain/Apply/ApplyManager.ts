@@ -13,6 +13,8 @@ import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userService from '../User/Service';
 import SystemMessage from '../Message/SystemMessage';
 import Config from '../../Config';
+import MessageRegister from '../Message/MessageRegister';
+import UserFactory from '../User/Factory/UserFactory';
 
 /**
  * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
@@ -56,7 +58,9 @@ class ApplyManager {
                     polymorphic_table: PolymorphicTables.requests,
                     polymorphic_id: polymorphic_id
                 };
-                await this.systemMessage.send(messageTxt, information_room, Config.system.superuser, messageOption);
+                const systemUser: UserEditor = await UserFactory.create(Config.system.superuser);
+                const messageRegister = new MessageRegister(messageTxt, systemUser, information_room);
+                await this.systemMessage.send(messageRegister, messageOption);
 
                 return [information_room];
             });
@@ -103,7 +107,9 @@ class ApplyManager {
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
-                this.systemMessage.send(message, roomInfo.room_id, Config.system.superuser);
+                const systemUser: UserEditor = await UserFactory.create(Config.system.superuser);
+                const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);
+                this.systemMessage.send(messageRegister);
 
                 //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
                 this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();

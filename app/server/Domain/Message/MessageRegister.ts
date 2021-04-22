@@ -5,6 +5,7 @@ import IMessageRepository from './Interface/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import roomManager from '../Room/RoomManager';
 import IUserEditor from '../User/Interface/IUserEditor';
+import IMessageRegister from './Interface/IMessageRegister';
 
 
 /**
