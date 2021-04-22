@@ -1,7 +1,7 @@
 import AuthenticationException from '../../Exception/AuthenticationException';
 import Exception from '../../Exception/Exception';
 import Datetime from '../../Utility/Datetime';
-import IMessageRepository from './Repository/IMessageRepository';
+import IMessageRepository from './Interface/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import IUserEditor from '../User/Interface/IUserEditor';
 

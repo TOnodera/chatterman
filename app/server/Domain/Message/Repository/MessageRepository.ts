@@ -1,4 +1,4 @@
-import IMessageRepository from './IMessageRepository';
+import IMessageRepository from '../Interface/IMessageRepository';
 import MessageEditor from '../MessageEditor';
 import Exception from '../../../Exception/Exception';
 import Datetime from '../../../Utility/Datetime';

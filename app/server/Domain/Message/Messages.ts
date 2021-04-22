@@ -1,4 +1,4 @@
-import IMessageRepository from './Repository/IMessageRepository';
+import IMessageRepository from './Interface/IMessageRepository';
 import MessageEditor from './MessageEditor';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import MessageFactory from './Factory/MessageFactory';
