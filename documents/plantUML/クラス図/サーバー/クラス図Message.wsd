@@ -1,67 +1,67 @@
 @startuml
 package Message{
 
-    Interface IMessageRepository{
-        +add(message: Message): void
-        +delete(message_id: string): void
-        +get(message_id: string): User
-        +save(message: Message): void
-        +all(room_id): Message[]
+    interface IMessage{
+        +registe(message: string,user_id: string,room_id:string,options?: MessageOptions): Promise<SendMessageToClient>;
+        +send(messge:string,user_id: string,room_id,options?:MessageOptions): Promise<void>;
+        +get(message_id: string): Promise<IMessageEditor>;
     }
 
-    package message-core{
-        class MessageRegister{
-            repository: IMessageRepository
-            message: string
-            user: User
-            room_id: string
-
-            +constructor(message:string,user: User,room_id: string)
-            +add(message: Message): void
-        }
-
-        class Message{
-            repository: IMessageRepository
-            message_id: string
-            message: string
-            user: User
-            room_id: string
-
-            +constructor(message: Message,repository: IMessageRepository)
-            +delete(message_id: string): void
-            +edit(message: Message): void
-        }
+    interface IMessageRegister{
+        +registe(): Promise<string>;
     }
 
-    class Messages{
-        #repository: IMessageRepository
-        +all() : Message[]
-        +more(): Message[]
-        +search(): Message[]
+    interface IMessageEditor{
+        +message_id: string;
+        +message: string;
+        +user: IUserEditor;
+        +room_id: string;
+        +options?: Options;
+        +created_at: Datetime;
+        +edit(message: string): Promise<boolean>;
+        +isEditable(message: IMessageEditor): Promise<boolean>;
+        +delete(): Promise<boolean>;
     }
 
-    class MessageController{
-        +add(message: Message): void
-        +delete(message: Message): void
-        +edit(message: Message): void
-        +all(): Messages
-        +typing(): void
+    abstract class Message{
+        #messageEventEmitter: MessageEventEmitter;
+        #repository: IMessageRepository;
+        #MAX_MESSAGE_COUNT
+
+        -add(message: string,user_id,room_id): Promise<string>;
+        #registe(message: string,user_id: string,room_id: string,options?: MessageOptions): Promise<SendMessageToClient>;
+        send(message: string,room_id: string,user_id: string,options?: MessageOptions): Promise<void>; (抽象メソッド)
+        get(message_id: string): Promise<IMessageEditor>;
+        delete(): void (未実装)
+        edit(): void : (未実装)
+        typing(user,room_id): void;
+        latest(room_id: string): Promise<void>;
+        more(room_id: string,message_id: string): Promise<void>;
     }
 
-    class MessageRepositoryFactory{
-        +create()
+    class UserMessage{
+        send(message: string,user_id:string,room_id: string,options?: MessageOptions);
     }
-    class MessageRepository
+
+    class SystemMessage{
+        send(message: string,user_id:string,room_id: string,options?: MessageOptions);
+    }
+
+    class Service{
+        toClient(messages: IMessageEditor[]): SendMessageToClient[]
+    }
+
+    IMessage <|.. Message
+    IMessageRegister <.. IMessage
+    IMessageEditor <.. IMessage
+    Message <|-- UserMessage
+    Message <|-- SystemMessage
+
+
+
+
+    
 }
 
-MessageRepository <.. MessageRepositoryFactory: <<create>>
-Message <-- MessageController
-Messages <-- MessageController
-User <-- Message
-IMessageRepository <.. Message
-IMessageRepository <.. Messages
-ReadConfig <-- MessageRepositoryFactory
-IMessageRepository <|.. MessageRepository
-RoomManager <-- MessageController
 
 @enduml
