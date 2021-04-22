@@ -6,11 +6,13 @@ import roomManager from '../Room/RoomManager';
 import { transaction } from '../../Utility/Connection/Connection';
 import { Socket } from 'socket.io';
 import ApplyEventEmitter from './ApplyEventEmitter';
-import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
+import { APPLY_REACTION, PolymorphicTables } from '../../Enum/Enum';
 import SocketService from '../../Utility/SocketService';
 import UserEditor from '../User/UserEditor';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userService from '../User/Service';
+import SystemMessage from '../Message/SystemMessage';
+import Config from '../../Config';
 
 /**
  * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
@@ -19,10 +21,12 @@ import userService from '../User/Service';
 class ApplyManager {
     private socket: Socket;
     private applyEventEmitter: ApplyEventEmitter;
+    private systemMessage: SystemMessage;
 
     constructor(socket: Socket) {
         this.socket = socket;
         this.applyEventEmitter = new ApplyEventEmitter(socket);
+        this.systemMessage = new SystemMessage(socket);
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
@@ -52,8 +56,7 @@ class ApplyManager {
                     polymorphic_table: PolymorphicTables.requests,
                     polymorphic_id: polymorphic_id
                 };
-                //TODO Messageクラスリファクタリングして小クラスとして実装したら書き換える
-                //await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
+                await this.systemMessage.send(messageTxt, information_room, Config.system.superuser, messageOption);
 
                 return [information_room];
             });
@@ -100,8 +103,7 @@ class ApplyManager {
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
-                //TODO Messageクラスリファクタリングして小クラスとして実装したら書き換える
-                //this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
+                this.systemMessage.send(message, roomInfo.room_id, Config.system.superuser);
 
                 //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
                 this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();

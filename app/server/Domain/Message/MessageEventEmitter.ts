@@ -9,10 +9,12 @@ class MessageEventEmitter {
     }
 
     broadcastUserSendMessageEvent(room_id: string, toClient: SendMessageToClient, options?: ApproveOptions) {
+        logger.debug(`メッセージ送信確認ブロードキャスト room_id:${room_id}, socket_id:${this.socket.id}`);
         this.socket.to(room_id).emit('broadcast:user-send-message', toClient, options);
     }
 
     sendUserSendMessageEvent(toClient: SendMessageToClient, options?: ApproveOptions) {
+        logger.debug(`メッセージ送信確認自分宛て socket_id:${this.socket.id}`);
         this.socket.emit('broadcast:user-send-message', toClient, options);
     }
 

@@ -1,14 +1,15 @@
+import UserMessage from '../Domain/Message/UserMessage';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import Message from '../Domain/Message/Message';
+
 
 class MessageController {
     private socket: Socket;
-    private message: Message;
+    private message: UserMessage;
 
     constructor(socket: Socket) {
         this.socket = socket;
-        this.message = new Message(socket);
+        this.message = new UserMessage(socket);
     }
 
     async add(message: string, user_id: string, room_id: string) {

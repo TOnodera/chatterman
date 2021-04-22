@@ -5,9 +5,10 @@ import logger from '../../../Utility/logger';
 import MessageEditor from '../MessageEditor';
 import MessageRepositoryFactory from './MessageRepositoryFactory';
 import polymorphicManager from '../../Polymorphic/PolymorphicManager';
+import IMessageEditor from '../Interface/IMessageEditor';
 
 class MessageFactory {
-    static async create(message_id: string): Promise<MessageEditor> {
+    static async create(message_id: string): Promise<IMessageEditor> {
         const repository = MessageRepositoryFactory.create();
         const result: any = await repository.get(message_id);
         const user: UserEditor = await UserFactory.create(result.user_id);

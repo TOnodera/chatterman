@@ -1,4 +1,4 @@
-import MessageEditor from './MessageEditor';;
+import IMessageEditor from './Interface/IMessageEditor';
 class Service {
     /**
      *
@@ -6,7 +6,7 @@ class Service {
      * メッセージオブジェクトにはUserオブジェクトが含まれていてbroadcast配信する必要のないデータがある。
      * 送信に必要なデータだけここでピックアップして送る。
      */
-    toClient(messages: MessageEditor[]): SendMessageToClient[] {
+    toClient(messages: IMessageEditor[]): SendMessageToClient[] {
         let toClient: SendMessageToClient[] = [];
         for (let message of messages) {
             const client: SendMessageToClient = {

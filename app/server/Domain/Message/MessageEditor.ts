@@ -4,12 +4,13 @@ import Datetime from '../../Utility/Datetime';
 import IMessageRepository from './Interface/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import IUserEditor from '../User/Interface/IUserEditor';
+import IMessageEditor from './Interface/IMessageEditor';
 
 
 /**
- * 既存メッセージの編集クラス
+ * 既存メッセージを扱うクラス
  */
-class MessageEditor {
+class MessageEditor implements IMessageEditor {
 
     private repository: IMessageRepository;
     message_id: string;
@@ -37,7 +38,7 @@ class MessageEditor {
         return await this.repository.save(this);
     }
 
-    async isEditable(message: MessageEditor): Promise<boolean> {
+    async isEditable(message: IMessageEditor): Promise<boolean> {
         return await this.repository.hasMessage(message);
     }
 

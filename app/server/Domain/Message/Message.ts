@@ -1,23 +1,23 @@
 import { transaction } from "../../Utility/Connection/Connection";
 import UserFactory from "../User/Factory/UserFactory";
-import UserEditor from "../User/UserEditor";
-import MessageEditor from "./MessageEditor";
+import IUserEditor from "../User/Interface/IUserEditor";
 import MessageRegister from "./MessageRegister";
 import PolymorphicManager from '../Polymorphic/PolymorphicManager';
 import Exception from "../../Exception/Exception";
-import MessageFactory from '../Message/Factory/MessageFactory';
+import MessageFactory from './Factory/MessageFactory';
 import MessageService from './Service';
 import MessageEventEmitter from "./MessageEventEmitter";
 import { Socket } from "socket.io";
 import IMessageRepository from "./Interface/IMessageRepository";
 import MessageRepositoryFactory from "./Factory/MessageRepositoryFactory";
 import Datetime from "../../Utility/Datetime";
+import IMessageEditor from "./Interface/IMessageEditor";
 
-class Message {
+abstract class Message {
 
-    private messageEventEmitter: MessageEventEmitter;
-    private repository: IMessageRepository;
-    private MAX_MESSAGES_COUNT = 20;// メッセージの送信要求をクライアントから受けた際に返すメッセージの最大数
+    protected messageEventEmitter: MessageEventEmitter;
+    protected repository: IMessageRepository;
+    protected MAX_MESSAGES_COUNT = 20;// メッセージの送信要求をクライアントから受けた際に返すメッセージの最大数
 
     constructor(socket: Socket) {
         this.messageEventEmitter = new MessageEventEmitter(socket);
@@ -29,19 +29,26 @@ class Message {
      * @param strMessage
      * @param user_id
      * @param room_id
-     * メッセージ登録
+     * メッセージ登録。registe（）で呼び出すだけ。
      */
     private async add(strMessage: string, user_id: string, room_id: string): Promise<string> {
 
-        const user: UserEditor = await UserFactory.create(user_id);
-        const message: MessageRegister = new MessageRegister(strMessage, user, room_id);
+        const user: IUserEditor = await UserFactory.create(user_id);
+        const message: IMessageRegister = new MessageRegister(strMessage, user, room_id);
         const message_id: string = await message.registe();
 
         return message_id;
     }
 
-    async send(message: string, user_id: string, room_id: string, options?: MessageOptions): Promise<void> {
-
+    /**
+     * 
+     * @param message 
+     * @param user_id 
+     * @param room_id 
+     * @param options 
+     * メッセージを登録。オプションがあれば関連テーブルにまとめて登録(このメソッドが登録の実態)
+     */
+    protected async registe(message: string, user_id: string, room_id: string, options?: MessageOptions): Promise<SendMessageToClient> {
         const [toClient]: SendMessageToClient[] = await transaction(
             async (): Promise<SendMessageToClient[]> => {
                 const message_id: string = await this.add(message, user_id, room_id);
@@ -54,20 +61,28 @@ class Message {
                 }
 
                 //データ取得して返す
-                const registeredNow: MessageEditor = await this.get(message_id);
+                const registeredNow: IMessageEditor = await this.get(message_id);
                 const toClient: SendMessageToClient[] = await MessageService.toClient([registeredNow]);
 
                 return toClient;
             });
-
-        //イベント送信　←　こここのクラス抽象化して小クラスに書く
-        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);
-        this.messageEventEmitter.sendUserSendMessageEvent(toClient);
-
+        return toClient;
     }
 
-    async get(message_id: string): Promise<MessageEditor> {
-        const message: MessageEditor = await MessageFactory.create(message_id);
+
+    /**
+     * 
+     * @param message 
+     * @param user_id 
+     * @param room_id 
+     * @param options 
+     * 抽象メソッド　送信は方法は小クラスに任せる
+     */
+    abstract send(message: string, room_id: string, user_id?: string, options?: MessageOptions): Promise<void>;
+
+
+    async get(message_id: string): Promise<IMessageEditor> {
+        const message: IMessageEditor = await MessageFactory.create(message_id);
         return message;
     }
 
@@ -91,9 +106,9 @@ class Message {
     async latest(room_id: string): Promise<void> {
         const rows: any[] = await this.repository.latest(room_id, this.MAX_MESSAGES_COUNT);
         if (rows.length > 0) {
-            const messages: MessageEditor[] = [];
+            const messages: IMessageEditor[] = [];
             for (let row of rows) {
-                const message: MessageEditor = await MessageFactory.create(row.id);
+                const message: IMessageEditor = await MessageFactory.create(row.id);
                 messages.push(message);
             }
             const toClientMessages: SendMessageToClient[] = MessageService.toClient(messages);
@@ -115,13 +130,13 @@ class Message {
      *  3.このメソッドがそのメッセージより古いメッセージを取得してクライアントに渡す    <-これやってる
      */
     async more(room_id: string, message_id: string): Promise<void> {
-        const message: MessageEditor = await this.get(message_id);
+        const message: IMessageEditor = await this.get(message_id);
         const created_at: Datetime = message.created_at;
         const rows: any[] = await this.repository.more(room_id, created_at, this.MAX_MESSAGES_COUNT);
         if (rows.length > 0) {
-            const messages: MessageEditor[] = [];
+            const messages: IMessageEditor[] = [];
             for (let row of rows) {
-                const message: MessageEditor = await MessageFactory.create(row.id);
+                const message: IMessageEditor = await MessageFactory.create(row.id);
                 messages.push(message);
             }
             const toClientMessages: SendMessageToClient[] = MessageService.toClient(messages);
