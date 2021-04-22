@@ -1,4 +1,4 @@
-import Datetime from 'server/Utility/Datetime';
+import Datetime from '../../../Utility/Datetime';
 import MessageEditor from '../MessageEditor';
 import MessageRegister from '../MessageRegister';
 interface IMessageRepository {
@@ -7,7 +7,7 @@ interface IMessageRepository {
     save(message: MessageEditor): Promise<boolean>;
     latest(room_id: string, nums: number): Promise<any[]>;
     more(room_id: string, created_at: Datetime, nums: number): Promise<any[]>;
-    get(message_id: string): Promise<Message>;
+    get(message_id: string): Promise<MessageEditor>;
     hasMessage(message: MessageEditor): Promise<boolean>;
 }
 export default IMessageRepository;

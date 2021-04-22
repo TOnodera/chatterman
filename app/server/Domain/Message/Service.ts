@@ -1,5 +1,5 @@
 import MessageEditor from './MessageEditor';;
-class MessageService {
+class Service {
     /**
      *
      * @param messages
@@ -23,4 +23,4 @@ class MessageService {
         return toClient;
     }
 }
-export default new MessageService;
+export default new Service;

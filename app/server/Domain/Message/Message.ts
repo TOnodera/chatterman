@@ -1,4 +1,4 @@
-import { transaction } from "server/Utility/Connection/Connection";
+import { transaction } from "../../Utility/Connection/Connection";
 import UserFactory from "../User/Factory/UserFactory";
 import UserEditor from "../User/UserEditor";
 import MessageEditor from "./MessageEditor";
@@ -58,8 +58,11 @@ class Message {
                 const toClient: SendMessageToClient[] = await MessageService.toClient([registeredNow]);
 
                 return toClient;
-            }
-        );
+            });
+
+        //イベント送信　←　こここのクラス抽象化して小クラスに書く
+        this.messageEventEmitter.broadcastUserSendMessageEvent(room_id, toClient);
+        this.messageEventEmitter.sendUserSendMessageEvent(toClient);
 
     }
 

@@ -5,7 +5,6 @@ import applyService from '../Apply/ApplyService';
 import roomManager from '../Room/RoomManager';
 import { transaction } from '../../Utility/Connection/Connection';
 import { Socket } from 'socket.io';
-import NotifyManager from '../Notify/NotifyManager';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables, ROOM_TYPE } from '../../Enum/Enum';
 import SocketService from '../../Utility/SocketService';
@@ -19,12 +18,10 @@ import userService from '../User/Service';
 
 class ApplyManager {
     private socket: Socket;
-    private notifyManager: NotifyManager;
     private applyEventEmitter: ApplyEventEmitter;
 
     constructor(socket: Socket) {
         this.socket = socket;
-        this.notifyManager = new NotifyManager(socket);
         this.applyEventEmitter = new ApplyEventEmitter(socket);
     }
 
@@ -55,7 +52,8 @@ class ApplyManager {
                     polymorphic_table: PolymorphicTables.requests,
                     polymorphic_id: polymorphic_id
                 };
-                await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
+                //TODO Messageクラスリファクタリングして小クラスとして実装したら書き換える
+                //await this.notifyManager.sendNoticeMessage(messageTxt, information_room, messageOption);
 
                 return [information_room];
             });
@@ -102,7 +100,8 @@ class ApplyManager {
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
-                this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
+                //TODO Messageクラスリファクタリングして小クラスとして実装したら書き換える
+                //this.notifyManager.sendNoticeMessage(message, roomInfo.room_id);
 
                 //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
                 this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();
