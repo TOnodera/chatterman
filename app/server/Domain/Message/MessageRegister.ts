@@ -10,7 +10,7 @@ import IUserEditor from '../User/Interface/IUserEditor';
 /**
  * 新規メッセージの作成クラス
  */
-class MessageRegister {
+class MessageRegister implements IMessageRegister {
     private repository: IMessageRepository;
     message_id: string;
     message: string;
@@ -25,7 +25,7 @@ class MessageRegister {
         this.room_id = room_id;
     }
 
-    async add(): Promise<string> {
+    async registe(): Promise<string> {
         if (await roomManager.isAccessableRooms(this.user.id, this.room_id) == false) {
             throw new AuthenticationException('このトークルームには投稿できません。');
         }

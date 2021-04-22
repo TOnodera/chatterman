@@ -1,18 +1,18 @@
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import MessageManager from '../Domain/Message/MessageManager';
+import Message from '../Domain/Message/Message';
 
 class MessageController {
     private socket: Socket;
-    private messageManager: MessageManager;
+    private message: Message;
 
     constructor(socket: Socket) {
         this.socket = socket;
-        this.messageManager = new MessageManager(socket);
+        this.message = new Message(socket);
     }
 
     async add(message: string, user_id: string, room_id: string) {
-        this.messageManager.add(message, user_id, room_id).catch((e) => {
+        this.message.send(message, user_id, room_id).catch((e) => {
             SocketExceptionHandler.handle(e, this.socket);
         });
     }
@@ -22,17 +22,17 @@ class MessageController {
     edit(): void { }
 
     typing(user: { id: string; name: string }, room_id: string): void {
-        this.messageManager.typing(user, room_id);
+        this.message.typing(user, room_id);
     }
 
-    async moreMessages(room_id: string, message_id: string) {
-        this.messageManager.moreMessages(room_id, message_id).catch((e) => {
+    async more(room_id: string, message_id: string) {
+        this.message.more(room_id, message_id).catch((e) => {
             SocketExceptionHandler.handle(e, this.socket);
         });
     }
 
-    async getLatest(room_id: string) {
-        this.messageManager.getLatest(room_id).catch((e) => {
+    async latest(room_id: string) {
+        this.message.latest(room_id).catch((e) => {
             SocketExceptionHandler.handle(e, this.socket);
         });
     }
