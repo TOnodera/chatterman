@@ -28,3 +28,6 @@ ci/cdサーバー構築してみたいので終わったらやる。
 
 ■ユーザーパッケージのUML(リファクタリング中)  
 ![image dmapplication](https://github.com/TOnodera/chatterman/blob/main/documents/image/user.png)
+
+■メッセージパッケージのUML  
+![image dmapplication](https://github.com/TOnodera/chatterman/blob/main/documents/image/message-package.png)
