@@ -2,8 +2,8 @@
 package Message{
 
     interface IMessage{
-        +registe(message: string,user_id: string,room_id:string,options?: MessageOptions): Promise<SendMessageToClient>;
-        +send(messge:string,user_id: string,room_id,options?:MessageOptions): Promise<void>;
+        +registe(messageRegister: IMessageRegister,options?: MessageOptions): Promise<SendMessageToClient>;
+        +send(messageRegister: IMessageRegister,options?:MessageOptions): Promise<void>;
         +get(message_id: string): Promise<IMessageEditor>;
     }
 
@@ -28,9 +28,8 @@ package Message{
         #repository: IMessageRepository;
         #MAX_MESSAGE_COUNT
 
-        -add(message: string,user_id,room_id): Promise<string>;
-        #registe(message: string,user_id: string,room_id: string,options?: MessageOptions): Promise<SendMessageToClient>;
-        send(message: string,room_id: string,user_id: string,options?: MessageOptions): Promise<void>; (抽象メソッド)
+        #registe(messageRegister: IMessageRegister,options?: MessageOptions): Promise<SendMessageToClient>;
+        send(messageRegister: IMessageRegister,options?: MessageOptions): Promise<void>; (抽象メソッド)
         get(message_id: string): Promise<IMessageEditor>;
         delete(): void (未実装)
         edit(): void : (未実装)
@@ -40,11 +39,11 @@ package Message{
     }
 
     class UserMessage{
-        send(message: string,user_id:string,room_id: string,options?: MessageOptions);
+        send(messageRegister: IMessageRegister,options?: MessageOptions);
     }
 
     class SystemMessage{
-        send(message: string,user_id:string,room_id: string,options?: MessageOptions);
+        send(messageRegister: IMessageRegister,options?: MessageOptions);
     }
 
     class Service{
