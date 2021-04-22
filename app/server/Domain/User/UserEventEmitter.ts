@@ -15,6 +15,8 @@ class UserEventEmitter {
 
     broadcastUserLogout(user_id: string, socket: Socket) {
         socket.broadcast.emit('broadcast:user-logout', user_id);
+        socket.emit('broadcast:user-logout', user_id);
+        console.log('broadcast:user-logoutイベント発行');
     }
 }
 

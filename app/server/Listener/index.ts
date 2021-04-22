@@ -5,6 +5,10 @@ const applyListener = require('./applyListener');
 const serverDisconnectedListener = require('./serverDisconnectedListener');
 const roomListener = require('./roomListener');
 
+
+/**
+ * クライアントから送られてくる各種イベントのリスナ
+ */
 module.exports = (io: any) => {
 
     io.on('connection', (socket: Socket) => {
