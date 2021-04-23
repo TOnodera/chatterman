@@ -5,6 +5,7 @@ import IUserEditor from '../Domain/User/Interface/IUserEditor';
 import UserFactory from '../Domain/User/Factory/UserFactory';
 import MessageRegister from '../Domain/Message/MessageRegister';
 import IMessageRegister from '../Domain/Message/Interface/IMessageRegister';
+import logger from '../Utility/logger';
 
 
 class MessageController {

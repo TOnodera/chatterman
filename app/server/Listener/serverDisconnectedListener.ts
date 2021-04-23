@@ -43,6 +43,5 @@ module.exports = (socket: Socket) => {
     socketService.registeOnce('disconnecting', disconnectingListener, socket);
     socketService.registeOnce('disconnected', disconnectedListener, socket);
     socketService.registeOnce('user:logout', userLogoutListener, socket);
-    console.log(userLogoutListener);
 
 };
