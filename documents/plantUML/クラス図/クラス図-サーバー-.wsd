@@ -29,7 +29,7 @@ package Polymorphic[
 
 Message <.. User
 Room <.. User
-Message <-- Polymorphic
+Polymorphic <-- Message
 
 
 
