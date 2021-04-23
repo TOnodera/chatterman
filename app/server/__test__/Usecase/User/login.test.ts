@@ -14,7 +14,7 @@ describe('User', () => {
     };
     const loginUser = {
         name: uuid.v4(),
-        credentials: credentials
+        credentials: JSON.parse(JSON.stringify(credentials))
     };
     const testBaseUrl = `http://localhost:${Config.system.test_port}`;
 

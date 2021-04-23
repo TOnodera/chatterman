@@ -7,7 +7,6 @@ import { Socket } from "socket.io";
 
 const authenticationMiddleware = async (socket: Socket, next: NextFunction) => {
     try {
-        logger.debug("ソケット通信の認証開始　セッション内容 -> ", socket.request);
         if (await loginManager.getAfterLoginManager(socket).authenticate(socket.request.session.credentials)) {
             logger.debug("認証成功 -> ", socket.request.session);
             next();

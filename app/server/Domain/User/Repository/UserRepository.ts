@@ -56,7 +56,7 @@ class UserRepository implements IUserRepository {
                 created_at: rows[0].created_at
             };
         }
-        throw new DomainException('ユーザーが見つかりませんでした。');
+        throw new AuthenticationException('ユーザーが見つかりませんでした。');
     }
 
     async getMembersId(): Promise<string[]> {
