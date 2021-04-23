@@ -26,6 +26,9 @@ ci/cdサーバー構築してみたいので終わったらやる。
 ■ざっくりとしたインフラ構成  
 ![image infle](https://github.com/TOnodera/chatterman/blob/main/documents/image/infla.png)
 
+■最終的なパッケージ間のイメージ
+![image packages](https://github.com/TOnodera/chatterman/blob/main/documents/image/packages.png)
+
 ■ユーザーパッケージのUML  
 ![image dmapplication](https://github.com/TOnodera/chatterman/blob/main/documents/image/user.png)
 
