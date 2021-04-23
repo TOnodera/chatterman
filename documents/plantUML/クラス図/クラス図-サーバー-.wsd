@@ -27,8 +27,8 @@ package Polymorphic[
 ]
 
 
-User <.. Message
-User <.. Room
+Message <.. User
+Room <.. User
 Message <-- Polymorphic
 
 
