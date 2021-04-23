@@ -1,10 +1,35 @@
 @startuml
-package Message
-package Room
-package User
+package Message[
+    メッセージパッケージ
+    --
+    IMessage
+    IMessageEditor
+    IMessageRegister
+    ...
+]
+package Room[
+    ルームパッケージ
+    --
+    これからリファクタリング
+]
+package User[
+    ユーザーパッケージ
+    --
+    IUser
+    IUserEditor
+    IUserRegister
+    ...
+]
+package Polymorphic[
+    ポリモーフィック関連テーブルの管理
+    --
+    要リファクタリング
+]
+
 
 User <.. Message
 User <.. Room
+Message <-- Polymorphic
 
 
 
