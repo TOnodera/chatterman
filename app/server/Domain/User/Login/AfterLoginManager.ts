@@ -4,7 +4,7 @@ import UserRepositoryFactory from '../Factory/UserRepositoryFactory';
 import loginUserStore from '../../../Store/LoginUsersStore';
 import UserEditor from '../UserEditor';
 import Exception from '../../../Exception/Exception';
-import roomManager from '../../Room/RoomManager';
+import Room from '../../Room/Room';
 import userService from '../Service';
 import userEventEmitter from '../UserEventEmitter';
 import socketService from '../../../Utility/SocketService';
@@ -24,7 +24,7 @@ class AfterLoginManager {
         logger.debug('in afterLogin: afterCredentials');
 
         const user: UserEditor = await userService.getUserByCredentials(credentials);
-        const information_room = await roomManager.getInformationRoomId(user.id);
+        const information_room = await Room.getInformationRoomId(user.id);
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
         const toClient: Client = { id: user.id, name: user.name };
 

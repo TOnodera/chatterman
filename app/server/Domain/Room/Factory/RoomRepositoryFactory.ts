@@ -1,8 +1,8 @@
 import RoomRepository from '../Repository/RoomRepository';
 
-class RepositoryFactory {
+class RoomRepositoryFactory {
     static create() {
         return new RoomRepository();
     }
 }
-export default RepositoryFactory;
+export default RoomRepositoryFactory;

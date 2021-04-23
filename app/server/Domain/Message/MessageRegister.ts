@@ -3,7 +3,7 @@ import AuthenticationException from '../../Exception/AuthenticationException';
 import Exception from '../../Exception/Exception';
 import IMessageRepository from './Interface/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
-import roomManager from '../Room/RoomManager';
+import Room from '../Room/Room';
 import IUserEditor from '../User/Interface/IUserEditor';
 import IMessageRegister from './Interface/IMessageRegister';
 
@@ -27,7 +27,7 @@ class MessageRegister implements IMessageRegister {
     }
 
     async registe(): Promise<string> {
-        if (await roomManager.isAccessableRooms(this.user.id, this.room_id) == false) {
+        if (await Room.isAccessableRooms(this.user.id, this.room_id) == false) {
             throw new AuthenticationException('このトークルームには投稿できません。');
         }
         this.message_id = uuid.v4();

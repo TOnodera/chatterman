@@ -1,52 +1,36 @@
 @startuml
 package Room{
 
+    interface IRoom{
+        attemptToEnter
+        leaveCurrentRoom
+        createRoom
+        createUserDefaultRoom
+        createInformationRoom
+        addAccessableRooms
+        getTalkRooms
+        getInformationRoom
+        isAccessableRooms
+        getAccessableRooms
+        getInformationRoomId
+        getDirectMessageRoom
+        getDirectMessageRoomInfo
+        getRoomEventEmitter
+
+    }
+
+    interface IRoomRegister{
+        registe()
+    }
+
     class Room{
-        id: string
-        name: string
-        creater_id: string
-        room_type: string
-        created_at: string
+
     }
 
-    class RoomRegister{
-        id: string
-        name: string
-        creater_id: string
-        room_type: RoomType
-        -repository: RoomRepository
-        +create(): string
-    }
-    note right of RoomRegister::create()
-    生成したRoomのidを返す
-    end note
+    IRoom <.. Room
+    IRoomRegister <.. Room
 
-    class RoomFactory{
-        create(id): Room
-    }
 
-    class RoomManager{
-        +attemptToenter()
-        +leaveCurrentRoom()
-        +createRoom()
-        +createUserDefaultRoom()
-        +addAccessableRooms()
-        +getAllRooms()
-        +join()
-        +joinMe()
-        +isAccessableRooms()
-        +getAccessableRooms()
-        +isAccessable(user: User)
-    }
 
-    class RoomRepository{
-        DB処理メソッド()
-    }
-
-    RoomRegister <-- RoomFactory
-    Room <.. RoomFactory : <<create>>
-    RoomManager <-- RoomContorller
-    RoomRegister <-- RoomManager
-    RoomRepository <-- RoomManager
 }
 @enduml

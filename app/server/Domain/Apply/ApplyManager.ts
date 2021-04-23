@@ -2,7 +2,7 @@ import Exception from '../../Exception/Exception';
 import logger from '../../Utility/logger';
 import SocketExceptionHandler from '../../Exception/SocketExceptionHandler';
 import applyService from '../Apply/ApplyService';
-import roomManager from '../Room/RoomManager';
+import Room from '../Room/Room';
 import { transaction } from '../../Utility/Connection/Connection';
 import { Socket } from 'socket.io';
 import ApplyEventEmitter from './ApplyEventEmitter';
@@ -49,7 +49,7 @@ class ApplyManager {
 
             const [information_room]: any[] = await transaction(async () => {
                 const polymorphic_id: number = await applyService.registeApplication(target_id, info.user.id);
-                const information_room = await roomManager.getInformationRoomId(target_id);
+                const information_room = await Room.getInformationRoomId(target_id);
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
 
@@ -105,7 +105,7 @@ class ApplyManager {
                 await applyService.registeAccept(unique_id, requestUser.id, targetUser.id, reaction);
 
                 //申請者にメッセージ送信
-                const [roomInfo]: RoomInfo[] = await roomManager.getInformationRoom(requestUser.id);
+                const [roomInfo]: RoomInfo[] = await Room.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
                 const systemUser: UserEditor = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);

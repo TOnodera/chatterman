@@ -4,9 +4,11 @@ import apply from './Apply';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { APPLY_REACTION, ROOM_TYPE } from '../../Enum/Enum';
 import logger from '../../Utility/logger';
-import Room from '../Room/Room';
 import uuid = require('node-uuid');
-import roomManager from '../Room/RoomManager';
+import Room from '../Room/Room';
+import IRoomEditor from '../Room/Interface/IRoomEditor';
+import IRoomRegister from '../Room/Interface/IRoomRegister';
+import RoomRegister from '../Room/RoomRegister';
 
 class ApplyService {
     private repository: ApplyRepository;
@@ -57,10 +59,12 @@ class ApplyService {
         //リアクションを登録
         await this.registeApplyReaction(unique_id, reaction);
         //DMルーム作成
-        const directMessageRoom: Room = await roomManager.createRoom(uuid.v4(), target_user_id, ROOM_TYPE.directmessage);
+        const name: string = uuid.v4();
+        const register: IRoomRegister = new RoomRegister(name, target_user_id, ROOM_TYPE.directmessage);
+        const directMessageRoom: IRoomEditor = await Room.create(register);
         //申請者と受信者が入場できるように許可を設定する
-        await roomManager.addAccessableRooms(request_user_id, directMessageRoom.id);
-        await roomManager.addAccessableRooms(target_user_id, directMessageRoom.id);
+        await Room.addAccessableRooms(request_user_id, directMessageRoom.id);
+        await Room.addAccessableRooms(target_user_id, directMessageRoom.id);
     }
 }
 

@@ -2,12 +2,15 @@ import { ROOM_TYPE } from '../Enum/Enum';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import RoomEventEmitter from '../Domain/Room/Emitter/RoomEventEmitter';
-import roomManager from '../Domain/Room/RoomManager';
+import Room from '../Domain/Room/Room';
 import logger from '../Utility/logger';
 import userService from '../Domain/User/Service';
 import IUserEditor from '../Domain/User/Interface/IUserEditor';
+import IRoomRegister from '../Domain/Room/Interface/IRoomRegister';
+import RoomRegister from '../Domain/Room/RoomRegister';
 
 class RoomController {
+
     private socket: Socket;
     private roomEventEmitter: RoomEventEmitter;
 
@@ -16,24 +19,24 @@ class RoomController {
         this.roomEventEmitter = new RoomEventEmitter(socket);
     }
 
-    async attemptToEnter(info: RoomAndUserId) {
+    async enter(info: RoomAndUserId) {
         logger.info(`1/2 ルームへの入場処理開始: user_id: ${info.user_id},room_id: ${info.room_id}`);
         try {
-            if (await roomManager.attemptToEnter(info)) {
-                roomManager.getRoomEventEmitter(this.socket).sendUserJoinRoomEvent(info.room_id);
+            if (await Room.enter(info)) {
+                Room.getRoomEventEmitter(this.socket).sendUserJoinRoomEvent(info.room_id);
                 return;
             }
-            roomManager.getRoomEventEmitter(this.socket).sendDeniedToEnterRoomEvent(info.room_id);
+            Room.getRoomEventEmitter(this.socket).sendDeniedToEnterRoomEvent(info.room_id);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
         logger.info(`2/2 ルームへの入場処理完了: user_id: ${info.user_id},room_id: ${info.room_id}`);
     }
 
-    async leaveCurrentRoom(info: RoomAndUserId) {
+    async leave(info: RoomAndUserId) {
         logger.info(`1/2 ルーム退出処理開始: user_id: ${info.user_id}, room_id: ${info.room_id}`);
         try {
-            if (await roomManager.leaveCurrentRoom(info)) {
+            if (await Room.leave(info)) {
                 this.roomEventEmitter.sendUserLeftRoomEvent(info.room_id);
             }
         } catch (e) {
@@ -42,10 +45,11 @@ class RoomController {
         logger.info(`2/2 ルーム退出処理完了: user_id: ${info.user_id}, room_id: ${info.room_id}`);
     }
 
-    async createRoom(name: string, creater_id: string, room_type: ROOM_TYPE) {
+    async create(name: string, creater_id: string, room_type: ROOM_TYPE) {
         logger.info(`1/2 ルーム作成処理開始: user_id(作成者): ${creater_id}, name: ${name}`);
         try {
-            if (await roomManager.createRoom(name, creater_id, room_type)) {
+            const register: IRoomRegister = new RoomRegister(name, creater_id, room_type);
+            if (await Room.create(register)) {
                 this.roomEventEmitter.sendRoomCreatedEvent();
                 return;
             }
@@ -63,8 +67,8 @@ class RoomController {
         try {
 
             //トークルームとお知らせルームを取得
-            const talkRooms: RoomInfo[] = await roomManager.getTalkRooms(user.id);
-            const informationRoom: RoomInfo[] = await roomManager.getInformationRoom(user.id);
+            const talkRooms: RoomInfo[] = await Room.getTalkRooms(user.id);
+            const informationRoom: RoomInfo[] = await Room.getInformationRoom(user.id);
             const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
 
             this.roomEventEmitter.sendRoomDataEvent(rooms);
@@ -78,7 +82,7 @@ class RoomController {
     async getDirectMessageRoomInfo() {
         try {
             const user: IUserEditor = await userService.getUserByCredentials(this.socket.request.session.credentials);
-            const clients: Client[] = await roomManager.getDirectMessageRoomInfo(user.id, this.socket);
+            const clients: Client[] = await Room.getDirectMessageRoomInfo(user.id, this.socket);
             this.roomEventEmitter.sendSendUsersDataEvent(clients);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
