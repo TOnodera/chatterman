@@ -9,12 +9,15 @@ import Room from '../Room/Room';
 import IRoomEditor from '../Room/Interface/IRoomEditor';
 import IRoomRegister from '../Room/Interface/IRoomRegister';
 import RoomRegister from '../Room/RoomRegister';
+import IRoom from '../Room/Interface/IRoom';
 
 class ApplyService {
     private repository: ApplyRepository;
+    private room: IRoom;
 
     constructor() {
         this.repository = ApplyRepositoryFactory.create();
+        this.room = new Room();
     }
 
     makeMessage(name: string) {
@@ -61,10 +64,10 @@ class ApplyService {
         //DMルーム作成
         const name: string = uuid.v4();
         const register: IRoomRegister = new RoomRegister(name, target_user_id, ROOM_TYPE.directmessage);
-        const directMessageRoom: IRoomEditor = await Room.create(register);
+        const directMessageRoom: IRoomEditor = await this.room.create(register);
         //申請者と受信者が入場できるように許可を設定する
-        await Room.addAccessableRooms(request_user_id, directMessageRoom.id);
-        await Room.addAccessableRooms(target_user_id, directMessageRoom.id);
+        await this.room.addAccessableRooms(request_user_id, directMessageRoom.id);
+        await this.room.addAccessableRooms(target_user_id, directMessageRoom.id);
     }
 }
 

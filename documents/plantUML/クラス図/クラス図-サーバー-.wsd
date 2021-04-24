@@ -20,16 +20,20 @@ package User[
     IUserRegister
     ...
 ]
-package Polymorphic[
-    ポリモーフィック関連テーブルの管理
+package Apply[
+    DM申請
     --
     要リファクタリング
 ]
+package Polymorphic[
+    ポリモーフィック関連テーブルの管理
+]
 
 
-User <.. Message
-User <.. Room
-Message <-- Polymorphic
+Message <.. User
+Room <.. User
+Apply <.. User
+Polymorphic <-- Message
 
 
 

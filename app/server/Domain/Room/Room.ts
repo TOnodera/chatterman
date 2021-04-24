@@ -14,12 +14,13 @@ import socketService from '../../Utility/SocketService';
 import UserFactory from '../User/Factory/UserFactory';
 import RoomRegister from './RoomRegister';
 import Config from '../../Config';
+import IRoom from './Interface/IRoom';
 
-class Room {
+class Room implements IRoom {
 
-    private repository: RoomRepository;
+    protected repository: RoomRepository;
     //TODO 削除対象
-    private INFORMATION_ROOM_NAME = "お知らせ";
+    protected INFORMATION_ROOM_NAME = "お知らせ";
 
     constructor() {
         this.repository = RoomRepositoryFactory.create();
@@ -36,7 +37,6 @@ class Room {
         return result;
     }
 
-    // TODO リファクタ
     async createInformationRoom(user_id: string): Promise<boolean> {
         const register: IRoomRegister = new RoomRegister(this.INFORMATION_ROOM_NAME, user_id, ROOM_TYPE.information);
         const room: RoomEditor = await this.create(register);
@@ -113,4 +113,4 @@ class Room {
     }
 }
 
-export default new Room;
+export default Room;

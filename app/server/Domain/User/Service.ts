@@ -18,7 +18,8 @@ class Service {
     }
 
     async getInfromationRoomId(user_id: string): Promise<string> {
-        return await Room.getInformationRoomId(user_id);
+        const room = new Room();
+        return await room.getInformationRoomId(user_id);
     }
 
     async getUserById(user_id: string): Promise<IUserEditor> {

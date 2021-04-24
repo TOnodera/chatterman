@@ -6,6 +6,7 @@ import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
 import Room from '../Room/Room';
 import IUserEditor from '../User/Interface/IUserEditor';
 import IMessageRegister from './Interface/IMessageRegister';
+import IRoom from '../Room/Interface/IRoom';
 
 
 /**
@@ -13,6 +14,8 @@ import IMessageRegister from './Interface/IMessageRegister';
  */
 class MessageRegister implements IMessageRegister {
     private repository: IMessageRepository;
+    // TODO パッケージ整理するときに削除
+    private room: IRoom;
     message_id: string;
     message: string;
     user: IUserEditor;
@@ -20,6 +23,7 @@ class MessageRegister implements IMessageRegister {
 
     constructor(message: string, user: IUserEditor, room_id: string) {
         this.repository = MessageRepositoryFactory.create();
+        this.room = new Room();
         this.message_id = uuid.v4();
         this.message = message;
         this.user = user;
@@ -27,7 +31,7 @@ class MessageRegister implements IMessageRegister {
     }
 
     async registe(): Promise<string> {
-        if (await Room.isAccessableRooms(this.user.id, this.room_id) == false) {
+        if (await this.room.isAccessableRooms(this.user.id, this.room_id) == false) {
             throw new AuthenticationException('このトークルームには投稿できません。');
         }
         this.message_id = uuid.v4();

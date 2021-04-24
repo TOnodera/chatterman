@@ -13,20 +13,22 @@ class RoomController {
 
     private socket: Socket;
     private roomEventEmitter: RoomEventEmitter;
+    private room: Room;
 
     constructor(socket: Socket) {
         this.socket = socket;
         this.roomEventEmitter = new RoomEventEmitter(socket);
+        this.room = new Room();
     }
 
     async enter(info: RoomAndUserId) {
         logger.info(`1/2 ルームへの入場処理開始: user_id: ${info.user_id},room_id: ${info.room_id}`);
         try {
-            if (await Room.enter(info)) {
-                Room.getRoomEventEmitter(this.socket).sendUserJoinRoomEvent(info.room_id);
+            if (await this.room.enter(info)) {
+                this.room.getRoomEventEmitter(this.socket).sendUserJoinRoomEvent(info.room_id);
                 return;
             }
-            Room.getRoomEventEmitter(this.socket).sendDeniedToEnterRoomEvent(info.room_id);
+            this.room.getRoomEventEmitter(this.socket).sendDeniedToEnterRoomEvent(info.room_id);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);
         }
@@ -36,7 +38,7 @@ class RoomController {
     async leave(info: RoomAndUserId) {
         logger.info(`1/2 ルーム退出処理開始: user_id: ${info.user_id}, room_id: ${info.room_id}`);
         try {
-            if (await Room.leave(info)) {
+            if (await this.room.leave(info)) {
                 this.roomEventEmitter.sendUserLeftRoomEvent(info.room_id);
             }
         } catch (e) {
@@ -49,7 +51,7 @@ class RoomController {
         logger.info(`1/2 ルーム作成処理開始: user_id(作成者): ${creater_id}, name: ${name}`);
         try {
             const register: IRoomRegister = new RoomRegister(name, creater_id, room_type);
-            if (await Room.create(register)) {
+            if (await this.room.create(register)) {
                 this.roomEventEmitter.sendRoomCreatedEvent();
                 return;
             }
@@ -67,8 +69,8 @@ class RoomController {
         try {
 
             //トークルームとお知らせルームを取得
-            const talkRooms: RoomInfo[] = await Room.getTalkRooms(user.id);
-            const informationRoom: RoomInfo[] = await Room.getInformationRoom(user.id);
+            const talkRooms: RoomInfo[] = await this.room.getTalkRooms(user.id);
+            const informationRoom: RoomInfo[] = await this.room.getInformationRoom(user.id);
             const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
 
             this.roomEventEmitter.sendRoomDataEvent(rooms);
@@ -82,7 +84,7 @@ class RoomController {
     async getDirectMessageRoomInfo() {
         try {
             const user: IUserEditor = await userService.getUserByCredentials(this.socket.request.session.credentials);
-            const clients: Client[] = await Room.getDirectMessageRoomInfo(user.id, this.socket);
+            const clients: Client[] = await this.room.getDirectMessageRoomInfo(user.id, this.socket);
             this.roomEventEmitter.sendSendUsersDataEvent(clients);
         } catch (e) {
             SocketExceptionHandler.handle(e, this.socket);

@@ -9,14 +9,17 @@ import userService from '../Service';
 import userEventEmitter from '../UserEventEmitter';
 import socketService from '../../../Utility/SocketService';
 import logger from '../../../Utility/logger';
+import IRoom from '../../../Domain/Room/Interface/IRoom';
 
 class AfterLoginManager {
     private socket: Socket;
     private repository: IUserRepository;
+    private room: IRoom;
 
     constructor(socket: Socket) {
         this.socket = socket;
         this.repository = UserRepositoryFactory.create();
+        this.room = new Room();
     }
 
     async afterCredentials(credentials: Credentials) {
@@ -24,7 +27,7 @@ class AfterLoginManager {
         logger.debug('in afterLogin: afterCredentials');
 
         const user: UserEditor = await userService.getUserByCredentials(credentials);
-        const information_room = await Room.getInformationRoomId(user.id);
+        const information_room = await this.room.getInformationRoomId(user.id);
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
         const toClient: Client = { id: user.id, name: user.name };
 
