@@ -1,35 +1,24 @@
-import { ROOM_TYPE } from "../../Enum/Enum";
-import { transaction } from "../../Utility/Connection/Connection";
-import IRoom from "../Room/Interface/IRoom";
-import IRoomRegister from "../Room/Interface/IRoomRegister";
-import Room from '../Room/Room';
-import RoomRegister from "../Room/RoomRegister";
+import Datetime from '../../Utility/Datetime';
+import IUserRepository from './Repository/IUserRepository';
+import UserRepositoryFactory from './Factory/UserRepositoryFactory';
+import IUser from './Interface/IUser';
 
 class User implements IUser {
 
-    private room: IRoom;
+    id: string;
+    credentials: Credentials;
+    name: string;
+    created_at: Datetime;
+    repository: IUserRepository;
 
-    constructor() {
-        this.room = new Room();
+    constructor(id: string, name: string, credentials: Credentials, created_at: string) {
+        this.id = id;
+        this.name = name;
+        this.credentials = credentials;
+        this.created_at = new Datetime(created_at);
+        this.repository = UserRepositoryFactory.create();
     }
-
-    async registe(userRegister: IUserRegister): Promise<string> {
-
-        const [id]: string[] = await transaction(async () => {
-
-            const user_id = await userRegister.registe();
-            const register: IRoomRegister = new RoomRegister(user_id, user_id, ROOM_TYPE.directmessage);//デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
-
-            if (user_id && await this.room.createUserDefaultRoom(register) && this.room.createInformationRoom(user_id)) {
-                return [user_id];
-            }
-            return [];
-
-        });
-
-        return id;
-    }
-
 
 }
-export default new User;
+
+export default User;

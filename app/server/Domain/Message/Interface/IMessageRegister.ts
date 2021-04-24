@@ -1,9 +1,9 @@
-import IUserEditor from "../../../Domain/User/Interface/IUserEditor";
+import IUser from "../../../Domain/User/Interface/IUser";
 
 interface IMessageRegister {
     message_id: string;
     message: string;
-    user: IUserEditor;
+    user: IUser;
     room_id: string;
     registe(): Promise<string>;
 }

@@ -1,7 +1,7 @@
 import { ROOM_TYPE } from "../../Enum/Enum";
 import Datetime from "../../Utility/Datetime";
 import UserFactory from "../User/Factory/UserFactory";
-import IUserEditor from "../User/Interface/IUserEditor";
+import IUser from "../User/Interface/IUser";
 import IRoomEditor from "./Interface/IRoomEditor";
 
 class RoomEditor implements IRoomEditor {

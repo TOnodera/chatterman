@@ -1,7 +1,7 @@
 import UserService from '../../../Domain/User/Service';
-import UserEditor from '../../../Domain/User/UserEditor';
-import UserRegister from '../../../Domain/User/UserRegister';
 import User from '../../../Domain/User/User';
+import UserRegister from '../../../Domain/User/UserRegister';
+import UserManager from '../../../Domain/User/UserManager';
 import { loginManager } from '../../../Domain/User/Login/LoginManager';
 import { Socket } from 'socket.io';
 import http from '../http';
@@ -27,8 +27,8 @@ describe('User', () => {
             };
 
             const userRegister: IUserRegister = new UserRegister(fromClient.name, fromClient.credentials);
-            user_id = await User.registe(userRegister);
-            const user: UserEditor = await UserService.getUserByCredentials(loginUser);
+            user_id = await UserManager.registe(userRegister);
+            const user: User = await UserService.getUserByCredentials(loginUser);
             expect(user.credentials.email).toBe(fromClient.credentials.email);
 
         });

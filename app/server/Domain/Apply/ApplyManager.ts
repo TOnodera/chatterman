@@ -8,7 +8,7 @@ import { Socket } from 'socket.io';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables } from '../../Enum/Enum';
 import SocketService from '../../Utility/SocketService';
-import UserEditor from '../User/UserEditor';
+import User from '../User/User';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userService from '../User/Service';
 import SystemMessage from '../Message/SystemMessage';
@@ -61,7 +61,7 @@ class ApplyManager {
                     polymorphic_table: PolymorphicTables.requests,
                     polymorphic_id: polymorphic_id
                 };
-                const systemUser: UserEditor = await UserFactory.create(Config.system.superuser);
+                const systemUser: User = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(messageTxt, systemUser, information_room);
                 await this.systemMessage.send(messageRegister, messageOption);
 
@@ -91,8 +91,8 @@ class ApplyManager {
         }
 
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        const targetUser: UserEditor = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-        const requestUser: UserEditor = await userService.getUserById(requestUserId);
+        const targetUser: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+        const requestUser: User = await userService.getUserById(requestUserId);
 
 
         //処理済みか確認
@@ -110,7 +110,7 @@ class ApplyManager {
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await this.room.getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
-                const systemUser: UserEditor = await UserFactory.create(Config.system.superuser);
+                const systemUser: User = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);
                 this.systemMessage.send(messageRegister);
 

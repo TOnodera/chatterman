@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import IUserRepository from '../Repository/IUserRepository';
 import UserRepositoryFactory from '../Factory/UserRepositoryFactory';
 import loginUserStore from '../../../Store/LoginUsersStore';
-import UserEditor from '../UserEditor';
+import User from '../User';
 import Exception from '../../../Exception/Exception';
 import Room from '../../Room/Room';
 import userService from '../Service';
@@ -26,7 +26,7 @@ class AfterLoginManager {
 
         logger.debug('in afterLogin: afterCredentials');
 
-        const user: UserEditor = await userService.getUserByCredentials(credentials);
+        const user: User = await userService.getUserByCredentials(credentials);
         const information_room = await this.room.getInformationRoomId(user.id);
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
         const toClient: Client = { id: user.id, name: user.name };

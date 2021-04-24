@@ -1,4 +1,4 @@
-import UserEditor from '../../User/UserEditor';
+import User from '../../User/User';
 import userService from '../../User/Service';
 import ApplyPolymorphicRepositoryFactory from './Factory/ApplyPolymorphicRepositoryFactory';
 import ApplyPolymorphicRepository from './Repository/ApplyPolymorphicRepository';
@@ -13,15 +13,15 @@ class ApplyPolymorphicManager {
         this.repository = ApplyPolymorphicRepositoryFactory.create();
     }
 
-    async getRequestUser(polymorphic_id: number): Promise<UserEditor> {
+    async getRequestUser(polymorphic_id: number): Promise<User> {
         const request_user: string = await this.repository.getRequestUserId(polymorphic_id);
-        const user: UserEditor = await userService.getUserById(request_user);
+        const user: User = await userService.getUserById(request_user);
         return user;
     }
 
-    async getTargetUser(polymorphic_id: number): Promise<UserEditor> {
+    async getTargetUser(polymorphic_id: number): Promise<User> {
         const request_user: string = await this.repository.getTargetUserId(polymorphic_id);
-        const user: UserEditor = await userService.getUserById(request_user);
+        const user: User = await userService.getUserById(request_user);
         return user;
     }
 }

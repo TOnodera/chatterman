@@ -1,7 +1,7 @@
 import UserMessage from '../Domain/Message/UserMessage';
 import { Socket } from 'socket.io';
 import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
-import IUserEditor from '../Domain/User/Interface/IUserEditor';
+import IUser from '../Domain/User/Interface/IUser';
 import UserFactory from '../Domain/User/Factory/UserFactory';
 import MessageRegister from '../Domain/Message/MessageRegister';
 import IMessageRegister from '../Domain/Message/Interface/IMessageRegister';
@@ -19,7 +19,7 @@ class MessageController {
 
     //TODO パッケージ間の依存関係整理するときにuserそのまま入れるメソッドをコントローラー以外のところに作る
     async add(message: string, user_id: string, room_id: string) {
-        const user: IUserEditor = await UserFactory.create(user_id);
+        const user: IUser = await UserFactory.create(user_id);
         const messageRegister: IMessageRegister = new MessageRegister(message, user, room_id);
         this.message.send(messageRegister).catch((e) => {
             SocketExceptionHandler.handle(e, this.socket);

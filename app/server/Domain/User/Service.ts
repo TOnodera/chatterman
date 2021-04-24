@@ -1,5 +1,5 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
-import IUserEditor from './Interface/IUserEditor';
+import IUser from './Interface/IUser';
 import Room from '../Room/Room';
 import UserFactory from './Factory/UserFactory';
 import logger from '../../Utility/logger';
@@ -12,7 +12,7 @@ class Service {
         this.repository = UserRepositoryFactory.create();
     }
 
-    async getUserByCredentials(credentials: Credentials): Promise<IUserEditor> {
+    async getUserByCredentials(credentials: Credentials): Promise<IUser> {
         const id: string = await this.repository.getUserIdByCredentials(credentials);
         return UserFactory.create(id);
     }
@@ -22,14 +22,14 @@ class Service {
         return await room.getInformationRoomId(user_id);
     }
 
-    async getUserById(user_id: string): Promise<IUserEditor> {
+    async getUserById(user_id: string): Promise<IUser> {
         return await UserFactory.create(user_id);
     }
 
-    async getUsersByIdArray(user_ids: string[]): Promise<IUserEditor[]> {
-        const users: IUserEditor[] = [];
+    async getUsersByIdArray(user_ids: string[]): Promise<IUser[]> {
+        const users: IUser[] = [];
         for (const id of user_ids) {
-            const user: IUserEditor = await this.getUserById(id);
+            const user: IUser = await this.getUserById(id);
             users.push(user);
         }
         return users;
@@ -39,9 +39,9 @@ class Service {
         return await this.repository.getMembersId();
     }
 
-    async getAllUsers(): Promise<IUserEditor[]> {
+    async getAllUsers(): Promise<IUser[]> {
         const idArray: string[] = await this.getMembersId();
-        const users: IUserEditor[] = await this.getUsersByIdArray(idArray);
+        const users: IUser[] = await this.getUsersByIdArray(idArray);
         return users;
     }
 

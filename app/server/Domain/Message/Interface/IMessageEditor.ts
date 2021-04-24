@@ -1,11 +1,11 @@
-import IUserEditor from "../../../Domain/User/Interface/IUserEditor";
+import IUser from "../../../Domain/User/Interface/IUser";
 import Datetime from "../../../Utility/Datetime";
 
 interface IMessageEditor {
 
     message_id: string;
     message: string;
-    user: IUserEditor;
+    user: IUser;
     room_id: string;
     options?: Options;
     created_at: Datetime;
