@@ -4,23 +4,19 @@ import IRoom from "../Room/Interface/IRoom";
 import IRoomRegister from "../Room/Interface/IRoomRegister";
 import Room from '../Room/Room';
 import RoomRegister from "../Room/RoomRegister";
+import UserFactory from "./Factory/UserFactory";
+import User from "./User";
 
 class UserManager {
-
-    private room: IRoom;
-
-    constructor() {
-        this.room = new Room();
-    }
 
     async registe(userRegister: IUserRegister): Promise<string> {
 
         const [id]: string[] = await transaction(async () => {
 
             const user_id = await userRegister.registe();
-            const register: IRoomRegister = new RoomRegister(user_id, user_id, ROOM_TYPE.directmessage);//デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
+            const user: User = await UserFactory.create(user_id);
 
-            if (user_id && await this.room.createUserDefaultRoom(register) && this.room.createInformationRoom(user_id)) {
+            if (user_id && await user.room().createUserDefaultRoom() && await user.room().createInformationRoom()) {
                 return [user_id];
             }
             return [];

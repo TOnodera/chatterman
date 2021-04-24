@@ -15,14 +15,18 @@ import UserFactory from '../User/Factory/UserFactory';
 import RoomRegister from './RoomRegister';
 import Config from '../../Config';
 import IRoom from './Interface/IRoom';
+import User from '../User/User';
+import uuid from 'node-uuid';
 
 class Room implements IRoom {
 
-    protected repository: RoomRepository;
+    private repository: RoomRepository;
+    private user: User;
     //TODO 削除対象
     protected INFORMATION_ROOM_NAME = "お知らせ";
 
-    constructor() {
+    constructor(user: User) {
+        this.user = user;
         this.repository = RoomRepositoryFactory.create();
     }
 
@@ -31,16 +35,17 @@ class Room implements IRoom {
         return await RoomFactory.create(id);
     }
 
-    async createUserDefaultRoom(register: IRoomRegister): Promise<boolean> {
+    async createUserDefaultRoom(): Promise<boolean> {
+        const register: RoomRegister = new RoomRegister(uuid.v4(), this.user.id, ROOM_TYPE.directmessage);
         const room: RoomEditor = await this.create(register);
-        const result = (await this.addAccessableRooms(room.creater_id, room.id)) && (await this.addAccessableRooms(room.creater_id, 'everybody'));
+        const result = (await this.addAccessableRooms(this.user.id, room.id)) && (await this.addAccessableRooms(this.user.id, 'everybody'));
         return result;
     }
 
-    async createInformationRoom(user_id: string): Promise<boolean> {
-        const register: IRoomRegister = new RoomRegister(this.INFORMATION_ROOM_NAME, user_id, ROOM_TYPE.information);
+    async createInformationRoom(): Promise<boolean> {
+        const register: IRoomRegister = new RoomRegister(this.INFORMATION_ROOM_NAME, this.user.id, ROOM_TYPE.information);
         const room: RoomEditor = await this.create(register);
-        const result = (await this.addAccessableRooms(user_id, room.id)) && this.addAccessableRooms(Config.system.superuser, room.id);
+        const result = (await this.addAccessableRooms(this.user.id, room.id)) && this.addAccessableRooms(Config.system.superuser, room.id);
         return result;
     }
 
@@ -48,8 +53,8 @@ class Room implements IRoom {
         return await this.repository.addAccessableRooms(user_id, room_id);
     }
 
-    async getTalkRooms(user_id: string): Promise<RoomInfo[]> {
-        const roomInfos: RoomInfo[] = await this.repository.getTalkRooms(user_id);
+    async getTalkRooms(): Promise<RoomInfo[]> {
+        const roomInfos: RoomInfo[] = await this.repository.getTalkRooms(this.user.id);
         return roomInfos;
     }
 
