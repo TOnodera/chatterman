@@ -31,7 +31,7 @@ class RoomRepository {
         return rows[0];
     }
 
-    async createRoom(room: RoomRegister): Promise<boolean> {
+    async create(room: RoomRegister): Promise<boolean> {
         const [rows]: any[] = await query('INSERT INTO rooms SET id = ?,name = ?, creater_id = ?, room_type = ?, created_at = NOW()', [room.id, room.name, room.creater_id, room.room_type]);
         return rows.affectedRows == 1;
     }

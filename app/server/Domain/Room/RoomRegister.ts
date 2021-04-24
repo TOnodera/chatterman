@@ -1,8 +1,10 @@
 import uuid = require('node-uuid');
 import { ROOM_TYPE } from '../../Enum/Enum';
 import RoomRepositoryFactory from './Factory/RoomRepositoryFactory';
+import IRoomRegister from './Interface/IRoomRegister';
 import RoomRepository from './Repository/RoomRepository';
-class RoomRegister {
+class RoomRegister implements IRoomRegister {
+
     id: string;
     name: string;
     creater_id: string;
@@ -18,7 +20,7 @@ class RoomRegister {
     }
 
     async create(): Promise<string> {
-        await this.repository.createRoom(this);
+        await this.repository.create(this);
         return this.id;
     }
 }

@@ -1,6 +1,6 @@
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import IUserEditor from './Interface/IUserEditor';
-import roomManager from '../Room/RoomManager';
+import Room from '../Room/Room';
 import UserFactory from './Factory/UserFactory';
 import logger from '../../Utility/logger';
 
@@ -18,7 +18,8 @@ class Service {
     }
 
     async getInfromationRoomId(user_id: string): Promise<string> {
-        return await roomManager.getInformationRoomId(user_id);
+        const room = new Room();
+        return await room.getInformationRoomId(user_id);
     }
 
     async getUserById(user_id: string): Promise<IUserEditor> {

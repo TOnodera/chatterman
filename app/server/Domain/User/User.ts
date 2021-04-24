@@ -1,15 +1,26 @@
 import { ROOM_TYPE } from "../../Enum/Enum";
 import { transaction } from "../../Utility/Connection/Connection";
-import roomManager from '../Room/RoomManager';
+import IRoom from "../Room/Interface/IRoom";
+import IRoomRegister from "../Room/Interface/IRoomRegister";
+import Room from '../Room/Room';
+import RoomRegister from "../Room/RoomRegister";
 
 class User implements IUser {
+
+    private room: IRoom;
+
+    constructor() {
+        this.room = new Room();
+    }
 
     async registe(userRegister: IUserRegister): Promise<string> {
 
         const [id]: string[] = await transaction(async () => {
 
             const user_id = await userRegister.registe();
-            if (user_id && await roomManager.createUserDefaultRoom(user_id, ROOM_TYPE.directmessage) && roomManager.createInformationRoom(user_id)) { //デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
+            const register: IRoomRegister = new RoomRegister(user_id, user_id, ROOM_TYPE.directmessage);//デフォルトのユーザールームとお知らせ用のDMルームも合わせて作成
+
+            if (user_id && await this.room.createUserDefaultRoom(register) && this.room.createInformationRoom(user_id)) {
                 return [user_id];
             }
             return [];

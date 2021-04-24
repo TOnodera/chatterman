@@ -1,16 +1,16 @@
 import Exception from '../../../Exception/Exception';
 import Datetime from '../../../Utility/Datetime';
-import Room from '../Room';
+import RoomEditor from '../RoomEditor';
 import roomRepositoryFactory from './RoomRepositoryFactory';
 
 class RoomFactory {
-    static async create(id: string): Promise<Room> {
+    static async create(id: string): Promise<RoomEditor> {
         const repository = await roomRepositoryFactory.create();
         const room: any = await repository.getRoom(id);
         if (room) {
-            return new Room(room.id, room.name, room.creater_id, room.room_type, new Datetime(room.created_at));
+            return new RoomEditor(id, room.name, room.creater_id, room.room_type, new Datetime(room.created_at));
         }
-        throw new Exception('ルームの取得に失敗しました。');
+        throw new Exception('ファクトリでルームの生成に失敗しました。');
     }
 }
 
