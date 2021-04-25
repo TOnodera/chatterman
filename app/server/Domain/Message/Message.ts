@@ -31,7 +31,7 @@ abstract class Message {
      * @param options 
      * メッセージを登録。オプションがあれば関連テーブルにまとめて登録(このメソッドが登録の実態)
      */
-    protected async registe(messageRegister: IMessageRegister, options?: MessageOptions): Promise<SendMessageToClient> {
+    async registe(messageRegister: IMessageRegister, options?: MessageOptions): Promise<SendMessageToClient> {
         const [toClient]: SendMessageToClient[] = await transaction(
             async (): Promise<SendMessageToClient[]> => {
 

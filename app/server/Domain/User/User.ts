@@ -3,11 +3,12 @@ import IUserRepository from './Repository/IUserRepository';
 import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import IUser from './Interface/IUser';
 import IRoom from '../Room/Interface/IRoom';
-import IMessage from '../Message/Interface/IMessage';
 import Room from '../Room/Room';
 import Message from '../Message/Message';
 import UserMessage from '../Message/UserMessage';
 import { Socket } from 'socket.io';
+import ApplyManager from '../Apply/ApplyManager';
+import IMessage from '../Message/Interface/IMessage';
 
 class User implements IUser {
 
@@ -25,7 +26,11 @@ class User implements IUser {
         this.repository = UserRepositoryFactory.create();
     }
 
-    message(socket: Socket): Message {
+    apply(socket: Socket): ApplyManager {
+        return new ApplyManager(socket, this);
+    }
+
+    message(socket: Socket): IMessage {
         return new UserMessage(socket);
     }
 

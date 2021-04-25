@@ -23,61 +23,56 @@ import IUser from '../User/Interface/IUser';
  */
 
 class ApplyManager {
-    private socket: Socket;
     private applyEventEmitter: ApplyEventEmitter;
     private systemMessage: SystemMessage;
+    private me: IUser;
 
-    constructor(socket: Socket) {
-        this.socket = socket;
+    constructor(socket: Socket, me: IUser) {
         this.applyEventEmitter = new ApplyEventEmitter(socket);
         this.systemMessage = new SystemMessage(socket);
+        this.me = me;//applyではリクエストユーザー、reactionではターゲットユーザー（操作してる人）
     }
 
-    async apply(target_id: string, info: UserBasicInfo) {
-        logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${target_id}, request_user: ${info.credentials.email}`);
+    async apply(targetUser: IUser) {
+        logger.info(`1/2 ApplyController.apply() -> 処理開始 target_id: ${targetUser.id}, request_user: ${this.me.credentials.email}`);
 
-        try {
-            //自分宛てのDM許可申請が無いか確認
-            if (await applyService.hasAccepted(target_id, info.user.id)) {
-                this.applyEventEmitter.sendAlreadyApplicationIsAcceptedEvent();
-                return;
-            }
 
-            //送信済みの許可申請が無いか確認
-            if (await applyService.hasAlreadyRequested(target_id, info.user.id)) {
-                this.applyEventEmitter.sendAlreadyRequestedEvent();
-                return;
-            }
-
-            //申請対象のユーザーを取得
-            const targetUser: IUser = await UserFactory.create(target_id);
-
-            const [information_room]: any[] = await transaction(async () => {
-                const polymorphic_id: number = await applyService.registeApplication(targetUser.id, info.user.id);
-                const information_room = await targetUser.room().getInformationRoomId();
-                //送信テキスト生成
-                const messageTxt = applyService.makeMessage(info.user.name);
-
-                //システムから対象者にメッセージ送信
-                const messageOption: MessageOptions = {
-                    polymorphic_table: PolymorphicTables.requests,
-                    polymorphic_id: polymorphic_id
-                };
-                const systemUser: User = await UserFactory.create(Config.system.superuser);
-                const messageRegister = new MessageRegister(messageTxt, systemUser, information_room);
-                await this.systemMessage.send(messageRegister, messageOption);
-
-                return [information_room];
-            });
-
-            //相手に新規お知らせの通知イベント発行
-            this.applyEventEmitter.sendNewNotice(information_room);
-        } catch (e) {
-            SocketExceptionHandler.handle(e, this.socket);
+        //自分宛てのDM許可申請が無いか確認
+        if (await applyService.hasAccepted(targetUser.id, this.me.id)) {
+            this.applyEventEmitter.sendAlreadyApplicationIsAcceptedEvent();
+            return;
         }
 
+        //送信済みの許可申請が無いか確認
+        if (await applyService.hasAlreadyRequested(targetUser.id, this.me.id)) {
+            this.applyEventEmitter.sendAlreadyRequestedEvent();
+            return;
+        }
+
+        const [information_room]: any[] = await transaction(async () => {
+            const polymorphic_id: number = await applyService.registeApplication(targetUser.id, this.me.id);
+            const information_room = await targetUser.room().getInformationRoomId();
+            //送信テキスト生成
+            const messageTxt = applyService.makeMessage(this.me.name);
+
+            //システムから対象者にメッセージ送信
+            const messageOption: MessageOptions = {
+                polymorphic_table: PolymorphicTables.requests,
+                polymorphic_id: polymorphic_id
+            };
+            const systemUser: IUser = await UserFactory.create(Config.system.superuser);
+            const messageRegister = new MessageRegister(messageTxt, systemUser, information_room);
+            await this.systemMessage.send(messageRegister, messageOption);
+
+            return [information_room];
+        });
+
+        //相手に新規お知らせの通知イベント発行
+        this.applyEventEmitter.sendNewNotice(information_room);
+
+
         this.applyEventEmitter.sendApplyRequestHasSentEvent();
-        logger.info(`2/2 ApplyController.apply() -> 処理完了 request_user: ${info.credentials.email}`);
+        logger.info(`2/2 ApplyController.apply() -> 処理完了 request_user: ${this.me.credentials.email}`);
     }
 
     /**
@@ -88,13 +83,14 @@ class ApplyManager {
      * 申請に対するリアクションを処理
      */
     async reaction(unique_id: number, requestUserId: string, reaction: APPLY_REACTION) {
+
         if ((await applyService.isThePerson(unique_id, requestUserId)) == false) {
             throw new Exception('unique_idに紐づくrequestUserIdが送られてきたrequestUserIdと一致しません。不正アクセスの可能性があります。');
         }
 
         const polymorphicInfo: PolymorphicInfo = await polymorphicManager.getPolymorphicInfo(unique_id);
-        const targetUser: User = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
-        const requestUser: User = await userService.getUserById(requestUserId);
+        const targetUser: IUser = await polymorphicManager.applyManager().getTargetUser(polymorphicInfo.polymorphic_id);
+        const requestUser: IUser = await userService.getUserById(requestUserId);
 
 
         //処理済みか確認
@@ -103,16 +99,20 @@ class ApplyManager {
             this.applyEventEmitter.sendAlreadyApplicationHasHandledEvent();
             return;
         }
+        //targetUserがthis.me（操作してる人）と一致するかチェック
+        if (this.me.id != targetUser.id) {
+            throw new Exception("targetUser.idとthis.me.idが一致しません。想定外のエラーです。");
+        }
 
         switch (reaction) {
             case APPLY_REACTION.IS_ACCEPT_ARROW: //許可
                 //登録
-                await applyService.registeAccept(unique_id, requestUser.id, targetUser.id, reaction);
+                await applyService.registeAccept(unique_id, requestUser.id, this.me.id, reaction);
 
                 //申請者にメッセージ送信
                 const [roomInfo]: RoomInfo[] = await requestUser.room().getInformationRoom(requestUser.id);
-                const message: string = applyService.messageTxt(targetUser.name, reaction);
-                const systemUser: User = await UserFactory.create(Config.system.superuser);
+                const message: string = applyService.messageTxt(this.me.name, reaction);
+                const systemUser: IUser = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);
                 this.systemMessage.send(messageRegister);
 

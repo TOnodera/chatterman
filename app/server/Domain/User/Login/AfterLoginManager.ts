@@ -10,6 +10,7 @@ import userEventEmitter from '../UserEventEmitter';
 import socketService from '../../../Utility/SocketService';
 import logger from '../../../Utility/logger';
 import IRoom from '../../../Domain/Room/Interface/IRoom';
+import IUser from '../Interface/IUser';
 
 class AfterLoginManager {
     private socket: Socket;
@@ -25,7 +26,7 @@ class AfterLoginManager {
 
         logger.debug('in afterLogin: afterCredentials');
 
-        const user: User = await userService.getUserByCredentials(credentials);
+        const user: IUser = await userService.getUserByCredentials(credentials);
         const information_room = await user.room().getInformationRoomId();
         const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
         const toClient: Client = { id: user.id, name: user.name };

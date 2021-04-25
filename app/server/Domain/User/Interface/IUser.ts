@@ -1,9 +1,10 @@
+import IMessage from "server/Domain/Message/Interface/IMessage";
 import Message from "server/Domain/Message/Message";
-import IRoom from "server/Domain/Room/Interface/IRoom";
-import Room from "server/Domain/Room/Room";
+import IRoom from "../../../Domain/Room/Interface/IRoom";
 import { Socket } from "socket.io";
 import Datetime from "../../../Utility/Datetime";
 import IUserRepository from "../Repository/IUserRepository";
+import ApplyManager from "server/Domain/Apply/ApplyManager";
 
 interface IUser {
     id: string;
@@ -12,7 +13,8 @@ interface IUser {
     created_at: Datetime;
     repository: IUserRepository;
 
-    message(socket: Socket): Message;
+    apply(socket: Socket): ApplyManager;
+    message(socket: Socket): IMessage;
     room(): IRoom;
 }
 

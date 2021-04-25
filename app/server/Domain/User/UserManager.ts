@@ -5,6 +5,7 @@ import IRoomRegister from "../Room/Interface/IRoomRegister";
 import Room from '../Room/Room';
 import RoomRegister from "../Room/RoomRegister";
 import UserFactory from "./Factory/UserFactory";
+import IUser from "./Interface/IUser";
 import User from "./User";
 
 class UserManager {
@@ -14,7 +15,7 @@ class UserManager {
         const [id]: string[] = await transaction(async () => {
 
             const user_id = await userRegister.registe();
-            const user: User = await UserFactory.create(user_id);
+            const user: IUser = await UserFactory.create(user_id);
 
             if (user_id && await user.room().createUserDefaultRoom() && await user.room().createInformationRoom()) {
                 return [user_id];
