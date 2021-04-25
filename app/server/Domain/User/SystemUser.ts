@@ -8,10 +8,9 @@ import UserMessage from '../Message/UserMessage';
 import { Socket } from 'socket.io';
 import ApplyManager from '../Apply/ApplyManager';
 import IMessage from '../Message/Interface/IMessage';
-import InformationRoom from '../Room/InformationRoom';
-import { USER_TYPE } from 'server/Enum/Enum';
+import { USER_TYPE } from '../../Enum/Enum';
 
-class User implements IUser {
+class SystemUser implements IUser {
 
     id: string;
     credentials: Credentials;
@@ -38,9 +37,9 @@ class User implements IUser {
     }
 
     room(): IRoom {
-        return new InformationRoom(this);
+        return new Room(this);
     }
 
 }
 
-export default User;
+export default SystemUser;

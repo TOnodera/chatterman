@@ -59,7 +59,7 @@ class UserRepository implements IUserRepository {
     }
 
     async getMembersId(): Promise<string[]> {
-        const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name', [Config.system.superuser]);
+        const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name', [Config.system.systemuser]);
         return rows.map((data: any) => {
             return data.id;
         });

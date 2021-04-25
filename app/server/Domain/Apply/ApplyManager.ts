@@ -51,7 +51,7 @@ class ApplyManager {
 
         const [information_room]: any[] = await transaction(async () => {
             const polymorphic_id: number = await applyService.registeApplication(targetUser.id, this.me.id);
-            const information_room = await targetUser.room().getInformationRoomId();
+            const infoRoom: RoomInfo = await targetUser.room().getInformationRoom();
             //送信テキスト生成
             const messageTxt = applyService.makeMessage(this.me.name);
 
@@ -60,11 +60,11 @@ class ApplyManager {
                 polymorphic_table: PolymorphicTables.requests,
                 polymorphic_id: polymorphic_id
             };
-            const systemUser: IUser = await UserFactory.create(Config.system.superuser);
-            const messageRegister = new MessageRegister(messageTxt, systemUser, information_room);
+            const systemUser: IUser = await UserFactory.create(Config.system.systemuser);
+            const messageRegister = new MessageRegister(messageTxt, systemUser, infoRoom.room_id);
             await this.systemMessage.send(messageRegister, messageOption);
 
-            return [information_room];
+            return [infoRoom.room_id];
         });
 
         //相手に新規お知らせの通知イベント発行
@@ -110,9 +110,9 @@ class ApplyManager {
                 await applyService.registeAccept(unique_id, requestUser.id, this.me.id, reaction);
 
                 //申請者にメッセージ送信
-                const [roomInfo]: RoomInfo[] = await requestUser.room().getInformationRoom();
+                const roomInfo: RoomInfo = await requestUser.room().getInformationRoom();
                 const message: string = applyService.messageTxt(this.me.name, reaction);
-                const systemUser: IUser = await UserFactory.create(Config.system.superuser);
+                const systemUser: IUser = await UserFactory.create(Config.system.systemuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);
                 this.systemMessage.send(messageRegister);
 

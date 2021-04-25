@@ -70,8 +70,10 @@ class RoomController {
 
             //トークルームとお知らせルームを取得
             const talkRooms: RoomInfo[] = await user.room().getTalkRooms();
-            const informationRoom: RoomInfo[] = await user.room().getInformationRoom();
-            const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
+            const informationRoom: RoomInfo = await user.room().getInformationRoom();
+            const rooms: RoomInfo[] = talkRooms;
+
+            rooms.push(informationRoom);
 
             this.roomEventEmitter.sendRoomDataEvent(rooms);
         } catch (e) {

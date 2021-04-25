@@ -9,13 +9,12 @@ interface IRoom {
     createInformationRoom(): Promise<boolean>;
     addAccessableRooms(room_id: string): Promise<boolean>;
     getTalkRooms(): Promise<RoomInfo[]>;
-    getInformationRoom(): Promise<RoomInfo[]>;
+    getInformationRoom(): Promise<RoomInfo>;
     isAccessableRooms(room_id: string): Promise<boolean>;
     getAccessableRooms(): Promise<string[]>;
     getDirectMessageRoomInfo(socket: Socket): Promise<Client[]>;
     enter(info: RoomAndUserId): Promise<boolean>;
     leave(info: RoomAndUserId): Promise<boolean>;
-    getInformationRoomId(): Promise<string>;
     getRoomEventEmitter(socket: Socket): RoomEventEmitter;
 }
 

@@ -26,8 +26,8 @@ class AfterLoginManager {
         logger.debug('in afterLogin: afterCredentials');
 
         const user: IUser = await userService.getUserByCredentials(credentials);
-        const information_room = await user.room().getInformationRoomId();
-        const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
+        const infoRoom: RoomInfo = await user.room().getInformationRoom();
+        const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: infoRoom.room_id };
         const toClient: Client = { id: user.id, name: user.name };
 
         loginUserStore.set(this.socket.id, user);

@@ -1,6 +1,7 @@
 import { USER_TYPE } from '../../../Enum/Enum';
 import Exception from '../../../Exception/Exception';
 import IUser from '../Interface/IUser';
+import SystemUser from '../SystemUser';
 import User from '../User';
 import repositoryFactory from './UserRepositoryFactory';
 class UserFactory {
@@ -12,7 +13,7 @@ class UserFactory {
             case USER_TYPE.USER:
                 return new User(row.id, row.name, row.credentials, USER_TYPE.USER, row.created_at);
             case USER_TYPE.SYSTEM:
-                return new User(row.id, row.name, row.credentials, USER_TYPE.SYSTEM, row.created_at);
+                return new SystemUser(row.id, row.name, row.credentials, USER_TYPE.SYSTEM, row.created_at);
         }
         throw new Exception('到達不能なコード');
     }

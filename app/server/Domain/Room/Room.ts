@@ -21,7 +21,6 @@ class Room implements IRoom {
 
     protected repository: RoomRepository;
     protected user: User;
-    //TODO 削除対象
     protected INFORMATION_ROOM_NAME = "お知らせ";
 
     constructor(user: User) {
@@ -44,7 +43,7 @@ class Room implements IRoom {
 
     async createInformationRoom(): Promise<boolean> {
         const room: RoomEditor = await this.create(this.INFORMATION_ROOM_NAME, ROOM_TYPE.information);
-        const systemUser: IUser = await UserFactory.create(Config.system.superuser);
+        const systemUser: IUser = await UserFactory.create(Config.system.systemuser);
         const result: boolean = await systemUser.room().addAccessableRooms(room.id) && await this.addAccessableRooms(room.id);
         return result;
     }
@@ -58,15 +57,10 @@ class Room implements IRoom {
         return roomInfos;
     }
 
-    async getInformationRoom(): Promise<RoomInfo[]> {
-        const roomInfos: RoomInfo[] = await this.repository.getInformationRoom(this.user.id);
-        return roomInfos;
+    async getInformationRoom(): Promise<RoomInfo> {
+        const roomInfo: RoomInfo = await this.repository.getInformationRoom(this.user.id);
+        return roomInfo;
     }
-
-    async getInformationRoomId(): Promise<string> {
-        return await this.repository.getInformationRoomId(this.user.id);
-    }
-
 
     async isAccessableRooms(room_id: string): Promise<boolean> {
         return await this.repository.isAccessable(this.user.id, room_id);

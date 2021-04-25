@@ -38,8 +38,8 @@ describe('Message', () => {
     });
 
     afterAll(async () => {
-        await query('DELETE FROM users WHERE id <> ?', [Config.system.superuser]);
-        await query('DELETE FROM messages', [Config.system.superuser]);
+        await query('DELETE FROM users WHERE id <> ?', [Config.system.systemuser]);
+        await query('DELETE FROM messages', [Config.system.systemuser]);
         close();
     });
 
