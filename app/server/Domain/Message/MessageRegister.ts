@@ -28,7 +28,7 @@ class MessageRegister implements IMessageRegister {
     }
 
     async registe(): Promise<string> {
-        if (await this.user.room().isAccessableRooms(this.user.id, this.room_id) == false) {
+        if (await this.user.room().isAccessableRooms(this.room_id) == false) {
             throw new AuthenticationException('このトークルームには投稿できません。');
         }
         this.message_id = uuid.v4();

@@ -4,12 +4,12 @@ import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import IUser from './Interface/IUser';
 import IRoom from '../Room/Interface/IRoom';
 import Room from '../Room/Room';
-import Message from '../Message/Message';
 import UserMessage from '../Message/UserMessage';
 import { Socket } from 'socket.io';
 import ApplyManager from '../Apply/ApplyManager';
 import IMessage from '../Message/Interface/IMessage';
-import { USER_TYPE } from '../../Enum/Enum';
+import InformationRoom from '../Room/InformationRoom';
+import { USER_TYPE } from 'server/Enum/Enum';
 
 class User implements IUser {
 
@@ -38,7 +38,7 @@ class User implements IUser {
     }
 
     room(): IRoom {
-        return new Room(this);
+        return new InformationRoom(this);
     }
 
 }

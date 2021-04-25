@@ -5,12 +5,14 @@ import { Socket } from "socket.io";
 import Datetime from "../../../Utility/Datetime";
 import IUserRepository from "../Repository/IUserRepository";
 import ApplyManager from "server/Domain/Apply/ApplyManager";
+import { USER_TYPE } from "server/Enum/Enum";
 
 interface IUser {
     id: string;
     credentials: Credentials;
     name: string;
     created_at: Datetime;
+    type: USER_TYPE;
     repository: IUserRepository;
 
     apply(socket: Socket): ApplyManager;

@@ -6,6 +6,7 @@ import Room from '../Room/Room';
 import RoomRegister from "../Room/RoomRegister";
 import UserFactory from "./Factory/UserFactory";
 import IUser from "./Interface/IUser";
+import IUserRegister from "./Interface/IUserRegister";
 import User from "./User";
 
 class UserManager {

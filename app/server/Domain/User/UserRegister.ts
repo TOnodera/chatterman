@@ -3,17 +3,22 @@ import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import Bcrypt from '../../Utility/Bcrypt';
 import DomainException from '../../Exception/DomainException';
 import Exception from '../../Exception/Exception';
+import IUserRepository from './Repository/IUserRepository';
+import IUserRegister from './Interface/IUserRegister';
+import { USER_TYPE } from '../../Enum/Enum';
 
 class UserRegister implements IUserRegister {
     id: string;
     credentials: Credentials;
     name: string;
-    repository: any;
+    type: USER_TYPE;
+    repository: IUserRepository;
 
     constructor(name: string, credentials: Credentials) {
         this.id = uuid.v4();
         this.name = name;
         this.credentials = credentials;
+        this.type = USER_TYPE.USER;
         this.repository = UserRepositoryFactory.create();
     }
 

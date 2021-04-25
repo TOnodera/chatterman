@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io';
 import { ROOM_TYPE } from '../../Enum/Enum';
-import Datetime from '../../Utility/Datetime';
 import IUser from '../User/Interface/IUser';
 import RoomEventEmitter from './Emitter/RoomEventEmitter';
 import RoomFactory from './Factory/RoomFactory';
@@ -20,8 +19,8 @@ import uuid = require('node-uuid');
 
 class Room implements IRoom {
 
-    private repository: RoomRepository;
-    private user: User;
+    protected repository: RoomRepository;
+    protected user: User;
     //TODO 削除対象
     protected INFORMATION_ROOM_NAME = "お知らせ";
 
@@ -30,27 +29,28 @@ class Room implements IRoom {
         this.repository = RoomRepositoryFactory.create();
     }
 
-    async create(register: IRoomRegister): Promise<RoomEditor> {
+    async create(name: string, type: ROOM_TYPE): Promise<RoomEditor> {
+        const register: IRoomRegister = new RoomRegister(name, this.user.id, type);
         const id: string = await register.create();
         return await RoomFactory.create(id);
     }
 
     async createUserDefaultRoom(): Promise<boolean> {
-        const register: RoomRegister = new RoomRegister(uuid.v4(), this.user.id, ROOM_TYPE.directmessage);
-        const room: RoomEditor = await this.create(register);
-        const result = (await this.addAccessableRooms(this.user.id, room.id)) && (await this.addAccessableRooms(this.user.id, 'everybody'));
+        const name: string = uuid.v4();
+        const room: RoomEditor = await this.create(name, ROOM_TYPE.directmessage);
+        const result = (await this.addAccessableRooms(room.id)) && (await this.addAccessableRooms('everybody'));
         return result;
     }
 
     async createInformationRoom(): Promise<boolean> {
-        const register: IRoomRegister = new RoomRegister(this.INFORMATION_ROOM_NAME, this.user.id, ROOM_TYPE.information);
-        const room: RoomEditor = await this.create(register);
-        const result = (await this.addAccessableRooms(this.user.id, room.id)) && this.addAccessableRooms(Config.system.superuser, room.id);
+        const room: RoomEditor = await this.create(this.INFORMATION_ROOM_NAME, ROOM_TYPE.information);
+        const systemUser: IUser = await UserFactory.create(Config.system.superuser);
+        const result: boolean = await systemUser.room().addAccessableRooms(room.id) && await this.addAccessableRooms(room.id);
         return result;
     }
 
-    async addAccessableRooms(user_id: string, room_id: string): Promise<boolean> {
-        return await this.repository.addAccessableRooms(user_id, room_id);
+    async addAccessableRooms(room_id: string): Promise<boolean> {
+        return await this.repository.addAccessableRooms(this.user.id, room_id);
     }
 
     async getTalkRooms(): Promise<RoomInfo[]> {
@@ -58,24 +58,25 @@ class Room implements IRoom {
         return roomInfos;
     }
 
-    async getInformationRoom(user_id: string): Promise<RoomInfo[]> {
-        const roomInfos: RoomInfo[] = await this.repository.getInformationRoom(user_id);
+    async getInformationRoom(): Promise<RoomInfo[]> {
+        const roomInfos: RoomInfo[] = await this.repository.getInformationRoom(this.user.id);
         return roomInfos;
-    }
-
-    async isAccessableRooms(user_id: string, room_id: string): Promise<boolean> {
-        return await this.repository.isAccessable(user_id, room_id);
-    }
-
-    async getAccessableRooms(user_id: string): Promise<string[]> {
-        return await this.repository.getAccessableRooms(user_id);
     }
 
     async getInformationRoomId(): Promise<string> {
         return await this.repository.getInformationRoomId(this.user.id);
     }
 
-    async getDirectMessageRoom(user1: string, user2: string): Promise<RoomEditor | null> {
+
+    async isAccessableRooms(room_id: string): Promise<boolean> {
+        return await this.repository.isAccessable(this.user.id, room_id);
+    }
+
+    async getAccessableRooms(): Promise<string[]> {
+        return await this.repository.getAccessableRooms(this.user.id);
+    }
+
+    private async getDirectMessageRoom(user1: string, user2: string): Promise<RoomEditor | null> {
         const room_id: string | null = await this.repository.getDirectMessageRoomId(user1, user2);
         if (room_id) {
             return RoomFactory.create(room_id);
@@ -103,13 +104,11 @@ class Room implements IRoom {
     }
 
     async enter(info: RoomAndUserId): Promise<boolean> {
-        const user: IUser = await UserFactory.create(info.user_id);
-        return await this.isAccessableRooms(user.id, info.room_id);
+        return await this.isAccessableRooms(info.room_id);
     }
 
     async leave(info: RoomAndUserId): Promise<boolean> {
-        const user: IUser = await UserFactory.create(info.user_id);
-        return await this.isAccessableRooms(user.id, info.room_id);
+        return await this.isAccessableRooms(info.room_id);
     }
 
     getRoomEventEmitter(socket: Socket) {

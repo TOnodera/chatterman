@@ -15,10 +15,10 @@ DML_SQL=$(cat << SQLTXT
 
 BEGIN;
 
-INSERT INTO chatter.users (id, name, email, password, created_at) VALUES ('$SYSTEM_USER', '管理システム', '${SYSTEM_EMAIL}', '$ENCRYPTED', NOW());
+INSERT INTO chatter.users (id, name, email, password, type,created_at) VALUES ('$SYSTEM_USER', '管理システム', '${SYSTEM_EMAIL}', '$ENCRYPTED', 2, NOW());
 INSERT INTO chatter.rooms (id, name, room_type, creater_id, created_at) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'$SYSTEM_USER', NOW());
 
-INSERT INTO chatter_test.users (id, name, email, password, created_at) VALUES ('$SYSTEM_USER', '管理システム', '${SYSTEM_EMAIL}', '$ENCRYPTED', NOW());
+INSERT INTO chatter_test.users (id, name, email, password, type, created_at) VALUES ('$SYSTEM_USER', '管理システム', '${SYSTEM_EMAIL}', '$ENCRYPTED', 2, NOW());
 INSERT INTO chatter_test.rooms (id, name, room_type, creater_id, created_at) VALUES ('everybody', 'ミーティングルーム','talkroom' ,'$SYSTEM_USER', NOW());
 
 COMMIT;

@@ -62,12 +62,10 @@ class ApplyService {
 
         //DMルーム作成
         const name: string = uuid.v4();
-        const register: IRoomRegister = new RoomRegister(name, target_user_id, ROOM_TYPE.directmessage);
-
+        const directMessageRoom: IRoomEditor = await targetUser.room().create(name, ROOM_TYPE.directmessage);
         //申請者と受信者が入場できるように許可を設定する
-        const directMessageRoom: IRoomEditor = await targetUser.room().create(register);
-        await requestUser.room().addAccessableRooms(request_user_id, directMessageRoom.id);
-        await targetUser.room().addAccessableRooms(target_user_id, directMessageRoom.id);
+        await requestUser.room().addAccessableRooms(directMessageRoom.id);
+        await targetUser.room().addAccessableRooms(directMessageRoom.id);
     }
 }
 

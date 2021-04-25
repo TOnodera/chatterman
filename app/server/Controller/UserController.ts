@@ -4,6 +4,7 @@ import SocketExceptionHandler from '../Exception/SocketExceptionHandler';
 import Exception from '../Exception/Exception';
 import UserManager from '../Domain/User/UserManager';
 import UserRegister from '../Domain/User/UserRegister';
+import IUserRegister from '../Domain/User/Interface/IUserRegister';
 
 class UserController {
 

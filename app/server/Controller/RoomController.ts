@@ -51,8 +51,7 @@ class RoomController {
         logger.info(`1/2 ルーム作成処理開始: user_id(作成者): ${creater_id}, name: ${name}`);
         const user: IUser = await UserFactory.create(creater_id);
         try {
-            const register: IRoomRegister = new RoomRegister(name, creater_id, room_type);
-            if (await user.room().create(register)) {
+            if (await user.room().create(name, room_type)) {
                 this.roomEventEmitter.sendRoomCreatedEvent();
                 return;
             }
@@ -70,8 +69,8 @@ class RoomController {
         try {
 
             //トークルームとお知らせルームを取得
-            const talkRooms: RoomInfo[] = await user.room().getTalkRooms(user.id);
-            const informationRoom: RoomInfo[] = await user.room().getInformationRoom(user.id);
+            const talkRooms: RoomInfo[] = await user.room().getTalkRooms();
+            const informationRoom: RoomInfo[] = await user.room().getInformationRoom();
             const rooms: RoomInfo[] = talkRooms.concat(informationRoom);
 
             this.roomEventEmitter.sendRoomDataEvent(rooms);

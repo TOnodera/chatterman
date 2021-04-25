@@ -110,7 +110,7 @@ class ApplyManager {
                 await applyService.registeAccept(unique_id, requestUser.id, this.me.id, reaction);
 
                 //申請者にメッセージ送信
-                const [roomInfo]: RoomInfo[] = await requestUser.room().getInformationRoom(requestUser.id);
+                const [roomInfo]: RoomInfo[] = await requestUser.room().getInformationRoom();
                 const message: string = applyService.messageTxt(this.me.name, reaction);
                 const systemUser: IUser = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);

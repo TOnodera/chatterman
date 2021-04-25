@@ -15,7 +15,6 @@ import IUser from '../Interface/IUser';
 class AfterLoginManager {
     private socket: Socket;
     private repository: IUserRepository;
-    private room: IRoom;
 
     constructor(socket: Socket) {
         this.socket = socket;

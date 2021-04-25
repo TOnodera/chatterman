@@ -5,6 +5,7 @@ import UserManager from '../../../Domain/User/UserManager';
 import { loginManager } from '../../../Domain/User/Login/LoginManager';
 import { Socket } from 'socket.io';
 import http from '../http';
+import IUserRegister from '../../../Domain/User/Interface/IUserRegister';
 
 describe('User', () => {
     describe('登録、ログイン', () => {

@@ -30,7 +30,7 @@ class SocketService {
      * 自分アクセス可能なルームにジョイン
      */
     async joinMe(user: IUser, socket: Socket) {
-        for (let room_id of await user.room().getAccessableRooms(user.id)) {
+        for (let room_id of await user.room().getAccessableRooms()) {
             socket.join(room_id);
         }
     }
