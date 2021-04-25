@@ -17,7 +17,6 @@ class MessageController {
         this.message = new UserMessage(socket);
     }
 
-    //TODO パッケージ間の依存関係整理するときにuserそのまま入れるメソッドをコントローラー以外のところに作る
     async add(message: string, user_id: string, room_id: string) {
         const user: IUser = await UserFactory.create(user_id);
         const messageRegister: IMessageRegister = new MessageRegister(message, user, room_id);

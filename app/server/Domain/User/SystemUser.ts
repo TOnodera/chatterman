@@ -4,11 +4,11 @@ import UserRepositoryFactory from './Factory/UserRepositoryFactory';
 import IUser from './Interface/IUser';
 import IRoom from '../Room/Interface/IRoom';
 import Room from '../Room/Room';
-import UserMessage from '../Message/UserMessage';
 import { Socket } from 'socket.io';
 import ApplyManager from '../Apply/ApplyManager';
 import IMessage from '../Message/Interface/IMessage';
 import { USER_TYPE } from '../../Enum/Enum';
+import SystemMessage from '../Message/SystemMessage';
 
 class SystemUser implements IUser {
 
@@ -33,7 +33,7 @@ class SystemUser implements IUser {
     }
 
     message(socket: Socket): IMessage {
-        return new UserMessage(socket);
+        return new SystemMessage(socket);
     }
 
     room(): IRoom {

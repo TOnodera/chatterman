@@ -1,21 +1,16 @@
 import Exception from '../../Exception/Exception';
 import logger from '../../Utility/logger';
-import SocketExceptionHandler from '../../Exception/SocketExceptionHandler';
 import applyService from '../Apply/ApplyService';
-import Room from '../Room/Room';
 import { transaction } from '../../Utility/Connection/Connection';
 import { Socket } from 'socket.io';
 import ApplyEventEmitter from './ApplyEventEmitter';
 import { APPLY_REACTION, PolymorphicTables } from '../../Enum/Enum';
 import SocketService from '../../Utility/SocketService';
-import User from '../User/User';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import userService from '../User/Service';
-import SystemMessage from '../Message/SystemMessage';
 import Config from '../../Config';
 import MessageRegister from '../Message/MessageRegister';
 import UserFactory from '../User/Factory/UserFactory';
-import IRoom from '../Room/Interface/IRoom';
 import IUser from '../User/Interface/IUser';
 
 /**
@@ -24,13 +19,13 @@ import IUser from '../User/Interface/IUser';
 
 class ApplyManager {
     private applyEventEmitter: ApplyEventEmitter;
-    private systemMessage: SystemMessage;
     private me: IUser;
+    private socket: Socket;
 
     constructor(socket: Socket, me: IUser) {
         this.applyEventEmitter = new ApplyEventEmitter(socket);
-        this.systemMessage = new SystemMessage(socket);
         this.me = me;//applyではリクエストユーザー、reactionではターゲットユーザー（操作してる人）
+        this.socket = socket;
     }
 
     async apply(targetUser: IUser) {
@@ -62,7 +57,7 @@ class ApplyManager {
             };
             const systemUser: IUser = await UserFactory.create(Config.system.systemuser);
             const messageRegister = new MessageRegister(messageTxt, systemUser, infoRoom.room_id);
-            await this.systemMessage.send(messageRegister, messageOption);
+            await systemUser.message(this.socket).send(messageRegister, messageOption);
 
             return [infoRoom.room_id];
         });
@@ -114,7 +109,7 @@ class ApplyManager {
                 const message: string = applyService.messageTxt(this.me.name, reaction);
                 const systemUser: IUser = await UserFactory.create(Config.system.systemuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);
-                this.systemMessage.send(messageRegister);
+                systemUser.message(this.socket).send(messageRegister);
 
                 //DMルーム情報の更新をするために更新要求を送る(申請者と受信者双方)
                 this.applyEventEmitter.sendRoomDataUpdateEventToTargetUser();
