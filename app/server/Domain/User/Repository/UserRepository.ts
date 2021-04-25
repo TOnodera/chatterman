@@ -1,16 +1,14 @@
 import IUserRepository from './IUserRepository';
 import Bcrypt from '../../../Utility/Bcrypt';
-import MessageEditor from '../../Message/MessageEditor';
 import AuthenticationException from '../../../Exception/AuthenticationException';
-import UserRegister from '../UserRegister';
-import DomainException from '../../../Exception/DomainException';
 import Config from '../../../Config';
 import { query } from '../../../Utility/Connection/Connection';
 import logger from '../../../Utility/logger';
+import IUserRegister from '../Interface/IUserRegister';
 
 class UserRepository implements IUserRepository {
-    async registe(user: UserRegister): Promise<boolean> {
-        const [result]: any[] = await query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? ,created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password]);
+    async registe(user: IUserRegister): Promise<boolean> {
+        const [result]: any[] = await query('INSERT INTO users SET id = ?, name = ?, email = ? , password = ? , type = ? , created_at = NOW() ', [user.id, user.name, user.credentials!.email, user.credentials!.password, user.type]);
         return result.affectedRows == 1;
     }
 
@@ -53,6 +51,7 @@ class UserRepository implements IUserRepository {
                 id: rows[0].id,
                 name: rows[0].name,
                 credentials: credentials,
+                type: rows[0].type,
                 created_at: rows[0].created_at
             };
         }
@@ -60,7 +59,7 @@ class UserRepository implements IUserRepository {
     }
 
     async getMembersId(): Promise<string[]> {
-        const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name', [Config.system.superuser]);
+        const [rows]: any[] = await query('SELECT users.id FROM users WHERE users.deleted_at is NULL AND id <> ? ORDER BY users.name', [Config.system.systemuser]);
         return rows.map((data: any) => {
             return data.id;
         });

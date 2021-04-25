@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 import loginUserStore from '../Store/LoginUsersStore';
 import Room from '../Domain/Room/Room';
-import IUserEditor from '../Domain/User/Interface/IUserEditor';
+import IUser from '../Domain/User/Interface/IUser';
 import IRoom from '../Domain/Room/Interface/IRoom';
 
 class SocketService {
@@ -29,9 +29,8 @@ class SocketService {
      * @param socket
      * 自分アクセス可能なルームにジョイン
      */
-    async joinMe(user: IUserEditor, socket: Socket) {
-        const room: IRoom = new Room();
-        for (let room_id of await room.getAccessableRooms(user.id)) {
+    async joinMe(user: IUser, socket: Socket) {
+        for (let room_id of await user.room().getAccessableRooms()) {
             socket.join(room_id);
         }
     }

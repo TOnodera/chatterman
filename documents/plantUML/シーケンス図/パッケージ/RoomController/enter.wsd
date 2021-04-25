@@ -1,0 +1,5 @@
+@startuml
+User -> Room : user情報渡す
+Room -> Room : enter()
+Room -> User
+@enduml

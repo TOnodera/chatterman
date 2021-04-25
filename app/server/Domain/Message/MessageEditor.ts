@@ -3,7 +3,7 @@ import Exception from '../../Exception/Exception';
 import Datetime from '../../Utility/Datetime';
 import IMessageRepository from './Interface/IMessageRepository';
 import MessageRepositoryFactory from './Factory/MessageRepositoryFactory';
-import IUserEditor from '../User/Interface/IUserEditor';
+import IUser from '../User/Interface/IUser';
 import IMessageEditor from './Interface/IMessageEditor';
 
 
@@ -15,12 +15,12 @@ class MessageEditor implements IMessageEditor {
     private repository: IMessageRepository;
     message_id: string;
     message: string;
-    user: IUserEditor;
+    user: IUser;
     room_id: string;
     options?: Options;
     created_at: Datetime;
 
-    constructor(message_id: string, message: string, user: IUserEditor, room_id: string, created_at: Datetime, options?: Options) {
+    constructor(message_id: string, message: string, user: IUser, room_id: string, created_at: Datetime, options?: Options) {
         this.repository = MessageRepositoryFactory.create();
         this.message_id = message_id;
         this.message = message;

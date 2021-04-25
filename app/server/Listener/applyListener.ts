@@ -7,8 +7,8 @@ module.exports = (socket: Socket) => {
     const applyController = new ApplyController(socket);
 
     //ダイレクトメッセージの許可申請
-    const applyDirectMessage = async (target_id: string, basicInfo: UserBasicInfo) => {
-        applyController.apply(target_id, basicInfo);
+    const applyDirectMessage = async (target_id: string, basicInfo: UserBasicInfo) => { // TODO basicInfoフロント側と一緒に削除する
+        applyController.apply(target_id);
     };
 
     //申請に対する処理（申請された側の処理受付）

@@ -1,23 +1,18 @@
 import ApplyRepositoryFactory from './Factory/ApplyRepositoryFactory';
 import ApplyRepository from './Repository/ApplyRepository';
-import apply from './Apply';
 import polymorphicManager from '../Polymorphic/PolymorphicManager';
 import { APPLY_REACTION, ROOM_TYPE } from '../../Enum/Enum';
-import logger from '../../Utility/logger';
 import uuid = require('node-uuid');
-import Room from '../Room/Room';
 import IRoomEditor from '../Room/Interface/IRoomEditor';
 import IRoomRegister from '../Room/Interface/IRoomRegister';
 import RoomRegister from '../Room/RoomRegister';
-import IRoom from '../Room/Interface/IRoom';
+import UserFactory from '../User/Factory/UserFactory';
+import IUser from '../User/Interface/IUser';
 
 class ApplyService {
     private repository: ApplyRepository;
-    private room: IRoom;
-
     constructor() {
         this.repository = ApplyRepositoryFactory.create();
-        this.room = new Room();
     }
 
     makeMessage(name: string) {
@@ -39,7 +34,7 @@ class ApplyService {
     }
 
     async registeApplication(target_id: string, user_id: string): Promise<number> {
-        const polymorphic_id: number = await apply.apply(target_id, user_id);
+        const polymorphic_id: number = await this.repository.apply(target_id, user_id);
         return polymorphic_id;
     }
 
@@ -61,13 +56,16 @@ class ApplyService {
     async registeAccept(unique_id: number, request_user_id: string, target_user_id: string, reaction: APPLY_REACTION) {
         //リアクションを登録
         await this.registeApplyReaction(unique_id, reaction);
+
+        const requestUser: IUser = await UserFactory.create(request_user_id);
+        const targetUser: IUser = await UserFactory.create(target_user_id);
+
         //DMルーム作成
         const name: string = uuid.v4();
-        const register: IRoomRegister = new RoomRegister(name, target_user_id, ROOM_TYPE.directmessage);
-        const directMessageRoom: IRoomEditor = await this.room.create(register);
+        const directMessageRoom: IRoomEditor = await targetUser.room().create(name, ROOM_TYPE.directmessage);
         //申請者と受信者が入場できるように許可を設定する
-        await this.room.addAccessableRooms(request_user_id, directMessageRoom.id);
-        await this.room.addAccessableRooms(target_user_id, directMessageRoom.id);
+        await requestUser.room().addAccessableRooms(directMessageRoom.id);
+        await targetUser.room().addAccessableRooms(directMessageRoom.id);
     }
 }
 

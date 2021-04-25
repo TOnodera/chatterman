@@ -1,8 +1,9 @@
-import UserEditor from '../User/UserEditor';
+import User from '../User/User';
 import logger from '../../Utility/logger';
 import PolymorphicRepositoryFactory from './Factory/PolymorphicRepositoryFactory';
 import PolymorphicRepository from './Repository/PolymorphicRepository';
 import applyPolymorphicManager from './ApplyPolymorphic/ApplyPolymorphicManager';
+import IUser from '../User/Interface/IUser';
 
 /**
  * ポリモーフィック関連テーブル(message_polymorphics)の管理クラス
@@ -43,7 +44,7 @@ class PolymorphicManager {
 
         if (result) {
             const polymorphicInfo: PolymorphicInfo = await this.getPolymorphicInfo(result.unique_id);
-            const user: UserEditor = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
+            const user: IUser = await applyPolymorphicManager.getRequestUser(polymorphicInfo.polymorphic_id);
             const option: ApproveOptions = {
                 unique_id: result.unique_id,
                 user_id: user.id

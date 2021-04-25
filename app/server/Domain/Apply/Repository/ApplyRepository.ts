@@ -4,7 +4,7 @@ import Exception from '../../../Exception/Exception';
 import { query } from '../../../Utility/Connection/Connection';
 
 class ApplyRepository {
-    async apply(target_id: string, user_id: string): Promise<string> {
+    async apply(target_id: string, user_id: string): Promise<number> {
         const [result]: any[] = await query('INSERT INTO requests SET target_user = ? ,request_user = ?, is_accept = ?, accept_notified = ?,created_at = NOW();', [target_id, user_id, APPLY_REACTION.IS_ACCEPT_UNTREATED, APPLY_SENDER_NOTICE.IS_NOTIFIED_YET]);
         return result.insertId;
     }

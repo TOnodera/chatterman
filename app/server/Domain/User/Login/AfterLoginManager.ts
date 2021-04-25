@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import IUserRepository from '../Repository/IUserRepository';
 import UserRepositoryFactory from '../Factory/UserRepositoryFactory';
 import loginUserStore from '../../../Store/LoginUsersStore';
-import UserEditor from '../UserEditor';
+import User from '../User';
 import Exception from '../../../Exception/Exception';
 import Room from '../../Room/Room';
 import userService from '../Service';
@@ -10,25 +10,24 @@ import userEventEmitter from '../UserEventEmitter';
 import socketService from '../../../Utility/SocketService';
 import logger from '../../../Utility/logger';
 import IRoom from '../../../Domain/Room/Interface/IRoom';
+import IUser from '../Interface/IUser';
 
 class AfterLoginManager {
     private socket: Socket;
     private repository: IUserRepository;
-    private room: IRoom;
 
     constructor(socket: Socket) {
         this.socket = socket;
         this.repository = UserRepositoryFactory.create();
-        this.room = new Room();
     }
 
     async afterCredentials(credentials: Credentials) {
 
         logger.debug('in afterLogin: afterCredentials');
 
-        const user: UserEditor = await userService.getUserByCredentials(credentials);
-        const information_room = await this.room.getInformationRoomId(user.id);
-        const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: information_room };
+        const user: IUser = await userService.getUserByCredentials(credentials);
+        const infoRoom: RoomInfo = await user.room().getInformationRoom();
+        const toMe: AfterLoginInfo = { id: user.id, name: user.name, information_room: infoRoom.room_id };
         const toClient: Client = { id: user.id, name: user.name };
 
         loginUserStore.set(this.socket.id, user);

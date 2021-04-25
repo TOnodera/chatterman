@@ -1,12 +1,12 @@
 import Exception from '../Exception/Exception';
 import DomainException from '../Exception/DomainException';
-import IUserEditor from '../Domain/User/Interface/IUserEditor';
+import IUser from '../Domain/User/Interface/IUser';
 import logger from '../Utility/logger';
 export default {
 
-    users: new Map() as Map<string, IUserEditor>,
+    users: new Map() as Map<string, IUser>,
     maxUserNum: 100,
-    set(socket_id: string, user: IUserEditor) {
+    set(socket_id: string, user: IUser) {
         if (!user.id) {
             throw new Exception('idの無いユーザーをストアに追加しようとしました。');
         }
@@ -35,7 +35,7 @@ export default {
         });
         return exists;
     },
-    getUserInUsersMap(socket_id: string): { user?: IUserEditor; exist: boolean } {
+    getUserInUsersMap(socket_id: string): { user?: IUser; exist: boolean } {
         if (this.users.has(socket_id)) {
             return { user: this.users.get(socket_id), exist: true };
         }
