@@ -17,10 +17,6 @@ class Service {
         return UserFactory.create(id);
     }
 
-    async getInfromationRoomId(user_id: string): Promise<string> {
-        const room = new Room();
-        return await room.getInformationRoomId(user_id);
-    }
 
     async getUserById(user_id: string): Promise<IUser> {
         return await UserFactory.create(user_id);

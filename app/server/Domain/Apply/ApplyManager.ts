@@ -16,6 +16,7 @@ import Config from '../../Config';
 import MessageRegister from '../Message/MessageRegister';
 import UserFactory from '../User/Factory/UserFactory';
 import IRoom from '../Room/Interface/IRoom';
+import IUser from '../User/Interface/IUser';
 
 /**
  * TODO ソケット使ってる部分別クラスにする形でリファクタリングしたい
@@ -25,13 +26,11 @@ class ApplyManager {
     private socket: Socket;
     private applyEventEmitter: ApplyEventEmitter;
     private systemMessage: SystemMessage;
-    private room: IRoom;
 
     constructor(socket: Socket) {
         this.socket = socket;
         this.applyEventEmitter = new ApplyEventEmitter(socket);
         this.systemMessage = new SystemMessage(socket);
-        this.room = new Room();
     }
 
     async apply(target_id: string, info: UserBasicInfo) {
@@ -50,9 +49,12 @@ class ApplyManager {
                 return;
             }
 
+            //申請対象のユーザーを取得
+            const targetUser: IUser = await UserFactory.create(target_id);
+
             const [information_room]: any[] = await transaction(async () => {
-                const polymorphic_id: number = await applyService.registeApplication(target_id, info.user.id);
-                const information_room = await this.room.getInformationRoomId(target_id);
+                const polymorphic_id: number = await applyService.registeApplication(targetUser.id, info.user.id);
+                const information_room = await targetUser.room().getInformationRoomId();
                 //送信テキスト生成
                 const messageTxt = applyService.makeMessage(info.user.name);
 
@@ -108,7 +110,7 @@ class ApplyManager {
                 await applyService.registeAccept(unique_id, requestUser.id, targetUser.id, reaction);
 
                 //申請者にメッセージ送信
-                const [roomInfo]: RoomInfo[] = await this.room.getInformationRoom(requestUser.id);
+                const [roomInfo]: RoomInfo[] = await requestUser.room().getInformationRoom(requestUser.id);
                 const message: string = applyService.messageTxt(targetUser.name, reaction);
                 const systemUser: User = await UserFactory.create(Config.system.superuser);
                 const messageRegister = new MessageRegister(message, systemUser, roomInfo.room_id);

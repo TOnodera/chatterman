@@ -10,6 +10,9 @@ import IRoomEditor from '../Room/Interface/IRoomEditor';
 import IRoomRegister from '../Room/Interface/IRoomRegister';
 import RoomRegister from '../Room/RoomRegister';
 import IRoom from '../Room/Interface/IRoom';
+import User from '../User/User';
+import UserFactory from '../User/Factory/UserFactory';
+import IUser from '../User/Interface/IUser';
 
 class ApplyService {
     private repository: ApplyRepository;
@@ -17,7 +20,6 @@ class ApplyService {
 
     constructor() {
         this.repository = ApplyRepositoryFactory.create();
-        this.room = new Room();
     }
 
     makeMessage(name: string) {
@@ -65,9 +67,13 @@ class ApplyService {
         const name: string = uuid.v4();
         const register: IRoomRegister = new RoomRegister(name, target_user_id, ROOM_TYPE.directmessage);
         const directMessageRoom: IRoomEditor = await this.room.create(register);
+
         //申請者と受信者が入場できるように許可を設定する
-        await this.room.addAccessableRooms(request_user_id, directMessageRoom.id);
-        await this.room.addAccessableRooms(target_user_id, directMessageRoom.id);
+        const requestUser: IUser = await UserFactory.create(request_user_id);
+        const targetUser: IUser = await UserFactory.create(target_user_id);
+
+        await requestUser.room().addAccessableRooms(request_user_id, directMessageRoom.id);
+        await targetUser.room().addAccessableRooms(target_user_id, directMessageRoom.id);
     }
 }
 

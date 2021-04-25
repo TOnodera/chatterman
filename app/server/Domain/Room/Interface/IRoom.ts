@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import RoomEventEmitter from "../Emitter/RoomEventEmitter";
 import RoomEditor from "../RoomEditor";
 import IRoomRegister from "./IRoomRegister";
 
@@ -11,9 +12,12 @@ interface IRoom {
     getInformationRoom(user_id: string): Promise<RoomInfo[]>;
     isAccessableRooms(user_id: string, room_id: string): Promise<boolean>;
     getAccessableRooms(user_id: string): Promise<string[]>;
-    getInformationRoomId(user_id: string): Promise<string>;
+    getInformationRoomId(): Promise<string>;
     getDirectMessageRoom(user1: string, user2: string): Promise<RoomEditor | null>;
-    getDirectMessageRoomInfo(my_id: string, socket: Socket): Promise<Client[]>;
+    getDirectMessageRoomInfo(socket: Socket): Promise<Client[]>;
+    enter(info: RoomAndUserId): Promise<boolean>;
+    leave(info: RoomAndUserId): Promise<boolean>;
+    getRoomEventEmitter(socket: Socket): RoomEventEmitter;
 }
 
 export default IRoom;

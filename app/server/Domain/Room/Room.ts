@@ -16,7 +16,7 @@ import RoomRegister from './RoomRegister';
 import Config from '../../Config';
 import IRoom from './Interface/IRoom';
 import User from '../User/User';
-import uuid from 'node-uuid';
+import uuid = require('node-uuid');
 
 class Room implements IRoom {
 
@@ -71,8 +71,8 @@ class Room implements IRoom {
         return await this.repository.getAccessableRooms(user_id);
     }
 
-    async getInformationRoomId(user_id: string): Promise<string> {
-        return await this.repository.getInformationRoomId(user_id);
+    async getInformationRoomId(): Promise<string> {
+        return await this.repository.getInformationRoomId(this.user.id);
     }
 
     async getDirectMessageRoom(user1: string, user2: string): Promise<RoomEditor | null> {
@@ -83,18 +83,17 @@ class Room implements IRoom {
         return null;
     }
 
-    async getDirectMessageRoomInfo(my_id: string, socket: Socket): Promise<Client[]> {
+    async getDirectMessageRoomInfo(socket: Socket): Promise<Client[]> {
+
         const users: IUser[] = await userService.getAllUsers();
 
         //入室可能なルームにソケットをジョイン
-        const me: IUser = await userService.getUserById(my_id);
-        await socketService.joinMe(me, socket);
+        await socketService.joinMe(this.user, socket);
 
         const members: Client[] = [];
         for (const user of users) {
             const result: Client = { id: user.id, name: user.name };
-            const room: RoomEditor | null = await this.getDirectMessageRoom(user.id, my_id);
-
+            const room: RoomEditor | null = await this.getDirectMessageRoom(user.id, this.user.id);
             result.room_id = room ? room.id : user.id; //既にDM出来る相手の場合はそのルームIDを設定
             result.isLogin = loginUsersStore.inUsers(user.id);
             members.push(result);
